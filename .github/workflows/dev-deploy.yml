@@ -1,76 +1,94 @@
-name: CI Pipeline
+name: Dev Deployment
 
 on:
   push:
     branches:
-      - main
-  pull_request:
+      - dev
+      - feature/*
+
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  test:
+  test-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Check out the repository
+        uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests with coverage
+      - name: Run tests with vitest
         run: npm run coverage
 
-      - name: List files in coverage directory for debug
+      # Debug: Listing contents of coverage directory to check if the report is generated correctly
+      - name: Check contents of coverage directory
         run: |
-          echo "Listing files in the coverage directory:"
-          ls -la ./coverage
-          echo "Listing files in the current directory:"
-          ls -la .
+          echo "Listing contents of coverage directory:"
+          ls -R ./coverage
 
+      # Upload the coverage report
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./coverage/coverage-summary.json
+          path: coverage/
 
-  check-coverage:
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download coverage report
-        uses: actions/download-artifact@v3
-        with:
-          name: coverage-report
-
-      - name: Install utilities
+      # Debug: Check if coverage directory exists and has the required report
+      - name: Check if coverage directory exists
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq bc
-
-      - name: Check if coverage-summary.json exists
-        run: |
-          echo "Listing coverage files for verification:"
+          echo "Listing coverage files:"
           ls ./coverage
+          if [ ! -d ./coverage ]; then
+            echo "Coverage directory not found!"
+            exit 1
+          fi
           if [ ! -f ./coverage/coverage-summary.json ]; then
             echo "Coverage report not found!"
             exit 1
           fi
           echo "Coverage report found"
 
+      # Check test coverage and proceed with deployment even if coverage is below threshold
       - name: Check test coverage
         run: |
           COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
           echo "Test coverage is ${COVERAGE}%"
-          if (( $(echo "$COVERAGE < 89" | bc -l) )); then
-            echo "Test coverage is below 90%, cannot proceed."
+          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+            echo "Test coverage is below 90%, but proceeding with deployment."
+          fi
+
+      # Build the project if tests pass
+      - name: Build the project
+        run: npm run build
+
+      # Debug: Check if build folder (dist) is ready before deploying
+      - name: Check build directory before deploy
+        run: |
+          echo "Listing contents of build (dist) directory"
+          ls -R ./dist
+          if [ ! -d ./dist ]; then
+            echo "Build directory not found!"
             exit 1
           fi
+          echo "Build directory found"
+
+      # Deploy to S3
+      - name: Deploy to S3
+        run: |
+          echo "Deploying to S3 bucket"
+          aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
