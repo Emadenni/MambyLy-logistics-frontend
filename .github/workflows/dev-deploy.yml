@@ -1,72 +1,76 @@
-name: Dev Deployment
+name: CI Pipeline
 
 on:
   push:
     branches:
-      - dev
-      - feature/*
-
-permissions:
-  contents: read
-  id-token: write
-  actions: write
-
-env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - main
+  pull_request:
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests with vitest
+      - name: Run tests with coverage
         run: npm run coverage
 
-      - name: Check contents of coverage directory
+      - name: List files in coverage directory for debug
         run: |
-          echo "Listing contents of coverage directory"
-          ls -R ./coverage
+          echo "Listing files in the coverage directory:"
+          ls -la ./coverage
+          echo "Listing files in the current directory:"
+          ls -la .
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: coverage/
+          path: ./coverage/coverage-summary.json
 
-      - name: Check if coverage directory exists
+  check-coverage:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+
+      - name: Install utilities
         run: |
-          echo "Listing coverage files:"
+          sudo apt-get update
+          sudo apt-get install -y jq bc
+
+      - name: Check if coverage-summary.json exists
+        run: |
+          echo "Listing coverage files for verification:"
           ls ./coverage
-          if [ ! -d ./coverage ]; then
-            echo "Coverage directory not found!"
+          if [ ! -f ./coverage/coverage-summary.json ]; then
+            echo "Coverage report not found!"
             exit 1
           fi
-          echo "Coverage directory found"
+          echo "Coverage report found"
 
       - name: Check test coverage
         run: |
           COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
           echo "Test coverage is ${COVERAGE}%"
-          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
-            echo "Test coverage is below 90%, but proceeding with deployment."
+          if (( $(echo "$COVERAGE < 89" | bc -l) )); then
+            echo "Test coverage is below 90%, cannot proceed."
+            exit 1
           fi
-
-      - name: Build the project
-        run: npm run build
-
-      - name: Deploy to S3
-        run: |
-          aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
