@@ -35,7 +35,7 @@ jobs:
       - name: Run tests with vitest
         run: npm run coverage
 
-      - name: Upload test coverage as artifact
+      - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
