@@ -33,40 +33,42 @@ jobs:
         run: npm install
 
       - name: Run tests with vitest
-        run: npm run coverage
+        run: npm run coverage -- --coverage.reporter=lcov
 
-      - name: Check contents of coverage directory
-        run: |
-          echo "Listing contents of coverage directory"
-          ls -R ./coverage
-
-      - name: Upload coverage report (v2)
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-report
-          path: coverage/
+      - name: Debug directory structure
+        run: ls -R
 
       - name: Check if coverage directory exists
         run: |
-          echo "Listing coverage files:"
-          ls ./coverage
-          if [ ! -d ./coverage ]; then
-            echo "Coverage directory not found!"
+          if [ -d ./coverage ]; then
+            echo "✅ Coverage directory found!"
+            ls -R ./coverage
+          else
+            echo "❌ Coverage directory NOT found!"
             exit 1
           fi
-          echo "Coverage directory found"
 
       - name: Check test coverage
         run: |
-          COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
-          echo "Test coverage is ${COVERAGE}%"
-          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
-            echo "Test coverage is below 90%, but proceeding with deployment."
+          if [ -f ./coverage/coverage-summary.json ]; then
+            COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
+            echo "Test coverage is ${COVERAGE}%"
+            if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+              echo "⚠️ Test coverage is below 90%, but proceeding with deployment."
+            fi
+          else
+            echo "❌ coverage-summary.json NOT FOUND!"
+            exit 1
           fi
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: ./coverage/**
 
       - name: Build the project
         run: npm run build
 
       - name: Deploy to S3
-        run: |
-          aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
+        run: aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
