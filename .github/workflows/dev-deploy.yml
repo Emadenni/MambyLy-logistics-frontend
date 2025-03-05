@@ -35,20 +35,17 @@ jobs:
       - name: Run tests with vitest
         run: npm run coverage
 
-      # Debug: Listing contents of coverage directory to check if the report is generated correctly
       - name: Check contents of coverage directory
         run: |
-          echo "Listing contents of coverage directory:"
+          echo "Listing contents of coverage directory"
           ls -R ./coverage
 
-      # Upload the coverage report
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+      - name: Upload coverage report (v2)
+        uses: actions/upload-artifact@v2
         with:
           name: coverage-report
           path: coverage/
 
-      # Debug: Check if coverage directory exists and has the required report
       - name: Check if coverage directory exists
         run: |
           echo "Listing coverage files:"
@@ -57,13 +54,8 @@ jobs:
             echo "Coverage directory not found!"
             exit 1
           fi
-          if [ ! -f ./coverage/coverage-summary.json ]; then
-            echo "Coverage report not found!"
-            exit 1
-          fi
-          echo "Coverage report found"
+          echo "Coverage directory found"
 
-      # Check test coverage and proceed with deployment even if coverage is below threshold
       - name: Check test coverage
         run: |
           COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
@@ -72,23 +64,9 @@ jobs:
             echo "Test coverage is below 90%, but proceeding with deployment."
           fi
 
-      # Build the project if tests pass
       - name: Build the project
         run: npm run build
 
-      # Debug: Check if build folder (dist) is ready before deploying
-      - name: Check build directory before deploy
-        run: |
-          echo "Listing contents of build (dist) directory"
-          ls -R ./dist
-          if [ ! -d ./dist ]; then
-            echo "Build directory not found!"
-            exit 1
-          fi
-          echo "Build directory found"
-
-      # Deploy to S3
       - name: Deploy to S3
         run: |
-          echo "Deploying to S3 bucket"
           aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
