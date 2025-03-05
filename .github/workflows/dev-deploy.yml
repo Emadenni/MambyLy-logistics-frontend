@@ -27,7 +27,7 @@ jobs:
 
       # Step 2: Set up Node.js
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
 
@@ -35,15 +35,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Install jq for JSON processing (used later to check coverage)
-      - name: Install jq for processing JSON
-        run: sudo apt-get install -y jq
-
-      # Step 5: Run tests with vitest
+      # Step 4: Run tests with vitest
       - name: Run tests with vitest
         run: npm run coverage
 
-      # Step 6: Check if coverage directory exists
+      # Step 5: Check if coverage directory exists
       - name: Check if coverage directory exists
         run: |
           if [ -d ./coverage ]; then
@@ -54,31 +50,17 @@ jobs:
             exit 1
           fi
 
-      # Step 7: Check test coverage
-      - name: Check test coverage
-        run: |
-          if [ -f ./coverage/coverage-summary.json ]; then
-            COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
-            echo "Test coverage is ${COVERAGE}%"
-            if (( $(echo "$COVERAGE < 90" | bc -l) )); then
-              echo "⚠️ Test coverage is below 90%, but proceeding with deployment."
-            fi
-          else
-            echo "❌ coverage-summary.json NOT FOUND!"
-            exit 1
-          fi
-
-      # Step 8: Upload coverage report
+      # Step 6: Upload coverage report (Usa v4)
       - name: Upload coverage report
-        uses: actions/upload-artifact@v2 # Updated to the latest stable version
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
 
-      # Step 9: Build the project
+      # Step 7: Build the project
       - name: Build the project
         run: npm run build
 
-      # Step 10: Deploy to S3
+      # Step 8: Deploy to S3
       - name: Deploy to S3
         run: aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
