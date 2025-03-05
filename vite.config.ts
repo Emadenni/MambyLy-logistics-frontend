@@ -8,11 +8,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './setup-tests.ts',
     coverage: {
-      provider: 'v8',  
-      reporter: ['json-summary', 'lcov', 'text'], 
-      include: ['src/**/*.{ts,tsx,js,jsx}'],  
-      outputDirectory: './coverage',  
-      all: true,  
+      provider: 'v8',
+      reporter: ['json-summary', 'lcov', 'text'],
+      include: ['src/**/*.{ts,tsx,js,jsx}'],
+      outputDirectory: './coverage',
+      all: true,
     },
   },
 });

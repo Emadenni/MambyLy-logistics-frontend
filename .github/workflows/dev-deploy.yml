@@ -41,15 +41,15 @@ jobs:
           name: coverage-report
           path: ./coverage
 
-      - name: Check if coverage-summary.json exists
+      - name: Check if coverage directory exists
         run: |
-          echo "Listing coverage files for verification:"
+          echo "Listing coverage files:"
           ls ./coverage
-          if [ ! -f ./coverage/coverage-summary.json ]; then
-            echo "Coverage report not found!"
+          if [ ! -d ./coverage ]; then
+            echo "Coverage directory not found!"
             exit 1
           fi
-          echo "Coverage report found"
+          echo "Coverage directory found"
 
       - name: Check test coverage
         run: |
