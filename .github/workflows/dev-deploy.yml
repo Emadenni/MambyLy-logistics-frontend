@@ -17,7 +17,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,13 +33,31 @@ jobs:
         run: npm install
 
       - name: Run tests with vitest
-        run: npm run test -- --coverage
+        run: npm run coverage
 
       - name: Upload test coverage as artifact
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./coverage 
+          path: ./coverage
+
+      - name: Check if coverage-summary.json exists
+        run: |
+          echo "Listing coverage files for verification:"
+          ls ./coverage
+          if [ ! -f ./coverage/coverage-summary.json ]; then
+            echo "Coverage report not found!"
+            exit 1
+          fi
+          echo "Coverage report found"
+
+      - name: Check test coverage
+        run: |
+          COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
+          echo "Test coverage is ${COVERAGE}%"
+          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+            echo "Test coverage is below 90%, but proceeding with deployment."
+          fi
 
       - name: Build the project
         run: npm run build
