@@ -21,25 +21,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
+
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js
+   
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      # Step 3: Install dependencies
+     
       - name: Install dependencies
         run: npm install
 
-      # Step 4: Run tests with vitest
+   
       - name: Run tests with vitest
         run: npm run coverage
 
-      # Step 5: Check if coverage directory exists
+      
       - name: Check if coverage directory exists
         run: |
           if [ -d ./coverage ]; then
@@ -50,17 +50,17 @@ jobs:
             exit 1
           fi
 
-      # Step 6: Upload coverage report (Usa v4)
+ 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
 
-      # Step 7: Build the project
+    
       - name: Build the project
         run: npm run build
 
-      # Step 8: Deploy to S3
+    
       - name: Deploy to S3
         run: aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
