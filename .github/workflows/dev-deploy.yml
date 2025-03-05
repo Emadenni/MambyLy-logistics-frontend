@@ -17,26 +17,23 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  test-and-deploy:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests with vitest
-        run: npm run coverage -- --coverage.reporter=lcov
-
-      - name: Debug directory structure
-        run: ls -R
+        run: npm run coverage
 
       - name: Check if coverage directory exists
         run: |
@@ -48,24 +45,55 @@ jobs:
             exit 1
           fi
 
-      - name: Check test coverage
-        run: |
-          if [ -f ./coverage/coverage-summary.json ]; then
-            COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
-            echo "Test coverage is ${COVERAGE}%"
-            if (( $(echo "$COVERAGE < 90" | bc -l) )); then
-              echo "⚠️ Test coverage is below 90%, but proceeding with deployment."
-            fi
-          else
-            echo "❌ coverage-summary.json NOT FOUND!"
-            exit 1
-          fi
-
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./coverage/**
+          path: coverage/
+
+  check-coverage:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+
+      - name: Install utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq bc
+
+      - name: Check if coverage-summary.json exists
+        run: |
+          echo "Listing coverage files for verification:"
+          ls ./coverage
+          if [ ! -f ./coverage/coverage-summary.json ]; then
+            echo "❌ Coverage report not found!"
+            exit 1
+          fi
+          echo "✅ Coverage report found"
+
+      - name: Check test coverage
+        run: |
+          COVERAGE=$(cat ./coverage/coverage-summary.json | jq .total.lines.pct)
+          echo "Test coverage is ${COVERAGE}%"
+          if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+            echo "⚠️ Test coverage is below 90%, but proceeding with deployment."
+          fi
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: check-coverage
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
 
       - name: Build the project
         run: npm run build
