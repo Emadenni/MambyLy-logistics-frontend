@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
+import { Route,  Navigate, RouteProps } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 
 interface PrivateRouteProps extends RouteProps {
@@ -12,7 +12,7 @@ const PrivateRoute = ({ element, ...rest }: PrivateRouteProps) => {
   return (
     <Route
       {...rest} //retrieves props from a normal route and spreads them to privateRoute
-      element={isAuthenticated ? element : <Redirect to="/login" />}
+      element={isAuthenticated ? element : <Navigate to="/login" />}
     />
   );
 };
