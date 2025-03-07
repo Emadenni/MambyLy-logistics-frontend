@@ -1,0 +1,12 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.admin_link_icon {
+  max-width: 26px;
+  position: absolute;
+    right: 0; 
+    bottom: 0;
+}
+
+

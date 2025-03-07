@@ -8,7 +8,7 @@ import tiktok_icon from "../../assets/images/socials/tiktok_icon.png";
 import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.png";
 import viber_icon from "../../assets/images/socials/viber_icon.png";
 
-const Social_box = (props: Props) => {
+const Social_box: React.FC  = (props: Props) => {
   return (
     <div className="socials_box__container">
       <Link to="/">                                                         {/* fill link  */}

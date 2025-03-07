@@ -8,4 +8,4 @@ const ContactUs = (props: Props) => {
   )
 }
 
-export default ContactUs
+export default ContactUs;

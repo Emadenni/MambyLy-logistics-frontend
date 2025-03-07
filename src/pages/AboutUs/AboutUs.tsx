@@ -2,10 +2,10 @@ import React from 'react'
 
 type Props = {}
 
-const AboutUs = (props: Props) => {
+const AboutUs:React.FC  = (props: Props) => {
   return (
-    <div>AboutUs</div>
+    <div>: React.FC </div>
   )
 }
 
-export default AboutUs
+export default AboutUs;

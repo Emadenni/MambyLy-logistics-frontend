@@ -1,8 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./footer_menu.scss";
+import Admin_link from "../Admin_link/Admin_link";
 
-const Footer_menu = (props: Props) => {
+const Footer_menu: React.FC  = () => {
   return (
     <div className="footer_menu">
       <ul className="footer_menu__list">
@@ -34,7 +35,10 @@ const Footer_menu = (props: Props) => {
             OM OSS
           </NavLink>
         </li>
+
+       
       </ul>
+      <Admin_link />
     </div>
   );
 };

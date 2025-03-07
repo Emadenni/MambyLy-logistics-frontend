@@ -6,7 +6,7 @@ import { logoProps } from "../../types/components";
 
 
 
-const Logo = ({ size = "medium" }: LogoProps) => {
+const Logo: React.FC  = ({ size = "medium" }: LogoProps) => {
   return (
     <Link to="/" className="mambyLy_logo-container">
       <img src={logo} alt="mambyLy-logo" className={`mambyLy_logo ${size}`} />

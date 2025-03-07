@@ -4,7 +4,7 @@ import "./terms.scss"
 
 type Props = {}
 
-const Terms = (props: Props) => {
+const Terms: React.FC  = (props: Props) => {
   return (
     <article className='terms'>
         <ul className='terms__list' >

@@ -7,7 +7,8 @@ import Logo from "../Logo/Logo";
 import Terms from "../Terms/Terms";
 import Social_box from "../Social_box/Social_box";
 
-const Footer = (props: Props) => {
+
+const Footer: React.FC  = () => {
   return (
     <footer className="footer">
       <div className="footer__logo_container">
@@ -16,6 +17,7 @@ const Footer = (props: Props) => {
       <Terms />
       <Social_box />
       <Footer_menu />
+     
     </footer>
   );
 };
