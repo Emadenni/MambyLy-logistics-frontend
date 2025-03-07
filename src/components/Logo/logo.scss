@@ -1,6 +1,16 @@
 
 
 .mambyLy_logo {
-    width: 50%; 
     height: auto;
+    &.small {
+        width: 18%;
+      }
+    
+      &.medium {
+        width: 45%;
+      }
+    
+      &.large {
+        width: 120px;
+      }
 }

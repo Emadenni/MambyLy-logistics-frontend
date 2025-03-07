@@ -5,7 +5,7 @@ import Logo from "../Logo/Logo";
 import Navbar from "../Navbar/Navbar";
 import Hamburger_menu from "../Hamburger_menu/Hamburger_menu";
 
-const Header = () => {
+const Header: React.FC  = () => {
   const { isMobile, setIsMobile } = useDeviceStore();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo_container">
-        <Logo />
+      <Logo size="medium" />
       </div>
       {isMobile ? <Hamburger_menu /> : <Navbar />}
     </header>
