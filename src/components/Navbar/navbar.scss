@@ -12,12 +12,18 @@
       color: $text-green;
       font-size: 0.6rem;
       padding: 0 16px;
-   
+
       text-align: center;
     }
 
     &__item:hover {
-        color: $secondary-color;
+      color: $secondary-color;
+      scale: 1.1;
+    }
+
+    .navbar_link--active {
+      color: $text-black;
+      text-decoration: underline;
     }
   }
 }

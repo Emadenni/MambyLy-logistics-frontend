@@ -1,41 +1,55 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./navbar.scss"
+import { NavLink } from "react-router-dom"; // Importazione corretta
+import "./navbar.scss";
 
 const Navbar = () => {
   return (
     <nav className="navbar">
       <ul className="navbar__list">
+        <li className="navbar__list__item">
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
+          >
+            HEM
+          </NavLink>
+        </li>
 
         <li className="navbar__list__item">
-          <Link to="/" className="navbar_link">
-            HEM
-          </Link>
-          </li>
-
-          <li className="navbar__list__item">
-          <Link to="/services" className="navbar_link">
+          <NavLink
+            to="/tjänster"
+            className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
+          >
             TJÄNSTER
-          </Link>
-          </li>
+          </NavLink>
+        </li>
 
-          <li className="navbar__list__item">
-          <Link to="/contactUs" className="navbar_link">
+        <li className="navbar__list__item">
+          <NavLink
+            to="/kontaktaOss"
+            className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
+          >
             KONTAKTA OSS
-          </Link>
-          </li>
+          </NavLink>
+        </li>
 
-          <li className="navbar__list__item">
-          <Link to="/workWithUs" className="navbar_link">
+        <li className="navbar__list__item">
+          <NavLink
+            to="/jobbaMedOss"
+            className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
+          >
             JOBBA MED OSS
-          </Link>
-          </li>
-          <li className="navbar__list__item">
-          <Link to="/aboutUs" className="navbar_link">
+          </NavLink>
+        </li>
+
+        <li className="navbar__list__item">
+          <NavLink
+            to="/omOss"
+            className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
+          >
             OM OSS
-          </Link>
-           </li>
-       
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
