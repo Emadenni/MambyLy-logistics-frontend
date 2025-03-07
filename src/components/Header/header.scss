@@ -1,0 +1,13 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.header {
+  @include flexbox(row, flex-end, center);
+ padding: 1rem 2rem;
+}
+
+.logo_container {
+   width: 50%;
+   
+}

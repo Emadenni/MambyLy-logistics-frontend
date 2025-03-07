@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./header.scss"
 import { useDeviceStore } from "../../store/useDeviceStore";
 import Logo from "../Logo/Logo";
 import Navbar from "../Navbar/Navbar";
@@ -24,8 +25,8 @@ const Header = () => {
   }, [setIsMobile]);
 
   return (
-    <header>
-      <div className="logo-container">
+    <header className="header">
+      <div className="logo_container">
         <Logo />
       </div>
       {isMobile ? <Hamburger_menu /> : <Navbar />}

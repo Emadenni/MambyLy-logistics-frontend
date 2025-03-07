@@ -1,3 +1,5 @@
+@use "../styles/variables" as *;
+
 *,
 *::before,
 *::after {
@@ -16,7 +18,7 @@ body {
   min-height: 100vh; 
 }
 
-a {
+a, li {
   text-decoration: none;
   color: inherit;
 }

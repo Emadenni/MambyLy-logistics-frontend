@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
+import "./styles/globals.scss";
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
 import ContactUs from "./pages/ContactUs/ContactUs";
