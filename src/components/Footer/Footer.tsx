@@ -5,6 +5,7 @@ import "./footer.scss";
 import Footer_menu from "../Footer_menu/Footer_menu";
 import Logo from "../Logo/Logo";
 import Terms from "../Terms/Terms";
+import Social_box from "../Social_box/Social_box";
 
 const Footer = (props: Props) => {
   return (
@@ -13,7 +14,7 @@ const Footer = (props: Props) => {
         <Logo size="small" />
       </div>
       <Terms />
-
+      <Social_box />
       <Footer_menu />
     </footer>
   );
