@@ -1,44 +1,42 @@
-import React from 'react'
-
-
+import React from "react";
+import { NavLink } from "react-router-dom";
+import "./footer_menu.scss";
 
 const Footer_menu = (props: Props) => {
- return (
-     <nav className="navbar">
-       <ul className="navbar__list">
- 
-         <li className="navbar__list__item">
-           <Link to="/" className="navbar_link" activeClassName="navbar_link--active">
-             HEM
-           </Link>
-           </li>
- 
-           <li className="navbar__list__item">
-           <Link to="/services" className="navbar_link" activeClassName="navbar_link--active">
-             TJÄNSTER
-           </Link>
-           </li>
- 
-           <li className="navbar__list__item">
-           <Link to="/contactUs" className="navbar_link" activeClassName="navbar_link--active">
-             KONTAKTA OSS
-           </Link>
-           </li>
- 
-           <li className="navbar__list__item">
-           <Link to="/workWithUs" className="navbar_link" activeClassName="navbar_link--active">
-             JOBBA MED OSS
-           </Link>
-           </li>
-           <li className="navbar__list__item">
-           <Link to="/aboutUs" className="navbar_link" activeClassName="navbar_link--active">
-             OM OSS
-           </Link>
-            </li>
-        
-       </ul>
-     </nav>
-   );
- };
+  return (
+    <div className="footer_menu">
+      <ul className="footer_menu__list">
+        <li className="footer_menu__list__item">
+          <NavLink to="/" className="footer_menu_link">
+            HEM
+          </NavLink>
+        </li>
 
-export default Footer_menu
+        <li className="footer_menu__list__item">
+          <NavLink to="/tjänster" className="footer_menu_link">
+            TJÄNSTER
+          </NavLink>
+        </li>
+
+        <li className="footer_menu__list__item">
+          <NavLink to="/kontaktaOss" className="footer_menu_link">
+            KONTAKTA OSS
+          </NavLink>
+        </li>
+
+        <li className="footer_menu__list__item">
+          <NavLink to="/jobbaMedOss" className="footer_menu_link">
+            JOBBA MED OSS
+          </NavLink>
+        </li>
+        <li className="footer_menu__list__item">
+          <NavLink to="/omOss" className="footer_menu_link">
+            OM OSS
+          </NavLink>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default Footer_menu;

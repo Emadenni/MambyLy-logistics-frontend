@@ -1,0 +1,23 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.footer_menu {
+  &__list {
+    @include flexbox(row, center, center);
+
+    &__item {
+      @include primary-font(700);
+      color: $text-green;
+      font-size: 0.7rem;
+      padding: 0 9px;
+      text-align: center;
+    }
+
+    &__item:hover {
+      color: $secondary-color;
+      scale: 1.1;
+    }
+
+  }
+}

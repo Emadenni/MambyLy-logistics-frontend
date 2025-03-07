@@ -27,7 +27,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="logo_container">
-        <Logo />
+      <Logo size="medium" />
       </div>
       {isMobile ? <Hamburger_menu /> : <Navbar />}
     </header>

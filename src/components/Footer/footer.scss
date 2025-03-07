@@ -1,0 +1,19 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.footer {
+  @include flexbox(column, center, center);
+  padding: 1rem 2rem;
+  margin: auto;
+  width: 100%;
+
+  &__logo_container {
+    @include flexbox(row, center, center);
+    text-align: center;
+
+    .mambyLy-logo {
+        margin: 0 auto;
+    }
+  }
+}
