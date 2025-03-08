@@ -4,7 +4,12 @@
 
 .header {
   @include flexbox(row, flex-end, center);
+  width: 100vw;
  padding: 1rem 2rem;
+border-bottom: solid 1px green;
+position: fixed;
+background-color: rgba($background-color, 0.8);
+z-index: 10;
 }
 
 .logo_container {

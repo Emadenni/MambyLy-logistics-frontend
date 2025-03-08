@@ -10,7 +10,7 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-import Layout from "./components/Layout/Layout";
+
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -18,7 +18,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route element={<Layout />}>
+        <Route >
           <Route path="/" element={<Home />} />
           <Route path="/tjänster" element={<Services />} />
           <Route path="/kontaktaOss" element={<ContactUs />} />

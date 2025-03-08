@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import Hero from "../../components/Hero/Hero";
+import Layout from "../../components/Layout/Layout";
 
-type Props = {}
-
-const Home: React.FC  = (props: Props) => {
+const Home: React.FC = () => {
+  console.log("Rendering Home Component");
   return (
-    <div>Home</div>
-  )
-}
+    <Layout>
+      <Hero />
+    </Layout>
+  );
+};
 
-export default Home
+export default Home;
