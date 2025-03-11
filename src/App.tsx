@@ -1,4 +1,6 @@
 import React from "react";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import "./styles/globals.scss";
@@ -10,7 +12,7 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-import Layout from "./components/Layout/Layout";
+
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -18,7 +20,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route element={<Layout />}>
+        <Route >
           <Route path="/" element={<Home />} />
           <Route path="/tjänster" element={<Services />} />
           <Route path="/kontaktaOss" element={<ContactUs />} />

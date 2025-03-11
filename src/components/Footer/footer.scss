@@ -6,8 +6,12 @@
   @include flexbox(column, center, center);
   padding: 1rem 2rem;
   margin: auto;
-  width: 100%;
+  width: 100vw;
   gap:0.6rem;
+ border-top: solid 1px green;
+ background-color: rgba($background-color, 0.55);
+ z-index: 100;
+
   
 
   &__logo_container {
@@ -18,4 +22,12 @@
         margin: 0 auto;
     }
   }
+}
+
+
+
+@media (max-width: 545px) {
+  .footer {
+width: 100%;
+}
 }

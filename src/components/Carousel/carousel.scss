@@ -1,0 +1,19 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+
+.slide-text {
+  color: $background-color;
+  padding: 0rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+;
+}
+
+.MuiBox-root {
+  padding: 0;
+}
+
+.css-vrk4dv {
+  padding: 0;
+}
