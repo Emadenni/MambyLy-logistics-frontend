@@ -11,16 +11,16 @@ const Hamburger_menu: React.FC = () => {
 
   return (
     <div className={`hamburger-menu ${isOpen ? "open" : ""}`}>
-      {isOpen && <div className="hamburger-menu__overlay" onClick={toggleMenu}></div>}
+      {isOpen && <div className="hamburger-menu__overlay" data-testid="overlay" onClick={toggleMenu}></div>}
 
-      <div className="hamburger-menu__icon" onClick={toggleMenu}>
+      <div className="hamburger-menu__icon" role="button" aria-label="Open menu" onClick={toggleMenu}>
         <div className={`bar ${isOpen ? "bar--open" : ""}`}></div>
         <div className={`bar ${isOpen ? "bar--open" : ""}`}></div>
         <div className={`bar ${isOpen ? "bar--open" : ""}`}></div>
       </div>
 
       {/* Lista del menu */}
-      <div className={`hamburger-menu__list ${isOpen ? "open" : ""}`}>
+      <div className={`hamburger-menu__list ${isOpen ? "open" : ""}`}  data-testid="menu-list">
         <ul>
           <li>
             <NavLink
