@@ -1,3 +1,44 @@
-.home_main {
-    background-color: red; 
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.home_container {
+  width: 100%;
+  @include flexbox(column, center, center);
+
+  .transition_container {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    max-width: 700px;
+    text-align: center;
+    @include flexbox(column, center, center);
+    gap: 2rem;
+    border-radius: 5px;
+    padding: 0;
+
+    .dynamic_title {
+      color: $background-color;
+      font-size: 1.6rem;
+      @include flexbox(column, center, center);
+   
+    }
+
+    .home_title {
+      font-size: 2rem;
+      color: yellow;
+    }
+  }
+
+  .home_CTA_box {
+    @include flexbox(row, center, center);
+    width: 100%;
+    gap: 1rem;
+  }
+
+
 }
