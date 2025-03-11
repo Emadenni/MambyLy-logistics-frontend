@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div className="hero">
+    <div className="hero" data-testid="home-page">
       <img src={hero_img} alt="hero placeholder" className={`hero_img ${isLoaded ? "hidden" : ""}`} />
 
       <video
@@ -18,6 +18,7 @@ const Hero: React.FC = () => {
         playsInline
         onLoadedData={() => setIsLoaded(true)}
         poster={hero_img}
+        role= "video"
       >
         <source src={hero_video} type="video/mp4" />
       </video>
