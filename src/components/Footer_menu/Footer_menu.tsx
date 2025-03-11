@@ -5,7 +5,7 @@ import Admin_link from "../Admin_link/Admin_link";
 
 const Footer_menu: React.FC  = () => {
   return (
-    <div className="footer_menu">
+    <div className="footer_menu" role="navigation">
       <ul className="footer_menu__list">
         <li className="footer_menu__list__item">
           <NavLink to="/" className="footer_menu_link">
@@ -27,7 +27,7 @@ const Footer_menu: React.FC  = () => {
 
         <li className="footer_menu__list__item">
           <NavLink to="/jobbaMedOss" className="footer_menu_link">
-            JOBBA MED OSS
+            JOBB
           </NavLink>
         </li>
         <li className="footer_menu__list__item">
