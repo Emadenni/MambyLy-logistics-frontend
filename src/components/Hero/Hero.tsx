@@ -8,8 +8,7 @@ const Hero: React.FC = () => {
 
   return (
     <div className="hero">
-      {/* Placeholder image visibile finché il video non è pronto */}
-      {!isLoaded && <img src={hero_img} alt="hero placeholder" className="hero_img" />}
+      <img src={hero_img} alt="hero placeholder" className={`hero_img ${isLoaded ? "hidden" : ""}`} />
 
       <video
         className={`hero_video ${isLoaded ? "loaded" : ""}`}
