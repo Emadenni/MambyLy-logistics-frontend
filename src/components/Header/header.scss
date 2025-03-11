@@ -3,16 +3,31 @@
 @use "../../styles/mixins" as *;
 
 .header {
-  @include flexbox(row, flex-end, center);
+  @include flexbox(row, flex-end, space-between);
   width: 100vw;
  padding: 1rem 2rem;
 border-bottom: solid 1px green;
 position: fixed;
 background-color: rgba($background-color, 0.9);
 z-index: 10;
+
 }
 
 .logo_container {
    width: 50%;
    
 }
+
+@media (max-width: 1024px) {
+   .header {
+   @include flexbox(row, center, space-between);
+   padding:  2rem 4rem;
+ }
+ }
+
+@media (max-width: 545px) {
+   .header {
+ width: 100%;
+ padding: 2rem 1.4rem;
+ }
+ }

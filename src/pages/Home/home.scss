@@ -8,7 +8,7 @@
 
   .transition_container {
     width: 50%;
-    height: 50%;
+    height: 20%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -38,7 +38,27 @@
     @include flexbox(row, center, center);
     width: 100%;
     gap: 1rem;
+    position: absolute;
+    top: 70%;
+    z-index: 9;
   }
 
 
+}
+
+
+@media (max-width: 545px) {
+  .home_container  .home_CTA_box {
+    @include flexbox(column, center, center);
+   top: 75%;
+  } 
+
+  .home_container .transition_container .home_title {
+    font-size: 1.6rem;
+    color: yellow;
+  }
+
+  .home_container .transition_container .dynamic_title {
+    font-size: 1.3rem;
+  }
 }

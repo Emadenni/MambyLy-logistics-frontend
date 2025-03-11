@@ -17,13 +17,13 @@
     }
 
     &__item:hover {
-      color: $secondary-color;
+      color: $green-background;
       scale: 1.1;
     }
 
     .navbar_link--active {
       color: $text-black;
-      text-decoration: underline;
+      
     }
   }
 }

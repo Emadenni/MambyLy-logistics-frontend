@@ -38,7 +38,7 @@ const Navbar: React.FC  = () => {
             to="/jobbaMedOss"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            JOBBA MED OSS
+            JOBB
           </NavLink>
         </li>
 

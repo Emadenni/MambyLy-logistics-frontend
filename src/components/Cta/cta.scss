@@ -2,18 +2,31 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
-
 .cta-button {
-    transform: translateY(-200px);
-    width: 100%;
-    min-width: 300px;
-    height: auto;
-    padding: 16px;
-    font-size: 1rem;
-    @include primary-font(900);
-    border-radius: 5px;
-    cursor: pointer;
+  width: 100%;
+  min-width: 260px;
+  height: auto;
+  padding: 16px;
+  font-size: 1rem;
+  @include primary-font(900);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out; 
+  z-index: 10;
+  
 
-    
 }
 
+.home_CTA_box .cta-button:hover {
+    background-color: $button-hover-background; 
+ 
+    scale: 1.1;
+  }
+
+  @media (max-width: 545px) {
+   .cta-button {
+     padding: 8px;
+     font-size: 0.8rem;
+     
+    } 
+  }

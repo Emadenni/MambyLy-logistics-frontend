@@ -15,19 +15,31 @@ const Home: React.FC = () => {
         <Hero />
 
         <section className="transition_container">
-          <h1 className="home_title">Linköping, Sverige, Norr Europa</h1>
+          <h1 className="home_title">Linköping, Sverige, Nordeuropa.</h1>
           <h2 className="dynamic_title">
-          Vi levererar inte bara varor, men   <SwitchWord words={["kvalitet", "förtroende", "effektivitet", "professionalism"]}  />
+          Vi levererar inte bara varor, men   <SwitchWord words={["kvalitet", "förtroende", "effektivitet", "professionalism", "organisation"]}  />
           </h2>
         </section>
         <div className="home_CTA_box">
-          <Link to="/tjänster">
-            <CTA text="VARA TJÄNSTER" backgroundColor="#0B770B" color="#DBD714" />
-          </Link>
-          <Link to="/kontaktaOss">
-            <CTA text="KONTAKTA OSS" backgroundColor="#DBD714" color="#0B770B" />
-          </Link>
-        </div>
+  <Link to="/tjänster">
+    <CTA 
+      text="VARA TJÄNSTER" 
+      backgroundColor="#0B770B" 
+      color="#DBD714" 
+      hoverBackgroundColor="#fff"  
+      hoverColor="#0B770B"               
+    />
+  </Link>
+  <Link to="/kontaktaOss">
+    <CTA 
+      text="KONTAKTA OSS" 
+      backgroundColor="#DBD714" 
+      color="#0B770B"
+      hoverBackgroundColor="#fff" 
+      hoverColor="#DBD714"
+    />
+  </Link>
+</div>
       </div>
     </Layout>
   );
