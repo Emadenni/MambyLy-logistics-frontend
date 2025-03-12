@@ -3,12 +3,15 @@
 @use "../../styles/mixins" as *;
 
 .socials_box__container {
+  .social_icon {
+    width: 45px;
+    padding: 5px;
+  }
+}
 
-
-    .social_icon {
-        width: 45px;
-        padding:5px;
-    }
-
-   
+@media (max-width: 545px) {
+  .socials_box__container .social_icon {
+    width: 35px;
+    padding: 5px;
+  }
 }

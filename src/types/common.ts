@@ -10,3 +10,14 @@ export interface CTAProps {
 export type logoProps = {
   size?: "small" | "medium" | "large";
 };
+
+export interface ServicesCardProps {
+  title: string;
+  shortDescription: string;
+  image: string;
+  background_color: string;
+  color:string;
+  onClick: () => void;
+  id: string;
+}
+

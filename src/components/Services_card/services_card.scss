@@ -1,0 +1,54 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.services_cards_container {
+  @include flexbox(row, center, center);
+  padding: 0 10rem;
+  width: 100vw;
+  gap: 5rem;
+  padding: 20px 0;
+
+}
+
+.service_item {
+  flex: 1;
+  max-width: 600px;
+  border-radius: 10px;
+  @include flexbox(column, center, center);
+  flex-wrap: wrap;
+  padding: 0 0rem;
+  position: relative;
+
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  height: 320px;
+  &__image {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px 10px 0 0;
+    object-fit: cover;
+    opacity: 0.9;
+  }
+
+  h3 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 80%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    color: $green-background;
+    background-color: rgba($secondary-color, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.4rem;
+  }
+
+  p {
+    padding: 20px;
+    @include primary-font(400);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 1.1rem;
+  }
+}
+
