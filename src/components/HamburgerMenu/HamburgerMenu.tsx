@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import "./hamburger_menu.scss";
+import "./hamburgerMenu.scss";
 
-const Hamburger_menu: React.FC = () => {
+const HamburgerMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -72,4 +72,4 @@ const Hamburger_menu: React.FC = () => {
   );
 };
 
-export default Hamburger_menu;
+export default HamburgerMenu;

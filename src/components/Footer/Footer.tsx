@@ -2,10 +2,10 @@ import React from "react";
 import "./footer.scss";
 import { Link } from "react-router-dom";
 import "./footer.scss";
-import Footer_menu from "../Footer_menu/Footer_menu";
+import FooterMenu from "../FooterMenu/FooterMenu";
 import Logo from "../Logo/Logo";
 import Terms from "../Terms/Terms";
-import Social_box from "../Social_box/Social_box";
+import SocialBox from "../SocialBox/SocialBox";
 
 
 const Footer: React.FC  = () => {
@@ -15,8 +15,8 @@ const Footer: React.FC  = () => {
         <Logo size="small" />
       </div>
       <Terms />
-      <Social_box />
-      <Footer_menu />
+      <SocialBox />
+      <FooterMenu />
      
     </footer>
   );

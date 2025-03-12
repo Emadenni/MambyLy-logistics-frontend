@@ -1,5 +1,5 @@
 import React from "react";
-import "./services_card.scss";
+import "./servicesCard.scss";
 import { ServicesCardProps } from "../../types/components";
 import { servicesData } from "../data/service";
 
@@ -23,7 +23,7 @@ const ServiceItem: React.FC<ServicesCardProps> = ({
   );
 };
 
-const Services_card: React.FC = () => {
+const ServicesCard: React.FC = () => {
   return (
     <div className="services_cards_container">
       {servicesData.map((service) => (
@@ -34,4 +34,4 @@ const Services_card: React.FC = () => {
   );
 };
 
-export default Services_card;
+export default ServicesCard;

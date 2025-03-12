@@ -1,13 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import Hamburger_menu from '../components/Hamburger_menu/Hamburger_menu';
+import HamburgerMenu from '../components/HamburgerMenu/HamburgerMenu';
 
 describe('Hamburger_menu', () => {
   it('should render the hamburger menu icon', () => {
     render(
       <MemoryRouter>
-        <Hamburger_menu />
+        <HamburgerMenu />
       </MemoryRouter>
     );
     const icon = screen.getByRole('button');
@@ -17,7 +17,7 @@ describe('Hamburger_menu', () => {
   test('should open the menu when clicked', () => {
     render(
       <MemoryRouter>
-        <Hamburger_menu />
+        <HamburgerMenu />
       </MemoryRouter>
     );
     const icon = screen.getByRole('button');
@@ -31,7 +31,7 @@ describe('Hamburger_menu', () => {
   it('should close the menu when the overlay is clicked', () => {
     render(
       <MemoryRouter>
-        <Hamburger_menu />
+        <HamburgerMenu />
       </MemoryRouter>
     );
     const icon = screen.getByRole('button');
@@ -47,7 +47,7 @@ describe('Hamburger_menu', () => {
   it('should render all the nav links', () => {
     render(
       <MemoryRouter>
-        <Hamburger_menu />
+        <HamburgerMenu />
       </MemoryRouter>
     );
     const navLinks = screen.getAllByRole('link');
