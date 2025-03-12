@@ -21,3 +21,10 @@ export interface ServicesCardProps {
   id: string;
 }
 
+export interface MicroserviceCardProps {
+  title: string;
+  description: string;
+  type: "transport" | "digital" | "other"; 
+  id: string;
+  image?: string; 
+}

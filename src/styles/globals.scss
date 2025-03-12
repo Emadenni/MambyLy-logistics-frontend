@@ -1,14 +1,18 @@
 @use "./variables" as *;
-@use "./mixins" as *; 
-@use "./reset" as *; 
+@use "./mixins" as *;
+@use "./reset" as *;
 
 .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .main-content {
-    flex-grow: 1; 
-    padding-top: 100px;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  /* min-height: 100vh; */
+  height: 80vh;
+}
+
+.main-content {
+    @media (max-width: 768px) {
+  padding-top: 100px;
+ }
+
+}

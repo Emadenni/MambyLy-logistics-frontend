@@ -6,7 +6,7 @@ import digital_img from "../../assets/images/digitalImg.jpg";
 export const servicesData: Service[] = [
   {
     title: "Transporttjänster",
-    shortDescription: " Vi erbjuder transport av olika typer av laster med våran dragbilar, där kunden tillhandahåller släpet. Vid behov kan vi även tillhandahålla släp på begäran.",
+    shortDescription: " Vi erbjuder transport av olika typer av laster, där kunden tillhandahåller släpet. Vid behov kan vi även tillhandahålla släp på begäran.",
     image: truck_img,
     color: "white",
     background_color : "rgb(18, 47, 18)",

@@ -4,10 +4,10 @@
 
 .services_cards_container {
   @include flexbox(row, center, center);
-  padding: clamp(10px, 5vw, 10rem);
   width: 100%;
   gap: 3rem;
   flex-wrap: wrap;
+  align-items: stretch;
 }
 
 .service_item {
@@ -16,7 +16,7 @@
   border-radius: 10px;
   @include flexbox(column, center, center);
   flex-wrap: wrap;
-  padding: 0;
+  padding: 0 0 1rem 0;
   position: relative;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   height: auto;
@@ -32,6 +32,11 @@
     border-radius: 10px 10px 0 0;
     object-fit: cover;
     opacity: 0.9;
+  }
+
+  &:hover {
+    scale: 1.02;
+    box-shadow: 4px 4px 15px rgb(177, 204, 70, 0.4);
   }
 
   h3 {
