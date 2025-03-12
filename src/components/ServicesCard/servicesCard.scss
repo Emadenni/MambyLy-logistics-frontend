@@ -4,24 +4,28 @@
 
 .services_cards_container {
   @include flexbox(row, center, center);
-  padding: 0 10rem;
-  width: 100vw;
-  gap: 5rem;
-  padding: 20px 0;
-
+  padding: clamp(10px, 5vw, 10rem);
+  width: 100%;
+  gap: 3rem;
+  flex-wrap: wrap;
 }
 
 .service_item {
-  flex: 1;
-  max-width: 600px;
+  flex: 1 1 300px;
+  max-width: 500px;
   border-radius: 10px;
   @include flexbox(column, center, center);
   flex-wrap: wrap;
-  padding: 0 0rem;
+  padding: 0;
   position: relative;
-
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
-  height: 320px;
+  height: auto;
+
+  @media (max-width: 768px) {
+    flex: 1 1 100%;
+    max-width: 90%;
+  }
+
   &__image {
     width: 100%;
     height: 200px;
@@ -32,16 +36,22 @@
 
   h3 {
     position: absolute;
-    top: 40%;
+    top: 35%;
     left: 50%;
-    width: 80%;
+    width: 70%;
     text-align: center;
     transform: translate(-50%, -50%);
     color: $green-background;
     background-color: rgba($secondary-color, 0.7);
     padding: 10px;
     border-radius: 5px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+
+    @media (max-width: 600px) {
+      top: 10%;
+      width: 90%;
+      font-size: 1rem;
+    }
   }
 
   p {
@@ -49,6 +59,9 @@
     @include primary-font(400);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-size: 1.1rem;
+
+    @media (max-width: 600px) {
+      font-size: 0.9rem;
+    }
   }
 }
-
