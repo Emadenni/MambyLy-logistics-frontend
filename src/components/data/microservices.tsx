@@ -1,4 +1,4 @@
-export const microservices = {
+export const microservicesData = {
     transport: [
       { id: "ms1", title: "Tracking", description: "Monitoraggio spedizioni in tempo reale", type: "transport" },
       { id: "ms2", title: "Gestione Flotte", description: "Software avanzato per flotte aziendali", type: "transport" },
