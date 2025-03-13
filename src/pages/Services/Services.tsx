@@ -15,13 +15,14 @@ const Services = () => {
     if (location.hash) {
       const element = document.querySelector(location.hash);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   }, [location]);
 
   return (
     <Layout>
+      <div className="services_page__wrapper"></div>
       <div className="services_container">
         <section className="services_container__title-box">
           <h1 className="services_container__title">Varje behov har sin lösning</h1>
