@@ -22,7 +22,7 @@ const Services = () => {
 
   return (
     <Layout>
-      <div className="services_page__wrapper"></div>
+      <div className="services_page__wrapper">
       <div className="services_container">
         <section className="services_container__title-box">
           <h1 className="services_container__title">Varje behov har sin lösning</h1>
@@ -82,6 +82,7 @@ const Services = () => {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </Layout>
   );

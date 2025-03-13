@@ -8,11 +8,10 @@
   gap: 4rem;
   flex-wrap: wrap;
   align-items: stretch;
-
 }
 
 .service_item {
-  flex: 1 1 ;
+  flex: 1 1;
   max-width: 600px;
   border-radius: 10px;
   @include flexbox(column, space-between, center);
@@ -21,9 +20,8 @@
   position: relative;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
   height: auto;
-  min-height: 390px; 
-  cursor:pointer;
-
+  min-height: 390px;
+  cursor: pointer;
 
   @media (max-width: 1024px) {
     flex: 1 1 100%;
@@ -40,7 +38,7 @@
 
   &:hover {
     scale: 1.02;
-    box-shadow: 4px 4px 15px rgb(177, 204, 70, 0.4);
+    box-shadow: 4px 4px 15px rgba(13, 14, 11, 0.4);
   }
 
   h3 {
@@ -55,12 +53,6 @@
     padding: 10px;
     border-radius: 5px;
     font-size: 1.2rem;
-
-    @media (max-width: 600px) {
-      top: 10%;
-      width: 90%;
-      font-size: 1rem;
-    }
   }
 
   p {
@@ -68,6 +60,8 @@
     @include primary-font(400);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-size: 1.1rem;
+
+    @include primary-font(100);
 
     @media (max-width: 600px) {
       font-size: 0.9rem;

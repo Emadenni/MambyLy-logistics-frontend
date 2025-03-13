@@ -17,11 +17,16 @@
 
     &--transport {
       background-color: #f0f8ff;
+      background: linear-gradient(to bottom, #f0f8ff, #ffffff);
+      background: linear-gradient(to bottom, #f0f8ff, #d6e6ff);
+      background: radial-gradient(circle, #dbe7f1, #ffffff);
       border: 1px solid #3b82f6; 
+      
     }
   
     &--digital {
       background-color: #f9fafb;
+      background: radial-gradient(circle, #eaefd4, #ffffff);
       border: 1px solid #10b981; 
     }
 
@@ -43,13 +48,16 @@
     }
 
     &__button {
-        background-color: #f9fafb;
+        background-color: $secondary-color;
+        color: $green-background;
         padding: 8px;
         width: 100%;
         border-radius: 5px;
+        border: none;
         font-size: 1rem;
         align-self: flex-end;
         cursor: pointer;
+        
 
         &:hover {
             background-color:$button-hover-background;
@@ -62,6 +70,7 @@
     h4 {
       font-size: 18px;
       color: #333;
+      color: $green-background;
       font-weight: bold;
       margin-bottom: 10px;
     }
