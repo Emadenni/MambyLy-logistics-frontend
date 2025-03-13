@@ -1,9 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import "./footer_menu.scss";
-import Admin_link from "../Admin_link/Admin_link";
+import "./footerMenu.scss";
+import AdminLink from "../AdminLink/AdminLink";
 
-const Footer_menu: React.FC  = () => {
+const FooterMenu: React.FC  = () => {
   return (
     <div className="footer_menu" role="navigation">
       <ul className="footer_menu__list">
@@ -38,9 +38,9 @@ const Footer_menu: React.FC  = () => {
 
        
       </ul>
-      <Admin_link />
+      <AdminLink />
     </div>
   );
 };
 
-export default Footer_menu;
+export default FooterMenu;

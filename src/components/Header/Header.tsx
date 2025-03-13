@@ -3,7 +3,7 @@ import "./header.scss";
 import { useDeviceStore } from "../../store/useDeviceStore";
 import Logo from "../Logo/Logo";
 import Navbar from "../Navbar/Navbar";
-import Hamburger_menu from "../Hamburger_menu/Hamburger_menu";
+import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
 
 const Header: React.FC = () => {
   const { isMobile, setIsMobile } = useDeviceStore();
@@ -28,7 +28,7 @@ const Header: React.FC = () => {
       <div className="logo_container">
         <Logo size="medium" />
       </div>
-      {isMobile ? <Hamburger_menu /> : <Navbar />}
+      {isMobile ? <HamburgerMenu /> : <Navbar />}
     </header>
   );
 };

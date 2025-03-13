@@ -1,17 +1,17 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom'; 
-import Footer_menu from '../components/Footer_menu/Footer_menu';
+import FooterMenu from '../components/FooterMenu/FooterMenu';
 import Terms from '../components/Terms/Terms';
-import Social_box from '../components/Social_box/Social_box'; 
+import SocialBox from '../components/SocialBox/SocialBox'; 
 
 describe('Footer', () => {
 
-  describe('Footer_menu', () => {
+  describe('FooterMenu', () => {
     it('should render all the nav links', () => {
       render(
         <MemoryRouter>
-          <Footer_menu />
+          <FooterMenu />
         </MemoryRouter>
       );
       const navLinks = screen.getAllByRole('link');
@@ -21,7 +21,7 @@ describe('Footer', () => {
     it('should render the correct link texts', () => {
       render(
         <MemoryRouter>
-          <Footer_menu />
+          <FooterMenu />
         </MemoryRouter>
       );
       const hemLink = screen.getByText('HEM');
@@ -40,7 +40,7 @@ describe('Footer', () => {
     it('should navigate to the correct routes when clicked', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Footer_menu />
+          <FooterMenu />
         </MemoryRouter>
       );
       const hemLink = screen.getByText('HEM');
@@ -92,7 +92,7 @@ describe('Footer', () => {
     it('should render all the social icons with links', () => {
       render(
         <MemoryRouter>
-          <Social_box />
+          <SocialBox />
         </MemoryRouter>
       );
       const socialIcons = screen.getAllByRole('link');
@@ -102,7 +102,7 @@ describe('Footer', () => {
     it('should render the correct icons', () => {
       render(
         <MemoryRouter>
-          <Social_box />
+          <SocialBox />
         </MemoryRouter>
       );
       const facebookIcon = screen.getByAltText('facebook_icon');
@@ -123,7 +123,7 @@ describe('Footer', () => {
     it('should navigate to the correct routes when clicked', () => {
       render(
         <MemoryRouter initialEntries={['/']}>
-          <Social_box />
+          <SocialBox />
         </MemoryRouter>
       );
       const facebookLink = screen.getByAltText('facebook_icon');

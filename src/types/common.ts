@@ -10,3 +10,22 @@ export interface CTAProps {
 export type logoProps = {
   size?: "small" | "medium" | "large";
 };
+
+export interface ServicesCardProps {
+  title: string;
+  shortDescription: string;
+  image: string;
+  background_color: string;
+  color:string;
+  path: string;
+  id: string;
+  children?: React.ReactNode; 
+}
+
+export interface MicroserviceCardProps {
+  title: string;
+  description: string;
+  type: "transport" | "digital" | "other"; 
+  id: string;
+  image?: string; 
+}

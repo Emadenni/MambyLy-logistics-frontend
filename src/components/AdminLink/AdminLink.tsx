@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./admin_link.scss";
+import "./adminLink.scss";
 import admin_link_icon from "../../assets/images/admin_link_icon.png";
 
-const Admin_link = (props: Props) => {
+const AdminLink = (props: Props) => {
   return (
     <div className="admin_link_container">
       <Link to="/admin">
@@ -13,4 +13,4 @@ const Admin_link = (props: Props) => {
   );
 };
 
-export default Admin_link;
+export default AdminLink;
