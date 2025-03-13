@@ -53,7 +53,7 @@ const Services = () => {
       </div>
 
       <div className="microservices_container">
-        <div className="microservices_cards__section" id="service1">
+        <div className="microservices_cards__section" id="service1" data-testid="service1-section">
           <h2>Transporttjänster</h2>
           <div className="microservices_cards__list">
             {microservicesData.transport.map((service) => (
@@ -69,7 +69,7 @@ const Services = () => {
         </div>
 
         <div className="microservices_cards__section" id="service2">
-          <h2>Digitala tjänster</h2>
+          <h2 data-testid="digital-section-title">Digitala tjänster</h2>
           <div className="microservices_cards__list">
             {microservicesData.digital.map((service) => (
               <MicroserviceCard

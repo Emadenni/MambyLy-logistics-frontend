@@ -61,7 +61,7 @@
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     font-size: 1.1rem;
 
-    @include primary-font(100);
+    @include primary-font(500);
 
     @media (max-width: 600px) {
       font-size: 0.9rem;
