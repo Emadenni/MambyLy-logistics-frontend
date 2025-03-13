@@ -8,8 +8,8 @@ export const servicesData: Service[] = [
     shortDescription:
       "Vi erbjuder transport av olika typer av laster, där kunden tillhandahåller släpet. Vid behov kan vi även tillhandahålla släp på begäran.",
     image: truck_img,
-    color: "white",
-    background_color: "rgb(2, 94, 40)",
+    color: "black",
+    background_color: "rgb(231, 241, 232)",
     id: "service1",
   },
   {
