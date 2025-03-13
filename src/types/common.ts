@@ -17,8 +17,9 @@ export interface ServicesCardProps {
   image: string;
   background_color: string;
   color:string;
-  onClick: () => void;
+  path: string;
   id: string;
+  children?: React.ReactNode; 
 }
 
 export interface MicroserviceCardProps {
