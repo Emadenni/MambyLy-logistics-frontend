@@ -6,7 +6,7 @@
   width: 100%;
   min-height: 100vh;
   @include flexbox(column, center, center);
-  background-color: rgb(245, 245, 231);
+
   gap: 3rem;
   padding-top: 100px;
 
@@ -31,7 +31,6 @@
 }
 
 .microservices_container {
-  background-color: rgb(245, 245, 231);
   @include flexbox(column, center, center);
   gap: 10rem;
   padding: 150px 0;
@@ -40,10 +39,10 @@
     color: $text-green;
   }
 
-  #service1, #service2 {
+  #service1,
+  #service2 {
     scroll-margin-top: 200px;
   }
-
 
   .microservices_cards {
     &__section {
@@ -66,4 +65,9 @@
       }
     }
   }
+}
+
+.services_page_wrapper {
+  width: 100%;
+  min-height: 100vh;
 }

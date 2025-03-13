@@ -18,7 +18,7 @@ export const servicesData: Service[] = [
       "Vi tillhandahåller verktygen för att säkerställa en kontrollerad och effektiv transportprocess med breda anpassningsmöjligheter.",
     image: digital_img,
     color: "black",
-    background_color: "rgb(177, 219, 182)",
+    background_color: "rgb(231, 241, 232)",
     id: "service2",
   },
 ];

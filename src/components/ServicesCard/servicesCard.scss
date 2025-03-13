@@ -8,11 +8,12 @@
   gap: 4rem;
   flex-wrap: wrap;
   align-items: stretch;
+
 }
 
 .service_item {
   flex: 1 1 ;
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 10px;
   @include flexbox(column, space-between, center);
   flex-wrap: wrap;

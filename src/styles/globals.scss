@@ -11,6 +11,8 @@
 }
 
 .main-content {
+  background: linear-gradient(135deg, rgb(179, 242, 176), rgb(187, 201, 185), rgb(238, 243, 237));
+
   @media (max-width: 768px) {
     padding-top: 100px;
   }

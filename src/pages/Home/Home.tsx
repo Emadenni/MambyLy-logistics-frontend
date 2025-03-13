@@ -17,7 +17,7 @@ const Home: React.FC = () => {
         <section className="transition_container">
           <h1 className="title home_title">Linköping, Sverige, Nordeuropa.</h1>
           <h2 className="dynamic_title">
-          Vi levererar inte bara varor, men   <SwitchWord words={["kvalitet", "förtroende", "effektivitet", "professionalism", "organisation"]}  />
+          Vi levererar inte bara varor, men   <SwitchWord words={["kvalitet", "förtroende", "effektivitet", "professionalism", "organisation", "lösningar"]}  />
           </h2>
         </section>
         <div className="home_CTA_box">
