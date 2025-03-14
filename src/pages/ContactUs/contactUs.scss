@@ -5,10 +5,11 @@
 .contactUs_container {
   width: 100%;
   min-height: 100vh;
-  @include flexbox (column, center, center);
+  @include flexbox(column, center, center);
 
   gap: 3rem;
   padding-top: 100px;
+  padding-bottom: 100px;
 
   @media (max-width: 768px) {
     padding-top: 0px;
@@ -16,5 +17,5 @@
 }
 
 .contactUs_wrapper {
-  background: linear-gradient(135deg, rgb(206, 242, 204), rgb(245, 246, 244), rgb(238, 243, 237));
+  background: linear-gradient(to bottom, #f5ede0, #ffffff);
 }

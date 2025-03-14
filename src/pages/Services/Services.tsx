@@ -56,8 +56,8 @@ const Services = () => {
                   text="LÄS MER"
                   backgroundColor="#0B770B"
                   color="#DBD714"
-                  hoverBackgroundColor="#fff"
-                  hoverColor="#0B770B"
+                  hoverBackgroundColor="#2596be"
+                  hoverColor="#faf2f2"
                 />
               </ServicesCard>
             ))}
