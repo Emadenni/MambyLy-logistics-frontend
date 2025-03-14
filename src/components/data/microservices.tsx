@@ -1,14 +1,14 @@
 export const microservicesData = {
   transport: [
-    { id: "ms1", title: "Palltrailer (Tautliner / Curtain Sider)", description: "För generella pallar med skjutbar sidoskydd för snabb lastning/lossning.", type: "transport" },
-    { id: "ms2", title: "Kyltrailer (Refrigerated Trailer)", description: "För temperaturkänsliga varor som livsmedel och läkemedel.", type: "transport" },
-    { id: "ms3", title: "Containertrailer (Flatbed / Chassis)", description: "För transport av sjöcontainrar i storlekarna 20’, 40’, 45’.", type: "transport" },
-    { id: "ms4", title: "Tanktrailer (Tanker Trailer)", description: "För transport av livsmedels- eller industrivätskor (utan ADR).", type: "transport" },
-    { id: "ms5", title: "Öppen trailer (Flatbed / Open Trailer)", description: "För stora laster, maskiner eller stålkonstruktioner.", type: "transport" },
-    { id: "ms6", title: "Walking Floor Trailer", description: "För bulkvaror som träflis, industriavfall eller jordbruksprodukter.", type: "transport" },
-    { id: "ms7", title: "Lastbil med bakgavellyft", description: "Perfekt för distribution i städer eller utan lastkaj.", type: "transport" },
-    { id: "ms8", title: "Trailerförflyttning & repositionering", description: "Transport mellan terminaler, lager eller hamnar.", type: "transport" },
-    { id: "ms9", title: "Förlastning & trailerhantering", description: "Möjlighet att hämta släpet i förväg och förvara det på en dedikerad plats.", type: "transport" }
+    { id: "ms1", title: "Pallsläp (Tautliner / Gardinsläp)", description: "För generella pallar med skjutbara sidor för snabb lastning och lossning.", type: "transport" },
+    { id: "ms2", title: "Kylsläp (Kyl- och frystransport)", description: "För temperaturkänsliga varor som livsmedel och läkemedel.", type: "transport" },
+    { id: "ms3", title: "Containersläp (Flak / Chassisläp)", description: "För transport av sjöcontainrar i storlekarna 20’, 40’ och 45’.", type: "transport" },
+    { id: "ms4", title: "Tanksläp", description: "För transport av livsmedels- eller industrivätskor (utan ADR).", type: "transport" },
+    { id: "ms5", title: "Flaksläp (Öppet släp)", description: "För stora laster, maskiner eller stålkonstruktioner.", type: "transport" },
+    { id: "ms6", title: "Gånggolvssläp (Walking Floor)", description: "För bulkvaror som träflis, industriavfall eller jordbruksprodukter.", type: "transport" },
+    { id: "ms7", title: "Lastbil med bakgavellyft", description: "Perfekt för distribution i städer eller vid leveranser utan lastkaj.", type: "transport" },
+    { id: "ms8", title: "Släpförflyttning & repositionering", description: "Transport mellan terminaler, lager och hamnar.", type: "transport" },
+    { id: "ms9", title: "Förlastning & släphantering", description: "Möjlighet att hämta släpet i förväg och förvara det på en dedikerad plats.", type: "transport" }
   ],
   digital: [
     {

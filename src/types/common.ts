@@ -16,16 +16,29 @@ export interface ServicesCardProps {
   shortDescription: string;
   image: string;
   background_color: string;
-  color:string;
+  color: string;
   path: string;
   id: string;
-  children?: React.ReactNode; 
+  children?: React.ReactNode;
 }
 
 export interface MicroserviceCardProps {
   title: string;
   description: string;
-  type: "transport" | "digital" | "other"; 
+  type: "transport" | "digital" | "other";
   id: string;
-  image?: string; 
+  image?: string;
+  onSelect: () => void;
+}
+
+export type FormProps = {
+  isJobApplication?: boolean;
+};
+
+export interface FormData {
+  name: string;
+  email: string;
+  message: string;
+  subject: isJobApplication ? jobPositions[0] : subjects[0],
+  file: File | null;
 }
