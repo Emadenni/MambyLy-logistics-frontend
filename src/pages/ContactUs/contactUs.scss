@@ -1,0 +1,22 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.contactUs_container {
+  width: 100%;
+  min-height: 100vh;
+  @include flexbox(column, center, center);
+
+  gap: 3rem;
+  padding-top: 100px;
+  padding-bottom: 100px;
+
+  @media (max-width: 768px) {
+    padding-top: 0px;
+  }
+}
+
+.contactUs_wrapper {
+  background: linear-gradient(to bottom, #f5ede0, #ffffff);
+  background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
+}

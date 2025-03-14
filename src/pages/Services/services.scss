@@ -13,30 +13,6 @@
   @media (max-width: 768px) {
     padding-top: 0px;
   }
-
-  &__title-box {
-    width: 65%;
-    margin-top: 4rem;
-    text-align: center;
-  }
-
-  &__title {
-    font-size: 2.4rem;
-    color: $text-green;
-    text-shadow: 2px 2px 5px rgba(156, 157, 157, 0.5);
-
-    @media (max-width: 768px) {
-      font-size: 1.8rem;
-    }
-  }
-  &__sub-title {
-    font-size: 1.3rem;
-    font-style: oblique;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-    }
-  }
 }
 
 .microservices_container {
@@ -45,7 +21,7 @@
   padding: 150px 0;
 
   h2 {
-    color: $text-green;
+    color: $text-blue;
   }
 
   #service1,
@@ -79,7 +55,8 @@
 .services_page__wrapper {
   min-height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, rgb(179, 242, 176), rgb(187, 201, 185), rgb(238, 243, 237));
+  background: linear-gradient(to bottom, #f5ede0, #ffffff);
+  background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
   display: flex;
   flex-direction: column;
 }
