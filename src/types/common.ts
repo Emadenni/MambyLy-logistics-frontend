@@ -39,6 +39,6 @@ export interface FormData {
   name: string;
   email: string;
   message: string;
-  subject: isJobApplication ? jobPositions[0] : subjects[0],
+  subject: string; 
   file: File | null;
 }
