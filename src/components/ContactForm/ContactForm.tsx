@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Input, Typography } from "@mui/material";
+import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typography } from "@mui/material";
 import "./contactForm.scss";
 import { FormData } from "../../types/common";
 
@@ -16,21 +16,6 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     setFormData((prev) => ({ ...prev, subject: subjectFromCard }));
   }, [subjectFromCard]);
 
-  const subjects = [
-    "Pallsläp (Tautliner / Gardinsläp)",
-    "Kylsläp (Kyl- och frystransport)",
-    "Containersläp (Flak / Chassisläp)",
-    "Tanksläp",
-    "Flaksläp (Öppet släp)",
-    "Gånggolvssläp (Walking Floor)",
-    "Lastbil med bakgavellyft",
-    "Släpförflyttning & repositionering",
-    "Förlastning & släphantering",
-    "Grundläggande digitala verktyg",
-    "Skräddarsydda logistiklösningar",
-    "Webbappar & specialbyggda system",
-    "Övrigt"
-  ];
   const jobPositions = ["spontan ansökan"];
 
   const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -65,7 +50,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <FormControl fullWidth margin="normal">
         <InputLabel>Välj ämne</InputLabel>
         <Select name="subject" value={formData.subject} onChange={handleChange}>
-          {(isJobApplication ? jobPositions : subjects).map((option) => (
+          {(isJobApplication ? jobPositions : [formData.subject]).map((option) => (
             <MenuItem key={option} value={option}>
               {option}
             </MenuItem>

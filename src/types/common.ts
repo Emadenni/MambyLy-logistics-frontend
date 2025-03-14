@@ -42,3 +42,15 @@ export interface FormData {
   subject: string; 
   file: File | null;
 }
+
+interface Position {
+  id: string;
+  departure: string;
+  destination: string;
+  distance: string;
+  serviceType: string;
+}
+
+interface AvailablePositionTableProps {
+  onSelectJob: (jobId: string) => void;
+}

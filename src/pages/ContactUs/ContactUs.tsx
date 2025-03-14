@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useLocation } from "react-router-dom"; // Per accedere alla location passata
+import { useLocation } from "react-router-dom"; 
 import "./contactUs.scss"
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
