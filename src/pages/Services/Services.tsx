@@ -8,6 +8,7 @@ import MicroserviceCard from "../../components/MicroservicesCard/MicroservicesCa
 import { microservicesData } from "../../components/data/microservices";
 import CTA from "../../components/Cta/Cta";
 import ContactForm from "../../components/ContactForm/ContactForm";
+import TitleBox from "../../components/TitleBox/TitleBox";
 
 const Services = () => {
   const location = useLocation();
@@ -31,10 +32,14 @@ const Services = () => {
     <Layout>
       <div className="services_page__wrapper">
         <div className="services_container">
-          <section className="services_container__title-box">
+        <TitleBox 
+            title="Varje behov har sin lösning" 
+            subTitle="Välj våra tjänster som passar dig" 
+          />
+          {/* <section className="services_container__title-box">
             <h1 className="services_container__title">Varje behov har sin lösning</h1>
             <h2 className="services_container__sub-title">Välj våra tjänster som passar dig</h2>
-          </section>
+          </section> */}
 
           <div className="services_cards_container">
             {servicesData.map((service) => (
@@ -93,7 +98,7 @@ const Services = () => {
           </div>
         </div>
 
-        <ContactForm selectedSubject={selectedSubject} />
+       
       </div>
     </Layout>
   );
