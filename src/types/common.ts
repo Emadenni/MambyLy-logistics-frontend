@@ -31,16 +31,17 @@ export interface MicroserviceCardProps {
   onSelect: () => void;
 }
 
-export type FormProps = {
-  isJobApplication?: boolean;
-};
-
 export interface FormData {
   name: string;
   email: string;
   message: string;
   subject: string; 
   file: File | null;
+}
+
+export interface FormProps {
+  subjectFromCard: string;
+  isJobApplication?: boolean;
 }
 
 interface Position {

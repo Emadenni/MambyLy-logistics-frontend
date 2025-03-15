@@ -19,14 +19,11 @@ const WorkWithUs = () => {
       <div className="workWithUs_wrapper">
         <div className="workWithUs_container">
           <TitleBox
-            title="Skicka ett meddelande till oss"
-            subTitle="Har du frågor eller funderingar? Vi är här för att svara på dem"
+            title="Vill du jobba med oss?"
+            subTitle="Kolla de lediga tjänsterna eller skicka in en spontanansökan."
           />
           <AvailablePositionTable onSelectJob={handleSelectJob} />
-          <ContactForm 
-            subjectFromCard={selectedJobId || "Spontan ansökan"} 
-            isJobApplication={isJobApplication}  
-          />
+          <ContactForm subjectFromCard={selectedJobId || "Spontan ansökan"} isJobApplication={true} />
         </div>
       </div>
     </Layout>

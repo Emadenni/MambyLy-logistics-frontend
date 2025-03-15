@@ -3,20 +3,24 @@ import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typo
 import "./contactForm.scss";
 import { FormData } from "../../types/common";
 
-const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({ subjectFromCard, isJobApplication = false }) => {
+const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
+  subjectFromCard,
+  isJobApplication = false,
+}) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
-    subject: subjectFromCard,
+    subject: subjectFromCard || "Spontan ansökan",
     file: null,
   });
 
+  // Aggiorna il valore di subject SOLO se cambia il job selezionato
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, subject: subjectFromCard }));
+    if (subjectFromCard) {
+      setFormData((prev) => ({ ...prev, subject: subjectFromCard }));
+    }
   }, [subjectFromCard]);
-
-  const jobPositions = ["spontan ansökan"];
 
   const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const { name, value } = e.target;
@@ -50,11 +54,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <FormControl fullWidth margin="normal">
         <InputLabel>Välj ämne</InputLabel>
         <Select name="subject" value={formData.subject} onChange={handleChange}>
-          {(isJobApplication ? jobPositions : [formData.subject]).map((option) => (
-            <MenuItem key={option} value={option}>
-              {option}
-            </MenuItem>
-          ))}
+          <MenuItem value="Spontan ansökan">Spontan ansökan</MenuItem>
+          {subjectFromCard && <MenuItem value={subjectFromCard}>{subjectFromCard}</MenuItem>}
         </Select>
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -71,7 +72,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       {isJobApplication && (
         <FormControl fullWidth margin="normal">
           <Typography variant="body2">Ladda upp ditt CV:</Typography>
-          <Input type="file" onChange={handleFileChange} required />
+          <input type="file" onChange={handleFileChange} required />
           {formData.file && <Typography variant="caption">{formData.file.name}</Typography>}
         </FormControl>
       )}

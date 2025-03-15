@@ -2,7 +2,7 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
-.workWithUS_container {
+.workWithUs_container {
   width: 100%;
   min-height: 100vh;
   @include flexbox(column, center, center);
@@ -16,7 +16,7 @@
   }
 }
 
-.workWithUS_wrapper {
-  background: linear-gradient(to bottom, #f5ede0, #ffffff);
+.workWithUs_wrapper {
+
   background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
 }
