@@ -94,7 +94,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       </FormControl>
 
       <FormControl fullWidth margin="normal">
-        <InputLabel>Välj postion</InputLabel>
+        <InputLabel>Välj ämne</InputLabel>
         <Select name="subject" value={formData.subject} onChange={handleChange}>
           {isJobApplication ? <MenuItem value="Spontan ansökan">Spontan ansökan</MenuItem> : null}
           {isJobApplication
