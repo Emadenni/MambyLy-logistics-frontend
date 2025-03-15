@@ -23,7 +23,7 @@ import "./availablePositionTable.scss";
 import { Position } from "../../types/common";
 
 const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelectJob }) => {
-  const { isMobile } = useDeviceStore(); 
+  const { isMobile } = useDeviceStore();
 
   return (
     <Box sx={{ marginBottom: 3 }}>
@@ -35,7 +35,6 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
           Ingen ledig tjänst för tillfället, men du kan alltid skicka in en spontanansökan.
         </Typography>
       ) : isMobile ? (
-        // Mostra la lista con le righe espandibili sui dispositivi mobili
         <Box>
           {positionsData.map((position) => (
             <Accordion key={position.id}>
@@ -47,7 +46,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                 <Typography>{position.id}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <List>
+                <List data-testid="available-positions">
                   <ListItem>
                     <ListItemText primary="Avgång" secondary={position.departure || "Ingen tillgänglig"} />
                   </ListItem>
@@ -66,9 +65,8 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
           ))}
         </Box>
       ) : (
-
         <Box sx={{ overflowX: "auto" }}>
-          <TableContainer component={Paper}>
+        <TableContainer component={Paper} data-testid="available-positions">
             <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
@@ -82,7 +80,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
               <TableBody>
                 {positionsData.map((position) => (
                   <TableRow key={position.id}>
-                    <TableCell>{position.id}</TableCell>
+                    <TableCell > </TableCell>
                     <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
                     <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
                     <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>

@@ -18,7 +18,7 @@ const ContactUs = () => {
             subTitle="Har du frågor eller funderingar? Vi är här för att svara på dem"
           />
 
-          <ContactForm subjectFromCard={subjectFromCard} />
+          <ContactForm subjectFromCard={subjectFromCard}  />
         </div>
       </div>
     </Layout>

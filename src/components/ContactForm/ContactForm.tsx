@@ -74,6 +74,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <Box
+      data-testid="contact-form"
       component="form"
       onSubmit={handleSubmit}
       sx={{
@@ -95,12 +96,9 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <FormControl fullWidth margin="normal">
         <InputLabel>Välj postion</InputLabel>
         <Select name="subject" value={formData.subject} onChange={handleChange}>
-        {isJobApplication ? (
-      <MenuItem value="Spontan ansökan">Spontan ansökan</MenuItem>
-    ) : null}
+          {isJobApplication ? <MenuItem value="Spontan ansökan">Spontan ansökan</MenuItem> : null}
           {isJobApplication
             ? positionsData.map((position) => (
-              
                 <MenuItem key={position.id} value={position.id}>
                   {position.id}
                 </MenuItem>
