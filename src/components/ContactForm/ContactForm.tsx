@@ -15,6 +15,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     file: null,
   });
 
+  const [successMessage, setSuccessMessage] = useState<string>("");
+
   // Aggiorna il valore di subject SOLO se cambia il job selezionato
   useEffect(() => {
     if (subjectFromCard) {
@@ -29,14 +31,34 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFormData({ ...formData, file: e.target.files[0] });
-      e.target.value = "";
+      const selectedFile = e.target.files[0];
+      console.log("File selezionato:", selectedFile);
+      setFormData((prev) => ({ ...prev, file: selectedFile }));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log("Stato formData al submit:", formData);
+
+    // **FIX** Controlla se l'utente ha caricato il file quando necessario
+    if (isJobApplication && !formData.file) {
+      alert("Vänligen ladda upp ditt CV.");
+      return;
+    }
+
     console.log("Formulär skickat:", formData);
+    setSuccessMessage("Tack! Ditt meddelande har skickats.");
+
+    // Resetta il form dopo l'invio
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+      subject: subjectFromCard || "Spontan ansökan",
+      file: null,
+    });
   };
 
   return (
@@ -79,6 +101,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <Button type="submit" variant="contained" color="primary" fullWidth>
         Skicka
       </Button>
+      {successMessage && <Typography color="success.main" sx={{ mt: 2 }}>{successMessage}</Typography>}
     </Box>
   );
 };
