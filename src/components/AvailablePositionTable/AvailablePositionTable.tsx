@@ -66,7 +66,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
         </Box>
       ) : (
         <Box sx={{ overflowX: "auto" }}>
-        <TableContainer component={Paper} data-testid="available-positions">
+          <TableContainer component={Paper} data-testid="available-positions">
             <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
@@ -80,7 +80,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
               <TableBody>
                 {positionsData.map((position) => (
                   <TableRow key={position.id}>
-                    <TableCell > </TableCell>
+                    <TableCell>{position.id}</TableCell> {/* Aggiungi l'ID qui */}
                     <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
                     <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
                     <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
