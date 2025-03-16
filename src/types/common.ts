@@ -44,7 +44,7 @@ export interface FormProps {
   isJobApplication?: boolean;
 }
 
-interface Position {
+export interface Position {
   id: string;
   departure: string;
   destination: string;
@@ -52,6 +52,13 @@ interface Position {
   serviceType: string;
 }
 
-interface AvailablePositionTableProps {
+export interface AvailablePositionTableProps {
   onSelectJob: (jobId: string) => void;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  email: string;
+  imageUrl: string;
 }

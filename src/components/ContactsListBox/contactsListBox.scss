@@ -1,0 +1,31 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.contact-box {
+  @include flexbox(column, center, center);
+  padding: 2rem;
+  text-align: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.contact-box .MuiList-root {
+  @include flexbox(column, center, center);
+  padding: 0;
+  width: 100%;
+  background-color: $background-color;
+}
+
+.contact-box .MuiListItem-root {
+  @include flexbox(row, center, center);
+  padding: 0.5rem 0;
+}
+
+.contact-box .MuiListItemText-root {
+  text-align: center;
+}
+
+.contact-box .MuiGrid-container {
+  width: 60%;
+}
