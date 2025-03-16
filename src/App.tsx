@@ -1,6 +1,6 @@
 import React from "react";
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import "./styles/globals.scss";
@@ -12,7 +12,7 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
-
+import LoginForm from "./components/LoginForm/LoginForm";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -20,7 +20,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route >
+        <Route>
           <Route path="/" element={<Home />} />
           <Route path="/tjänster" element={<Services />} />
           <Route path="/kontaktaOss" element={<ContactUs />} />
@@ -29,11 +29,9 @@ const App = () => {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
-      
-        <Route
-          path="/admin"
-          element={isAuthenticated ? <AdminPage /> : <Navigate to="/" />}
-        />
+        <Route path="/login" element={<LoginForm />} />
+
+        <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
