@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
-import "./LoginForm.scss"; 
+import "./loginForm.scss"; 
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
