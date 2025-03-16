@@ -7,7 +7,7 @@ import { TeamMember } from "../../types/common";
 
 const ContactsListBox = () => {
   return (
-    <Box className="contact-box">
+    <Box className="contact-box" >
       <Typography variant="h5" gutterBottom>
         Våra kontakter
       </Typography>
@@ -29,7 +29,7 @@ const ContactsListBox = () => {
       <Typography variant="h6" gutterBottom>
         För specifika frågor, kontakta våra nyckelpersoner
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} data-testid="contacts-list-box">
         {teamMembersData.map((member, index) => (
           <Grid item xs={12} sm={4} key={index}>
             <Box sx={{ textAlign: "center" }}>
