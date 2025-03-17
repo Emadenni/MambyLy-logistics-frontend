@@ -15,7 +15,23 @@ const AdminPageTabs: React.FC = () => {
 
   return (
     <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-      <Tabs value={value} onChange={handleChange} aria-label="Admin Page Tabs">
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="Admin Page Tabs"
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{
+          '@media (max-width: 600px)': {
+            fontSize: '12px',
+            overflowX: 'auto',
+            '& .MuiTabs-flexContainer': {
+              flexWrap: 'nowrap',
+            },
+          },
+          
+        }}
+      >
         <Tab label="Client Messages" />
         <Tab label="Application Messages" />
         <Tab label="Job Positions" />

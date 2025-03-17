@@ -29,39 +29,50 @@ const ClientsMessagesTab: React.FC = () => {
   };
 
   const handleCopyEmail = (email: string) => {
-    navigator.clipboard.writeText(email)
+    navigator.clipboard
+      .writeText(email)
       .then(() => setOpenCopyDialog(true))
       .catch((error) => alert("Error copying email: " + error));
   };
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h6">Client Messages</Typography>
-      {messages.filter((message) => !message.subject.includes("Job Application")).map((message, index) => (
-        <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
-          <Typography><strong>Name:</strong> {message.name}</Typography>
-          <Typography><strong>Email:</strong> {message.email}</Typography>
-          <Typography><strong>Message:</strong> {message.message}</Typography>
-          
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => handleCopyEmail(message.email)}
-            sx={{ marginTop: 1 }}
-          >
-            Copy Email
-          </Button>
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
+        Client Messages
+      </Typography>
+      {messages
+        .filter((message) => !message.subject.includes("Job Application"))
+        .map((message, index) => (
+          <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+            <Typography>
+              <strong>Name:</strong> {message.name}
+            </Typography>
+            <Typography>
+              <strong>Email:</strong> {message.email}
+            </Typography>
+            <Typography>
+              <strong>Message:</strong> {message.message}
+            </Typography>
 
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => handleDeleteMessage(index)}
-            sx={{ marginTop: 1, marginLeft: 2 }}
-          >
-            Delete Message
-          </Button>
-        </Box>
-      ))}
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => handleCopyEmail(message.email)}
+              sx={{ marginTop: 1 }}
+            >
+              Copy Email
+            </Button>
+
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => handleDeleteMessage(index)}
+              sx={{ marginTop: 1, marginLeft: 2 }}
+            >
+              Delete Message
+            </Button>
+          </Box>
+        ))}
 
       <Dialog open={openDialog} onClose={cancelDelete}>
         <DialogTitle>Confirm Deletion</DialogTitle>

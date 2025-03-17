@@ -38,7 +38,9 @@ const ApplicationsMessagesTab: React.FC = () => {
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h6">Application Messages</Typography>
+         <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
+               Applications Messages
+             </Typography>
       {messages.map((message, index) => (
         <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
           <Typography><strong>Name:</strong> {message.name}</Typography>
