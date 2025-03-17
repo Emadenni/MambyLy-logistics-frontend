@@ -19,7 +19,7 @@ const AdminPage: React.FC = () => {
         </div>
       </div>
       <AdminPageTabs />
-      <div className="logo_container" >
+      <div className="admin_logo_container" >
      <Logo size="small" />
      </div>
     </div>
