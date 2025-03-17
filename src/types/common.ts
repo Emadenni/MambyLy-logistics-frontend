@@ -62,3 +62,15 @@ export interface TeamMember {
   email: string;
   imageUrl: string;
 }
+
+interface Admin {
+  firstName: string;
+  lastName: string;
+  username: string;
+  profilePicture: string;
+  role: string;  
+}
+
+interface AdminInfoBoxProps {
+  admin: Admin;
+}

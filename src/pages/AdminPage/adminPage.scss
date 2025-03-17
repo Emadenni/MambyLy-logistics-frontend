@@ -1,0 +1,19 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.admin_container {
+@include flexbox(row, center, space-between);
+  margin-bottom: 20px;
+}
+
+.logout_button {
+    @include flexbox(row, center, flex-end);
+    margin-right: 20px;
+
+}
+
+.logo_container {
+width: 100%;
+text-align: center;
+}

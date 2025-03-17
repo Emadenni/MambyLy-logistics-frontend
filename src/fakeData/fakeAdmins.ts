@@ -6,6 +6,7 @@ export const fakeAdmins = [
       username: "alice.johnson",
       password: "admin123",  
       profilePicture: "https://example.com/images/alice_johnson.jpg",  
+      role: "Super Admin",  
     },
     {
       firstName: "Bob",
@@ -13,6 +14,7 @@ export const fakeAdmins = [
       username: "bob.smith",
       password: "admin456", 
       profilePicture: "https://example.com/images/bob_smith.jpg", 
+      role: "Admin",  
     },
   ];
   
