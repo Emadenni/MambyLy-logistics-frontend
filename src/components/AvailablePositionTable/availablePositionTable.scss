@@ -1,0 +1,48 @@
+/* availablePositionTable.scss */
+
+/* Per dispositivi mobili, usa una visualizzazione a lista */
+@media (max-width: 768px) {
+    .MuiTableCell-root {
+      padding: 3px;
+    }
+  
+    .MuiTableRow-root {
+      display: block;
+      margin-bottom: 16px;
+    }
+  
+    .MuiTableCell-root {
+      display: block;
+      width: 10%;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      
+    }
+  
+    .MuiTableCell-root:nth-child(odd) {
+      font-weight: bold;
+    }
+  
+    .MuiTableCell-root:first-child {
+      margin-top: 8px;
+    }
+  
+    .MuiTableHead-root {
+      display: none;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .MuiTableRow-root {
+      display: table-row;
+    }
+  
+    .MuiTableCell-root {
+      display: table-cell;
+    }
+  
+    .MuiTableHead-root {
+      display: table-header-group;
+    }
+  }
+  

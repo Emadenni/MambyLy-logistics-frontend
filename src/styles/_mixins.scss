@@ -1,0 +1,12 @@
+@mixin primary-font($weight: 400) {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: $weight;
+  } //  @include primary-font(700); exemple
+
+
+  @mixin flexbox($direction: row, $align-items: center, $justify-content: center) {
+    display: flex;
+    flex-direction: $direction;
+    align-items: $align-items;
+    justify-content: $justify-content;
+  } // @include flexbox(row, center, space-between); exemple

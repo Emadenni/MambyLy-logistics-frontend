@@ -1,0 +1,19 @@
+@use "./variables" as *;
+@use "./mixins" as *;
+@use "./reset" as *;
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* min-height: 100vh; */
+  height: 80vh;
+}
+
+.main-content {
+
+
+  @media (max-width: 768px) {
+    padding-top: 100px;
+  }
+}

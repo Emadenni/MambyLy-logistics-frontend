@@ -1,19 +1,15 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { viteMockServe } from "vite-plugin-mock";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), viteMockServe()],
   test: {
-    globals: true, 
-    environment: 'jsdom', 
-    setupFiles: './setup-tests.ts', 
+    globals: true,
+    environment: "jsdom",
     coverage: {
-      provider: 'v8', 
-      reporter: ['json-summary', 'lcov', 'text'], 
-      include: ['src/**/*.{ts,tsx,js,jsx}'], 
-      outputDirectory: './coverage', 
-      all: true, 
+      provider: "istanbul",
+      reporter: ["text", "json", "html"],
     },
   },
 });
