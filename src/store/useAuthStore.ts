@@ -6,6 +6,6 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
+  isAuthenticated: !!sessionStorage.getItem("token"),
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
 }));

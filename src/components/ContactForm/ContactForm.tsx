@@ -3,6 +3,7 @@ import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typo
 import "./contactForm.scss";
 import { FormData } from "../../types/common";
 import { positionsData } from "../data/positions";
+import useSubmitCompanyMessages from "../../hooks/useSubmitCompanyMessage.ts";
 
 const microservices = [
   "Pallsläp (Tautliner / Gardinsläp)",
@@ -34,6 +35,9 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   const [successMessage, setSuccessMessage] = useState<string>("");
 
+
+  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages();
+
   useEffect(() => {
     if (subjectFromCard) {
       setFormData((prev) => ({ ...prev, subject: subjectFromCard }));
@@ -52,7 +56,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isJobApplication && !formData.file) {
@@ -60,9 +64,10 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       return;
     }
 
-    console.log("Formulär skickat:", formData);
-    setSuccessMessage("Tack! Ditt meddelande har skickats.");
+    // Chiama la funzione handleSubmit che aggiorna companyMessages
+    await handleSubmit(formData);
 
+    // Se il messaggio è stato inviato con successo, puoi resettare il form e mostrare un messaggio di successo
     setFormData({
       name: "",
       email: "",
@@ -70,13 +75,17 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       subject: subjectFromCard || "Spontan ansökan",
       file: null,
     });
+
+    if (!error) {
+      setSuccessMessage("Tack! Ditt meddelande har skickats.");
+    }
   };
 
   return (
     <Box
       data-testid="contact-form"
       component="form"
-      onSubmit={handleSubmit}
+      onSubmit={handleFormSubmit}
       sx={{
         maxWidth: 500,
         mx: "auto",
@@ -133,9 +142,15 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         </>
       )}
 
-      <Button type="submit" variant="contained" color="primary" fullWidth>
-        Skicka
+      <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
+        {isSubmitting ? "Skickar..." : "Skicka"}
       </Button>
+
+      {error && (
+        <Typography color="error.main" sx={{ mt: 2 }}>
+          {error}
+        </Typography>
+      )}
 
       {successMessage && (
         <Typography color="success.main" sx={{ mt: 2 }}>
