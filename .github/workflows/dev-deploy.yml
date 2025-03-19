@@ -15,6 +15,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  REACT_APP_API_BASE_URL: ${{ secrets.API_BASE_URL }}  # Cambia la variabile per essere compatibile con React
 
 jobs:
   test-and-deploy:
@@ -25,21 +26,17 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-   
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-     
       - name: Install dependencies
         run: npm install
 
-   
       - name: Run tests with vitest
         run: npm run coverage
 
-      
       - name: Check if coverage directory exists
         run: |
           if [ -d ./coverage ]; then
@@ -50,17 +47,16 @@ jobs:
             exit 1
           fi
 
- 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
 
-    
       - name: Build the project
-        run: npm run build
+        run: |
+          
+          REACT_APP_API_BASE_URL=${{ secrets.API_BASE_URL }} npm run build
 
-    
       - name: Deploy to S3
         run: aws s3 sync ./dist s3://mambyly-logistics-frontend-dev --delete
