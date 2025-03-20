@@ -36,7 +36,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   const [successMessage, setSuccessMessage] = useState<string>("");
 
 
-  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages();
+  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages(isJobApplication);
 
   useEffect(() => {
     if (subjectFromCard) {
