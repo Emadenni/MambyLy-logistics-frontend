@@ -74,3 +74,10 @@ interface Admin {
 interface AdminInfoBoxProps {
   admin: Admin;
 }
+
+export interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  textMessage: string;
+}

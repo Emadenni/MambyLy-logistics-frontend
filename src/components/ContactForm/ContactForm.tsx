@@ -36,7 +36,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   const [successMessage, setSuccessMessage] = useState<string>("");
 
 
-  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages();
+  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages(isJobApplication);
 
   useEffect(() => {
     if (subjectFromCard) {
@@ -64,10 +64,10 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       return;
     }
 
-    // Chiama la funzione handleSubmit che aggiorna companyMessages
+    
     await handleSubmit(formData);
 
-    // Se il messaggio è stato inviato con successo, puoi resettare il form e mostrare un messaggio di successo
+   
     setFormData({
       name: "",
       email: "",

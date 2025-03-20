@@ -2,49 +2,23 @@ import React, { useState } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import useLogin from "../../hooks/useLogin";
 import "./loginForm.scss"; 
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [showForm, setShowForm] = useState(true); 
   const navigate = useNavigate();
-  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("https://reqres.in/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid email or password");
-      }
-
-      const data = await response.json();
-
-      if (data.token) {
-        sessionStorage.setItem("token", data.token);
-        setIsAuthenticated(true);
-        setError("");
-        setSuccessMessage("Login successful! Redirecting...");
-        setTimeout(() => {
-          navigate("/admin");
-        }, 1000);
-      } else {
-        setError("Invalid email or password");
-      }
-    } catch (err) {
-      setError("Invalid email or password");
-    }
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    error,
+    successMessage,
+    handleSubmit,
+    isLoading,
+  } = useLogin();
 
   const handleClose = () => {
     setShowForm(false); 
@@ -81,8 +55,15 @@ const LoginForm = () => {
           />
           {error && <Typography color="error">{error}</Typography>}
           {successMessage && <Typography color="primary">{successMessage}</Typography>}
-          <Button type="submit" fullWidth variant="contained" color="primary" sx={{ marginTop: 2 }}>
-            Login
+          <Button 
+            type="submit" 
+            fullWidth 
+            variant="contained" 
+            color="primary" 
+            sx={{ marginTop: 2 }}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Loading...' : 'Login'}
           </Button>
         </form>
       </div>
