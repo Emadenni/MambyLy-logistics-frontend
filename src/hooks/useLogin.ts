@@ -15,7 +15,7 @@ const useLogin = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-        const apiUrl = `${process.env.API_BASE_URL}/admin/login`;
+        const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/login`;
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
