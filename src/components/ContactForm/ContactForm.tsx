@@ -58,11 +58,6 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isJobApplication && !formData.file) {
-      alert("Vänligen ladda upp ditt CV.");
-      return;
-    }
-
     const result = await handleSubmit(formData);
 
     setFormData({

@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { FormData } from "../types/common";
+import { FormData, ApiResponse } from "../types/common";  // Assicurati che FormData e ApiResponse siano importati correttamente
 import { validateFormData } from "../utils/validation";
 
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const apiUrl = isJobApplication 
-    ? `${import.meta.env.VITE_API_BASE_URL}/jobMessages` 
+  const apiUrl = isJobApplication
+    ? `${import.meta.env.VITE_API_BASE_URL}/jobMessages`
     : `${import.meta.env.VITE_API_BASE_URL}/clientsMessages`;
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (formData: FormData): Promise<ApiResponse> => {
     setIsSubmitting(true);
     setError("");
 
@@ -28,12 +28,12 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
       textMessage: formData.message,
     };
 
+    // Gestisci il caso del file per Job Application
     if (isJobApplication && formData.file) {
       try {
-      
         const base64File = await readFileAsBase64(formData.file);
         if (base64File) {
-          dataToSend.uploadCvBase64 = base64File; 
+          dataToSend.uploadCvBase64 = base64File;
         }
       } catch (fileError) {
         setError(`Error reading file: ${fileError.message}`);
