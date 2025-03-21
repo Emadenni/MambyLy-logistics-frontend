@@ -8,15 +8,12 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
 
   const handleAddNewAdmin = async () => {
     const result = await submitAdmin();
-  
+
     console.log(result);
-  
+
     if (result.success) {
       setSuccessMessage("Admin added successfully!");
-  
-      onAddAdmin(newAdmin);
-  
-     
+
       setNewAdmin({
         firstName: "",
         lastName: "",
@@ -24,14 +21,12 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
         email: "",
         profileImage: "",
       });
-  
-  
+
       setTimeout(() => {
-        onClose(); 
-        setSuccessMessage(null); 
-      }, 3000); 
+        onClose();
+        setSuccessMessage(null);
+      }, 3000);
     } else {
-      
       setSuccessMessage(null);
       console.error(result.message);
     }

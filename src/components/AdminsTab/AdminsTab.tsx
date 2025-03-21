@@ -122,7 +122,7 @@ const AdminsTab: React.FC = () => {
       <AddAdmin
         open={openAddAdmin}
         onClose={() => setOpenAddAdmin(false)}
-        onAddAdmin={handleAddAdmin} 
+   
       />
     </Box>
   );
