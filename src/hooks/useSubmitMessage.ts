@@ -6,7 +6,9 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/clientsMessages`;
+  const apiUrl = isJobApplication 
+    ? `${import.meta.env.VITE_API_BASE_URL}/jobMessages` 
+    : `${import.meta.env.VITE_API_BASE_URL}/clientsMessages`;
 
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
@@ -16,7 +18,7 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
     if (validationErrors.length > 0) {
       setError(validationErrors.join(", "));
       setIsSubmitting(false);
-      return;
+      return { success: false, message: validationErrors.join(", ") };
     }
 
     const dataToSend: any = {
@@ -27,7 +29,17 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
     };
 
     if (isJobApplication && formData.file) {
-      dataToSend.file = formData.file;
+      try {
+      
+        const base64File = await readFileAsBase64(formData.file);
+        if (base64File) {
+          dataToSend.uploadCvBase64 = base64File; 
+        }
+      } catch (fileError) {
+        setError(`Error reading file: ${fileError.message}`);
+        setIsSubmitting(false);
+        return { success: false, message: fileError.message || "Unknown file error" };
+      }
     }
 
     try {
@@ -45,12 +57,28 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
         throw new Error(`Error: ${response.statusText}`);
       }
 
-      console.log("Message sent successfully", dataToSend);
+      const responseBody = await response.json();
+      console.log("Message sent successfully", responseBody);
+
+      return { success: true, message: responseBody.message };
     } catch (err) {
+      console.error("An error occurred:", err);
       setError(`An error occurred: ${err.message || "Unknown error"}`);
+      return { success: false, message: err.message || "Unknown error" };
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const readFileAsBase64 = (file: File): Promise<string | null> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result?.toString().split(",")[1] || null);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   };
 
   return { isSubmitting, error, handleSubmit };
