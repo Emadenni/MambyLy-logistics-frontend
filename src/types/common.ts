@@ -66,7 +66,6 @@ export interface TeamMember {
 interface Admin {
   firstName: string;
   lastName: string;
-  username: string;
   profilePicture: string;
   role: string;  
 }
@@ -85,4 +84,24 @@ export interface FormData {
 export interface ApiResponse {
   success: boolean;
   message: string;
+}
+
+interface RegisterResult {
+  success: boolean;
+  message: string;
+}
+
+interface AdminData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  profileImage: string;
+}
+
+interface FieldErrors {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  password: string | null;
 }

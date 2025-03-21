@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Avatar, Typography } from '@mui/material';
-import { AdminInfoBoxProps, Admin } from '../../types/common';
+import { AdminInfoBoxProps, Admin } from "../../types/common";
 
 
 const AdminInfoBox: React.FC<AdminInfoBoxProps> = ({ admin }) => {
@@ -11,9 +11,6 @@ const AdminInfoBox: React.FC<AdminInfoBoxProps> = ({ admin }) => {
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
               {admin.firstName} {admin.lastName}
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              Username: {admin.username}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Role: {admin.role}  {/* Visualizza il ruolo */}

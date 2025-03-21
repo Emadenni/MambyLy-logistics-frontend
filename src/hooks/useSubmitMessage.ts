@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FormData, ApiResponse } from "../types/common";  // Assicurati che FormData e ApiResponse siano importati correttamente
-import { validateFormData } from "../utils/validation";
+import { FormData, ApiResponse } from "../types/common";  
+import { validateFormData } from "../utils/formValidation";
 
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +28,7 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
       textMessage: formData.message,
     };
 
-    // Gestisci il caso del file per Job Application
+  
     if (isJobApplication && formData.file) {
       try {
         const base64File = await readFileAsBase64(formData.file);

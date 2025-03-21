@@ -38,3 +38,4 @@ export const validateFormData = (formData, isJobApplication) => {
 
   return error ? error.details.map(e => e.message) : [];
 };
+
