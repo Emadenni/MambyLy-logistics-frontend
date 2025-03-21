@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -78,15 +78,21 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                 </TableRow>
               </TableHead>
               <TableBody>
-                {positionsData.map((position) => (
-                  <TableRow key={position.id}>
-                    <TableCell>{position.id}</TableCell> {/* Aggiungi l'ID qui */}
-                    <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
-                    <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
-                    <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
-                    <TableCell>{position.serviceType}</TableCell>
+                {positionsData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5}>Ingen ledig tjänst för tillfället.</TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  positionsData.map((position) => (
+                    <TableRow key={position.id}>
+                      <TableCell>{position.id}</TableCell>
+                      <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
+                      <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
+                      <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
+                      <TableCell>{position.serviceType}</TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

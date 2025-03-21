@@ -3,7 +3,7 @@ import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typo
 import "./contactForm.scss";
 import { FormData } from "../../types/common";
 import { positionsData } from "../data/positions";
-import useSubmitCompanyMessages from "../../hooks/useSubmitCompanyMessage.ts";
+import useSubmitMessages from "../../hooks/useSubmitMessage.ts";
 
 const microservices = [
   "Pallsläp (Tautliner / Gardinsläp)",
@@ -35,8 +35,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   const [successMessage, setSuccessMessage] = useState<string>("");
 
-
-  const { isSubmitting, error, handleSubmit } = useSubmitCompanyMessages(isJobApplication);
+  const { isSubmitting, error, handleSubmit } = useSubmitMessages(isJobApplication);
 
   useEffect(() => {
     if (subjectFromCard) {
@@ -59,15 +58,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (isJobApplication && !formData.file) {
-      alert("Vänligen ladda upp ditt CV.");
-      return;
-    }
+    const result = await handleSubmit(formData);
 
-    
-    await handleSubmit(formData);
-
-   
     setFormData({
       name: "",
       email: "",
@@ -76,7 +68,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       file: null,
     });
 
-    if (!error) {
+    if (result.success && !error) {
       setSuccessMessage("Tack! Ditt meddelande har skickats.");
     }
   };

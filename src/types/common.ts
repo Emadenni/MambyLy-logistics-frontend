@@ -81,3 +81,8 @@ export interface FormData {
   subject: string;
   textMessage: string;
 }
+
+export interface ApiResponse {
+  success: boolean;
+  message: string;
+}
