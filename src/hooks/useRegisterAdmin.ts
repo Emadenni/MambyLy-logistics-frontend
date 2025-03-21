@@ -61,39 +61,38 @@ const useRegisterAdmin = () => {
       setError("Please fix the form errors.");
       return { success: false, message: "Form validation failed." };
     }
-  
+
     try {
       const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/register`;
       const token = sessionStorage.getItem("token");
-  
+
       const headers: HeadersInit = {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       };
-  
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers,
         body: JSON.stringify(newAdmin),
       });
-  
+
       if (response.ok) {
         setError(null);
         return { success: true, message: "Admin added successfully." };
       } else {
         const data = await response.json();
         const errorMessage = data.message || "Something went wrong.";
-        setError(errorMessage); // Aggiorna l'errore
-        return { success: false, message: errorMessage }; 
+        setError(errorMessage);
+        return { success: false, message: errorMessage };
       }
     } catch (err) {
       setError("An error occurred while submitting the form.");
       return { success: false, message: "An error occurred while submitting the form." };
     }
   };
-  
 
-  return { newAdmin, error, handleChange, handleFileChange, submitAdmin, fieldErrors };
+  return { newAdmin, error, handleChange, handleFileChange, submitAdmin, setNewAdmin, fieldErrors };
 };
 
 export default useRegisterAdmin;

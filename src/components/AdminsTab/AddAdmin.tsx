@@ -9,7 +9,7 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
   const handleAddNewAdmin = async () => {
     const result = await submitAdmin();
   
-    console.log(result); // Logghiamo la risposta per vedere cosa succede
+    console.log(result);
   
     if (result.success) {
       setSuccessMessage("Admin added successfully!");
@@ -73,7 +73,7 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
         helperText={fieldErrors.password}
       />
   
-      {/* Caricamento immagine */}
+
       <input
         accept="image/*"
         id="profile-image"
@@ -86,8 +86,7 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
           Upload Profile Image
         </Button>
       </label>
-  
-      {/* Anteprima immagine */}
+
       {newAdmin.profileImage && (
         <div>
           <img
@@ -104,12 +103,12 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
       )}
     </DialogContent>
   
-    {Object.values(fieldErrors).some((err) => err) && (
+   {/*  {Object.values(fieldErrors).some((err) => err) && (
       <Alert severity="error" sx={{ marginTop: 2 }}>
         Please correct the errors in the form before submitting.
       </Alert>
     )}
-  
+   */}
     <DialogActions>
       <Button onClick={onClose} color="primary">
         Cancel
