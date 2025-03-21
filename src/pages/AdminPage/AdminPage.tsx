@@ -1,7 +1,7 @@
 import React from "react";
 import "./adminPage.scss";
 import AdminPageTabs from "../../components/AdminPageTabs/AdminPageTabs";
-import AdminInfoBox from "../../components/AdminInfoBox/AdminInfoBox";
+import AdminInfoBox from "../../components/AdminsTab/AdminInfoBox";
 import { fakeAdmins } from "../../fakeData/fakeAdmins";
 import LogoutButton from "../../components/LogoutButton/LogoutButton";
 import Logo from "../../components/Logo/Logo";

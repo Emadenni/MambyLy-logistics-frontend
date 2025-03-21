@@ -31,3 +31,19 @@ export const microservicesData = {
     },
   ]
 };
+
+export const microservices = [
+  "Pallsläp (Tautliner / Gardinsläp)",
+  "Kylsläp (Kyl- och frystransport)",
+  "Containersläp (Flak / Chassisläp)",
+  "Tanksläp",
+  "Flaksläp (Öppet släp)",
+  "Gånggolvssläp (Walking Floor)",
+  "Lastbil med bakgavellyft",
+  "Släpförflyttning & repositionering",
+  "Förlastning & släphantering",
+  "Grundläggande digitala verktyg",
+  "Skräddarsydda logistiklösningar",
+  "Webbappar & specialbyggda system",
+  "Övrigt",
+];
