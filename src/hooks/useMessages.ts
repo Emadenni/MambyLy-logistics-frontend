@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { Message } from "../types/common";
 
-
-
 const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -15,8 +13,11 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const fetchMessages = async () => {
     const token = getToken();
     setLoading(true);
+
+    const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages";
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/clientsMessages`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${endpoint}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -58,15 +59,18 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
     }
   };
 
-  const deleteMessage = async (clientMessageId: string | undefined) => {
-    if (!clientMessageId) {
-      console.error("Error: clientMessageId is undefined!"); 
+  const deleteMessage = async (messageId: string | undefined) => {
+    if (!messageId) {
+      console.error("Error: messageId is undefined!");
       return;
     }
+
     const token = getToken();
+    const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages"; 
+
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/clientsMessages/${clientMessageId}`,
+        `${import.meta.env.VITE_API_BASE_URL}${endpoint}/${messageId}`,
         {
           method: "DELETE",
           headers: {
@@ -79,7 +83,9 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
       if (!response.ok) {
         throw new Error("Failed to delete message");
       }
-      setMessages((prevMessages) => prevMessages.filter((msg) => msg.clientMessageId !== clientMessageId));
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg[idKey] !== messageId)
+      );
     } catch (err) {
       setError(err.message || "Failed to delete message");
     }
@@ -87,9 +93,9 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
   useEffect(() => {
     fetchMessages();
-  }, []);
+  }, [idKey]);
 
   return { messages, loading, error, fetchMessages, deleteMessage };
 };
 
-export default useMessages;
+export default useMessages;  

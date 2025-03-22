@@ -4,20 +4,19 @@ import useMessages from "../../hooks/useMessages";
 import { formatDate } from "../../utils/dateUtils";
 
 const ClientsMessagesTab: React.FC = () => {
-  const { messages, loading, error, deleteMessage } = useMessages("clientMessageId"); 
-
+  const { messages, loading, error, deleteMessage } = useMessages("clientMessageId");
   const [openDialog, setOpenDialog] = useState(false);
-  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);  
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
 
   const handleDeleteMessage = (messageId: string) => {
-    setMessageToDelete(messageId); 
+    setMessageToDelete(messageId);
     setOpenDialog(true);
   };
 
   const confirmDelete = () => {
     if (messageToDelete !== null) {
-      deleteMessage(messageToDelete);  
+      deleteMessage(messageToDelete);
       setOpenDialog(false);
       setMessageToDelete(null);
     }
@@ -31,7 +30,10 @@ const ClientsMessagesTab: React.FC = () => {
   const handleCopyEmail = (email: string) => {
     navigator.clipboard
       .writeText(email)
-      .then(() => setOpenCopyDialog(true))
+      .then(() => {
+        setOpenCopyDialog(true);
+        setTimeout(() => setOpenCopyDialog(false), 3000);
+      })
       .catch((error) => alert("Error copying email: " + error));
   };
 
@@ -50,7 +52,7 @@ const ClientsMessagesTab: React.FC = () => {
       </Typography>
       {messages.length > 0 ? (
         messages.map((message) => (
-          <Box key={message.messageId} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+          <Box key={message.clientMessageId} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
             <Typography>
               <strong>Name:</strong> {message.name}
             </Typography>
@@ -79,7 +81,7 @@ const ClientsMessagesTab: React.FC = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => handleDeleteMessage(message.clientMessageId)}  
+              onClick={() => handleDeleteMessage(message.clientMessageId)}
               sx={{ marginTop: 1, marginLeft: 2 }}
             >
               Delete Message
