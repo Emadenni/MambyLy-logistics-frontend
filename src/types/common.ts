@@ -81,9 +81,10 @@ export interface FormData {
   textMessage: string;
 }
 
-export interface ApiResponse {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
+  data?: T;  
 }
 
 interface RegisterResult {

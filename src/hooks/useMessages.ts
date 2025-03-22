@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Message } from "../types/common";
+import { Message, ApiResponse } from "../types/common";
 
 const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -29,10 +29,10 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
         throw new Error("Failed to fetch messages");
       }
 
-      const data = await response.json();
+      const data: ApiResponse  = await response.json();
 
       if (data && typeof data === "object") {
-        const messageArray = Object.values(data).map((message: any) => {
+        const messageArray = Object.values(data).map((message: Message) => {
           const sentAtString = message.sentAt;
           let sentAtDate: Date | null = null;
 

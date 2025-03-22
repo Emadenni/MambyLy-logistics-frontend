@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { ApiResponse } from "../types/common";
+
 
 const useLogin = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +30,7 @@ const useLogin = () => {
         throw new Error("Invalid email or password");
       }
 
-      const data = await response.json();
+      const data: ApiResponse  = await response.json();
 
       if (data.token) {
         sessionStorage.setItem("token", data.token);
@@ -41,8 +43,13 @@ const useLogin = () => {
       } else {
         setError("Invalid email or password");
       }
-    } catch (err) {
-      setError("Invalid email or password");
+    }catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    
     } finally {
       setIsLoading(false);
     }

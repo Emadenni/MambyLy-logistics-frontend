@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -8,15 +8,15 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
+  CircularProgress,
 } from "@mui/material";
 import AddAdmin from "./AddAdmin";
-import { fakeAdmins } from "../../fakeData/fakeAdmins";
-import useRegisterAdmin from "../../hooks/useRegisterAdmin";
+import useRenderAdmin from "../../hooks/useRenderAdmin"; 
 import "./adminsTab.scss";
 
 const AdminsTab: React.FC = () => {
-  const [admins, setAdmins] = useState(fakeAdmins);
+  const { admins, loading, error, fetchAdmins } = useRenderAdmin(); 
+
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<number | null>(null);
   const [openAddAdmin, setOpenAddAdmin] = useState(false);
@@ -45,6 +45,29 @@ const AdminsTab: React.FC = () => {
     setAdmins([...admins, admin]);
   };
 
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ padding: 3, display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ padding: 3 }}>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
@@ -63,7 +86,7 @@ const AdminsTab: React.FC = () => {
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Avatar
-              src={admin.profilePicture}
+              src={admin.profileImageUrl}
               alt={`${admin.firstName} ${admin.lastName}`}
               sx={{ width: 80, height: 80, marginRight: 3 }}
             />
@@ -77,18 +100,10 @@ const AdminsTab: React.FC = () => {
             </Box>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              sx={{ marginRight: 2 }}
-            >
+            <Button variant="outlined" color="primary" sx={{ marginRight: 2 }}>
               Edit
             </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => handleDeleteAdmin(index)}
-            >
+            <Button variant="outlined" color="error" onClick={() => handleDeleteAdmin(index)}>
               Delete
             </Button>
           </Box>
@@ -110,20 +125,11 @@ const AdminsTab: React.FC = () => {
         </DialogActions>
       </Dialog>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ marginTop: 3 }}
-        onClick={() => setOpenAddAdmin(true)}
-      >
+      <Button variant="contained" color="primary" sx={{ marginTop: 3 }} onClick={() => setOpenAddAdmin(true)}>
         Add New Admin
       </Button>
 
-      <AddAdmin
-        open={openAddAdmin}
-        onClose={() => setOpenAddAdmin(false)}
-   
-      />
+      <AddAdmin open={openAddAdmin} onClose={() => setOpenAddAdmin(false)} />
     </Box>
   );
 };
