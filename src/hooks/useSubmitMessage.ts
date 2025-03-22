@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { FormData, ApiResponse } from "../types/common";  
+import { FormData, ApiResponse } from "../types/common";
 import { validateFormData } from "../utils/formValidation";
 
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
+
+  const removeBase64Prefix = (base64String: string) => {
+    return base64String.replace(/^data:([A-Za-z-+/]+);base64,/, "");
+  };
 
   const apiUrl = isJobApplication
     ? `${import.meta.env.VITE_API_BASE_URL}/jobMessages`
@@ -28,12 +32,12 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
       textMessage: formData.message,
     };
 
-  
     if (isJobApplication && formData.file) {
       try {
         const base64File = await readFileAsBase64(formData.file);
         if (base64File) {
-          dataToSend.uploadCvBase64 = base64File;
+          const cleanBase64 = removeBase64Prefix(base64File);
+          dataToSend.uploadCvBase64 = cleanBase64;
         }
       } catch (fileError) {
         setError(`Error reading file: ${fileError.message}`);
