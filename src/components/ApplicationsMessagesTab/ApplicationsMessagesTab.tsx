@@ -9,8 +9,8 @@ const ApplicationsMessagesTab: React.FC = () => {
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessageToDelete(messageId);
+  const handleDeleteMessage = (jobMessageId: string) => {
+    setMessageToDelete(jobMessageId);
     setOpenDialog(true);
   };
 
