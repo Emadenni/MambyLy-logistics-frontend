@@ -105,3 +105,12 @@ interface FieldErrors {
   email: string | null;
   password: string | null;
 }
+
+interface Message {
+  messageId: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  sentAt: string;
+}
