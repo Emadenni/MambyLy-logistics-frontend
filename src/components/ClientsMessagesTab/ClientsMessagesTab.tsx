@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { fakeCompanyMessages } from "../../fakeData/fakeCompanyMessages";
+import useMessages from "../../hooks/useMessages";
+import { formatDate } from "../../utils/dateUtils";
 
 const ClientsMessagesTab: React.FC = () => {
-  const [messages, setMessages] = useState(fakeCompanyMessages);
+  const { messages, loading, error, deleteMessage } = useMessages("clientMessageId"); 
+
   const [openDialog, setOpenDialog] = useState(false);
-  const [messageToDelete, setMessageToDelete] = useState<number | null>(null);
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);  
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
 
-  const handleDeleteMessage = (index: number) => {
-    setMessageToDelete(index);
+  const handleDeleteMessage = (messageId: string) => {
+    setMessageToDelete(messageId); 
     setOpenDialog(true);
   };
 
   const confirmDelete = () => {
     if (messageToDelete !== null) {
-      const newMessages = [...messages];
-      newMessages.splice(messageToDelete, 1);
-      setMessages(newMessages);
+      deleteMessage(messageToDelete);  
       setOpenDialog(false);
       setMessageToDelete(null);
     }
@@ -35,15 +35,22 @@ const ClientsMessagesTab: React.FC = () => {
       .catch((error) => alert("Error copying email: " + error));
   };
 
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
+
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
         Client Messages
       </Typography>
-      {messages
-        .filter((message) => !message.subject.includes("Job Application"))
-        .map((message, index) => (
-          <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+      {messages.length > 0 ? (
+        messages.map((message) => (
+          <Box key={message.messageId} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
             <Typography>
               <strong>Name:</strong> {message.name}
             </Typography>
@@ -51,7 +58,13 @@ const ClientsMessagesTab: React.FC = () => {
               <strong>Email:</strong> {message.email}
             </Typography>
             <Typography>
-              <strong>Message:</strong> {message.message}
+              <strong>Subject:</strong> {message.subject}
+            </Typography>
+            <Typography>
+              <strong>Message:</strong> {message.textMessage}
+            </Typography>
+            <Typography>
+              <strong>Received:</strong> {formatDate(message.sentAt)}
             </Typography>
 
             <Button
@@ -66,13 +79,16 @@ const ClientsMessagesTab: React.FC = () => {
             <Button
               variant="outlined"
               color="error"
-              onClick={() => handleDeleteMessage(index)}
+              onClick={() => handleDeleteMessage(message.clientMessageId)}  
               sx={{ marginTop: 1, marginLeft: 2 }}
             >
               Delete Message
             </Button>
           </Box>
-        ))}
+        ))
+      ) : (
+        <Typography>No messages found.</Typography>
+      )}
 
       <Dialog open={openDialog} onClose={cancelDelete}>
         <DialogTitle>Confirm Deletion</DialogTitle>
