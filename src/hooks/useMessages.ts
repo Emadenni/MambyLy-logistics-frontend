@@ -66,7 +66,7 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
     }
 
     const token = getToken();
-    const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages"; 
+    const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages";
 
     try {
       const response = await fetch(
@@ -98,4 +98,4 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   return { messages, loading, error, fetchMessages, deleteMessage };
 };
 
-export default useMessages;  
+export default useMessages;

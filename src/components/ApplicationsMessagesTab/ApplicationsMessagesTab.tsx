@@ -4,8 +4,7 @@ import useMessages from "../../hooks/useMessages";
 import { formatDate } from "../../utils/dateUtils";
 
 const ApplicationsMessagesTab: React.FC = () => {
-  const { messages, loading, error, deleteMessage } = useMessages("jobMessageId"); 
-
+  const { messages, loading, error, deleteMessage } = useMessages("jobMessageId");
   const [openDialog, setOpenDialog] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
@@ -49,54 +48,55 @@ const ApplicationsMessagesTab: React.FC = () => {
         Job Messages
       </Typography>
       {messages.length > 0 ? (
-        messages.map((message) => (
-          <Box key={message.jobMessageId} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
-            <Typography>
-              <strong>Id:</strong> {message.jobMessageId}
-            </Typography>
-            <Typography>
-              <strong>Name:</strong> {message.name}
-            </Typography>
-            <Typography>
-              <strong>Email:</strong> {message.email}
-            </Typography>
-            <Typography>
-              <strong>Subject:</strong> {message.subject}
-            </Typography>
-            <Typography>
-              <strong>Message:</strong> {message.textMessage}
-            </Typography>
-            <Typography>
-              <strong>Received:</strong> {formatDate(message.sentAt)}
-            </Typography>
-            {message.uploadCv && (
+        messages.map((message) => {
+          // Fallback key using message.jobMessageId or a combination of other unique fields
+          const key = message.jobMessageId || `fallback-${message.name}-${message.email}`;
+
+          return (
+            <Box key={key} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+              <Typography>
+                <strong>Name:</strong> {message.name}
+              </Typography>
+              <Typography>
+                <strong>Email:</strong> {message.email}
+              </Typography>
+              <Typography>
+                <strong>Subject:</strong> {message.subject}
+              </Typography>
+              <Typography>
+                <strong>Message:</strong> {message.textMessage}
+              </Typography>
+              <Typography>
+                <strong>Received:</strong> {formatDate(message.sentAt)}
+              </Typography>
+               
               <Typography>
                 <strong>CV:</strong>
                 <a href={message.uploadCv} target="_blank" rel="noopener noreferrer">
                   Download CV
                 </a>
               </Typography>
-            )}
 
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleCopyEmail(message.email)}
-              sx={{ marginTop: 1 }}
-            >
-              Copy Email
-            </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleCopyEmail(message.email)}
+                sx={{ marginTop: 1 }}
+              >
+                Copy Email
+              </Button>
 
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => handleDeleteMessage(message.jobMessageId)}
-              sx={{ marginTop: 1, marginLeft: 2 }}
-            >
-              Delete Message
-            </Button>
-          </Box>
-        ))
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleDeleteMessage(message.jobMessageId)}
+                sx={{ marginTop: 1, marginLeft: 2 }}
+              >
+                Delete Message
+              </Button>
+            </Box>
+          );
+        })
       ) : (
         <Typography>No messages found.</Typography>
       )}
@@ -127,4 +127,5 @@ const ApplicationsMessagesTab: React.FC = () => {
     </Box>
   );
 };
+
 export default ApplicationsMessagesTab;

@@ -30,10 +30,7 @@ const ClientsMessagesTab: React.FC = () => {
   const handleCopyEmail = (email: string) => {
     navigator.clipboard
       .writeText(email)
-      .then(() => {
-        setOpenCopyDialog(true);
-        setTimeout(() => setOpenCopyDialog(false), 3000);
-      })
+      .then(() => setOpenCopyDialog(true))
       .catch((error) => alert("Error copying email: " + error));
   };
 
@@ -51,43 +48,48 @@ const ClientsMessagesTab: React.FC = () => {
         Client Messages
       </Typography>
       {messages.length > 0 ? (
-        messages.map((message) => (
-          <Box key={message.clientMessageId} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
-            <Typography>
-              <strong>Name:</strong> {message.name}
-            </Typography>
-            <Typography>
-              <strong>Email:</strong> {message.email}
-            </Typography>
-            <Typography>
-              <strong>Subject:</strong> {message.subject}
-            </Typography>
-            <Typography>
-              <strong>Message:</strong> {message.textMessage}
-            </Typography>
-            <Typography>
-              <strong>Received:</strong> {formatDate(message.sentAt)}
-            </Typography>
+        messages.map((message) => {
+      
+          const key = message.clientMessageId || `fallback-${message.name}-${message.email}`;
 
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleCopyEmail(message.email)}
-              sx={{ marginTop: 1 }}
-            >
-              Copy Email
-            </Button>
+          return (
+            <Box key={key} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+              <Typography>
+                <strong>Name:</strong> {message.name}
+              </Typography>
+              <Typography>
+                <strong>Email:</strong> {message.email}
+              </Typography>
+              <Typography>
+                <strong>Subject:</strong> {message.subject}
+              </Typography>
+              <Typography>
+                <strong>Message:</strong> {message.textMessage}
+              </Typography>
+              <Typography>
+                <strong>Received:</strong> {formatDate(message.sentAt)}
+              </Typography>
 
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => handleDeleteMessage(message.clientMessageId)}
-              sx={{ marginTop: 1, marginLeft: 2 }}
-            >
-              Delete Message
-            </Button>
-          </Box>
-        ))
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleCopyEmail(message.email)}
+                sx={{ marginTop: 1 }}
+              >
+                Copy Email
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleDeleteMessage(message.clientMessageId)}
+                sx={{ marginTop: 1, marginLeft: 2 }}
+              >
+                Delete Message
+              </Button>
+            </Box>
+          );
+        })
       ) : (
         <Typography>No messages found.</Typography>
       )}
