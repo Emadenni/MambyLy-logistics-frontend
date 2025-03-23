@@ -9,10 +9,15 @@ import {
   DialogTitle,
   Avatar,
   TextField,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import AddAdmin from "./AddAdmin";
 import useRenderAdmin from "../../hooks/useRenderAdmin";
 import { formatDate } from "../../utils/dateUtils";
+import { adminValidation } from "../../utils/adminValidation";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const AdminsTab: React.FC = () => {
   const { admins, loading, error, deleteAdmin, updateAdmin } = useRenderAdmin();
@@ -22,6 +27,7 @@ const AdminsTab: React.FC = () => {
   const [openAddAdmin, setOpenAddAdmin] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<any | null>(null);
   const [updatedData, setUpdatedData] = useState<any>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleDeleteAdmin = (adminId: string) => {
     setAdminToDelete(adminId);
@@ -54,11 +60,19 @@ const AdminsTab: React.FC = () => {
       firstName: admin.firstName,
       lastName: admin.lastName,
       email: admin.email,
+      password: "",
     });
   };
 
   const handleSaveChanges = () => {
     if (editingAdmin) {
+      const validationErrors = adminValidation(updatedData);
+
+      if (validationErrors.length > 0) {
+        alert(validationErrors.join("\n"));
+        return;
+      }
+
       updateAdmin(editingAdmin.adminId, updatedData);
       setEditingAdmin(null);
     }
@@ -74,6 +88,10 @@ const AdminsTab: React.FC = () => {
       ...prevState,
       [name]: value,
     }));
+  };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   if (loading) {
@@ -126,6 +144,28 @@ const AdminsTab: React.FC = () => {
                         onChange={handleInputChange}
                         fullWidth
                         sx={{ marginBottom: 2 }}
+                      />
+                      <TextField
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        value={updatedData.password}
+                        onChange={handleInputChange}
+                        fullWidth
+                        sx={{ marginBottom: 2 }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleTogglePasswordVisibility}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Box>
                   ) : (
