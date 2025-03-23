@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-
-interface Admin {
-  firstName: string;
-  lastName: string;
-  role: string;
-  profileImageUrl: string;
-}
+import { useNavigate } from "react-router-dom";
+import { Admin } from "../types/common";
 
 const useAdminData = (adminId: string | null) => {
   const [admin, setAdmin] = useState<Admin | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -33,6 +30,16 @@ const useAdminData = (adminId: string | null) => {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("adminId");
+
+            alert("Session expired. Please login again");
+
+            navigate("/");
+
+            return;
+          }
           throw new Error("Failed to fetch admin data");
         }
 
@@ -50,7 +57,7 @@ const useAdminData = (adminId: string | null) => {
     };
 
     fetchAdminData();
-  }, [adminId]);
+  }, [adminId, navigate]);
 
   return { admin, isLoading, error };
 };

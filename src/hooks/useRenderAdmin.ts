@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AdminData, ApiResponse } from "../types/common";
 
 const useRenderAdmin = () => {
   const [admins, setAdmins] = useState<AdminData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const getToken = () => sessionStorage.getItem("token");
 
@@ -21,6 +23,13 @@ const useRenderAdmin = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.status === 401) {
+        alert("Session expired. Please log in again.");
+        sessionStorage.removeItem("token");
+        navigate("/");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Failed to fetch admins");
@@ -71,14 +80,20 @@ const useRenderAdmin = () => {
         },
       });
 
+      if (response.status === 401) {
+        alert("Session expired. Please log in again.");
+        sessionStorage.removeItem("token");
+        navigate("/");
+        return;
+      }
+
       if (!response.ok) {
         const responseBody = await response.text();
         throw new Error(`Failed to delete admin: ${responseBody || "Unknown error"}`);
       }
 
       setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
-      alert("Admin deleted successfully");
-      window.location.reload();
+      fetchAdmins();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete admin");
     }
@@ -98,6 +113,13 @@ const useRenderAdmin = () => {
         body: JSON.stringify(updatedData),
       });
 
+      if (response.status === 401) {
+        alert("Session expired. Please log in again.");
+        sessionStorage.removeItem("token");
+        navigate("/");
+        return;
+      }
+
       if (!response.ok) {
         const responseBody = await response.text();
         throw new Error(`Failed to update admin: ${responseBody || "Unknown error"}`);
@@ -105,12 +127,8 @@ const useRenderAdmin = () => {
 
       const updatedAdmin = await response.json();
       setAdmins((prevAdmins) =>
-        prevAdmins.map((admin) =>
-          admin.id === adminId ? { ...admin, ...updatedAdmin } : admin
-        )
+        prevAdmins.map((admin) => (admin.id === adminId ? { ...admin, ...updatedAdmin } : admin))
       );
-      alert("Admin updated successfully");
-      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update admin");
     }

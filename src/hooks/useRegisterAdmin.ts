@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { adminValidation } from "../utils/adminValidation";
 import { AdminData, FieldErrors, ApiResponse } from "../types/common";
+import { useNavigate } from "react-router-dom"; 
 
 const useRegisterAdmin = () => {
   const [newAdmin, setNewAdmin] = useState<AdminData>({
@@ -18,6 +19,8 @@ const useRegisterAdmin = () => {
     email: null,
     password: null,
   });
+
+  const navigate = useNavigate(); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof AdminData) => {
     setNewAdmin({ ...newAdmin, [field]: e.target.value });
@@ -58,7 +61,7 @@ const useRegisterAdmin = () => {
   const submitAdmin = async (): Promise<ApiResponse> => {
     const isValid = validateForm();
     if (!isValid) {
-      setError("Some field is miisng in the form.");
+      setError("Some field is missing in the form.");
       return { success: false, message: "Form validation failed." };
     }
 
@@ -82,6 +85,8 @@ const useRegisterAdmin = () => {
 
       if (response.ok) {
         setError(null);
+       
+        navigate("/"); 
         return { success: true, message: "Admin added successfully." };
       } else {
         if (data.error === "Email Already in use") {
