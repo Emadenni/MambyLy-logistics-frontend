@@ -1,13 +1,26 @@
 import React, { useState } from "react";
-import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Avatar } from "@mui/material";
-import useRenderAdmin from "../../hooks/useRenderAdmin"; 
-import { formatDate } from "../../utils/dateUtils"; 
+import {
+  Typography,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Avatar,
+  TextField,
+} from "@mui/material";
+import useRenderAdmin from "../../hooks/useRenderAdmin";
+import { formatDate } from "../../utils/dateUtils";
 
 const AdminsTab: React.FC = () => {
-  const { admins, loading, error, deleteAdmin } = useRenderAdmin(); 
+  const { admins, loading, error, deleteAdmin, updateAdmin } = useRenderAdmin();
   const [openDialog, setOpenDialog] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
+
+  const [editingAdmin, setEditingAdmin] = useState<any | null>(null);
+  const [updatedData, setUpdatedData] = useState<any>({});
 
   const handleDeleteAdmin = (adminId: string) => {
     setAdminToDelete(adminId);
@@ -34,6 +47,34 @@ const AdminsTab: React.FC = () => {
       .catch((error) => alert("Error copying email: " + error));
   };
 
+  const handleEditAdmin = (admin: any) => {
+    setEditingAdmin(admin);
+    setUpdatedData({
+      firstName: admin.firstName,
+      lastName: admin.lastName,
+      email: admin.email,
+    });
+  };
+
+  const handleSaveChanges = () => {
+    if (editingAdmin) {
+      updateAdmin(editingAdmin.adminId, updatedData);
+      setEditingAdmin(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingAdmin(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUpdatedData((prevState: any) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   if (loading) {
     return <Typography>Loading...</Typography>;
   }
@@ -50,7 +91,6 @@ const AdminsTab: React.FC = () => {
       {admins.length > 0 ? (
         admins.map((admin) => {
           const key = admin.adminId || `fallback-${admin.email}`;
-
           return (
             <Box key={key} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -60,35 +100,80 @@ const AdminsTab: React.FC = () => {
                   sx={{ width: 80, height: 80, marginRight: 3 }}
                 />
                 <Box sx={{ width: "100%" }}>
-                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                    {admin.firstName} {admin.lastName}
-                  </Typography>
-                  <Typography variant="body2" sx={{ marginBottom: 1 }}>
-                    {admin.email || "No email available"}
-                  </Typography>
-                  <Typography>
-                    <strong>Created:</strong> {formatDate(admin.createdAt)}
-                  </Typography>
+                  {editingAdmin?.adminId === admin.adminId ? (
+                    <Box>
+                      <TextField
+                        label="First Name"
+                        name="firstName"
+                        value={updatedData.firstName}
+                        onChange={handleInputChange}
+                        fullWidth
+                        sx={{ marginBottom: 2 }}
+                      />
+                      <TextField
+                        label="Last Name"
+                        name="lastName"
+                        value={updatedData.lastName}
+                        onChange={handleInputChange}
+                        fullWidth
+                        sx={{ marginBottom: 2 }}
+                      />
+                      <TextField
+                        label="Email"
+                        name="email"
+                        value={updatedData.email}
+                        onChange={handleInputChange}
+                        fullWidth
+                        sx={{ marginBottom: 2 }}
+                      />
+                    </Box>
+                  ) : (
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                        {admin.firstName} {admin.lastName}
+                      </Typography>
+                      <Typography variant="body2" sx={{ marginBottom: 1 }}>
+                        {admin.email || "No email available"}
+                      </Typography>
+                      <Typography>
+                        <strong>Created:</strong> {formatDate(admin.createdAt)}
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
               </Box>
-
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleCopyEmail(admin.email)}
-                sx={{ marginTop: 1 }}
-              >
-                Copy Email
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleDeleteAdmin(admin.adminId)}
-                sx={{ marginTop: 1, marginLeft: 2 }}
-              >
-                Delete Admin
-              </Button>
+              {editingAdmin?.adminId === admin.adminId ? (
+                <Box>
+                  <Button variant="outlined" color="primary" onClick={handleSaveChanges} sx={{ marginTop: 1 }}>
+                    Save Changes
+                  </Button>
+                  <Button variant="outlined" color="secondary" onClick={handleCancelEdit} sx={{ marginTop: 1, marginLeft: 2 }}>
+                    Cancel
+                  </Button>
+                </Box>
+              ) : (
+                <Box>
+                  <Button variant="outlined" color="primary" onClick={() => handleCopyEmail(admin.email)} sx={{ marginTop: 1 }}>
+                    Copy Email
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => handleDeleteAdmin(admin.adminId)}
+                    sx={{ marginTop: 1, marginLeft: 2 }}
+                  >
+                    Delete Admin
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => handleEditAdmin(admin)}
+                    sx={{ marginTop: 1, marginLeft: 2 }}
+                  >
+                    Edit Admin
+                  </Button>
+                </Box>
+              )}
             </Box>
           );
         })

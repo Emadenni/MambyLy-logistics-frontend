@@ -29,7 +29,6 @@ const useRenderAdmin = () => {
       const data: ApiResponse = await response.json();
 
       if (data && typeof data === "object") {
-   
         const { success, ...adminData } = data;
 
         const adminsArray = Object.values(adminData).map((admin: AdminData) => {
@@ -85,11 +84,43 @@ const useRenderAdmin = () => {
     }
   };
 
+  const updateAdmin = async (adminId: string, updatedData: any) => {
+    const token = getToken();
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.text();
+        throw new Error(`Failed to update admin: ${responseBody || "Unknown error"}`);
+      }
+
+      const updatedAdmin = await response.json();
+      setAdmins((prevAdmins) =>
+        prevAdmins.map((admin) =>
+          admin.id === adminId ? { ...admin, ...updatedAdmin } : admin
+        )
+      );
+      alert("Admin updated successfully");
+      window.location.reload();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update admin");
+    }
+  };
+
   useEffect(() => {
     fetchAdmins();
   }, []);
 
-  return { admins, loading, error, fetchAdmins, deleteAdmin };
+  return { admins, loading, error, fetchAdmins, deleteAdmin, updateAdmin };
 };
 
 export default useRenderAdmin;
