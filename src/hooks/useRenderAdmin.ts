@@ -6,9 +6,7 @@ const useRenderAdmin = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const getToken = () => {
-    return sessionStorage.getItem("token");
-  };
+  const getToken = () => sessionStorage.getItem("token");
 
   const fetchAdmins = async () => {
     const token = getToken();
@@ -52,17 +50,43 @@ const useRenderAdmin = () => {
         throw new Error("Invalid response structure: Data is not an object");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch admin");
+      setError(err instanceof Error ? err.message : "Failed to fetch admins");
     } finally {
       setLoading(false);
     }
   };
 
+  const deleteAdmin = async (adminId: string) => {
+    const token = getToken();
+    const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const responseBody = await response.text(); 
+        throw new Error(`Failed to delete admin: ${responseBody || "Unknown error"}`);
+      }
+
+      setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
+      alert("Admin deleted successfully"); 
+      window.location.reload();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete admin");
+    }
+  };
+
   useEffect(() => {
     fetchAdmins();
-  }, []); 
+  }, []);
 
-  return { admins, loading, error, fetchAdmins };
+  return { admins, loading, error, fetchAdmins, deleteAdmin };
 };
 
 export default useRenderAdmin;

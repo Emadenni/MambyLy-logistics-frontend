@@ -1,117 +1,103 @@
-import React, { useEffect, useState } from "react";
-import {
-  Typography,
-  Box,
-  Avatar,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  CircularProgress,
-} from "@mui/material";
-import AddAdmin from "./AddAdmin";
-import useRenderAdmin from "../../hooks/useRenderAdmin"; 
-import "./adminsTab.scss";
+import React, { useState } from "react";
+import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Avatar } from "@mui/material";
+import useRenderAdmin from "../../hooks/useRenderAdmin"; // Cambiato a useRenderAdmin
+import { formatDate } from "../../utils/dateUtils"; // Se necessario
 
 const AdminsTab: React.FC = () => {
-  const { admins, loading, error, fetchAdmins } = useRenderAdmin(); 
+  const { admins, loading, error, deleteAdmin } = useRenderAdmin(); // Usato useRenderAdmin
+  const [openDialog, setOpenDialog] = useState(false);
+  const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
+  const [openCopyDialog, setOpenCopyDialog] = useState(false);
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [adminToDelete, setAdminToDelete] = useState<number | null>(null);
-  const [openAddAdmin, setOpenAddAdmin] = useState(false);
-
-  const handleDeleteAdmin = (index: number) => {
-    setAdminToDelete(index);
-    setOpenDeleteDialog(true);
+  const handleDeleteAdmin = (adminId: string) => {
+    setAdminToDelete(adminId);
+    setOpenDialog(true);
   };
 
   const confirmDelete = () => {
     if (adminToDelete !== null) {
-      const newAdmins = [...admins];
-      newAdmins.splice(adminToDelete, 1);
-      setAdmins(newAdmins);
-      setOpenDeleteDialog(false);
+      deleteAdmin(adminToDelete);
+      setOpenDialog(false);
       setAdminToDelete(null);
     }
   };
 
   const cancelDelete = () => {
-    setOpenDeleteDialog(false);
+    setOpenDialog(false);
     setAdminToDelete(null);
   };
 
-  const handleAddAdmin = (admin: any) => {
-    setAdmins([...admins, admin]);
+  const handleCopyEmail = (email: string) => {
+    navigator.clipboard
+      .writeText(email)
+      .then(() => setOpenCopyDialog(true))
+      .catch((error) => alert("Error copying email: " + error));
   };
 
-
-  useEffect(() => {
-    fetchAdmins();
-  }, []);
-
   if (loading) {
-    return (
-      <Box sx={{ padding: 3, display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <Typography>Loading...</Typography>;
   }
 
   if (error) {
-    return (
-      <Box sx={{ padding: 3 }}>
-        <Typography variant="h6" color="error">
-          {error}
-        </Typography>
-      </Box>
-    );
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
-        Admins
+        Admins List
       </Typography>
-      {admins.map((admin, index) => (
-        <Box
-          key={index}
-          sx={{
-            marginBottom: 3,
-            borderBottom: "1px solid #ddd",
-            paddingBottom: 2,
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar
-              src={admin.profileImageUrl}
-              alt={`${admin.firstName} ${admin.lastName}`}
-              sx={{ width: 80, height: 80, marginRight: 3 }}
-            />
-            <Box sx={{ width: "100%" }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                {admin.firstName} {admin.lastName}
-              </Typography>
-              <Typography variant="body2" sx={{ marginBottom: 1 }}>
-                {admin.email}
-              </Typography>
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
-            <Button variant="outlined" color="primary" sx={{ marginRight: 2 }}>
-              Edit
-            </Button>
-            <Button variant="outlined" color="error" onClick={() => handleDeleteAdmin(index)}>
-              Delete
-            </Button>
-          </Box>
-        </Box>
-      ))}
+      {admins.length > 0 ? (
+        admins.map((admin) => {
+          const key = admin.adminId || `fallback-${admin.email}`;
 
-      <Dialog open={openDeleteDialog} onClose={cancelDelete}>
-        <DialogTitle>Delete Admin</DialogTitle>
+          return (
+            <Box key={key} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
+                  src={admin.profileImageUrl}
+                  alt={`${admin.firstName} ${admin.lastName}`}
+                  sx={{ width: 80, height: 80, marginRight: 3 }}
+                />
+                <Box sx={{ width: "100%" }}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    {admin.firstName} {admin.lastName}
+                  </Typography>
+                  <Typography variant="body2" sx={{ marginBottom: 1 }}>
+                    {admin.email || "No email available"}
+                  </Typography>
+                  <Typography>
+                    <strong>Created:</strong> {formatDate(admin.createdAt)}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleCopyEmail(admin.email)}
+                sx={{ marginTop: 1 }}
+              >
+                Copy Email
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => handleDeleteAdmin(admin.adminId)}
+                sx={{ marginTop: 1, marginLeft: 2 }}
+              >
+                Delete Admin
+              </Button>
+            </Box>
+          );
+        })
+      ) : (
+        <Typography>No admins found.</Typography>
+      )}
+
+      <Dialog open={openDialog} onClose={cancelDelete}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <Typography>Are you sure you want to delete this admin?</Typography>
         </DialogContent>
@@ -125,11 +111,14 @@ const AdminsTab: React.FC = () => {
         </DialogActions>
       </Dialog>
 
-      <Button variant="contained" color="primary" sx={{ marginTop: 3 }} onClick={() => setOpenAddAdmin(true)}>
-        Add New Admin
-      </Button>
-
-      <AddAdmin open={openAddAdmin} onClose={() => setOpenAddAdmin(false)} />
+      <Dialog open={openCopyDialog} onClose={() => setOpenCopyDialog(false)}>
+        <DialogTitle>Copied to Clipboard</DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpenCopyDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
