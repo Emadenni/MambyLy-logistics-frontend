@@ -115,3 +115,10 @@ export interface Message {
   message: string;
   sentAt: string;
 }
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  admin: Admin | null;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setAdmin: (admin: Admin | null) => void;
+}

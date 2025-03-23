@@ -9,6 +9,7 @@ const LogoutButton: React.FC = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("adminId");
 setIsAuthenticated(false);
     navigate("/");
   };
