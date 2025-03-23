@@ -75,6 +75,8 @@ const AdminsTab: React.FC = () => {
 
       updateAdmin(editingAdmin.adminId, updatedData);
       setEditingAdmin(null);
+      alert("Admin updated!")
+      window.location.reload();
     }
   };
 

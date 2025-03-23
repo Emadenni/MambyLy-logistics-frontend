@@ -58,7 +58,7 @@ const useRegisterAdmin = () => {
   const submitAdmin = async (): Promise<ApiResponse> => {
     const isValid = validateForm();
     if (!isValid) {
-      setError("Please fix the form errors.");
+      setError("Some field is miisng in the form.");
       return { success: false, message: "Form validation failed." };
     }
 
