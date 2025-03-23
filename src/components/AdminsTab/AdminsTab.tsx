@@ -10,6 +10,7 @@ import {
   Avatar,
   TextField,
 } from "@mui/material";
+import AddAdmin from "./AddAdmin";
 import useRenderAdmin from "../../hooks/useRenderAdmin";
 import { formatDate } from "../../utils/dateUtils";
 
@@ -18,7 +19,7 @@ const AdminsTab: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
-
+  const [openAddAdmin, setOpenAddAdmin] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<any | null>(null);
   const [updatedData, setUpdatedData] = useState<any>({});
 
@@ -147,13 +148,23 @@ const AdminsTab: React.FC = () => {
                   <Button variant="outlined" color="primary" onClick={handleSaveChanges} sx={{ marginTop: 1 }}>
                     Save Changes
                   </Button>
-                  <Button variant="outlined" color="secondary" onClick={handleCancelEdit} sx={{ marginTop: 1, marginLeft: 2 }}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleCancelEdit}
+                    sx={{ marginTop: 1, marginLeft: 2 }}
+                  >
                     Cancel
                   </Button>
                 </Box>
               ) : (
                 <Box>
-                  <Button variant="outlined" color="primary" onClick={() => handleCopyEmail(admin.email)} sx={{ marginTop: 1 }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleCopyEmail(admin.email)}
+                    sx={{ marginTop: 1 }}
+                  >
                     Copy Email
                   </Button>
                   <Button
@@ -204,6 +215,12 @@ const AdminsTab: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Button variant="contained" color="primary" sx={{ marginTop: 3 }} onClick={() => setOpenAddAdmin(true)}>
+        Add New Admin
+      </Button>
+
+      <AddAdmin open={openAddAdmin} onClose={() => setOpenAddAdmin(false)} />
     </Box>
   );
 };

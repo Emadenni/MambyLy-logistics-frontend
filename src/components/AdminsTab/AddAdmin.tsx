@@ -23,7 +23,7 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
       });
 
       setTimeout(() => {
-        onClose();
+        window.location.reload();
         setSuccessMessage(null);
       }, 3000);
     } else {
