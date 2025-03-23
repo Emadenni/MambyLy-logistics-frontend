@@ -29,7 +29,10 @@ const useRenderAdmin = () => {
       const data: ApiResponse = await response.json();
 
       if (data && typeof data === "object") {
-        const adminsArray = Object.values(data).map((admin: AdminData) => {
+   
+        const { success, ...adminData } = data;
+
+        const adminsArray = Object.values(adminData).map((admin: AdminData) => {
           const createdAtString = admin.createdAt;
           let createdAtDate: Date | null = null;
 
@@ -70,12 +73,12 @@ const useRenderAdmin = () => {
       });
 
       if (!response.ok) {
-        const responseBody = await response.text(); 
+        const responseBody = await response.text();
         throw new Error(`Failed to delete admin: ${responseBody || "Unknown error"}`);
       }
 
       setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
-      alert("Admin deleted successfully"); 
+      alert("Admin deleted successfully");
       window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete admin");

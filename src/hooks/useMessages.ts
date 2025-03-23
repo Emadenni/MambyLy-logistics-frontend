@@ -32,7 +32,10 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
       const data: ApiResponse  = await response.json();
 
       if (data && typeof data === "object") {
-        const messageArray = Object.values(data).map((message: Message) => {
+      
+        const { success, ...messageData } = data;
+
+        const messageArray = Object.values(messageData).map((message: Message) => {
           const sentAtString = message.sentAt;
           let sentAtDate: Date | null = null;
 

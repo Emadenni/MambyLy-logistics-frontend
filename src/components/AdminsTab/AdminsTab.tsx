@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Avatar } from "@mui/material";
-import useRenderAdmin from "../../hooks/useRenderAdmin"; // Cambiato a useRenderAdmin
-import { formatDate } from "../../utils/dateUtils"; // Se necessario
+import useRenderAdmin from "../../hooks/useRenderAdmin"; 
+import { formatDate } from "../../utils/dateUtils"; 
 
 const AdminsTab: React.FC = () => {
-  const { admins, loading, error, deleteAdmin } = useRenderAdmin(); // Usato useRenderAdmin
+  const { admins, loading, error, deleteAdmin } = useRenderAdmin(); 
   const [openDialog, setOpenDialog] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
