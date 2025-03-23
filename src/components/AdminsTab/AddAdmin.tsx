@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Alert } from "@mui/material";
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Alert, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useRegisterAdmin from "../../hooks/useRegisterAdmin";
 
 const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
   const { newAdmin, error, handleChange, handleFileChange, submitAdmin, setNewAdmin, fieldErrors } = useRegisterAdmin();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleAddNewAdmin = async () => {
     const result = await submitAdmin();
@@ -23,13 +25,17 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
       });
 
       setTimeout(() => {
-        onClose();
+        window.location.reload();
         setSuccessMessage(null);
       }, 3000);
     } else {
       setSuccessMessage(null);
       console.error(result.message);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -74,6 +80,16 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
           sx={{ marginBottom: 2 }}
           error={Boolean(fieldErrors.password)}
           helperText={fieldErrors.password}
+          type={showPassword ? "text" : "password"} 
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={togglePasswordVisibility}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />} 
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
 
         <input accept="image/*" id="profile-image" type="file" hidden onChange={handleFileChange} />

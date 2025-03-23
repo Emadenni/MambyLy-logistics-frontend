@@ -26,6 +26,7 @@ const createSchema = Joi.object({
   }),
   profileImage: Joi.string().uri().optional().messages({
     'string.uri': `"profileImage" must be a valid URI.`,
+
   }),
 });
 

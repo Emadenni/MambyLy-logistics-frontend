@@ -81,17 +81,18 @@ export interface FormData {
   textMessage: string;
 }
 
-export interface ApiResponse {
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  message: string;
+  data?: T;  
+}
+
+export interface RegisterResult {
   success: boolean;
   message: string;
 }
 
-interface RegisterResult {
-  success: boolean;
-  message: string;
-}
-
-interface AdminData {
+export interface AdminData {
   firstName: string;
   lastName: string;
   email: string;
@@ -99,14 +100,14 @@ interface AdminData {
   profileImage: string;
 }
 
-interface FieldErrors {
+export interface FieldErrors {
   firstName: string | null;
   lastName: string | null;
   email: string | null;
   password: string | null;
 }
 
-interface Message {
+export interface Message {
   messageId: string;
   name: string;
   email: string;
