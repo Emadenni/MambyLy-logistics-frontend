@@ -4,17 +4,17 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useJobPositions from "../../hooks/useJobPositions";
 
 const JobPositionsTab: React.FC = () => {
-  const [positions, setPositions] = useState([]); 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [positionToDelete, setPositionToDelete] = useState<number | null>(null);
   const [openAddPosition, setOpenAddPosition] = useState(false);
   const [newPosition, setNewPosition] = useState({
+    positionId: "",
     departure: "",
     destination: "",
     distance: "",
-    serviceType: "",
+    type: "",
   });
-  const { jobPositions, loading, error } = useJobPositions();
+  const { jobPositions, loading, error, setJobPositions, addJobPosition } = useJobPositions(); 
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
@@ -23,9 +23,9 @@ const JobPositionsTab: React.FC = () => {
 
   const confirmDelete = () => {
     if (positionToDelete !== null) {
-      const newPositions = [...positions];
+      const newPositions = [...jobPositions];
       newPositions.splice(positionToDelete, 1);
-      setPositions(newPositions);
+      setJobPositions(newPositions);  
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
     }
@@ -36,10 +36,14 @@ const JobPositionsTab: React.FC = () => {
     setPositionToDelete(null);
   };
 
-  const handleAddNewPosition = () => {
-    setPositions([...positions, newPosition]);
-    setOpenAddPosition(false);
-    setNewPosition({ departure: "", destination: "", distance: "", serviceType: "" });
+  const handleAddNewPosition = async () => {
+    try {
+      await addJobPosition(newPosition); 
+      setOpenAddPosition(false);  
+      setNewPosition({ positionId: "", departure: "", destination: "", distance: "", type: "" }); 
+    } catch (error) {
+      console.error("Errore nell'aggiungere la posizione:", error);
+    }
   };
 
   if (loading) {
@@ -58,50 +62,41 @@ const JobPositionsTab: React.FC = () => {
         Job Positions
       </Typography>
 
-      {jobPositions.length === 0 ? (
-        <Typography variant="h6" color="textSecondary">
-          No open positons.
-        </Typography>
-      ) : (
-        <Box>
-          {jobPositions.map((position, index) => (
-            <Accordion key={position.positionId}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={`panel${position.positionId}-content`}
-                id={`panel${position.positionId}-header`}
-              >
-                <Typography>{position.positionId}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List data-testid="available-positions">
-                  <ListItem>
-                    <ListItemText primary="Avgång" secondary={position.departure || "Ingen tillgänglig"} />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Destination" secondary={position.destination || "Ingen tillgänglig"} />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Antal km" secondary={position.distance || "Ingen tillgänglig"} />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemText primary="Typ av tjänst" secondary={position.serviceType} />
-                  </ListItem>
-                </List>
-              </AccordionDetails>
-            </Accordion>
-          ))}
-
+      {jobPositions.map((position, index) => (
+        <Accordion key={position.positionId || index}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`panel${position.positionId || index}-content`} 
+            id={`panel${position.positionId || index}-header`}
+          >
+            <Typography>{position.positionId || `Position #${index}`}</Typography> 
+          </AccordionSummary>
+          <AccordionDetails>
+            <List data-testid="available-positions">
+              <ListItem>
+                <ListItemText primary="Avgång" secondary={position.departure || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Destination" secondary={position.destination || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Antal km" secondary={position.distance || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Typ av tjänst" secondary={position.type || "Ingen tillgänglig"} />
+              </ListItem>
+            </List>
+          </AccordionDetails>
           <Button
             variant="outlined"
             color="error"
-            onClick={() => handleDeletePosition(index)}
+            onClick={() => handleDeletePosition(index)} 
             sx={{ marginTop: 1 }}
           >
             Delete Position
           </Button>
-        </Box>
-      )}
+        </Accordion>
+      ))}
 
       <Button
         variant="contained"
@@ -115,6 +110,13 @@ const JobPositionsTab: React.FC = () => {
       {openAddPosition && (
         <Box sx={{ marginTop: 2, padding: 2, border: "1px solid #ddd" }}>
           <Typography variant="h6">Add New Position</Typography>
+          <TextField
+            label="Position Id"
+            value={newPosition.positionId}
+            onChange={(e) => setNewPosition({ ...newPosition, positionId: e.target.value })}
+            fullWidth
+            sx={{ marginBottom: 2 }}
+          />
           <TextField
             label="Departure"
             value={newPosition.departure}
@@ -138,8 +140,8 @@ const JobPositionsTab: React.FC = () => {
           />
           <TextField
             label="Service Type"
-            value={newPosition.serviceType}
-            onChange={(e) => setNewPosition({ ...newPosition, serviceType: e.target.value })}
+            value={newPosition.type}
+            onChange={(e) => setNewPosition({ ...newPosition, type: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
           />
