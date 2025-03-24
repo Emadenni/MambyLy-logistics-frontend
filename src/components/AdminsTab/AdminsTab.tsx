@@ -156,7 +156,7 @@ const AdminsTab: React.FC = () => {
                       />
                       {isChangingPassword ? (
   <TextField
-    label="New Password"
+    label="Type the password or set a new one"
     name="password"
     type={showPassword ? "text" : "password"}
     value={updatedData.password}

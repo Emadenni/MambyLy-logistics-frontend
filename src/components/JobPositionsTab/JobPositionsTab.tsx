@@ -66,7 +66,7 @@ const JobPositionsTab: React.FC = () => {
     return (
       <Box sx={{ marginBottom: 3 }}>
         <Typography variant="h6" component="h2">
-          Laddar lediga tjänster...
+          Loading...
         </Typography>
       </Box>
     );
