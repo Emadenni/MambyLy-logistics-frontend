@@ -19,9 +19,14 @@ const createSchema = Joi.object({
     'string.email': `"email" must be a valid email address.`,
     'any.required': `"email" is a required field.`,
   }),
-  password: Joi.string().min(6).required().messages({
+  password: Joi.string()
+  .min(6)
+  .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)
+  .required()
+  .messages({
     'string.base': `"password" must be a string.`,
     'string.min': `"password" must be at least 6 characters long.`,
+    'string.pattern.base': `"password" must contain at least one letter, one number, and one special character.`,
     'any.required': `"password" is a required field.`,
   }),
   profileImage: Joi.string().uri().optional().messages({
