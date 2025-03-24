@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { JobPosition } from "../types/common";
-import { validatePositionData } from "../utils/postionSchema";
+import { validatePositionData } from "../utils/positionValidation";
 
 const useJobPositions = () => {
   const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
@@ -48,10 +48,10 @@ const useJobPositions = () => {
           newFieldErrors[match[1]] = error;
         }
       });
-      setFieldErrors(newFieldErrors);
-    } else {
-      setFieldErrors({});
+      return newFieldErrors; // Restituisce gli errori invece di impostarli nello stato
     }
+
+    return {};
   };
 
   const addJobPosition = async (positionData: JobPosition) => {
@@ -60,9 +60,9 @@ const useJobPositions = () => {
       return;
     }
 
-    validateForm(positionData);
-
-    if (Object.keys(fieldErrors).length > 0) {
+    const validationErrors = validateForm(positionData);
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors);
       return;
     }
 
@@ -84,11 +84,12 @@ const useJobPositions = () => {
 
       const data = await response.json();
       setJobPositions((prevPositions) => [...prevPositions, data]);
-
+      alert("Position sucessfully added")
       setFieldErrors({});
-      setIsSubmitting(false);
+      setError(null);
     } catch (err) {
       setError("Failed to add job position.");
+    } finally {
       setIsSubmitting(false);
     }
   };

@@ -1,5 +1,20 @@
 import React, { useState } from "react";
-import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useJobPositions from "../../hooks/useJobPositions";
 
@@ -14,7 +29,7 @@ const JobPositionsTab: React.FC = () => {
     distance: "",
     type: "",
   });
-  const { jobPositions, loading, error, setJobPositions, addJobPosition } = useJobPositions(); 
+  const { jobPositions, loading, error, setJobPositions, addJobPosition, fieldErrors } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
@@ -25,7 +40,7 @@ const JobPositionsTab: React.FC = () => {
     if (positionToDelete !== null) {
       const newPositions = [...jobPositions];
       newPositions.splice(positionToDelete, 1);
-      setJobPositions(newPositions);  
+      setJobPositions(newPositions);
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
     }
@@ -37,13 +52,12 @@ const JobPositionsTab: React.FC = () => {
   };
 
   const handleAddNewPosition = async () => {
-    try {
-      await addJobPosition(newPosition); 
-      setOpenAddPosition(false);  
-      setNewPosition({ positionId: "", departure: "", destination: "", distance: "", type: "" }); 
-    } catch (error) {
-      console.error("Errore nell'aggiungere la posizione:", error);
-    }
+    await addJobPosition(newPosition);
+
+    if (Object.keys(fieldErrors).length > 0) return;
+
+    setNewPosition({ positionId: "", departure: "", destination: "", distance: "", type: "" });
+    setOpenAddPosition(false);
   };
 
   if (loading) {
@@ -58,7 +72,7 @@ const JobPositionsTab: React.FC = () => {
 
   return (
     <Box sx={{ padding: 3 }}>
-      <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
         Job Positions
       </Typography>
 
@@ -66,10 +80,10 @@ const JobPositionsTab: React.FC = () => {
         <Accordion key={position.positionId || index}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            aria-controls={`panel${position.positionId || index}-content`} 
+            aria-controls={`panel${position.positionId || index}-content`}
             id={`panel${position.positionId || index}-header`}
           >
-            <Typography>{position.positionId || `Position #${index}`}</Typography> 
+            <Typography>{position.positionId || `Position #${index}`}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <List data-testid="available-positions">
@@ -87,23 +101,13 @@ const JobPositionsTab: React.FC = () => {
               </ListItem>
             </List>
           </AccordionDetails>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => handleDeletePosition(index)} 
-            sx={{ marginTop: 1 }}
-          >
+          <Button variant="outlined" color="error" onClick={() => handleDeletePosition(index)} sx={{ marginTop: 1 }}>
             Delete Position
           </Button>
         </Accordion>
       ))}
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setOpenAddPosition(true)}
-        sx={{ marginTop: 2 }}
-      >
+      <Button variant="contained" color="primary" onClick={() => setOpenAddPosition(true)} sx={{ marginTop: 2 }}>
         + Add New Position
       </Button>
 
@@ -116,41 +120,50 @@ const JobPositionsTab: React.FC = () => {
             onChange={(e) => setNewPosition({ ...newPosition, positionId: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.positionId}
+            helperText={fieldErrors.positionId}
           />
+
           <TextField
             label="Departure"
             value={newPosition.departure}
             onChange={(e) => setNewPosition({ ...newPosition, departure: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.departure}
+            helperText={fieldErrors.departure}
           />
+
           <TextField
             label="Destination"
             value={newPosition.destination}
             onChange={(e) => setNewPosition({ ...newPosition, destination: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.destination}
+            helperText={fieldErrors.destination}
           />
+
           <TextField
             label="Distance"
             value={newPosition.distance}
             onChange={(e) => setNewPosition({ ...newPosition, distance: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.distance}
+            helperText={fieldErrors.distance}
           />
+
           <TextField
             label="Service Type"
             value={newPosition.type}
             onChange={(e) => setNewPosition({ ...newPosition, type: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.type}
+            helperText={fieldErrors.type}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddNewPosition}
-            sx={{ marginTop: 2 }}
-          >
+          <Button variant="contained" color="primary" onClick={handleAddNewPosition} sx={{ marginTop: 2 }}>
             Add Position
           </Button>
           <Button
