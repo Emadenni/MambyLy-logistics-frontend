@@ -28,6 +28,7 @@ const AdminsTab: React.FC = () => {
   const [editingAdmin, setEditingAdmin] = useState<any | null>(null);
   const [updatedData, setUpdatedData] = useState<any>({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const handleDeleteAdmin = (adminId: string) => {
     setAdminToDelete(adminId);
@@ -67,15 +68,21 @@ const AdminsTab: React.FC = () => {
   const handleSaveChanges = () => {
     if (editingAdmin) {
       const validationErrors = adminValidation(updatedData);
-
+  
       if (validationErrors.length > 0) {
         alert(validationErrors.join("\n"));
         return;
       }
-
-      updateAdmin(editingAdmin.adminId, updatedData);
+  
+      const updatedAdminData = { ...updatedData };
+      if (!isChangingPassword || updatedData.password.trim() === "") {
+        delete updatedAdminData.password;
+      }
+  
+      updateAdmin(editingAdmin.adminId, updatedAdminData);
       setEditingAdmin(null);
-      alert("Admin updated!")
+      setIsChangingPassword(false);
+      alert("Admin updated!");
       window.location.reload();
     }
   };
@@ -147,28 +154,30 @@ const AdminsTab: React.FC = () => {
                         fullWidth
                         sx={{ marginBottom: 2 }}
                       />
-                      <TextField
-                        label="Password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        value={updatedData.password}
-                        onChange={handleInputChange}
-                        fullWidth
-                        sx={{ marginBottom: 2 }}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleTogglePasswordVisibility}
-                                edge="end"
-                              >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
+                      {isChangingPassword ? (
+  <TextField
+    label="New Password"
+    name="password"
+    type={showPassword ? "text" : "password"}
+    value={updatedData.password}
+    onChange={handleInputChange}
+    fullWidth
+    sx={{ marginBottom: 2 }}
+    InputProps={{
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+            {showPassword ? <VisibilityOff /> : <Visibility />}
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+  />
+) : (
+  <Button variant="outlined" color="primary" onClick={() => setIsChangingPassword(true)} sx={{ marginBottom: 2 }}>
+    Change Password
+  </Button>
+)}
                     </Box>
                   ) : (
                     <Box>

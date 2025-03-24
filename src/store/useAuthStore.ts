@@ -1,11 +1,9 @@
 import { create } from "zustand";
-
-interface AuthState {
-  isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-}
+import { AuthState } from "../types/common";
 
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: !!sessionStorage.getItem("token"),
+  adminId: sessionStorage.getItem("adminId"),
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
+  setAdminId: (adminId) => set({ adminId }),
 }));

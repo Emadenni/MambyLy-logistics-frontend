@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Message, ApiResponse } from "../types/common";
 
 const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const getToken = () => {
     return sessionStorage.getItem("token");
@@ -25,14 +28,23 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
         },
       });
 
+      if (response.status === 401) {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("adminId");
+
+        alert("Session expired. Redirecting to login...");
+        navigate("/");
+
+        return;
+      }
+
       if (!response.ok) {
         throw new Error("Failed to fetch messages");
       }
 
-      const data: ApiResponse  = await response.json();
+      const data: ApiResponse = await response.json();
 
       if (data && typeof data === "object") {
-      
         const { success, ...messageData } = data;
 
         const messageArray = Object.values(messageData).map((message: Message) => {
@@ -72,23 +84,28 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
     const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages";
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}${endpoint}/${messageId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}${endpoint}/${messageId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("adminId");
+
+        alert("Session expired. Redirecting to login...");
+        navigate("/");
+
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Failed to delete message");
       }
-      setMessages((prevMessages) =>
-        prevMessages.filter((msg) => msg[idKey] !== messageId)
-      );
+      setMessages((prevMessages) => prevMessages.filter((msg) => msg[idKey] !== messageId));
     } catch (err) {
       setError(err.message || "Failed to delete message");
     }
