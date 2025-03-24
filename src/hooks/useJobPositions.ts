@@ -48,7 +48,7 @@ const useJobPositions = () => {
           newFieldErrors[match[1]] = error;
         }
       });
-      return newFieldErrors; // Restituisce gli errori invece di impostarli nello stato
+      return newFieldErrors; 
     }
 
     return {};

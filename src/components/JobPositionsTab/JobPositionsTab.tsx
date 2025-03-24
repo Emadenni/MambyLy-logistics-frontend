@@ -23,7 +23,6 @@ const JobPositionsTab: React.FC = () => {
   const [positionToDelete, setPositionToDelete] = useState<number | null>(null);
   const [openAddPosition, setOpenAddPosition] = useState(false);
   const [newPosition, setNewPosition] = useState({
-    positionId: "",
     departure: "",
     destination: "",
     distance: "",
@@ -56,7 +55,7 @@ const JobPositionsTab: React.FC = () => {
 
     if (Object.keys(fieldErrors).length > 0) return;
 
-    setNewPosition({ positionId: "", departure: "", destination: "", distance: "", type: "" });
+    setNewPosition({ departure: "", destination: "", distance: "", type: "" });
     setOpenAddPosition(false);
   };
 
@@ -114,15 +113,6 @@ const JobPositionsTab: React.FC = () => {
       {openAddPosition && (
         <Box sx={{ marginTop: 2, padding: 2, border: "1px solid #ddd" }}>
           <Typography variant="h6">Add New Position</Typography>
-          <TextField
-            label="Position Id"
-            value={newPosition.positionId}
-            onChange={(e) => setNewPosition({ ...newPosition, positionId: e.target.value })}
-            fullWidth
-            sx={{ marginBottom: 2 }}
-            error={!!fieldErrors.positionId}
-            helperText={fieldErrors.positionId}
-          />
 
           <TextField
             label="Departure"

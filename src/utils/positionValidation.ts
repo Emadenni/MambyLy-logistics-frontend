@@ -1,12 +1,7 @@
 import Joi from "joi";
 
 export const createSchema = Joi.object({
-  positionId: Joi.string().min(2).max(20).required().messages({
-    'string.base': `"Position ID" must be a string.`,
-    'string.min': `"Position ID" must be at least 2 characters long.`,
-    'string.max': `"Position ID" can be at most 20 characters long.`,
-    'any.required': `"Position ID" is a required field.`,
-  }),
+
   departure: Joi.string().min(2).max(20).required().messages({
     'string.base': `"Departure" must be a string.`,
     'string.min': `"Departure" must be at least 2 characters long.`,
