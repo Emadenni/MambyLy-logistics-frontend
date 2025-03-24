@@ -94,6 +94,9 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                     <ListItemText primary="Typ av tjänst" secondary={position.type} />
                   </ListItem>
                   <ListItem>
+                    <ListItemText primary="Created At" secondary={position.createdAt} />
+                  </ListItem>
+                  <ListItem>
                     <IconButton
                       aria-label="copy id"
                       onClick={() => handleCopy(position.positionId)}
@@ -119,31 +122,34 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                   <TableCell>Antal km</TableCell>
                   <TableCell>Typ av tjänst</TableCell>
                   <TableCell>Copy Id</TableCell>
+                  <TableCell>Created At</TableCell>
+
                 </TableRow>
               </TableHead>
               <TableBody>
                 {jobPositions.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6}>Ingen ledig tjänst för tillfället.</TableCell>
-                  </TableRow>
-                ) : (
-                  jobPositions.map((position: JobPosition) => (
-                    <TableRow key={position.positionId}>
-                      <TableCell>{position.positionId}</TableCell>
-                      <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.type}</TableCell>
-                      <TableCell>
-                        <IconButton
-                          aria-label="copy"
-                          onClick={() => handleCopy(position.positionId)}
-                          size="small"
-                        >
-                          <ContentCopyIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
+                   <TableRow>
+                   <TableCell colSpan={7}>Ingen ledig tjänst för tillfället.</TableCell>
+                 </TableRow>
+               ) : (
+                 jobPositions.map((position: JobPosition) => (
+                   <TableRow key={position.positionId}>
+                     <TableCell>{position.positionId}</TableCell>
+                     <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.type}</TableCell>
+                     <TableCell>
+                       <IconButton
+                         aria-label="copy"
+                         onClick={() => handleCopy(position.positionId)}
+                         size="small"
+                       >
+                         <ContentCopyIcon />
+                       </IconButton>
+                     </TableCell>
+                     <TableCell>{position.createdAt}</TableCell>
+                   </TableRow>
                   ))
                 )}
               </TableBody>

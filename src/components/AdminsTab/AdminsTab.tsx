@@ -18,6 +18,7 @@ import { formatDate } from "../../utils/dateUtils";
 import { adminValidation } from "../../utils/adminValidation";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Admin } from "../../types/common";
 
 const AdminsTab: React.FC = () => {
   const { admins, loading, error, deleteAdmin, updateAdmin } = useRenderAdmin();
@@ -55,7 +56,7 @@ const AdminsTab: React.FC = () => {
       .catch((error) => alert("Error copying email: " + error));
   };
 
-  const handleEditAdmin = (admin: any) => {
+  const handleEditAdmin = (admin: Admin) => {
     setEditingAdmin(admin);
     setUpdatedData({
       firstName: admin.firstName,

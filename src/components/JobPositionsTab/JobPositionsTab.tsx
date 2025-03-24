@@ -101,6 +101,9 @@ const JobPositionsTab: React.FC = () => {
               <ListItem>
                 <ListItemText primary="Typ av tjänst" secondary={position.type || "Ingen tillgänglig"} />
               </ListItem>
+              <ListItem>
+                <ListItemText primary="Created At" secondary={position.createdAt || "Ingen tillgänglig"} />
+              </ListItem>
             </List>
           </AccordionDetails>
           <Button variant="outlined" color="error" onClick={() => handleDeletePosition(index)} sx={{ marginTop: 1 }}>
