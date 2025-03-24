@@ -28,18 +28,21 @@ const JobPositionsTab: React.FC = () => {
     distance: "",
     type: "",
   });
-  const { jobPositions, loading, error, setJobPositions, addJobPosition, fieldErrors } = useJobPositions();
+  const { jobPositions, loading, error, setJobPositions, addJobPosition, deleteJobPosition, fieldErrors } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
     setOpenDeleteDialog(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (positionToDelete !== null) {
-      const newPositions = [...jobPositions];
-      newPositions.splice(positionToDelete, 1);
-      setJobPositions(newPositions);
+      const positionToDeleteObj = jobPositions[positionToDelete];
+      const { positionId, createdAt } = positionToDeleteObj;
+
+
+      await deleteJobPosition(positionId, createdAt);
+
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
     }

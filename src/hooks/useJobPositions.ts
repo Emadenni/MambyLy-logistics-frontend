@@ -94,6 +94,37 @@ const useJobPositions = () => {
     }
   };
 
+  const deleteJobPosition = async (positionId: string, createdAt: string) => {
+    if (!authToken) {
+      setError("No authentication token found.");
+      return;
+    }
+  
+    try {
+      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/jobPositions/${positionId}`;
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ createdAt }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete job position.");
+      }
+  
+  
+      setJobPositions((prevPositions) =>
+        prevPositions.filter((position) => position.positionId !== positionId)
+      );
+      alert("Position successfully deleted.");
+    } catch (err) {
+      setError("Failed to delete job position.");
+    }
+  };
+
   return {
     jobPositions,
     loading,
@@ -101,8 +132,12 @@ const useJobPositions = () => {
     fieldErrors,
     addJobPosition,
     isSubmitting,
-    setJobPositions
+    setJobPositions, 
+    deleteJobPosition
   };
 };
+
+
+
 
 export default useJobPositions;
