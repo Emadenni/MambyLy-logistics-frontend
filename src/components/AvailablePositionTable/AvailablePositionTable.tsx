@@ -15,12 +15,25 @@ import {
   List,
   ListItem,
   ListItemText,
+  IconButton,
 } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useDeviceStore } from "../../store/useDeviceStore";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { JobPosition } from "../../types/common";
 import useJobPositions from "../../hooks/useJobPositions";
 import "./availablePositionTable.scss";
+
+const handleCopy = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      alert("Copied!");
+    })
+    .catch((err) => {
+      console.error("Errore durante la copia: ", err);
+    });
+};
 
 const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelectJob }) => {
   const { isMobile } = useDeviceStore();
@@ -80,6 +93,15 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                   <ListItem>
                     <ListItemText primary="Typ av tjänst" secondary={position.type} />
                   </ListItem>
+                  <ListItem>
+                    <IconButton
+                      aria-label="copy id"
+                      onClick={() => handleCopy(position.positionId)}
+                      size="small"
+                    >
+                      <ContentCopyIcon />
+                    </IconButton>
+                  </ListItem>
                 </List>
               </AccordionDetails>
             </Accordion>
@@ -96,12 +118,13 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                   <TableCell>Destination</TableCell>
                   <TableCell>Antal km</TableCell>
                   <TableCell>Typ av tjänst</TableCell>
+                  <TableCell>Copy Id</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {jobPositions.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5}>Ingen ledig tjänst för tillfället.</TableCell>
+                    <TableCell colSpan={6}>Ingen ledig tjänst för tillfället.</TableCell>
                   </TableRow>
                 ) : (
                   jobPositions.map((position: JobPosition) => (
@@ -111,6 +134,15 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                       <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
                       <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
                       <TableCell>{position.type}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          aria-label="copy"
+                          onClick={() => handleCopy(position.positionId)}
+                          size="small"
+                        >
+                          <ContentCopyIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
