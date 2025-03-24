@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { positionsData } from "../data/positions";
+import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemText } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useJobPositions from "../../hooks/useJobPositions";
 
 const JobPositionsTab: React.FC = () => {
-  const [positions, setPositions] = useState(positionsData);
+  const [positions, setPositions] = useState([]); 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [positionToDelete, setPositionToDelete] = useState<number | null>(null);
-  const [editingPositionIndex, setEditingPositionIndex] = useState<number | null>(null);
-  const [editedPosition, setEditedPosition] = useState<any | null>(null);
-  const [openAddPosition, setOpenAddPosition] = useState(false);  // Stato per il nuovo modulo
+  const [openAddPosition, setOpenAddPosition] = useState(false);
   const [newPosition, setNewPosition] = useState({
     departure: "",
     destination: "",
     distance: "",
     serviceType: "",
   });
+  const { jobPositions, loading, error } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
@@ -36,116 +36,72 @@ const JobPositionsTab: React.FC = () => {
     setPositionToDelete(null);
   };
 
-  const handleEditPosition = (index: number) => {
-    setEditingPositionIndex(index);
-    setEditedPosition({ ...positions[index] });
-  };
-
-  const handleSaveEdit = () => {
-    if (editingPositionIndex !== null && editedPosition) {
-      const newPositions = [...positions];
-      newPositions[editingPositionIndex] = editedPosition;
-      setPositions(newPositions);
-      setEditingPositionIndex(null);
-      setEditedPosition(null);
-    }
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    if (editedPosition) {
-      setEditedPosition({
-        ...editedPosition,
-        [field]: event.target.value,
-      });
-    } else {
-      setNewPosition({
-        ...newPosition,
-        [field]: event.target.value,
-      });
-    }
-  };
-
   const handleAddNewPosition = () => {
     setPositions([...positions, newPosition]);
     setOpenAddPosition(false);
     setNewPosition({ departure: "", destination: "", distance: "", serviceType: "" });
   };
 
+  if (loading) {
+    return (
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h6" component="h2">
+          Laddar lediga tjänster...
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ padding: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
-                Job Positions
-              </Typography>
-      {positions.map((position, index) => (
-        <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
-          {editingPositionIndex === index ? (
-            <>
-              <TextField
-                label="Departure"
-                value={editedPosition.departure}
-                onChange={(e) => handleChange(e, "departure")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Destination"
-                value={editedPosition.destination}
-                onChange={(e) => handleChange(e, "destination")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Distance"
-                value={editedPosition.distance}
-                onChange={(e) => handleChange(e, "distance")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Service Type"
-                value={editedPosition.serviceType}
-                onChange={(e) => handleChange(e, "serviceType")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
+      <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
+        Job Positions
+      </Typography>
 
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleSaveEdit}
-                sx={{ marginTop: 1 }}
+      {jobPositions.length === 0 ? (
+        <Typography variant="h6" color="textSecondary">
+          No open positons.
+        </Typography>
+      ) : (
+        <Box>
+          {jobPositions.map((position, index) => (
+            <Accordion key={position.positionId}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`panel${position.positionId}-content`}
+                id={`panel${position.positionId}-header`}
               >
-                Save Changes
-              </Button>
-            </>
-          ) : (
-            <>
-              <Typography><strong>Departure:</strong> {position.departure}</Typography>
-              <Typography><strong>Destination:</strong> {position.destination}</Typography>
-              <Typography><strong>Distance:</strong> {position.distance}</Typography>
-              <Typography><strong>Service Type:</strong> {position.serviceType}</Typography>
+                <Typography>{position.positionId}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <List data-testid="available-positions">
+                  <ListItem>
+                    <ListItemText primary="Avgång" secondary={position.departure || "Ingen tillgänglig"} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Destination" secondary={position.destination || "Ingen tillgänglig"} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Antal km" secondary={position.distance || "Ingen tillgänglig"} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Typ av tjänst" secondary={position.serviceType} />
+                  </ListItem>
+                </List>
+              </AccordionDetails>
+            </Accordion>
+          ))}
 
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleEditPosition(index)}
-                sx={{ marginTop: 1 }}
-              >
-                Edit Position
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleDeletePosition(index)}
-                sx={{ marginTop: 1, marginLeft: 2 }}
-              >
-                Delete Position
-              </Button>
-            </>
-          )}
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleDeletePosition(index)}
+            sx={{ marginTop: 1 }}
+          >
+            Delete Position
+          </Button>
         </Box>
-      ))}
+      )}
 
       <Button
         variant="contained"
@@ -162,28 +118,28 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Departure"
             value={newPosition.departure}
-            onChange={(e) => handleChange(e, "departure")}
+            onChange={(e) => setNewPosition({ ...newPosition, departure: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
           />
           <TextField
             label="Destination"
             value={newPosition.destination}
-            onChange={(e) => handleChange(e, "destination")}
+            onChange={(e) => setNewPosition({ ...newPosition, destination: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
           />
           <TextField
             label="Distance"
             value={newPosition.distance}
-            onChange={(e) => handleChange(e, "distance")}
+            onChange={(e) => setNewPosition({ ...newPosition, distance: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
           />
           <TextField
             label="Service Type"
             value={newPosition.serviceType}
-            onChange={(e) => handleChange(e, "serviceType")}
+            onChange={(e) => setNewPosition({ ...newPosition, serviceType: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
           />
