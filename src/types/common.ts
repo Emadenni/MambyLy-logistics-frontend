@@ -122,3 +122,13 @@ export interface AuthState {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setAdmin: (admin: Admin | null) => void;
 }
+
+
+export interface JobPosition {
+  positionId: string;
+  createdAt: string;
+  departure: string;
+  destination: string;
+  distance: string;
+  type: string;
+}

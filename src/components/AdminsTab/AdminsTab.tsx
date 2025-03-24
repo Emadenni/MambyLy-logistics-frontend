@@ -190,6 +190,9 @@ const AdminsTab: React.FC = () => {
                       <Typography>
                         <strong>Created:</strong> {formatDate(admin.createdAt)}
                       </Typography>
+                      <Typography>
+                        <strong>Role:</strong> {admin.role}
+                      </Typography>
                     </Box>
                   )}
                 </Box>
