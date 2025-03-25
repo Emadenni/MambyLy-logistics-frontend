@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useJobPositions from "../../hooks/useJobPositions";
+import { formatDate } from "../../utils/dateUtils";
 
 const JobPositionsTab: React.FC = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -102,7 +103,8 @@ const JobPositionsTab: React.FC = () => {
                 <ListItemText primary="Typ av tjänst" secondary={position.type || "Ingen tillgänglig"} />
               </ListItem>
               <ListItem>
-                <ListItemText primary="Created At" secondary={position.createdAt || "Ingen tillgänglig"} />
+              <ListItemText primary="Created At" secondary={formatDate(position.createdAt) || "Ingen tillgänglig"} />
+
               </ListItem>
             </List>
           </AccordionDetails>

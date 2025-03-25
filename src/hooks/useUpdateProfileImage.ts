@@ -32,17 +32,22 @@ const useUpdateProfileImage = () => {
           body: JSON.stringify(requestData),
         });
 
-        
+        if (response.status === 401) {
+          sessionStorage.removeItem("token");
+          alert("Session expired. Please log in again.");
+          navigate("/");
+          window.location.reload();
+          return;
+        }
+
         if (!response.ok) {
           throw new Error(`Image upload failed with status: ${response.status}`);
         }
 
-        // Trattiamo direttamente la risposta come JSON
         const data = await response.json();
 
-        // Controlliamo la risposta per l'URL dell'immagine
         if (data.imageUrl) {
-          setImageUrl(data.imageUrl); // Aggiorna l'URL dell'immagine
+          setImageUrl(data.imageUrl);
         } else {
           throw new Error("Unexpected response format: imageUrl not found");
         }

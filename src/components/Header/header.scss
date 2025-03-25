@@ -22,11 +22,17 @@
     @include flexbox(row, center, space-between);
     padding: 2rem 4rem;
   }
+
+  
 }
 
 @media (max-width: 545px) {
   .header {
     width: 100%;
     padding: 2rem 1.4rem;
+  }
+
+  .logo_container {
+    width: 80%;
   }
 }

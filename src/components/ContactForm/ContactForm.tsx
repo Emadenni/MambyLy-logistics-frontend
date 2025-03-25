@@ -14,7 +14,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     name: "",
     email: "",
     message: "",
-    subject: subjectFromCard || "Spontan ansökan",
+    subject: subjectFromCard || "",
     file: null,
   });
 
@@ -49,7 +49,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       name: "",
       email: "",
       message: "",
-      subject: subjectFromCard || "Spontan ansökan",
+      subject: subjectFromCard || "",
       file: null,
     });
 
@@ -85,7 +85,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             name="subject"
             value={formData.subject || ""} 
             onChange={handleChange}
-            placeholder="Skriv ditt ämne här"
+            placeholder=""
+            label="Klistra in tjänst-ID eller skriv 'Spontan ansökan'"
             fullWidth
           />
         ) : (

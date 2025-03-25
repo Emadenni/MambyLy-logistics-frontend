@@ -55,6 +55,7 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
         body: JSON.stringify(dataToSend),
       });
 
+
       if (!response.ok) {
         const responseBody = await response.json();
         console.error("API Error Response:", responseBody);

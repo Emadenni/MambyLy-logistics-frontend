@@ -57,7 +57,10 @@ const AdminInfoBox: React.FC = () => {
               <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                 {admin.firstName} {admin.lastName}
               </Typography>
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="h5" color="textSecondary">
+                {admin.email}
+              </Typography>
+              <Typography variant="h6" color="textSecondary">
                 Role: {admin.role}
               </Typography>
 

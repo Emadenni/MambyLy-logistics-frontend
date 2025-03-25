@@ -29,6 +29,14 @@ const useAdminData = (adminId: string | null) => {
           },
         });
 
+        if (response.status === 401) {
+          sessionStorage.removeItem("token");
+          alert("Session expired. Please log in again.");
+          navigate("/");
+          window.location.reload();
+          return;
+        }
+
         if (!response.ok) {
           if (response.status === 401) {
             sessionStorage.removeItem("token");

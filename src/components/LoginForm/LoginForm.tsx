@@ -32,7 +32,7 @@ const LoginForm = () => {
       <div className="login_overlay__container">
         <button className="login_overlay__close-btn" onClick={handleClose}>X</button>
         <Typography variant="h5" className="login_overlay__form-title">Login</Typography>
-        <Typography variant="h6" className="login_overlay__form-subtitle">Admin Only</Typography>
+        <Typography variant="h6" className="login_overlay__form-subtitle">Admins Only</Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             label="Email"

@@ -35,20 +35,6 @@ describe("WorkWithUs Page", () => {
     ).toBeInTheDocument();
   });
 
-/*   it("renders AvailablePositionTable and ContactForm", async () => {
-    render(
-      <MemoryRouter>
-        <WorkWithUs />
-      </MemoryRouter>
-    );
-  
-   
-    const availablePositions = await screen.findByTestId("available-positions");
-    expect(availablePositions).toBeInTheDocument(); // Verifica che la tabella sia presente
-  
-    expect(screen.getByTestId("contact-form")).toBeInTheDocument();
-  });
-  */
 });
 
 

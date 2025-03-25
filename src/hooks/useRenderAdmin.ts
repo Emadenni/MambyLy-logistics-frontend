@@ -25,9 +25,10 @@ const useRenderAdmin = () => {
       });
 
       if (response.status === 401) {
-        alert("Session expired. Please log in again.");
         sessionStorage.removeItem("token");
+        alert("Session expired. Please log in again.");
         navigate("/");
+        window.location.reload();
         return;
       }
 

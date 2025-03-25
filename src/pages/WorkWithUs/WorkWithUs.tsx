@@ -23,7 +23,7 @@ const WorkWithUs = () => {
             subTitle="Kolla de lediga tjänsterna eller skicka in en spontanansökan."
           />
           <AvailablePositionTable onSelectJob={handleSelectJob} />
-          <ContactForm subjectFromCard={selectedJobId || "Klistra in tjänst-ID eller skriv 'Spontan ansökan'"} isJobApplication={true} />
+          <ContactForm subjectFromCard={selectedJobId || ""} isJobApplication={true} />
         </div>
       </div>
     </Layout>
