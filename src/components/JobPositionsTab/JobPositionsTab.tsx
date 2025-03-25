@@ -1,31 +1,48 @@
 import React, { useState } from "react";
-import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { positionsData } from "../data/positions";
+import {
+  Typography,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useJobPositions from "../../hooks/useJobPositions";
 
 const JobPositionsTab: React.FC = () => {
-  const [positions, setPositions] = useState(positionsData);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [positionToDelete, setPositionToDelete] = useState<number | null>(null);
-  const [editingPositionIndex, setEditingPositionIndex] = useState<number | null>(null);
-  const [editedPosition, setEditedPosition] = useState<any | null>(null);
-  const [openAddPosition, setOpenAddPosition] = useState(false);  // Stato per il nuovo modulo
+  const [openAddPosition, setOpenAddPosition] = useState(false);
   const [newPosition, setNewPosition] = useState({
     departure: "",
     destination: "",
     distance: "",
-    serviceType: "",
+    type: "",
   });
+  const { jobPositions, loading, error, setJobPositions, addJobPosition, deleteJobPosition, fieldErrors } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
     setOpenDeleteDialog(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (positionToDelete !== null) {
-      const newPositions = [...positions];
-      newPositions.splice(positionToDelete, 1);
-      setPositions(newPositions);
+      const positionToDeleteObj = jobPositions[positionToDelete];
+      const { positionId, createdAt } = positionToDeleteObj;
+
+
+      await deleteJobPosition(positionId, createdAt);
+
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
     }
@@ -36,163 +53,113 @@ const JobPositionsTab: React.FC = () => {
     setPositionToDelete(null);
   };
 
-  const handleEditPosition = (index: number) => {
-    setEditingPositionIndex(index);
-    setEditedPosition({ ...positions[index] });
-  };
+  const handleAddNewPosition = async () => {
+    await addJobPosition(newPosition);
 
-  const handleSaveEdit = () => {
-    if (editingPositionIndex !== null && editedPosition) {
-      const newPositions = [...positions];
-      newPositions[editingPositionIndex] = editedPosition;
-      setPositions(newPositions);
-      setEditingPositionIndex(null);
-      setEditedPosition(null);
-    }
-  };
+    if (Object.keys(fieldErrors).length > 0) return;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    if (editedPosition) {
-      setEditedPosition({
-        ...editedPosition,
-        [field]: event.target.value,
-      });
-    } else {
-      setNewPosition({
-        ...newPosition,
-        [field]: event.target.value,
-      });
-    }
-  };
-
-  const handleAddNewPosition = () => {
-    setPositions([...positions, newPosition]);
+    setNewPosition({ departure: "", destination: "", distance: "", type: "" });
     setOpenAddPosition(false);
-    setNewPosition({ departure: "", destination: "", distance: "", serviceType: "" });
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h6" component="h2">
+          Loading...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main', marginBottom: 2 }}>
-                Job Positions
-              </Typography>
-      {positions.map((position, index) => (
-        <Box key={index} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
-          {editingPositionIndex === index ? (
-            <>
-              <TextField
-                label="Departure"
-                value={editedPosition.departure}
-                onChange={(e) => handleChange(e, "departure")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Destination"
-                value={editedPosition.destination}
-                onChange={(e) => handleChange(e, "destination")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Distance"
-                value={editedPosition.distance}
-                onChange={(e) => handleChange(e, "distance")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                label="Service Type"
-                value={editedPosition.serviceType}
-                onChange={(e) => handleChange(e, "serviceType")}
-                fullWidth
-                sx={{ marginBottom: 2 }}
-              />
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
+        Job Positions
+      </Typography>
 
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleSaveEdit}
-                sx={{ marginTop: 1 }}
-              >
-                Save Changes
-              </Button>
-            </>
-          ) : (
-            <>
-              <Typography><strong>Departure:</strong> {position.departure}</Typography>
-              <Typography><strong>Destination:</strong> {position.destination}</Typography>
-              <Typography><strong>Distance:</strong> {position.distance}</Typography>
-              <Typography><strong>Service Type:</strong> {position.serviceType}</Typography>
-
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleEditPosition(index)}
-                sx={{ marginTop: 1 }}
-              >
-                Edit Position
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleDeletePosition(index)}
-                sx={{ marginTop: 1, marginLeft: 2 }}
-              >
-                Delete Position
-              </Button>
-            </>
-          )}
-        </Box>
+      {jobPositions.map((position, index) => (
+        <Accordion key={position.positionId || index}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`panel${position.positionId || index}-content`}
+            id={`panel${position.positionId || index}-header`}
+          >
+            <Typography>{position.positionId || `Position #${index}`}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <List data-testid="available-positions">
+              <ListItem>
+                <ListItemText primary="Avgång" secondary={position.departure || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Destination" secondary={position.destination || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Antal km" secondary={position.distance || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Typ av tjänst" secondary={position.type || "Ingen tillgänglig"} />
+              </ListItem>
+              <ListItem>
+                <ListItemText primary="Created At" secondary={position.createdAt || "Ingen tillgänglig"} />
+              </ListItem>
+            </List>
+          </AccordionDetails>
+          <Button variant="outlined" color="error" onClick={() => handleDeletePosition(index)} sx={{ marginTop: 1 }}>
+            Delete Position
+          </Button>
+        </Accordion>
       ))}
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setOpenAddPosition(true)}
-        sx={{ marginTop: 2 }}
-      >
+      <Button variant="contained" color="primary" onClick={() => setOpenAddPosition(true)} sx={{ marginTop: 2 }}>
         + Add New Position
       </Button>
 
       {openAddPosition && (
         <Box sx={{ marginTop: 2, padding: 2, border: "1px solid #ddd" }}>
           <Typography variant="h6">Add New Position</Typography>
+
           <TextField
             label="Departure"
             value={newPosition.departure}
-            onChange={(e) => handleChange(e, "departure")}
+            onChange={(e) => setNewPosition({ ...newPosition, departure: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.departure}
+            helperText={fieldErrors.departure}
           />
+
           <TextField
             label="Destination"
             value={newPosition.destination}
-            onChange={(e) => handleChange(e, "destination")}
+            onChange={(e) => setNewPosition({ ...newPosition, destination: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.destination}
+            helperText={fieldErrors.destination}
           />
+
           <TextField
             label="Distance"
             value={newPosition.distance}
-            onChange={(e) => handleChange(e, "distance")}
+            onChange={(e) => setNewPosition({ ...newPosition, distance: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.distance}
+            helperText={fieldErrors.distance}
           />
+
           <TextField
             label="Service Type"
-            value={newPosition.serviceType}
-            onChange={(e) => handleChange(e, "serviceType")}
+            value={newPosition.type}
+            onChange={(e) => setNewPosition({ ...newPosition, type: e.target.value })}
             fullWidth
             sx={{ marginBottom: 2 }}
+            error={!!fieldErrors.type}
+            helperText={fieldErrors.type}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddNewPosition}
-            sx={{ marginTop: 2 }}
-          >
+          <Button variant="contained" color="primary" onClick={handleAddNewPosition} sx={{ marginTop: 2 }}>
             Add Position
           </Button>
           <Button

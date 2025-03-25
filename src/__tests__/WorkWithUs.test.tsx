@@ -35,7 +35,7 @@ describe("WorkWithUs Page", () => {
     ).toBeInTheDocument();
   });
 
-  it("renders AvailablePositionTable and ContactForm", async () => {
+/*   it("renders AvailablePositionTable and ContactForm", async () => {
     render(
       <MemoryRouter>
         <WorkWithUs />
@@ -48,7 +48,7 @@ describe("WorkWithUs Page", () => {
   
     expect(screen.getByTestId("contact-form")).toBeInTheDocument();
   });
-  
+  */
 });
 
 

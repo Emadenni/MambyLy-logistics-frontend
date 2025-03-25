@@ -18,6 +18,7 @@ import { formatDate } from "../../utils/dateUtils";
 import { adminValidation } from "../../utils/adminValidation";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Admin } from "../../types/common";
 
 const AdminsTab: React.FC = () => {
   const { admins, loading, error, deleteAdmin, updateAdmin } = useRenderAdmin();
@@ -55,7 +56,7 @@ const AdminsTab: React.FC = () => {
       .catch((error) => alert("Error copying email: " + error));
   };
 
-  const handleEditAdmin = (admin: any) => {
+  const handleEditAdmin = (admin: Admin) => {
     setEditingAdmin(admin);
     setUpdatedData({
       firstName: admin.firstName,
@@ -156,7 +157,7 @@ const AdminsTab: React.FC = () => {
                       />
                       {isChangingPassword ? (
   <TextField
-    label="New Password"
+    label="Type the password or set a new one"
     name="password"
     type={showPassword ? "text" : "password"}
     value={updatedData.password}
@@ -189,6 +190,9 @@ const AdminsTab: React.FC = () => {
                       </Typography>
                       <Typography>
                         <strong>Created:</strong> {formatDate(admin.createdAt)}
+                      </Typography>
+                      <Typography>
+                        <strong>Role:</strong> {admin.role}
                       </Typography>
                     </Box>
                   )}

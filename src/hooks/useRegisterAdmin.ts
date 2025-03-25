@@ -61,7 +61,7 @@ const useRegisterAdmin = () => {
   const submitAdmin = async (): Promise<ApiResponse> => {
     const isValid = validateForm();
     if (!isValid) {
-      setError("Some field is missing in the form.");
+      setError("Some field is missing in the form. Check the profile image input");
       return { success: false, message: "Form validation failed." };
     }
 

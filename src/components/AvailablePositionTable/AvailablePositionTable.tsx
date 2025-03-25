@@ -15,35 +15,69 @@ import {
   List,
   ListItem,
   ListItemText,
+  IconButton,
 } from "@mui/material";
-import { positionsData } from "../data/positions";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useDeviceStore } from "../../store/useDeviceStore";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { JobPosition } from "../../types/common";
+import useJobPositions from "../../hooks/useJobPositions";
 import "./availablePositionTable.scss";
-import { Position } from "../../types/common";
+
+const handleCopy = (text: string) => {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      alert("Copied!");
+    })
+    .catch((err) => {
+      console.error("Errore durante la copia: ", err);
+    });
+};
 
 const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelectJob }) => {
   const { isMobile } = useDeviceStore();
+  const { jobPositions, loading, error } = useJobPositions();
+
+  if (loading) {
+    return (
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h6" component="h2">
+          Laddar lediga tjänster...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h6" color="error">
+          Ett fel uppstod vid hämtning av tjänster: {error}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ marginBottom: 3 }}>
       <Typography variant="h6" component="h2">
         Lediga tjänster
       </Typography>
-      {positionsData.length === 0 ? (
+      {jobPositions.length === 0 ? (
         <Typography variant="h6" color="textSecondary">
           Ingen ledig tjänst för tillfället, men du kan alltid skicka in en spontanansökan.
         </Typography>
       ) : isMobile ? (
         <Box>
-          {positionsData.map((position) => (
-            <Accordion key={position.id}>
+          {jobPositions.map((position: JobPosition) => (
+            <Accordion key={position.positionId}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls={`panel${position.id}-content`}
-                id={`panel${position.id}-header`}
+                aria-controls={`panel${position.positionId}-content`}
+                id={`panel${position.positionId}-header`}
               >
-                <Typography>{position.id}</Typography>
+                <Typography>{position.positionId}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <List data-testid="available-positions">
@@ -57,7 +91,19 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                     <ListItemText primary="Antal km" secondary={position.distance || "Ingen tillgänglig"} />
                   </ListItem>
                   <ListItem>
-                    <ListItemText primary="Typ av tjänst" secondary={position.serviceType} />
+                    <ListItemText primary="Typ av tjänst" secondary={position.type} />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemText primary="Created At" secondary={position.createdAt} />
+                  </ListItem>
+                  <ListItem>
+                    <IconButton
+                      aria-label="copy id"
+                      onClick={() => handleCopy(position.positionId)}
+                      size="small"
+                    >
+                      <ContentCopyIcon />
+                    </IconButton>
                   </ListItem>
                 </List>
               </AccordionDetails>
@@ -75,22 +121,35 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                   <TableCell>Destination</TableCell>
                   <TableCell>Antal km</TableCell>
                   <TableCell>Typ av tjänst</TableCell>
+                  <TableCell>Copy Id</TableCell>
+                  <TableCell>Created At</TableCell>
+
                 </TableRow>
               </TableHead>
               <TableBody>
-                {positionsData.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5}>Ingen ledig tjänst för tillfället.</TableCell>
-                  </TableRow>
-                ) : (
-                  positionsData.map((position) => (
-                    <TableRow key={position.id}>
-                      <TableCell>{position.id}</TableCell>
-                      <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
-                      <TableCell>{position.serviceType}</TableCell>
-                    </TableRow>
+                {jobPositions.length === 0 ? (
+                   <TableRow>
+                   <TableCell colSpan={7}>Ingen ledig tjänst för tillfället.</TableCell>
+                 </TableRow>
+               ) : (
+                 jobPositions.map((position: JobPosition) => (
+                   <TableRow key={position.positionId}>
+                     <TableCell>{position.positionId}</TableCell>
+                     <TableCell>{position.departure || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.destination || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.distance || "Ingen tillgänglig"}</TableCell>
+                     <TableCell>{position.type}</TableCell>
+                     <TableCell>
+                       <IconButton
+                         aria-label="copy"
+                         onClick={() => handleCopy(position.positionId)}
+                         size="small"
+                       >
+                         <ContentCopyIcon />
+                       </IconButton>
+                     </TableCell>
+                     <TableCell>{position.createdAt}</TableCell>
+                   </TableRow>
                   ))
                 )}
               </TableBody>

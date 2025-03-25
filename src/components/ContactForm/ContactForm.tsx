@@ -6,8 +6,6 @@ import { positionsData } from "../data/positions";
 import useSubmitMessages from "../../hooks/useSubmitMessage.ts";
 import { microservices } from "../data/microservices.tsx";
 
-
-
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
   isJobApplication = false,
@@ -80,23 +78,25 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <FormControl fullWidth margin="normal">
         <TextField label="E-post" name="email" type="email" value={formData.email} onChange={handleChange} required />
       </FormControl>
-
       <FormControl fullWidth margin="normal">
-        <InputLabel>Välj ämne</InputLabel>
-        <Select name="subject" value={formData.subject} onChange={handleChange}>
-          {isJobApplication ? <MenuItem value="Spontan ansökan">Spontan ansökan</MenuItem> : null}
-          {isJobApplication
-            ? positionsData.map((position) => (
-                <MenuItem key={position.id} value={position.id}>
-                  {position.id}
-                </MenuItem>
-              ))
-            : microservices.map((service, index) => (
-                <MenuItem key={index} value={service}>
-                  {service}
-                </MenuItem>
-              ))}
-        </Select>
+        
+        {isJobApplication ? (
+            <TextField
+            name="subject"
+            value={formData.subject || ""} 
+            onChange={handleChange}
+            placeholder="Skriv ditt ämne här"
+            fullWidth
+          />
+        ) : (
+          <Select name="subject" value={formData.subject} onChange={handleChange}>
+            {microservices.map((service, index) => (
+              <MenuItem key={index} value={service}>
+                {service}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
       </FormControl>
 
       <FormControl fullWidth margin="normal">

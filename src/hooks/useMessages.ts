@@ -63,7 +63,14 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
           };
         });
 
-        setMessages(messageArray);
+  
+        const sortedMessages = messageArray.sort((a, b) => {
+          const dateA = new Date(a.sentAt).getTime();
+          const dateB = new Date(b.sentAt).getTime();
+          return dateA - dateB; 
+        });
+
+        setMessages(sortedMessages);
       } else {
         throw new Error("Invalid response structure: Data is not an object");
       }
