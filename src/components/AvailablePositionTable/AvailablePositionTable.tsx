@@ -23,6 +23,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { JobPosition } from "../../types/common";
 import useJobPositions from "../../hooks/useJobPositions";
 import "./availablePositionTable.scss";
+import { formatDate } from "../../utils/dateUtils";
 
 const handleCopy = (text: string) => {
   navigator.clipboard
@@ -94,7 +95,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                     <ListItemText primary="Typ av tjänst" secondary={position.type} />
                   </ListItem>
                   <ListItem>
-                    <ListItemText primary="Created At" secondary={position.createdAt} />
+                    <ListItemText primary="Created At" secondary={formatDate(position.createdAt)} />
                   </ListItem>
                   <ListItem>
                     <IconButton

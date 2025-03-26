@@ -17,6 +17,14 @@ const useJobPositions = () => {
         const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/jobPositions`;
         const response = await fetch(apiUrl);
 
+        if (response.status === 401) {
+          sessionStorage.removeItem("token");
+          alert("Session expired. Please log in again.");
+          navigate("/");
+          window.location.reload();
+          return;
+        }
+
         if (!response.ok) {
           throw new Error("Failed to fetch job positions.");
         }
@@ -78,6 +86,14 @@ const useJobPositions = () => {
         body: JSON.stringify(positionData),
       });
 
+      if (response.status === 401) {
+        sessionStorage.removeItem("token");
+        alert("Session expired. Please log in again.");
+        navigate("/");
+        window.location.reload();
+        return;
+      }
+
       if (!response.ok) {
         throw new Error("Failed to add job position.");
       }
@@ -110,6 +126,14 @@ const useJobPositions = () => {
         },
         body: JSON.stringify({ createdAt }),
       });
+
+      if (response.status === 401) {
+        sessionStorage.removeItem("token");
+        alert("Session expired. Please log in again.");
+        navigate("/");
+        window.location.reload();
+        return;
+      }
   
       if (!response.ok) {
         throw new Error("Failed to delete job position.");

@@ -107,15 +107,16 @@ export interface FieldErrors {
   password: string | null;
 }
 
+
 export interface Message {
-  messageId: string;
+  jobMessageId: string;
   name: string;
   email: string;
   subject: string;
-  message: string;
+  textMessage: string;
   sentAt: string;
+  uploadCv?: string;
 }
-
 export interface AuthState {
   isAuthenticated: boolean;
   admin: Admin | null;
@@ -131,4 +132,9 @@ export interface JobPosition {
   destination: string;
   distance: string;
   type: string;
+}
+export interface AddAdminProps {
+  open: boolean;
+  onClose: () => void;
+  onAddAdmin: () => void;
 }

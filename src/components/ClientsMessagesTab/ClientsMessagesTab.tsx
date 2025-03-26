@@ -9,8 +9,9 @@ const ClientsMessagesTab: React.FC = () => {
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
 
+
   const handleDeleteMessage = (messageId: string) => {
-    setMessageToDelete(messageId);
+    setMessageToDelete(messageId); 
     setOpenDialog(true);
   };
 
@@ -18,21 +19,23 @@ const ClientsMessagesTab: React.FC = () => {
     if (messageToDelete !== null) {
       deleteMessage(messageToDelete);
       setOpenDialog(false);
-      setMessageToDelete(null);
+      setMessageToDelete(null); 
     }
   };
 
   const cancelDelete = () => {
     setOpenDialog(false);
-    setMessageToDelete(null);
+    setMessageToDelete(null); 
   };
+
 
   const handleCopyEmail = (email: string) => {
     navigator.clipboard
       .writeText(email)
-      .then(() => setOpenCopyDialog(true))
+      .then(() => setOpenCopyDialog(true)) 
       .catch((error) => alert("Error copying email: " + error));
   };
+
 
   if (loading) {
     return <Typography>Loading...</Typography>;
@@ -47,6 +50,8 @@ const ClientsMessagesTab: React.FC = () => {
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
         Client Messages
       </Typography>
+
+      
       {messages.length > 0 ? (
         messages.map((message) => {
       
@@ -79,6 +84,7 @@ const ClientsMessagesTab: React.FC = () => {
                 Copy Email
               </Button>
 
+             
               <Button
                 variant="outlined"
                 color="error"
@@ -91,9 +97,10 @@ const ClientsMessagesTab: React.FC = () => {
           );
         })
       ) : (
-        <Typography>No messages found.</Typography>
+        <Typography>No messages found.</Typography> 
       )}
 
+      {/*for confirmin message deletion */}
       <Dialog open={openDialog} onClose={cancelDelete}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
@@ -109,6 +116,7 @@ const ClientsMessagesTab: React.FC = () => {
         </DialogActions>
       </Dialog>
 
+   
       <Dialog open={openCopyDialog} onClose={() => setOpenCopyDialog(false)}>
         <DialogTitle>Copied to Clipboard</DialogTitle>
         <DialogActions>

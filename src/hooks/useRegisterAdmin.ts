@@ -81,12 +81,19 @@ const useRegisterAdmin = () => {
       });
 
       const data = await response.json();
-      console.log("Response Data:", data);
+      
+      if (response.status === 401) {
+        sessionStorage.removeItem("token");
+        alert("Session expired. Please log in again.");
+        navigate("/");
+        window.location.reload();
+        return;
+      }
 
       if (response.ok) {
         setError(null);
-       
-        navigate("/"); 
+       alert("Admin added successfully")
+        window.location.reload(); 
         return { success: true, message: "Admin added successfully." };
       } else {
         if (data.error === "Email Already in use") {

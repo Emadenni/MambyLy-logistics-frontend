@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Typography, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import useMessages from "../../hooks/useMessages";
 import { formatDate } from "../../utils/dateUtils";
+import { Message } from "../../types/common";
 
 const ApplicationsMessagesTab: React.FC = () => {
   const { messages, loading, error, deleteMessage } = useMessages("jobMessageId");
+
   const [openDialog, setOpenDialog] = useState(false);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
@@ -48,12 +50,14 @@ const ApplicationsMessagesTab: React.FC = () => {
         Job Messages
       </Typography>
       {messages.length > 0 ? (
-        messages.map((message) => {
-          // Fallback key using message.jobMessageId or a combination of other unique fields
+        messages.map((message: Message) => {
           const key = message.jobMessageId || `fallback-${message.name}-${message.email}`;
 
           return (
             <Box key={key} sx={{ marginBottom: 2, borderBottom: "1px solid #ddd", paddingBottom: 2 }}>
+              <Typography>
+                <strong>Id:</strong> {message.jobMessageId}
+              </Typography>
               <Typography>
                 <strong>Name:</strong> {message.name}
               </Typography>
@@ -69,7 +73,6 @@ const ApplicationsMessagesTab: React.FC = () => {
               <Typography>
                 <strong>Received:</strong> {formatDate(message.sentAt)}
               </Typography>
-               
               <Typography>
                 <strong>CV:</strong>
                 <a href={message.uploadCv} target="_blank" rel="noopener noreferrer">

@@ -1,17 +1,26 @@
 import React, { useState } from "react";
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Alert, IconButton, InputAdornment } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Alert,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useRegisterAdmin from "../../hooks/useRegisterAdmin";
+import { AddAdminProps } from "../../types/common";
 
 const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
   const { newAdmin, error, handleChange, handleFileChange, submitAdmin, setNewAdmin, fieldErrors } = useRegisterAdmin();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleAddNewAdmin = async () => {
-    const result = await submitAdmin();
-
-    console.log(result);
+  const handleAddNewAdmin = async (): Promise<void> => {
+    const result: { success: boolean; message?: string } = await submitAdmin();
 
     if (result.success) {
       setSuccessMessage("Admin added successfully!");
@@ -24,13 +33,14 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
         profileImage: "",
       });
 
+      onAddAdmin();
+
       setTimeout(() => {
-        window.location.reload();
         setSuccessMessage(null);
+        onClose();
       }, 3000);
     } else {
       setSuccessMessage(null);
-      console.error(result.message);
     }
   };
 
@@ -80,12 +90,12 @@ const AddAdmin: React.FC<AddAdminProps> = ({ open, onClose, onAddAdmin }) => {
           sx={{ marginBottom: 2 }}
           error={Boolean(fieldErrors.password)}
           helperText={fieldErrors.password}
-          type={showPassword ? "text" : "password"} 
+          type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={togglePasswordVisibility}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />} 
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
             ),

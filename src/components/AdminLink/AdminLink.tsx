@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./adminLink.scss";
 import admin_link_icon from "../../assets/images/admin_link_icon.png";
 
-const AdminLink = (props: Props) => {
+const AdminLink: React.FC = () => {
   return (
     <div className="admin_link_container">
       <Link to="/admin">

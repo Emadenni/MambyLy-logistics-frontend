@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -26,8 +26,8 @@ const AdminsTab: React.FC = () => {
   const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
   const [openAddAdmin, setOpenAddAdmin] = useState(false);
-  const [editingAdmin, setEditingAdmin] = useState<any | null>(null);
-  const [updatedData, setUpdatedData] = useState<any>({});
+  const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
+  const [updatedData, setUpdatedData] = useState<Partial<Admin>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
@@ -38,9 +38,10 @@ const AdminsTab: React.FC = () => {
 
   const confirmDelete = () => {
     if (adminToDelete !== null) {
-      deleteAdmin(adminToDelete);
-      setOpenDialog(false);
-      setAdminToDelete(null);
+      deleteAdmin(adminToDelete).then(() => {
+        setOpenDialog(false);
+        setAdminToDelete(null);
+      });
     }
   };
 
@@ -53,7 +54,7 @@ const AdminsTab: React.FC = () => {
     navigator.clipboard
       .writeText(email)
       .then(() => setOpenCopyDialog(true))
-      .catch((error) => alert("Error copying email: " + error));
+      .catch((error) => alert("Error copying email: " + error)); 
   };
 
   const handleEditAdmin = (admin: Admin) => {
@@ -62,29 +63,36 @@ const AdminsTab: React.FC = () => {
       firstName: admin.firstName,
       lastName: admin.lastName,
       email: admin.email,
-      password: "",
+      password: "", 
     });
   };
 
   const handleSaveChanges = () => {
     if (editingAdmin) {
       const validationErrors = adminValidation(updatedData);
-  
+
       if (validationErrors.length > 0) {
-        alert(validationErrors.join("\n"));
+        alert("Something's wrong, fix it: " + validationErrors.join("\n"));
         return;
       }
-  
+
       const updatedAdminData = { ...updatedData };
-      if (!isChangingPassword || updatedData.password.trim() === "") {
-        delete updatedAdminData.password;
+      if (!isChangingPassword || updatedData.password?.trim() === "") {
+        delete updatedAdminData.password; 
       }
-  
-      updateAdmin(editingAdmin.adminId, updatedAdminData);
-      setEditingAdmin(null);
-      setIsChangingPassword(false);
-      alert("Admin updated!");
-      window.location.reload();
+
+      updateAdmin(editingAdmin.adminId, updatedAdminData).then(() => {
+        setEditingAdmin(null);
+        setIsChangingPassword(false);
+        alert("Updated! Hopefully it worked...");
+        const updatedAdmins = admins.map((admin) =>
+          admin.adminId === editingAdmin.adminId
+            ? { ...admin, ...updatedAdminData }
+            : admin
+        );
+        setUpdatedData({});
+        setEditingAdmin(null);
+      });
     }
   };
 
@@ -94,7 +102,7 @@ const AdminsTab: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUpdatedData((prevState: any) => ({
+    setUpdatedData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -109,13 +117,13 @@ const AdminsTab: React.FC = () => {
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Typography color="error">something went wrong: {error}</Typography>;
   }
 
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "primary.main", marginBottom: 2 }}>
-        Admins List
+        Admins List 
       </Typography>
       {admins.length > 0 ? (
         admins.map((admin) => {
@@ -156,29 +164,29 @@ const AdminsTab: React.FC = () => {
                         sx={{ marginBottom: 2 }}
                       />
                       {isChangingPassword ? (
-  <TextField
-    label="Type the password or set a new one"
-    name="password"
-    type={showPassword ? "text" : "password"}
-    value={updatedData.password}
-    onChange={handleInputChange}
-    fullWidth
-    sx={{ marginBottom: 2 }}
-    InputProps={{
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton onClick={handleTogglePasswordVisibility} edge="end">
-            {showPassword ? <VisibilityOff /> : <Visibility />}
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-  />
-) : (
-  <Button variant="outlined" color="primary" onClick={() => setIsChangingPassword(true)} sx={{ marginBottom: 2 }}>
-    Change Password
-  </Button>
-)}
+                        <TextField
+                          label="Type the password or set a new one"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          value={updatedData.password}
+                          onChange={handleInputChange}
+                          fullWidth
+                          sx={{ marginBottom: 2 }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={handleTogglePasswordVisibility} edge="end">
+                                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      ) : (
+                        <Button variant="outlined" color="primary" onClick={() => setIsChangingPassword(true)} sx={{ marginBottom: 2 }}>
+                          Change Password
+                        </Button>
+                      )}
                     </Box>
                   ) : (
                     <Box>
@@ -203,39 +211,19 @@ const AdminsTab: React.FC = () => {
                   <Button variant="outlined" color="primary" onClick={handleSaveChanges} sx={{ marginTop: 1 }}>
                     Save Changes
                   </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleCancelEdit}
-                    sx={{ marginTop: 1, marginLeft: 2 }}
-                  >
+                  <Button variant="outlined" color="secondary" onClick={handleCancelEdit} sx={{ marginTop: 1, marginLeft: 2 }}>
                     Cancel
                   </Button>
                 </Box>
               ) : (
                 <Box>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleCopyEmail(admin.email)}
-                    sx={{ marginTop: 1 }}
-                  >
+                  <Button variant="outlined" color="primary" onClick={() => handleCopyEmail(admin.email)} sx={{ marginTop: 1 }}>
                     Copy Email
                   </Button>
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    onClick={() => handleDeleteAdmin(admin.adminId)}
-                    sx={{ marginTop: 1, marginLeft: 2 }}
-                  >
+                  <Button variant="outlined" color="error" onClick={() => handleDeleteAdmin(admin.adminId)} sx={{ marginTop: 1, marginLeft: 2 }}>
                     Delete Admin
                   </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleEditAdmin(admin)}
-                    sx={{ marginTop: 1, marginLeft: 2 }}
-                  >
+                  <Button variant="outlined" color="secondary" onClick={() => handleEditAdmin(admin)} sx={{ marginTop: 1, marginLeft: 2 }}>
                     Edit Admin
                   </Button>
                 </Box>
@@ -244,26 +232,26 @@ const AdminsTab: React.FC = () => {
           );
         })
       ) : (
-        <Typography>No admins found.</Typography>
+        <Typography>No admins found. That’s weird, right?</Typography>
       )}
 
       <Dialog open={openDialog} onClose={cancelDelete}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogTitle>Are you sure? 🤔</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this admin?</Typography>
+          <Typography>Are you really sure you want to delete this admin?</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={cancelDelete} color="primary">
             Cancel
           </Button>
           <Button onClick={confirmDelete} color="error">
-            Delete
+            Yes, Delete!
           </Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={openCopyDialog} onClose={() => setOpenCopyDialog(false)}>
-        <DialogTitle>Copied to Clipboard</DialogTitle>
+        <DialogTitle>Email copied! ✨</DialogTitle>
         <DialogActions>
           <Button onClick={() => setOpenCopyDialog(false)} color="primary">
             Close

@@ -9,7 +9,7 @@ const ServicesCard: React.FC<ServicesCardProps> = ({
   image,
   color,
   background_color,
-  id, // Usa direttamente l'id
+  id, 
   children,
 }) => {
   const navigate = useNavigate();

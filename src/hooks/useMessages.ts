@@ -30,11 +30,9 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
       if (response.status === 401) {
         sessionStorage.removeItem("token");
-        sessionStorage.removeItem("adminId");
-
-        alert("Session expired. Redirecting to login...");
+        alert("Session expired. Please log in again.");
         navigate("/");
-
+        window.location.reload();
         return;
       }
 
@@ -101,11 +99,9 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
       if (response.status === 401) {
         sessionStorage.removeItem("token");
-        sessionStorage.removeItem("adminId");
-
-        alert("Session expired. Redirecting to login...");
+        alert("Session expired. Please log in again.");
         navigate("/");
-
+        window.location.reload();
         return;
       }
 
