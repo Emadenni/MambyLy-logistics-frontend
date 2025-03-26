@@ -51,18 +51,19 @@ const AdminInfoBox: React.FC = () => {
             <Avatar
               src={imagePreview || imageUrl || admin.profileImageUrl}
               alt={`${admin.firstName} ${admin.lastName}`}
-              sx={{ width: 130, height: 130, marginRight: 3 }}
+              sx={{ width: 120, height: 120, marginRight: 3 }}
             />
             <Box>
               <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                 {admin.firstName} {admin.lastName}
               </Typography>
-              <Typography variant="h5" color="textSecondary">
+              <Typography variant="body2" color="textSecondary">
                 {admin.email}
               </Typography>
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="body2" color="textSecondary">
                 Role: {admin.role}
               </Typography>
+              
 
               <IconButton
                 color="primary"
