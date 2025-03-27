@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./hero.scss";
 import hero_img from "../../assets/video-placeholder.png";
-import hero_video from "../../assets/video/5200378-hd_1280_720_30fps.mp4";
+import hero_video from "../../assets/video/hero-video.mp4";
 
 const Hero: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);

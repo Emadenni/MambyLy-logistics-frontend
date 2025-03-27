@@ -34,7 +34,7 @@ const useLogin = () => {
 
       if (data.token) {
         sessionStorage.setItem("token", data.token);
-        sessionStorage.setItem("adminId", data.adminId); // Salvataggio dell'adminId
+        sessionStorage.setItem("adminId", data.adminId); 
         setAdminId(data.adminId);
         setIsAuthenticated(true);
         setError("");

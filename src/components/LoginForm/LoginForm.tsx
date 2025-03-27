@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/useAuthStore";
 import useLogin from "../../hooks/useLogin";
 import "./loginForm.scss"; 
 
 const LoginForm = () => {
   const [showForm, setShowForm] = useState(true); 
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(""); 
   const navigate = useNavigate();
 
   const {
@@ -25,6 +26,16 @@ const LoginForm = () => {
     navigate("/");
   };
 
+  const handleLocalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setPasswordError("Le password non coincidono");
+      return;
+    }
+    setPasswordError("");
+    handleSubmit(e); 
+  };
+
   if (!showForm) return null; 
 
   return (
@@ -33,7 +44,7 @@ const LoginForm = () => {
         <button className="login_overlay__close-btn" onClick={handleClose}>X</button>
         <Typography variant="h5" className="login_overlay__form-title">Login</Typography>
         <Typography variant="h6" className="login_overlay__form-subtitle">Admins Only</Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLocalSubmit}>
           <TextField
             label="Email"
             variant="outlined"
@@ -53,6 +64,17 @@ const LoginForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            required
+            margin="normal"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          {passwordError && <Typography color="error">{passwordError}</Typography>}
           {error && <Typography color="error">{error}</Typography>}
           {successMessage && <Typography color="primary">{successMessage}</Typography>}
           <Button 

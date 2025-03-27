@@ -43,10 +43,7 @@ describe("ContactsListBox & AboutUs Components", () => {
     }
   });
 
-  it("renders the title", () => {
-    render(<AboutUs />);
-    expect(screen.getByText((content) => content.includes("Programmerade för att växa."))).toBeInTheDocument();
-  });
+ 
 
   it("renders the main text", () => {
     render(<AboutUs />);

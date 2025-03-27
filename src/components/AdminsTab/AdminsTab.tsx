@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Box,
@@ -9,15 +9,11 @@ import {
   DialogTitle,
   Avatar,
   TextField,
-  InputAdornment,
-  IconButton,
 } from "@mui/material";
 import AddAdmin from "./AddAdmin";
 import useRenderAdmin from "../../hooks/useRenderAdmin";
 import { formatDate } from "../../utils/dateUtils";
 import { adminValidation } from "../../utils/adminValidation";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Admin } from "../../types/common";
 
 const AdminsTab: React.FC = () => {
@@ -28,8 +24,6 @@ const AdminsTab: React.FC = () => {
   const [openAddAdmin, setOpenAddAdmin] = useState(false);
   const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
   const [updatedData, setUpdatedData] = useState<Partial<Admin>>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const handleDeleteAdmin = (adminId: string) => {
     setAdminToDelete(adminId);
@@ -63,7 +57,6 @@ const AdminsTab: React.FC = () => {
       firstName: admin.firstName,
       lastName: admin.lastName,
       email: admin.email,
-      password: "", 
     });
   };
 
@@ -77,14 +70,10 @@ const AdminsTab: React.FC = () => {
       }
 
       const updatedAdminData = { ...updatedData };
-      if (!isChangingPassword || updatedData.password?.trim() === "") {
-        delete updatedAdminData.password; 
-      }
-
+      
       updateAdmin(editingAdmin.adminId, updatedAdminData).then(() => {
         setEditingAdmin(null);
-        setIsChangingPassword(false);
-        alert("Updated! Hopefully it worked...");
+        alert(" Admin Updated!");
         const updatedAdmins = admins.map((admin) =>
           admin.adminId === editingAdmin.adminId
             ? { ...admin, ...updatedAdminData }
@@ -106,10 +95,6 @@ const AdminsTab: React.FC = () => {
       ...prevState,
       [name]: value,
     }));
-  };
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   if (loading) {
@@ -163,30 +148,6 @@ const AdminsTab: React.FC = () => {
                         fullWidth
                         sx={{ marginBottom: 2 }}
                       />
-                      {isChangingPassword ? (
-                        <TextField
-                          label="Type the password or set a new one"
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          value={updatedData.password}
-                          onChange={handleInputChange}
-                          fullWidth
-                          sx={{ marginBottom: 2 }}
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton onClick={handleTogglePasswordVisibility} edge="end">
-                                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      ) : (
-                        <Button variant="outlined" color="primary" onClick={() => setIsChangingPassword(true)} sx={{ marginBottom: 2 }}>
-                          Change Password
-                        </Button>
-                      )}
                     </Box>
                   ) : (
                     <Box>

@@ -11,8 +11,8 @@ const AboutUs: React.FC = () => {
       <div className="aboutUs_wrapper">
         <div className="aboutUs_container">
           <TitleBox
-            title="Programmerade för att växa."
-            subTitle="Med vårt engagemang vill vi vara din pålitliga logistiklösning."
+            title="Programmerade för att växa"
+            subTitle="Med vårt engagemang vill vi vara din pålitliga logistiklösning"
           />
           <div className="aboutUs_container__main-text">
             <p>
@@ -20,19 +20,21 @@ const AboutUs: React.FC = () => {
               teknisk kompetens. Vår mission är att göra arbetsflödet smidigt, effektivt och intelligent för våra
               kunder. Vi garanterar pålitlighet, engagemang och erbjuder flexibilitet samt skräddarsydda lösningar.
             </p>
-            <p>
-              Vi ansvarar för att transportera era släp till de önskade destinationerna, med en punktlig och säker
-              service. Varje kund får tillgång till ett grundläggande digitalt paket, med stora möjligheter till
-              anpassning, för att få full kontroll och en optimerad hantering av operationerna.
-            </p>
-            <p>
-              Vi är redo att arbeta i Sverige och hela Nordeuropa, med ett dynamiskt och innovativt förhållningssätt. Vi
-              är övertygade om att lyssnande på era behov är det första steget mot ett framgångsrikt samarbete.
-            </p>
+            <div className="aboutUs_container__secondary-text">
+              <p>
+                Vi ansvarar för att transportera era släp till de önskade destinationerna, med en punktlig och säker
+                service. Varje kund får tillgång till ett grundläggande digitalt paket, med stora möjligheter till
+                anpassning, för att få full kontroll och en optimerad hantering av operationerna.
+              </p>
+              <p>
+                Vi är redo att arbeta i Sverige och hela Nordeuropa, med ett dynamiskt och innovativt förhållningssätt.
+                Vi är övertygade om att lyssnande på era behov är det första steget mot ett framgångsrikt samarbete.
+              </p>
+            </div>
           </div>
-
           <Carousel />
-          <ContactsListBox />        </div>
+          <ContactsListBox />{" "}
+        </div>
       </div>
     </Layout>
   );

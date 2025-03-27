@@ -11,19 +11,21 @@
 }
 
 .contact-box .MuiList-root {
-  @include flexbox(column, center, center);
+  @include flexbox(row, center, center);
   padding: 0;
   width: 100%;
-  background-color: $background-color;
+  /* background-color: rgb(210, 206, 182); */
 }
 
 .contact-box .MuiListItem-root {
   @include flexbox(row, center, center);
   padding: 0.5rem 0;
+ 
 }
 
 .contact-box .MuiListItemText-root {
   text-align: center;
+  
 }
 
 .contact-box .MuiGrid-container {
