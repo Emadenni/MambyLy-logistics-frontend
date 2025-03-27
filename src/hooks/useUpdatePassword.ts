@@ -21,16 +21,20 @@ const useUpdatePassword = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ newPassword: newPassword }),
-        
       });
-      console.log("Request body:", { newPassword }); 
-      console.log(adminId);
-      
+
       if (!response.ok) {
         throw new Error("Failed to update password");
       }
 
       setSuccess(true);
+
+      
+      setSuccess(true);
+      setTimeout(() => {
+        sessionStorage.removeItem("token");
+        window.location.href = "/"; 
+      }, 5000);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
