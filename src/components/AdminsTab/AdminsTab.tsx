@@ -14,10 +14,11 @@ import AddAdmin from "./AddAdmin";
 import useRenderAdmin from "../../hooks/useRenderAdmin";
 import { formatDate } from "../../utils/dateUtils";
 import { adminValidation } from "../../utils/adminValidation";
+import { updateAdminValidation } from "../../utils/updateAdminValidation";
 import { Admin } from "../../types/common";
 
 const AdminsTab: React.FC = () => {
-  const { admins, loading, error, deleteAdmin, updateAdmin } = useRenderAdmin();
+  const { admins, loading, error, deleteAdmin, updateAdmin, fetchAdmins } = useRenderAdmin();
   const [openDialog, setOpenDialog] = useState(false);
   const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
   const [openCopyDialog, setOpenCopyDialog] = useState(false);
@@ -35,6 +36,7 @@ const AdminsTab: React.FC = () => {
       deleteAdmin(adminToDelete).then(() => {
         setOpenDialog(false);
         setAdminToDelete(null);
+        fetchAdmins();
       });
     }
   };
@@ -62,7 +64,7 @@ const AdminsTab: React.FC = () => {
 
   const handleSaveChanges = () => {
     if (editingAdmin) {
-      const validationErrors = adminValidation(updatedData);
+      const validationErrors = updateAdminValidation(updatedData);
 
       if (validationErrors.length > 0) {
         alert("Something's wrong, fix it: " + validationErrors.join("\n"));
@@ -81,6 +83,7 @@ const AdminsTab: React.FC = () => {
         );
         setUpdatedData({});
         setEditingAdmin(null);
+        fetchAdmins();
       });
     }
   };
