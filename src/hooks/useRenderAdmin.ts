@@ -145,7 +145,7 @@ const useRenderAdmin = () => {
     fetchAdmins();
   }, []);
 
-  return { admins, loading, error, fetchAdmins, deleteAdmin, updateAdmin, fetchAdmins };
+  return { admins, loading, error, fetchAdmins, deleteAdmin, updateAdmin };
 };
 
 export default useRenderAdmin;

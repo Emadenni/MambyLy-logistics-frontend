@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { ApiResponse } from "../types/common";
 
 const useUpdatePassword = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const updatePassword = async (adminId: string, newPassword: string) => {
     const token = sessionStorage.getItem("token");
@@ -20,23 +21,27 @@ const useUpdatePassword = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ newPassword: newPassword }),
+        body: JSON.stringify({ newPassword }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update password");
+      const result: ApiResponse<null> = await response.json(); 
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to update password");
       }
 
       setSuccess(true);
 
-      
-      setSuccess(true);
       setTimeout(() => {
         sessionStorage.removeItem("token");
-        window.location.href = "/"; 
+        window.location.href = "/";
       }, 5000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsLoading(false);
     }

@@ -21,6 +21,7 @@ import useUpdatePassword from "../../hooks/useUpdatePassword";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import { AdminData } from "../../types/common";
 
 const AdminInfoBox: React.FC = () => {
   const adminId = useAuthStore((state) => state.adminId);
@@ -28,60 +29,33 @@ const AdminInfoBox: React.FC = () => {
   const { isUploading, error: uploadError, imageUrl, uploadImage } = useUpdateProfileImage();
   const { isLoading: isUpdatingPassword, error: passwordError, success, updatePassword } = useUpdatePassword();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [newPassword, setNewPassword] = useState("");
-  const [openPasswordModal, setOpenPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [openPasswordModal, setOpenPasswordModal] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
+    if (event.target.files?.[0]) {
       const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-        uploadImage(file, adminId);
-      }
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result as string);
+      reader.readAsDataURL(file);
+      uploadImage(file, adminId);
     }
-  };
-
-  const handleGoHome = () => {
-    navigate("/");
   };
 
   const handlePasswordUpdate = async () => {
     if (newPassword) {
       await updatePassword(adminId, newPassword);
-
-      setTimeout(() => {
-        setOpenPasswordModal(false);
-      }, 3000);
+      setTimeout(() => setOpenPasswordModal(false), 3000);
     }
   };
 
-  const handleOpenPasswordModal = () => setOpenPasswordModal(true);
-  const handleClosePasswordModal = () => setOpenPasswordModal(false);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    handleMenuClose();
-  };
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
-  }
+  if (isLoading) return <CircularProgress />;
+  if (error) return <Typography color="error">{error}</Typography>;
 
   return (
     <>
@@ -104,8 +78,6 @@ const AdminInfoBox: React.FC = () => {
               <Typography variant="body2" color="textSecondary">
                 Role: {admin.role}
               </Typography>
-
-              {/* Icona per aprire il menu */}
               <IconButton color="primary" onClick={handleMenuOpen} sx={{ marginTop: 2 }}>
                 <MenuIcon />
               </IconButton>
@@ -113,15 +85,13 @@ const AdminInfoBox: React.FC = () => {
           </Box>
         )}
       </Box>
-
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <MenuItem onClick={handleGoHome}>Go Home</MenuItem>
-        <MenuItem onClick={handleOpenPasswordModal}>Update Password</MenuItem>
+        <MenuItem onClick={() => navigate("/")}>Go Home</MenuItem>
+        <MenuItem onClick={() => setOpenPasswordModal(true)}>Update Password</MenuItem>
         <MenuItem onClick={() => document.getElementById("file-input")?.click()}>Change Profile Image</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Menu>
-
-      <Dialog open={openPasswordModal} onClose={handleClosePasswordModal}>
+      <Dialog open={openPasswordModal} onClose={() => setOpenPasswordModal(false)}>
         <DialogTitle>Update Password</DialogTitle>
         <DialogContent>
           <TextField
@@ -134,10 +104,10 @@ const AdminInfoBox: React.FC = () => {
             sx={{ marginBottom: 2 }}
           />
           {passwordError && <Typography color="error">{passwordError}</Typography>}
-          {success && <Typography color="success.main">Password updated successfully! You have to login again.</Typography>}
+          {success && <Typography color="success.main">Password updated successfully! Wait to be logged out..</Typography>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClosePasswordModal} color="secondary">
+          <Button onClick={() => setOpenPasswordModal(false)} color="secondary">
             Cancel
           </Button>
           <Button onClick={handlePasswordUpdate} variant="contained" color="primary" disabled={isUpdatingPassword}>
@@ -145,7 +115,6 @@ const AdminInfoBox: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
       <input id="file-input" type="file" hidden accept="image/*" onChange={handleImageChange} />
     </>
   );
