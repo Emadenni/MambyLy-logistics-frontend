@@ -96,8 +96,8 @@ export interface AdminData {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  profileImage: string;
+  password?: string;
+  profileImage?: string;
 }
 
 export interface FieldErrors {
