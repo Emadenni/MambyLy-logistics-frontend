@@ -71,7 +71,7 @@ const useRenderAdmin = () => {
   const deleteAdmin = async (adminId: string) => {
     const token = getToken();
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
-  
+
     try {
       const response = await fetch(apiUrl, {
         method: "DELETE",
@@ -80,37 +80,35 @@ const useRenderAdmin = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response.status === 401) {
         alert("Session expired. Please log in again.");
         sessionStorage.removeItem("token");
         navigate("/");
         return;
       }
-  
+
       if (!response.ok) {
         const responseBody = await response.text();
-        
-      
         if (responseBody.includes("Cannot delete a superadmin")) {
           alert("You cannot delete a superadmin.");
           return;
         }
-  
         throw new Error(`Failed to delete admin: ${responseBody || "Unknown error"}`);
       }
-  
+
       setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
       fetchAdmins();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete admin");
     }
   };
-  
 
   const updateAdmin = async (adminId: string, updatedData: any) => {
     const token = getToken();
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
+    
+    const { password, ...filteredData } = updatedData;
 
     try {
       const response = await fetch(apiUrl, {
@@ -119,7 +117,7 @@ const useRenderAdmin = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedData),
+        body: JSON.stringify(filteredData),
       });
 
       if (response.status === 401) {
