@@ -29,7 +29,13 @@ const JobPositionsTab: React.FC = () => {
     distance: "",
     type: "",
   });
-  const { jobPositions, loading, error, setJobPositions, addJobPosition, deleteJobPosition, fieldErrors } = useJobPositions();
+  const [fieldErrors, setFieldErrors] = useState({
+    departure: "",
+    destination: "",
+    distance: "",
+    type: "",
+  });
+  const { jobPositions, loading, error, setJobPositions, addJobPosition, deleteJobPosition } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
@@ -40,10 +46,7 @@ const JobPositionsTab: React.FC = () => {
     if (positionToDelete !== null) {
       const positionToDeleteObj = jobPositions[positionToDelete];
       const { positionId, createdAt } = positionToDeleteObj;
-
-
       await deleteJobPosition(positionId, createdAt);
-
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
     }
@@ -54,11 +57,31 @@ const JobPositionsTab: React.FC = () => {
     setPositionToDelete(null);
   };
 
+  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const { value } = e.target;
+    setFieldErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
+    setNewPosition((prevPosition) => ({
+      ...prevPosition,
+      [field]: value,
+    }));
+  };
+
+  const validatePositionData = (data: typeof newPosition) => {
+    const errors: { [key: string]: string } = {};
+    if (!data.departure) errors.departure = "Departure is required";
+    if (!data.destination) errors.destination = "Destination is required";
+    if (!data.distance) errors.distance = "Distance is required";
+    if (!data.type) errors.type = "Service type is required";
+    return errors;
+  };
+
   const handleAddNewPosition = async () => {
+    const errors = validatePositionData(newPosition);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
     await addJobPosition(newPosition);
-
-    if (Object.keys(fieldErrors).length > 0) return;
-
     setNewPosition({ departure: "", destination: "", distance: "", type: "" });
     setOpenAddPosition(false);
   };
@@ -103,8 +126,7 @@ const JobPositionsTab: React.FC = () => {
                 <ListItemText primary="Typ av tjänst" secondary={position.type || "Ingen tillgänglig"} />
               </ListItem>
               <ListItem>
-              <ListItemText primary="Created At" secondary={formatDate(position.createdAt) || "Ingen tillgänglig"} />
-
+                <ListItemText primary="Created At" secondary={formatDate(position.createdAt) || "Ingen tillgänglig"} />
               </ListItem>
             </List>
           </AccordionDetails>
@@ -125,7 +147,7 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Departure"
             value={newPosition.departure}
-            onChange={(e) => setNewPosition({ ...newPosition, departure: e.target.value })}
+            onChange={(e) => handleFieldChange(e, 'departure')}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.departure}
@@ -135,7 +157,7 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Destination"
             value={newPosition.destination}
-            onChange={(e) => setNewPosition({ ...newPosition, destination: e.target.value })}
+            onChange={(e) => handleFieldChange(e, 'destination')}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.destination}
@@ -145,17 +167,18 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Distance"
             value={newPosition.distance}
-            onChange={(e) => setNewPosition({ ...newPosition, distance: e.target.value })}
+            onChange={(e) => handleFieldChange(e, 'distance')}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.distance}
             helperText={fieldErrors.distance}
+            type="number"
           />
 
           <TextField
             label="Service Type"
             value={newPosition.type}
-            onChange={(e) => setNewPosition({ ...newPosition, type: e.target.value })}
+            onChange={(e) => handleFieldChange(e, 'type')}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.type}

@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { JobPosition } from "../types/common";
-import { validatePositionData } from "../utils/positionValidation";
 
 const useJobPositions = () => {
   const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const authToken = sessionStorage.getItem("token");
@@ -45,32 +43,9 @@ const useJobPositions = () => {
     fetchJobPositions();
   }, []);
 
-  const validateForm = (formData: JobPosition) => {
-    const errors = validatePositionData(formData);
-    const newFieldErrors: { [key: string]: string } = {};
-
-    if (errors.length > 0) {
-      errors.forEach((error) => {
-        const match = error.match(/"([^"]+)"/);
-        if (match && match[1]) {
-          newFieldErrors[match[1]] = error;
-        }
-      });
-      return newFieldErrors; 
-    }
-
-    return {};
-  };
-
   const addJobPosition = async (positionData: JobPosition) => {
     if (!authToken) {
       setError("No authentication token found.");
-      return;
-    }
-
-    const validationErrors = validateForm(positionData);
-    if (Object.keys(validationErrors).length > 0) {
-      setFieldErrors(validationErrors);
       return;
     }
 
@@ -100,8 +75,7 @@ const useJobPositions = () => {
 
       const data = await response.json();
       setJobPositions((prevPositions) => [...prevPositions, data]);
-      alert("Position sucessfully added")
-      setFieldErrors({});
+      alert("Position successfully added");
       setError(null);
     } catch (err) {
       setError("Failed to add job position.");
@@ -139,7 +113,6 @@ const useJobPositions = () => {
         throw new Error("Failed to delete job position.");
       }
   
-  
       setJobPositions((prevPositions) =>
         prevPositions.filter((position) => position.positionId !== positionId)
       );
@@ -153,15 +126,11 @@ const useJobPositions = () => {
     jobPositions,
     loading,
     error,
-    fieldErrors,
     addJobPosition,
     isSubmitting,
     setJobPositions, 
     deleteJobPosition
   };
 };
-
-
-
 
 export default useJobPositions;

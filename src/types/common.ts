@@ -130,7 +130,7 @@ export interface JobPosition {
   createdAt: string;
   departure: string;
   destination: string;
-  distance: string;
+  distance: number;
   type: string;
 }
 export interface AddAdminProps {
