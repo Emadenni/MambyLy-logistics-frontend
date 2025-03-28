@@ -29,12 +29,16 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   }, [subjectFromCard]);
 
-  const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name) {
       setFormData({ ...formData, [name]: value as string });
+
+      const formErrors = validateForm({ ...formData, [name]: value as string }, isJobApplication);
+      setErrors(formErrors);
     }
   };
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
