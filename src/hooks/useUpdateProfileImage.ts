@@ -21,7 +21,6 @@ const useUpdateProfileImage = () => {
         };
 
         const token = sessionStorage.getItem("token");
-
         const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/updateProfileImage/${adminId}`;
 
         const response = await fetch(apiUrl, {
@@ -37,11 +36,11 @@ const useUpdateProfileImage = () => {
           useAuthStore.getState().handleUnauthorized();
         }
 
+        const data = await response.json();
+
         if (!response.ok) {
           throw new Error(`Image upload failed with status: ${response.status}`);
         }
-
-        const data = await response.json();
 
         if (data.imageUrl) {
           setImageUrl(data.imageUrl);
@@ -52,6 +51,7 @@ const useUpdateProfileImage = () => {
 
       reader.readAsDataURL(file);
     } catch (err: any) {
+      console.error("Upload error:", err.message);
       setError(err.message);
     } finally {
       setIsUploading(false);
