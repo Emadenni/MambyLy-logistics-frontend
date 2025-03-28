@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box, Typography } from "@mui/material";
-import "./contactForm.scss";
+import { TextField, Button, MenuItem, Select, FormControl, Box, Typography } from "@mui/material";
 import { FormData } from "../../types/common";
 import { positionsData } from "../data/positions";
 import useSubmitMessages from "../../hooks/useSubmitMessage.ts";
 import { microservices } from "../data/microservices.tsx";
+import { validateForm } from "../../utils/formValidation.ts";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
@@ -19,6 +19,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   });
 
   const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { isSubmitting, error, handleSubmit } = useSubmitMessages(isJobApplication);
 
@@ -30,7 +31,9 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
     const { name, value } = e.target;
-    if (name) setFormData({ ...formData, [name]: value as string });
+    if (name) {
+      setFormData({ ...formData, [name]: value as string });
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +45,11 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const formErrors = validateForm(formData, isJobApplication);
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length > 0) return;
 
     const result = await handleSubmit(formData);
 
@@ -60,6 +68,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <Box
+      noValidate
       data-testid="contact-form"
       component="form"
       onSubmit={handleFormSubmit}
@@ -73,24 +82,47 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       }}
     >
       <FormControl fullWidth margin="normal">
-        <TextField label="Namn / Företag" name="name" value={formData.name} onChange={handleChange} required />
+        <TextField
+          label="Namn / Företag"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          error={!!errors.name}
+          helperText={errors.name}
+        />
       </FormControl>
       <FormControl fullWidth margin="normal">
-        <TextField label="E-post" name="email" type="email" value={formData.email} onChange={handleChange} required />
+        <TextField
+          label="E-post"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          error={!!errors.email}
+          helperText={errors.email}
+        />
       </FormControl>
       <FormControl fullWidth margin="normal">
-        
         {isJobApplication ? (
-            <TextField
+          <TextField
             name="subject"
-            value={formData.subject || ""} 
+            value={formData.subject || ""}
             onChange={handleChange}
             placeholder=""
             label="Klistra in tjänst-ID eller skriv 'Spontan ansökan'"
             fullWidth
+            error={!!errors.subject}
+            helperText={errors.subject}
           />
         ) : (
-          <Select name="subject" value={formData.subject} onChange={handleChange}>
+          <Select
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+            error={!!errors.subject}
+          >
             {microservices.map((service, index) => (
               <MenuItem key={index} value={service}>
                 {service}
@@ -109,6 +141,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           value={formData.message}
           onChange={handleChange}
           required
+          error={!!errors.message}
+          helperText={errors.message}
         />
       </FormControl>
 
@@ -118,6 +152,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             <Typography variant="body2">Ladda upp ditt CV:</Typography>
             <input type="file" onChange={handleFileChange} required />
             {formData.file && <Typography variant="caption">{formData.file.name}</Typography>}
+            {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
           </FormControl>
         </>
       )}

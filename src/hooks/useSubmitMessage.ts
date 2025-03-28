@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FormData, ApiResponse } from "../types/common";
-import { validateFormData } from "../utils/formValidation";
 
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,13 +16,6 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const handleSubmit = async (formData: FormData): Promise<ApiResponse> => {
     setIsSubmitting(true);
     setError("");
-
-    const validationErrors = validateFormData(formData, isJobApplication);
-    if (validationErrors.length > 0) {
-      setError(validationErrors.join(", "));
-      setIsSubmitting(false);
-      return { success: false, message: validationErrors.join(", ") };
-    }
 
     const dataToSend: any = {
       name: formData.name,
@@ -54,7 +46,6 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
         },
         body: JSON.stringify(dataToSend),
       });
-
 
       if (!response.ok) {
         const responseBody = await response.json();
