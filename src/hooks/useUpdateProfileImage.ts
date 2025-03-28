@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const useUpdateProfileImage = () => {
   const [isUploading, setIsUploading] = useState(false);
@@ -33,11 +34,7 @@ const useUpdateProfileImage = () => {
         });
 
         if (response.status === 401) {
-          sessionStorage.removeItem("token");
-          alert("Session expired. Please log in again.");
-          navigate("/");
-          window.location.reload();
-          return;
+          useAuthStore.getState().handleUnauthorized();
         }
 
         if (!response.ok) {

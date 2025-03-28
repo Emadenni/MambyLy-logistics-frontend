@@ -11,6 +11,11 @@ const LoginForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [logoutMessage, setLogoutMessage] = useState(
+    sessionStorage.getItem("logoutMessage") || ""
+  );
+
   const navigate = useNavigate();
 
   const {
@@ -38,6 +43,13 @@ const LoginForm = () => {
     handleSubmit(e);
   };
 
+  // Rimuoviamo il messaggio dopo averlo mostrato
+  React.useEffect(() => {
+    if (logoutMessage) {
+      sessionStorage.removeItem("logoutMessage");
+    }
+  }, [logoutMessage]);
+
   return (
     <div className="login_overlay">
       <div className="login_overlay__container">
@@ -50,6 +62,9 @@ const LoginForm = () => {
         <Typography variant="h6" className="login_overlay__form-subtitle">
           Admins Only
         </Typography>
+        {logoutMessage && (
+          <Typography color="error">{logoutMessage}</Typography>
+        )}
         <form onSubmit={handleLocalSubmit}>
           <TextField
             label="Email"

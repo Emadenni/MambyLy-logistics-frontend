@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ApiResponse } from "../types/common";
+import { useAuthStore } from "../store/useAuthStore";
 
 const useUpdatePassword = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -25,6 +26,10 @@ const useUpdatePassword = () => {
       });
 
       const result: ApiResponse<null> = await response.json(); 
+
+      if (response.status === 401) {
+        useAuthStore.getState().handleUnauthorized();
+      }
 
       if (!response.ok || !result.success) {
         throw new Error(result.message || "Failed to update password");

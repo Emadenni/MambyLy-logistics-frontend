@@ -2,6 +2,7 @@ import { useState } from "react";
 import { adminValidation } from "../utils/adminValidation";
 import { AdminData, FieldErrors, ApiResponse } from "../types/common";
 import { useNavigate } from "react-router-dom"; 
+import { useAuthStore } from "../store/useAuthStore";
 
 const useRegisterAdmin = () => {
   const [newAdmin, setNewAdmin] = useState<AdminData>({
@@ -83,11 +84,8 @@ const useRegisterAdmin = () => {
       const data = await response.json();
       
       if (response.status === 401) {
-        sessionStorage.removeItem("token");
-        alert("Session expired. Please log in again.");
-        navigate("/");
-        window.location.reload();
-        return;
+        useAuthStore.getState().handleUnauthorized();
+
       }
 
       if (response.ok) {
