@@ -54,8 +54,12 @@ const AdminInfoBox: React.FC = () => {
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
+  
   if (isLoading) return <CircularProgress />;
-  if (error) return <Typography color="error">{error}</Typography>;
+if (error) return <Typography color="error">{error}</Typography>;
+
+if (!admin) return <Typography color="error">Admin data not loaded yet</Typography>; // Aggiungi un controllo per admin
+
 
   return (
     <>
@@ -69,8 +73,8 @@ const AdminInfoBox: React.FC = () => {
         )}
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
-            src={imagePreview || imageUrl || admin.profileImageUrl}
-            alt={`${admin.firstName} ${admin.lastName}`}
+            src={imagePreview || imageUrl || (admin ? admin.profileImageUrl : "")}
+            alt={`${admin?.firstName} ${admin?.lastName}`}
             sx={{ width: 120, height: 120, marginRight: 3 }}
           />
           <Box>
@@ -107,7 +111,9 @@ const AdminInfoBox: React.FC = () => {
             sx={{ marginBottom: 2 }}
           />
           {passwordError && <Typography color="error">{passwordError}</Typography>}
-          {success && <Typography color="success.main">Password updated successfully! Wait to be logged out..</Typography>}
+          {success && (
+            <Typography color="success.main">Password updated successfully! Wait to be logged out..</Typography>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenPasswordModal(false)} color="secondary">
