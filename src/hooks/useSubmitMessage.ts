@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FormData, ApiResponse } from "../types/common";
 
+
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");

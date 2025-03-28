@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { JobPosition } from "../types/common";
+import { useAuthStore } from "../store/useAuthStore";
 
 const useJobPositions = () => {
   const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
@@ -16,11 +17,7 @@ const useJobPositions = () => {
         const response = await fetch(apiUrl);
 
         if (response.status === 401) {
-          sessionStorage.removeItem("token");
-          alert("Session expired. Please log in again.");
-          navigate("/");
-          window.location.reload();
-          return;
+          useAuthStore.getState().handleUnauthorized();
         }
 
         if (!response.ok) {

@@ -119,9 +119,10 @@ export interface Message {
 }
 export interface AuthState {
   isAuthenticated: boolean;
-  admin: Admin | null;
+  adminId: string | null;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
-  setAdmin: (admin: Admin | null) => void;
+  setAdminId: (adminId: string | null) => void;
+  logout: () => void;
 }
 
 

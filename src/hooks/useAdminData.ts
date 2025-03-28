@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Admin } from "../types/common";
+import { useAuthStore } from "../store/useAuthStore";
 
 const useAdminData = (adminId: string | null) => {
   const [admin, setAdmin] = useState<Admin | null>(null);
@@ -30,11 +31,7 @@ const useAdminData = (adminId: string | null) => {
         });
 
         if (response.status === 401) {
-          sessionStorage.removeItem("token");
-          alert("Session expired. Please log in again.");
-          navigate("/");
-          window.location.reload();
-          return;
+          useAuthStore.getState().handleUnauthorized();
         }
 
         if (!response.ok) {
