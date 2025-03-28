@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography } from "@mui/material";
+import { TextField, Button, Typography, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
-import "./loginForm.scss"; 
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import "./loginForm.scss";
 
 const LoginForm = () => {
-  const [showForm, setShowForm] = useState(true); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState(""); 
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -22,7 +25,6 @@ const LoginForm = () => {
   } = useLogin();
 
   const handleClose = () => {
-    setShowForm(false); 
     navigate("/");
   };
 
@@ -33,17 +35,21 @@ const LoginForm = () => {
       return;
     }
     setPasswordError("");
-    handleSubmit(e); 
+    handleSubmit(e);
   };
-
-  if (!showForm) return null; 
 
   return (
     <div className="login_overlay">
       <div className="login_overlay__container">
-        <button className="login_overlay__close-btn" onClick={handleClose}>X</button>
-        <Typography variant="h5" className="login_overlay__form-title">Login</Typography>
-        <Typography variant="h6" className="login_overlay__form-subtitle">Admins Only</Typography>
+        <button className="login_overlay__close-btn" onClick={handleClose}>
+          X
+        </button>
+        <Typography variant="h5" className="login_overlay__form-title">
+          Login
+        </Typography>
+        <Typography variant="h6" className="login_overlay__form-subtitle">
+          Admins Only
+        </Typography>
         <form onSubmit={handleLocalSubmit}>
           <TextField
             label="Email"
@@ -56,36 +62,58 @@ const LoginForm = () => {
           />
           <TextField
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             variant="outlined"
             fullWidth
             required
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              ),
+            }}
           />
           <TextField
             label="Confirm Password"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             variant="outlined"
             fullWidth
             required
             margin="normal"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  edge="end"
+                >
+                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              ),
+            }}
           />
           {passwordError && <Typography color="error">{passwordError}</Typography>}
           {error && <Typography color="error">{error}</Typography>}
-          {successMessage && <Typography color="primary">{successMessage}</Typography>}
-          <Button 
-            type="submit" 
-            fullWidth 
-            variant="contained" 
-            color="primary" 
+          {successMessage && (
+            <Typography color="primary">{successMessage}</Typography>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
             sx={{ marginTop: 2 }}
             disabled={isLoading}
           >
-            {isLoading ? 'Loading...' : 'Login'}
+            {isLoading ? "Loading..." : "Login"}
           </Button>
         </form>
       </div>
