@@ -1,0 +1,16 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.terms {
+
+    &__list {
+        @include flexbox(row, center, center);
+        gap: 10px;
+        margin-top: -0.4rem;
+        &__item {
+            font-size: 0.7rem;
+            @include primary-font(600);
+        }
+    }
+}

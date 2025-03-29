@@ -1,0 +1,134 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+
+.hamburger-menu {
+  position: relative;
+
+  .hamburger-menu__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+
+  .hamburger-menu__icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 1000;
+
+    .bar {
+      width: 26px;
+      height: 4px;
+      background-color: $text-green;
+      transition: transform 0.3s, opacity 0.3s;
+
+      &--open {
+        transform: rotate(45deg);
+        &:nth-child(2) {
+          opacity: 0;
+        }
+
+        &:nth-child(1) {
+          transform: rotate(-45deg) translateY(8px);
+        }
+
+        &:nth-child(3) {
+          transform: rotate(45deg) translateY(-8px);
+        }
+      }
+    }
+  }
+
+ 
+  .hamburger-menu__list {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $background-color;
+    width: 60%;
+    height: 100vh;
+    padding: 3rem;
+    z-index: 100;
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(5px);
+    transform: translateX(-100%); 
+    
+
+    
+    &.open {
+      display: block;
+      transform: translateX(0); 
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin: 15px 0;
+    }
+
+    .navbar_link {
+      color: $green-background;
+      font-size: 1.6rem;
+      text-decoration: none;
+      transition: color 0.3s;
+
+      &:hover {
+        color: $text-green;
+      }
+
+      &.navbar_link--active {
+        font-weight: bold;
+      }
+    }
+  }
+
+
+  .hamburger-menu__close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 2rem;
+    color: $text-blue;
+    z-index: 1000;
+    cursor: pointer;
+
+    &:hover {
+      color: $secondary-color;
+    }
+
+    span {
+      display: block;
+    }
+  }
+
+ 
+  &.open {
+    .hamburger-menu__overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+@media (max-width: 545px) {
+    .hamburger-menu .hamburger-menu__list .navbar_link {
+        
+    font-size: 1.2rem;
+  }
+}

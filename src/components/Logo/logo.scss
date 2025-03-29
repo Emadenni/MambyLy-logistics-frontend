@@ -1,0 +1,24 @@
+
+
+.mambyLy_logo {
+    height: auto;
+    &.small {
+        width: 26%;
+      }
+    
+      &.medium {
+        width: 40%;
+      }
+    
+      &.large {
+        width: 120px;
+      }
+}
+
+@media (max-width: 1024px) {
+.mambyLy_logo {
+  &.medium {
+    width: 70%;
+  }
+  }
+}

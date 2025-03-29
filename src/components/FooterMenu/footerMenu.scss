@@ -1,0 +1,40 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.footer_menu {
+  @include flexbox(row, center, center);
+  position: relative;
+  width: 100%;
+
+  &__list {
+    @include flexbox(row, center, center);
+
+    &__item {
+      @include primary-font(700);
+      color: $text-green;
+      font-size: 0.7rem;
+      padding: 0 9px;
+      text-align: center;
+      text-shadow: 1px 1px 4px rgba(247, 241, 241, 0.2);
+    }
+
+    &__item:hover {
+      color: $secondary-color;
+      scale: 1.1;
+    }
+  }
+}
+
+@media (max-width: 545px) {
+  .footer_menu {
+    &__list {
+      &__item {
+        @include primary-font(700);
+
+        font-size: 0.6rem;
+        padding: 0 7px;
+      }
+    }
+  }
+}

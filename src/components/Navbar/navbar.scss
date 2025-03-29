@@ -1,0 +1,29 @@
+@use "../../styles/globals" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.navbar {
+  &__list {
+    @include flexbox(row, center, center);
+    margin-bottom: 1.3rem;
+
+    &__item {
+      @include primary-font(700);
+      color: $text-green;
+      font-size: 1.25rem;
+      padding: 0 16px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    &__item:hover {
+      color: $green-background;
+      scale: 1.1;
+    }
+
+    .navbar_link--active {
+      color: $text-blue;
+      
+    }
+  }
+}
