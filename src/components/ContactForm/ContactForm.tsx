@@ -33,12 +33,8 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     const { name, value } = e.target;
     if (name) {
       setFormData({ ...formData, [name]: value as string });
-
-      const formErrors = validateForm({ ...formData, [name]: value as string }, isJobApplication);
-      setErrors(formErrors);
     }
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
