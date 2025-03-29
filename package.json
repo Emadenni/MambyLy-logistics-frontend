@@ -40,6 +40,7 @@
     "@vitest/coverage-v8": "^3.0.7",
     "jsdom": "^23.0.1",
     "msw": "^2.6.8",
+    "typescript": "^5.8.2",
     "vite": "^6.2.0",
     "vite-plugin-mock": "^3.0.2",
     "vitest": "^3.0.7"

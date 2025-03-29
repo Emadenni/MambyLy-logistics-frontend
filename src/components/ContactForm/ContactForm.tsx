@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, FormControl, Box, Typography } from "@mui/material";
+import { TextField, Button, MenuItem, Select, FormControl, Box, Typography, SelectChangeEvent } from "@mui/material";
 import { FormData } from "../../types/common";
 import { positionsData } from "../data/positions";
-import useSubmitMessages from "../../hooks/useSubmitMessage.ts";
-import { microservices } from "../data/microservices.tsx";
-import { validateForm } from "../../utils/formValidation.ts";
+import useSubmitMessages from "../../hooks/useSubmitMessage";
+import { microservices } from "../data/microservices";
+import { validateForm } from "../../utils/formValidation";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
@@ -29,16 +29,12 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   }, [subjectFromCard]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
     const { name, value } = e.target;
     if (name) {
       setFormData({ ...formData, [name]: value as string });
-
-      const formErrors = validateForm({ ...formData, [name]: value as string }, isJobApplication);
-      setErrors(formErrors);
     }
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
