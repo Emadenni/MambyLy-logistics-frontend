@@ -78,7 +78,8 @@ export interface FormData {
   name: string;
   email: string;
   subject: string;
-  textMessage: string;
+  message: string;
+  file: File | null;
 }
 
 export interface ApiResponse<T = unknown> {
@@ -123,6 +124,7 @@ export interface AuthState {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setAdminId: (adminId: string | null) => void;
   logout: () => void;
+  handleUnauthorized: () => void; 
 }
 
 

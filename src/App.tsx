@@ -11,7 +11,6 @@ import WorkWithUs from "./pages/WorkWithUs/WorkWithUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import LoginForm from "./components/LoginForm/LoginForm";
 
 const App = () => {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { adminValidation } from "../utils/adminValidation";
 import { AdminData, FieldErrors, ApiResponse } from "../types/common";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
 const useRegisterAdmin = () => {
@@ -21,9 +21,9 @@ const useRegisterAdmin = () => {
     password: null,
   });
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof AdminData) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof AdminData) => {
     setNewAdmin({ ...newAdmin, [field]: e.target.value });
   };
 
@@ -82,16 +82,15 @@ const useRegisterAdmin = () => {
       });
 
       const data = await response.json();
-      
+
       if (response.status === 401) {
         useAuthStore.getState().handleUnauthorized();
-
       }
 
       if (response.ok) {
         setError(null);
-       alert("Admin added successfully")
-        window.location.reload(); 
+        alert("Admin added successfully");
+        window.location.reload();
         return { success: true, message: "Admin added successfully." };
       } else {
         if (data.error === "Email Already in use") {
