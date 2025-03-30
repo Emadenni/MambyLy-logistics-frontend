@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FormData, ApiResponse } from "../types/common";
 
-
 const useSubmitCompanyMessages = (isJobApplication: boolean) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>("");
@@ -32,10 +31,14 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
           const cleanBase64 = removeBase64Prefix(base64File);
           dataToSend.uploadCvBase64 = cleanBase64;
         }
-      } catch (fileError) {
-        setError(`Error reading file: ${fileError.message}`);
+      } catch (fileError: unknown) {
+        if (fileError instanceof Error) {
+          setError(`Error reading file: ${fileError.message}`);
+        } else {
+          setError("Unknown error reading file.");
+        }
         setIsSubmitting(false);
-        return { success: false, message: fileError.message || "Unknown file error" };
+        return { success: false, message: fileError instanceof Error ? fileError.message : "Unknown file error" };
       }
     }
 
@@ -58,10 +61,10 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
       console.log("Message sent successfully", responseBody);
 
       return { success: true, message: responseBody.message };
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("An error occurred:", err);
-      setError(`An error occurred: ${err.message || "Unknown error"}`);
-      return { success: false, message: err.message || "Unknown error" };
+      setError(`An error occurred: ${err instanceof Error ? err.message : "Unknown error"}`);
+      return { success: false, message: err instanceof Error ? err.message : "Unknown error" };
     } finally {
       setIsSubmitting(false);
     }
