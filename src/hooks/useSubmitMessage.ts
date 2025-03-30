@@ -32,7 +32,6 @@ const useSubmitCompanyMessages = (isJobApplication: boolean) => {
           dataToSend.uploadCvBase64 = cleanBase64;
         }
       } catch (fileError: unknown) {
-        // Aggiungi il controllo per gestire 'fileError' come un oggetto Error
         if (fileError instanceof Error) {
           setError(`Error reading file: ${fileError.message}`);
         } else {
