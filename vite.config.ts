@@ -5,6 +5,14 @@ import { viteMockServe } from "vite-plugin-mock";
 export default defineConfig({
   plugins: [react(), viteMockServe()],
   define: {
-    // Vite automaticamente carica variabili d'ambiente da `.env` e `.env.production`
+    
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    coverage: {
+      provider: "istanbul",
+      reporter: ["text", "json", "html"],
+    },
   },
 });
