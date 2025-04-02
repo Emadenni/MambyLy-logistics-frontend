@@ -5,6 +5,7 @@
 .home_container {
   width: 100%;
   @include flexbox(column, center, center);
+  
 
   .transition_container {
     width: 50%;
@@ -20,16 +21,17 @@
     gap: 2rem;
     border-radius: 5px;
     padding: 0;
+   
 
     .dynamic_title {
       color: $background-color;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       @include flexbox(column, center, center);
    
     }
 
     .home_title {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: yellow;
     }
   }
@@ -54,11 +56,13 @@
   } 
 
   .home_container .transition_container .home_title {
-    font-size: 1.6rem;
+    font-size: 1rem;
     color: yellow;
+    padding-top: 50px;
+  
   }
 
   .home_container .transition_container .dynamic_title {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 }
