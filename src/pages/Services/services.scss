@@ -3,60 +3,16 @@
 @use "../../styles/mixins" as *;
 
 .services_container {
-  width: 100%;
-  min-height: 100vh;
-  @include flexbox(column, center, center);
-
-  gap: 3rem;
-  padding-top: 100px;
-
-  @media (max-width: 768px) {
-    padding-top: 0px;
-  }
-}
-
-.microservices_container {
-  @include flexbox(column, center, center);
-  gap: 10rem;
-  padding: 150px 0;
-
-  h2 {
-    color: $text-blue;
-  }
-
-  #service1,
-  #service2 {
-    scroll-margin-top: 200px;
-  }
-
-  .microservices_cards {
-    &__section {
-      @include flexbox(column, center, center);
-
-      width: 100%;
-    }
-    &__list {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(200px, 1fr));
-      gap: 20px;
-      grid-auto-rows: auto;
-      padding: 20px;
-
-      justify-content: center;
-      align-content: center;
-
-      @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-      }
-    }
-  }
-}
-
-.services_page__wrapper {
+  height: 100%;
   min-height: 100vh;
   width: 100%;
   background: linear-gradient(to bottom, #f5ede0, #ffffff);
-  background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
+  background: linear-gradient(to bottom, #f2f2f2, #ffffff);
   display: flex;
   flex-direction: column;
+}
+@media (max-width: 768px) {
+  .services_container {
+    min-height: 85vh;
+  }
 }
