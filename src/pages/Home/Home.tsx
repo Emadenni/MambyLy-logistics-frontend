@@ -27,7 +27,7 @@ const Home: React.FC = () => {
           <Link to="/tjänster">
             <CTA
               text="VARA TJÄNSTER"
-              backgroundColor="#0B770B"
+              backgroundColor="#045D17"
               color="#DBD714"
               hoverBackgroundColor="#fff"
               hoverColor="#0B770B"
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
             <CTA
               text="KONTAKTA OSS"
               backgroundColor="#DBD714"
-              color="#0B770B"
+              color="#045D17"
               hoverBackgroundColor="#fff"
               hoverColor="#DBD714"
             />
