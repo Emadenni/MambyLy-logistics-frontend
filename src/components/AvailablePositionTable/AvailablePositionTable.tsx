@@ -20,7 +20,7 @@ import {
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useDeviceStore } from "../../store/useDeviceStore";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { JobPosition } from "../../types/common";
+import { AvailablePositionTableProps, JobPosition } from "../../types/common";
 import useJobPositions from "../../hooks/useJobPositions";
 import "./availablePositionTable.scss";
 import { formatDate } from "../../utils/dateUtils";
@@ -149,7 +149,7 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
                          <ContentCopyIcon />
                        </IconButton>
                      </TableCell>
-                     <TableCell>{position.createdAt}</TableCell>
+                     <TableCell>{formatDate(position.createdAt)}</TableCell>
                    </TableRow>
                   ))
                 )}

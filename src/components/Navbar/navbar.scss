@@ -8,7 +8,7 @@
     margin-bottom: 1.3rem;
 
     &__item {
-      @include primary-font(700);
+      @include primary-font(600);
       color: $text-green;
       font-size: 1.25rem;
       padding: 0 16px;

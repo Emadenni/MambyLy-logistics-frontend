@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import OriginalTextTransition, { presets } from "react-text-transition";
 import "./switchWord.scss";
+import React from "react";
 
 interface SwitchWordProps {
   words: string[];

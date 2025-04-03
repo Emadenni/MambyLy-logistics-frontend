@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CTAProps } from "./cta.types";
+import { CTAProps } from "../../types/common";
 import "./cta.scss";
 
 const CTA: React.FC<CTAProps> = ({
