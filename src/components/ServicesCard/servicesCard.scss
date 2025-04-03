@@ -17,53 +17,67 @@
   height: 100%;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.8);
+  filter: brightness(0.7) blur(1px);
   z-index: 1;
   transition: transform 0.4s ease-in-out;
 }
 
 .service_card__content {
-  margin-top: 100px;
+  margin-top: 150px;
   position: relative;
   z-index: 2;
   color: white;
   text-align: left;
   padding: 3rem 4rem;
   max-width: 50%;
-  background: rgba(247, 251, 251, 0.1);
+  /* background: rgba(255, 255, 255, 0.3); */
   border-radius: 20px;
-  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.8);
   transform: translateY(60px);
-  opacity: 0; 
+  opacity: 0;
   animation: slideIn 0.8s ease-out forwards;
 
+  background-image: linear-gradient(45deg, rgba(230, 236, 236, 0.3), rgba(187, 222, 238, 0.2));
+}
+
+.service_card__content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(16, 17, 16, 0.69);
+  mix-blend-mode: screen;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 h3 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.1rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 2rem;
   letter-spacing: 1.5px;
   text-transform: capitalize;
-  color: #77afce;
+  color: #91ceee;
   animation: fadeIn 0.6s ease-out forwards;
   opacity: 0;
-  
 }
 
 p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.4rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.2rem;
   line-height: 1.8;
   margin-bottom: 2.5rem;
   opacity: 0.85;
   max-width: 95%;
   margin: 1rem auto;
   font-weight: 300;
-  color: #c8dec9;
+  color: #eff6ef;
   animation: fadeIn 0.6s ease-out forwards;
-  animation-delay: 0.3s; 
+  animation-delay: 0.3s;
   opacity: 0;
 }
 
@@ -110,26 +124,33 @@ p {
 
 @media (max-width: 768px) {
   .service_card {
+    margin-top: 0px;
     padding: 1.5rem;
-    height: 100vh;
+    height: 100%;
+    position: relative;
   }
 
   .service_card__content {
-    margin-top: 0px;
+    margin-top: 50px;
     padding: 1.2rem;
     max-width: 60%;
+
     h3 {
       font-size: 1.2rem;
       margin-bottom: 1rem;
+      color: #276c91;
     }
+
     p {
       font-size: 0.8rem;
+      color: #05344d;
     }
+
     position: absolute;
     top: 20%;
     left: 5%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(235, 233, 233, 0.7);
     border-radius: 20px;
     box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
   }
@@ -137,8 +158,9 @@ p {
   .service_card__background {
     margin-top: 0;
     background-size: cover;
-    background-position: center center;
+    background-position: 80% 30%;
     background-repeat: no-repeat;
+    height: 100%;
   }
 
   .service_card__icons {
@@ -147,5 +169,11 @@ p {
     transform: translateX(-50%);
     display: flex;
     gap: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .service_card__content {
+    margin-top: 0;
   }
 }
