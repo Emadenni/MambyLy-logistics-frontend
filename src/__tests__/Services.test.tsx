@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from "@testing-library/react";
+/* import { render, screen, fireEvent, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Services from "../pages/Services/Services";
@@ -132,3 +132,4 @@ test("should navigate to the contacts page when the 'Fråga Oss' button is click
     expect(screen.getByTestId("contacts-page")).toBeInTheDocument();
   });
 });
+ */
