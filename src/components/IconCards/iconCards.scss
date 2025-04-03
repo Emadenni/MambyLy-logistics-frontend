@@ -97,25 +97,26 @@
   }
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-rows: repeat(2, auto);
     grid-template-areas:
-      "card1"
-      "card2"
-      "card3"
-      "card4"
-      "card5"
-      "card6"
-      "card7"
-      "card8"
-      "card9";
+      "card1 card2 card3 card4 card5"
+      "card6 card7 card8 card9"; 
     
-    gap: 0;
+    gap: 10px;
     
     .icon-card {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       font-size: 1.5rem;
-   
+    }
+  }
+
+  @media (max-width: 385px) {
+    .icon-card {
+      width: 42px;
+      height: 42px;
+      font-size: 1.5rem;
     }
   }
 }
