@@ -6,8 +6,6 @@
   width: 100%;
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
-  
-  
 
   .transition_container {
     width: 50%;
@@ -24,21 +22,21 @@
     border-radius: 5px;
     padding: 0;
     position: fixed;
-    
-   
+    font-family: "Poppins", sans-serif;
 
     .dynamic_title {
-      color: $background-color;
+      color: white;
       font-size: 1.6rem;
       @include flexbox(column, center, center);
       letter-spacing: 1.2px;
-   
+      font-weight: 300;
     }
 
     .home_title {
-      font-size: 2rem;
+      font-size: 1.6rem;
       color: yellow;
       letter-spacing: 1.2px;
+      font-weight: 400;
     }
   }
 
@@ -46,30 +44,33 @@
     @include flexbox(row, center, center);
     width: 100%;
     gap: 1rem;
-    position: absolute;
     top: 65%;
     z-index: 9;
     position: fixed;
   }
-
-
 }
 
-
 @media (max-width: 545px) {
-  .home_container  .home_CTA_box {
+  .home_container .home_CTA_box {
     @include flexbox(column, center, center);
-   top: 75%;
-  } 
+    top: 75%;
+  }
 
   .home_container .transition_container .home_title {
     font-size: 1.2rem;
     color: yellow;
     padding-top: 50px;
-  
   }
 
   .home_container .transition_container .dynamic_title {
     font-size: 1rem;
+  }
+
+  .home_container .transition_container {
+    position: absolute;
+  }
+
+  .home_container .home_CTA_box {
+    position: absolute;
   }
 }

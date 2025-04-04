@@ -1,9 +1,10 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ServicesCardProps } from "../../types/common";
 import IconCards from "../IconCards/IconCards";
 import "./servicesCard.scss";
 import CTA from "../Cta/Cta";
+import logoIcon from "../../assets/images/iconLogo.png";
 
 const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, image, id, children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,18 +26,22 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, im
         <p>{shortDescription}</p>
         <div>{children}</div>
         <Link to="/kontaktaOss">
-        <CTA
-              text="KONTAKTA OSS"
-              backgroundColor="#91ceee;"
-              color="rgba(66, 165, 245)"
-              hoverBackgroundColor="#fff"
-              hoverColor="#DBD714"
-            />
-            </Link>
+          <CTA
+            text="KONTAKTA OSS"
+            backgroundColor="#91ceee;"
+            color="rgba(66, 165, 245)"
+            hoverBackgroundColor="#fff"
+            hoverColor="#DBD714"
+          />
+        </Link>
+      
       </div>
+      
+
 
       <div className="service_card__icons">
         <IconCards />
+        <img src={logoIcon} alt="logo-icon" className="logoIcon" />
       </div>
     </div>
   );

@@ -10,8 +10,10 @@
   align-items: center;
   width: 60px;
   height: 60px;
-  background: #264a17;
-  color: rgb(199, 221, 210);
+  background: #3bb5069b;
+  background: #095754c4;
+  background: #5bb4b1de;
+  color: rgb(3, 38, 4);
   border-radius: 10px;
   margin: 10px;
   font-size: 2rem;
@@ -20,7 +22,7 @@
   border: 1px solid rgb(220, 220, 146);
   box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
 
-  /* Effetto di ingresso */
+
   animation: entrance 2s ease-out forwards;
 
   &:hover {
@@ -88,13 +90,27 @@
     "card1 card2 card3"
     "card4 card5 card6"
     "card7 card8 card9";
+   
+    
+   
+ 
+   
 
   animation: grid-entrance 2s ease-out forwards;
+
 
   @keyframes grid-entrance {
     0% { opacity: 0; transform: translateY(50px); }
     100% { opacity: 1; transform: translateY(0); }
   }
+
+  .icons-title {
+    color: rgb(206, 229, 237);
+    background-color: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
+    padding: 5px 10px; /* Distanza tra il testo e il bordo dello sfondo */
+    border-radius: 5px; /* Bordi arrotondati */
+  }
+  
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(5, 1fr); 
@@ -110,6 +126,10 @@
       height: 48px;
       font-size: 1.5rem;
     }
+
+    .icons-title {
+    font-size: 0.5rem;
+  }
   }
 
   @media (max-width: 385px) {
@@ -119,4 +139,7 @@
       font-size: 1.5rem;
     }
   }
+
+  
 }
+

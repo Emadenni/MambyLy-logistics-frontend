@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./iconCards.scss";
-import { FaCogs, FaHeart, FaRocket } from "react-icons/fa";
+import {
+  FaStore,
+  FaBox,
+  FaHotel,
+  FaBuilding,
+  FaDumbbell,
+  FaLaptopCode,
+  FaWarehouse,
+  FaBullhorn,
+  FaTruck,
+} from "react-icons/fa";
 
 interface IconCardProps {
   icon: React.ReactNode;
@@ -29,22 +39,24 @@ const IconCards: React.FC = () => {
   }, []);
 
   const icons = [
-    { icon: <FaCogs />, info: "Funzione 1" },
-    { icon: <FaHeart />, info: "Funzione 2" },
-    { icon: <FaRocket />, info: "Funzione 3" },
-    { icon: <FaRocket />, info: "Funzione 4" },
-    { icon: <FaRocket />, info: "Funzione 5" },
-    { icon: <FaHeart />, info: "Funzione 6" },
-    { icon: <FaRocket />, info: "Funzione 7" },
-    { icon: <FaRocket />, info: "Funzione 8" },
-    { icon: <FaCogs />, info: "Funzione 9" },
+    { icon: <FaStore />, info: "Är du en Pizzeria, Restaurang eller Fast Food?" },
+    { icon: <FaStore />, info: "Är du en liten butik?" },
+    { icon: <FaHotel />, info: "Har du ett hotell eller rum för uthyrning?" },
+    { icon: <FaTruck />, info: "Är du ett transportföretag eller logistikleverantör?" },
+    { icon: <FaBuilding />, info: "Är du ett byggföretag eller professionell tjänst?" },
+    { icon: <FaDumbbell />, info: "Har du ett gym eller wellnesscenter?" },
+    { icon: <FaLaptopCode />, info: "Är du frilansare inom tech eller kreativt arbete?" },
+    { icon: <FaWarehouse />, info: "Är du ett lager eller leverantör för B2B?" },
+    { icon: <FaBullhorn />, info: "Är du en kommunikationsbyrå eller webbyrå?" },
   ];
 
   return (
-    <div className="icons-container">
-      {icons.map((item, index) => (
-        <IconCard key={index} icon={item.icon} info={item.info} animated={animated} />
-      ))}
+    <div className="icons-container-wrapper">
+      <div className="icons-container">
+        {icons.map((item, index) => (
+          <IconCard key={index} icon={item.icon} info={item.info} animated={animated} />
+        ))}
+      </div>
     </div>
   );
 };
