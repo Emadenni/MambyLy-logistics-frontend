@@ -15,9 +15,9 @@ const Home: React.FC = () => {
         <Hero />
 
         <section className="transition_container">
-          <h1 className="title home_title">Linköping, Sverige, Var som helst.</h1>
+          <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
           <h2 className="dynamic_title">
-            Vi skapar inte bara digitala tjänster, men
+            Inte bara digitala tjänster, men
             <SwitchWord
               words={["innovation", "säkerhet", "effektivitet", "pålitlighet", "automatisering", "smarta lösningar"]}
             />
