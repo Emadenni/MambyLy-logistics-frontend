@@ -7,6 +7,7 @@
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
   
+  
 
   .transition_container {
     width: 50%;
@@ -22,6 +23,7 @@
     gap: 2rem;
     border-radius: 5px;
     padding: 0;
+    position: fixed;
     
    
 
@@ -45,8 +47,9 @@
     width: 100%;
     gap: 1rem;
     position: absolute;
-    top: 70%;
+    top: 65%;
     z-index: 9;
+    position: fixed;
   }
 
 
