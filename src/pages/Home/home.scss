@@ -52,25 +52,20 @@
 
 @media (max-width: 545px) {
   .home_container .home_CTA_box {
-    @include flexbox(column, center, center);
-    top: 75%;
+    @include flexbox(row, center, center);
+    top: 64%;
   }
 
   .home_container .transition_container .home_title {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     color: yellow;
     padding-top: 50px;
   }
 
   .home_container .transition_container .dynamic_title {
     font-size: 1rem;
+    margin-bottom: 4rem;
   }
 
-  .home_container .transition_container {
-    position: absolute;
-  }
-
-  .home_container .home_CTA_box {
-    position: absolute;
-  }
+ 
 }
