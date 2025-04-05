@@ -123,6 +123,8 @@
     .icons-title {
       font-size: 0.5rem;
     }
+
+  
   }
 
   @media (max-width: 385px) {
@@ -131,5 +133,11 @@
       height: 42px;
       font-size: 1.5rem;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .icon-card::after {
+    display: none !important;
   }
 }

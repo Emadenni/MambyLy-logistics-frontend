@@ -18,8 +18,8 @@
     
     @media (max-width: 768px) {
       padding: 10px; 
-      top: -100%; /* 50% della viewport */
-    left: 50%; /* 50% della viewport */
+      top: -95%; 
+    left: 50%; 
     }
   
     @keyframes fadeIn {
@@ -37,12 +37,12 @@
   .popup-container {
     background-color: rgba(49, 45, 45, 0.837);
     padding: 40px;
-    width: 80%; /* Imposta la larghezza del popup */
-    max-width: 600px; /* Imposta una larghezza massima */
+    width: 80%; 
+    max-width: 600px;
     text-align: center;
     position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ombra per profondità */
-    border-radius: 8px; /* Bordo arrotondato */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    border-radius: 8px; 
     animation: fadeIn 0.3s ease-in-out;
   
     h2 {

@@ -1,4 +1,3 @@
-// IconCards.tsx
 import React, { useEffect, useState } from "react";
 import "./iconCards.scss";
 import {
@@ -39,11 +38,9 @@ const IconCards: React.FC = () => {
   } | null>(null);
 
   useEffect(() => {
-    // Attiva l'animazione dopo 2 secondi
     const timer = setTimeout(() => {
       setAnimated(true);
     }, 2000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -161,6 +158,12 @@ const IconCards: React.FC = () => {
   const handleIconClick = (data: { title: string; description: string; services: string[] }) => {
     setPopupData(data);
     setPopupOpen(true);
+    setTimeout(() => {
+      const popup = document.getElementById("info-popup");
+      if (popup) {
+        popup.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
   };
 
   const handleClosePopup = () => {

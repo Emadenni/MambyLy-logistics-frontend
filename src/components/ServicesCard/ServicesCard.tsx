@@ -23,7 +23,7 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, im
 
       <div className="service_card__content">
         <h3>{title}</h3>
-        <p>{shortDescription}</p>
+        <p className="service_card__content__p">{shortDescription}</p>
         <div>{children}</div>
         <Link to="/kontaktaOss">
           <CTA
@@ -34,6 +34,7 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, im
             hoverColor="#DBD714"
           />
         </Link>
+        <p className="service_card__content__extra">Kolla om du tillhör något av de här scenarierna och upptäck våra tjänster. Om du inte gör det, oroa dig inte, vi kan troligtvis hjälpa även dig</p>
       
       </div>
       
