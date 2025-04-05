@@ -5,6 +5,7 @@ export interface CTAProps {
   hoverBackgroundColor?: string;
   hoverColor?: string;
   onClick?: () => void;
+  className?: string;
 }
 
 export type logoProps = {

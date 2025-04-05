@@ -52,8 +52,14 @@
 
 @media (max-width: 545px) {
   .home_container .home_CTA_box {
-    @include flexbox(row, center, center);
+    @include flexbox(column, center, center);
     top: 64%;
+    
+  }
+
+  .home_container .cta_button {
+    font-size: 0.6rem;
+    padding: 8px !important;
   }
 
   .home_container .transition_container .home_title {

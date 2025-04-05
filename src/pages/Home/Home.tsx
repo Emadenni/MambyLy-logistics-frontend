@@ -26,6 +26,7 @@ const Home: React.FC = () => {
         <div className="home_CTA_box">
           <Link to="/tjänster">
             <CTA
+              className="cta_button"
               text="VARA TJÄNSTER"
               backgroundColor="#fff"
               color="rgba(66, 165, 245)"
@@ -35,6 +36,7 @@ const Home: React.FC = () => {
           </Link>
           <Link to="/kontaktaOss">
             <CTA
+              className="cta_button"
               text="KONTAKTA OSS"
               backgroundColor="#DBD714"
               color="#045D17"
