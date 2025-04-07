@@ -15,6 +15,7 @@
   left: 0;
   width: 100%;
   height: 100%;
+  background-image: url("../../assets/images/serviceImg.webp");
   background-size: cover;
   background-position: center;
   filter: brightness(0.7) blur(1px);
@@ -163,12 +164,15 @@
   }
 
   .service_card__background {
+    background-image: url("../../assets/images/serviceImg.webp");
     margin-top: 0;
     background-size: cover;
     background-position: 75% 30%;
     background-repeat: no-repeat;
     height: 100%;
     filter: brightness(0.65);
+    transition: transform 0.4s ease-in-out;
+    will-change: transform;  
   }
 
   .service_card__icons {
