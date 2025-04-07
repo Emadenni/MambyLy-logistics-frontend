@@ -15,7 +15,6 @@ export type logoProps = {
 export interface ServicesCardProps {
   title: string;
   shortDescription: string;
-  image: string;
   background_color: string;
   color: string;
   path: string;
@@ -36,7 +35,7 @@ export interface FormData {
   name: string;
   email: string;
   message: string;
-  subject: string; 
+  subject: string;
   file: File | null;
 }
 
@@ -68,7 +67,7 @@ interface Admin {
   firstName: string;
   lastName: string;
   profilePicture: string;
-  role: string;  
+  role: string;
 }
 
 interface AdminInfoBoxProps {
@@ -86,7 +85,7 @@ export interface FormData {
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
-  data?: T;  
+  data?: T;
 }
 
 export interface RegisterResult {
@@ -109,7 +108,6 @@ export interface FieldErrors {
   password: string | null;
 }
 
-
 export interface Message {
   jobMessageId: string;
   name: string;
@@ -125,9 +123,8 @@ export interface AuthState {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   setAdminId: (adminId: string | null) => void;
   logout: () => void;
-  handleUnauthorized: () => void; 
+  handleUnauthorized: () => void;
 }
-
 
 export interface JobPosition {
   positionId: string;
