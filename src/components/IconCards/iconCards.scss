@@ -108,12 +108,12 @@
     grid-template-areas:
       "card1 card2 card3 card4 card5"
       "card6 card7 card8 card9";
-    gap: 10px;
+    gap: 5px;
 
     .icon-card {
-      width: 48px;
-      height: 48px;
-      font-size: 1.5rem;
+      width: 52px;
+      height: 52px;
+      font-size: 1.6rem;
 
       &:not(.animated) {
         animation: none !important;
@@ -127,17 +127,26 @@
   
   }
 
-  @media (max-width: 385px) {
-    .icon-card {
-      width: 42px;
-      height: 42px;
-      font-size: 1.5rem;
-    }
-  }
+
 }
+
+
+
 
 @media (max-width: 768px) {
   .icon-card::after {
     display: none !important;
+  }
+}
+
+@media (max-width: 385px) {
+  .icons-container {
+    gap: 0px !important;
+  }
+
+  .icon-card {
+    width: 49px;
+    height: 49px;
+    font-size: 1.5rem;
   }
 }

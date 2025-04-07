@@ -1,6 +1,6 @@
 .popup-overlay {
     position: absolute;
-    top: 50%; /* 50% della viewport */
+    top:80%; /* 50% della viewport */
     left: 20%; /* 50% della viewport */
     transform: translate(-50%, -50%); /* Centra esattamente in relazione al 50% di top e left */
     width: 100vw; /* Larghezza che occupa tutta la viewport */
@@ -18,7 +18,7 @@
     
     @media (max-width: 768px) {
       padding: 10px; 
-      top: -95%; 
+      top:-120%; 
     left: 50%; 
     }
   

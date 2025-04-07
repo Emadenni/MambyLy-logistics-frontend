@@ -5,10 +5,9 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: hidden;
-  position: relative; /* Importante per il layout */
-  overflow: visible; 
 
+  position: relative;
+  overflow: visible;
 }
 
 @media (max-width: 768px) {
@@ -21,4 +20,3 @@
     flex-grow: 1;
   }
 }
-
