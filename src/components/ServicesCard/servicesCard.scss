@@ -34,7 +34,7 @@
   opacity: 0;
   animation: slideIn 0.8s ease-out forwards;
   margin-top: 80px;
-  z-index: 1 ;
+  z-index: 1;
 }
 
 .service_card__content::before {
@@ -77,7 +77,6 @@
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: 0.3s;
   opacity: 0;
-  
 }
 
 .service_card__content__extra {
@@ -140,6 +139,7 @@
     margin-top: -80px;
     padding: 1rem;
     max-width: 90%;
+    box-shadow: none; 
     h3 {
       font-size: 1.2rem;
       margin-bottom: 1rem;
@@ -159,8 +159,7 @@
     left: 5%;
     background: rgb(1, 5, 11);
     border-radius: 20px;
-    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
-    animation: none; 
+   
   }
 
   .service_card__background {
@@ -188,11 +187,11 @@
     }
 
     .service_card__content__p {
-      font-size: 0.80rem;
+      font-size: 0.8rem;
     }
 
     .service_card__content__extra {
-      font-size: 0.80rem !important;
+      font-size: 0.8rem !important;
     }
   }
 
@@ -206,22 +205,24 @@
 }
 
 .service_card__icons .logoIcon {
-  z-index: -1;
+/*   z-index: -1;
   position: absolute;
   top: 45% !important;
   left: 45%;
   transform: translate(-50%, -50%);
   opacity: 0.2;
-  filter: brightness(0.70) blur(2px);
+  filter: brightness(0.7) blur(2px);
   pointer-events: none;
   transition: opacity 0.5s ease-in-out;
-  width: 180%;
+  width: 180%; */
+  display: none;
 }
 
 @media (max-width: 768px) {
   .service_card__icons .logoIcon {
-    width: 380%;
+   /*  width: 380%;
     top: 0%;
-    opacity: 0.25;
+    opacity: 0.25; */
+    display: none;
   }
 }
