@@ -156,17 +156,16 @@ const IconCards: React.FC = () => {
   ];
   const handleIconClick = (data: { title: string; description: string; services: string[] }) => {
     setPopupData(data);
-    setPopupOpen(true);
-  
-   
+
     window.scrollTo({
-      top: 0, 
-      behavior: "smooth", 
+      top: 0,
+      behavior: "smooth",
+    });
+
+    requestAnimationFrame(() => {
+      setPopupOpen(true);
     });
   };
-  
-  
-  
 
   const handleClosePopup = () => {
     setPopupOpen(false);
