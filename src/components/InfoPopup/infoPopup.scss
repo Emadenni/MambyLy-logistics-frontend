@@ -1,12 +1,12 @@
 .popup-overlay {
     position: absolute;
-    top:80%; /* 50% della viewport */
-    left: 20%; /* 50% della viewport */
-    transform: translate(-50%, -50%); /* Centra esattamente in relazione al 50% di top e left */
-    width: 100vw; /* Larghezza che occupa tutta la viewport */
-    height: 100vh; /* Altezza che occupa tutta la viewport */
+    top:80%; 
+    left: 20%; 
+    transform: translate(-50%, -50%); 
+    width: 100vw; 
+    height: 100vh; 
   
-    background-color: rgba(0, 0, 0, 0.7); /* Sfondo semitrasparente */
+    background-color: rgba(0, 0, 0, 0.7); 
     display: flex;
     justify-content: center;
     align-items: center;

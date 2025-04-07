@@ -42,7 +42,7 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, im
 
       <div className="service_card__icons">
         <IconCards />
-        <img src={logoIcon} alt="logo-icon" className="logoIcon" />
+       {/*  <img src={logoIcon} alt="logo-icon" className="logoIcon" /> */}
       </div>
     </div>
   );
