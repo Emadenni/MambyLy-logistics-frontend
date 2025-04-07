@@ -154,17 +154,19 @@ const IconCards: React.FC = () => {
       ],
     },
   ];
-
   const handleIconClick = (data: { title: string; description: string; services: string[] }) => {
     setPopupData(data);
     setPopupOpen(true);
-    setTimeout(() => {
-      const popup = document.getElementById("info-popup");
-      if (popup) {
-        popup.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }, 100);
+  
+   
+    window.scrollTo({
+      top: 0, 
+      behavior: "smooth", 
+    });
   };
+  
+  
+  
 
   const handleClosePopup = () => {
     setPopupOpen(false);
