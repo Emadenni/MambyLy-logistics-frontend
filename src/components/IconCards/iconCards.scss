@@ -5,13 +5,10 @@
 .icon-card {
   position: relative;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 60px;
   height: 60px;
-  background: #3bb5069b;
-  background: #095754c4;
   background: #5bb4b1de;
   color: rgb(3, 38, 4);
   border-radius: 10px;
@@ -22,6 +19,8 @@
   border: 1px solid rgb(220, 220, 146);
   box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
   animation: entrance 2s ease-out forwards;
+  background-size: cover;
+  background-position: center; // Gestisce il posizionamento dell'immagine
 
   &:hover {
     opacity: 0.9;
@@ -66,6 +65,24 @@
     50% { transform: translateY(-5px); }
   }
 
+  .icon-container {
+    z-index: 2; // L'icona deve essere sopra l'immagine
+  }
+
+  .info-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; // Metti l'overlay sotto l'icona
+    color: white;
+    font-size: 0.8rem;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+  }
+
   &:nth-child(1) { animation-delay: 0s; }
   &:nth-child(2) { animation-delay: 0.3s; }
   &:nth-child(3) { animation-delay: 0.6s; }
@@ -93,60 +110,5 @@
   @keyframes grid-entrance {
     0% { opacity: 0; transform: translateY(50px); }
     100% { opacity: 1; transform: translateY(0); }
-  }
-
-  .icons-title {
-    color: rgb(206, 229, 237);
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, auto);
-    grid-template-areas:
-      "card1 card2 card3 card4 card5"
-      "card6 card7 card8 card9";
-    gap: 5px;
-
-    .icon-card {
-      width: 52px;
-      height: 52px;
-      font-size: 1.6rem;
-
-      &:not(.animated) {
-        animation: none !important;
-      }
-    }
-
-    .icons-title {
-      font-size: 0.5rem;
-    }
-
-  
-  }
-
-
-}
-
-
-
-
-@media (max-width: 768px) {
-  .icon-card::after {
-    display: none !important;
-  }
-}
-
-@media (max-width: 385px) {
-  .icons-container {
-    gap: 0px !important;
-  }
-
-  .icon-card {
-    width: 49px;
-    height: 49px;
-    font-size: 1.5rem;
   }
 }
