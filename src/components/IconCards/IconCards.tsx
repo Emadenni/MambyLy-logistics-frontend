@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-import "./iconCards.scss";
-import InfoPopup from "../InfoPopup/InfoPopup";
+import React, { useState, useEffect } from "react";
 import { iconData } from "../../components/data/iconData";
 import * as FaIcons from "react-icons/fa";
+import InfoPopup from "../InfoPopup/InfoPopup";
+import "./iconCards.scss";
 
 const IconCards: React.FC = () => {
-  const [animated, setAnimated] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupData, setPopupData] = useState<{
     title: string;
@@ -13,11 +12,6 @@ const IconCards: React.FC = () => {
     services: string[];
     image: string;
   } | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimated(true), 2000);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleCardClick = (title: string, description: string, services: string[], image: string) => {
     setPopupData({ title, description, services, image });
@@ -33,9 +27,9 @@ const IconCards: React.FC = () => {
           return (
             <div
               key={index}
-              className={`icon-card ${animated ? "animated" : ""}`}
+              className="icon-card"
               data-info={info}
-              onClick={() => handleCardClick(title, description, services, image)} // Pass the actual image here
+              onClick={() => handleCardClick(title, description, services, image)}
             >
               {IconComponent && <IconComponent size={40} />}
             </div>

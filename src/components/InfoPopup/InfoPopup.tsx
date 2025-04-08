@@ -1,37 +1,31 @@
-import React from "react";
-import "./infoPopup.scss";
+import React from 'react';
+import { Modal } from '@mui/material';
+import './InfoPopup.scss';
 
-interface InfoPopupProps {
+const InfoPopup: React.FC<{
   title: string;
   description: string;
   services: string[];
   image: string;
   onClose: () => void;
-}
-
-const InfoPopup: React.FC<InfoPopupProps> = ({ title, description, services, image, onClose }) => {
+}> = ({ title, description, services, image, onClose }) => {
   return (
-    <div className="popup-overlay">
-      <div className="popup-content">
-        <button className="close-btn" onClick={onClose}>×</button>
-
-        <div className="image-container">
-          <img src={image} alt={title} />
-          <div className="text-overlay">
-            <h2>{title}</h2>
-            <p>{description}</p>
-          </div>
-        </div>
-
-        <ul>
-          {services.map((service, i) => (
-            <li key={i}>{service}</li>
+    <Modal open={true} onClose={onClose}>
+      <div className="info-popup">
+        <button className="info-popup__close" onClick={onClose}>
+          ✕
+        </button>
+        <h2 className="info-popup__title">{title}</h2>
+        <p className="info-popup__description">{description}</p>
+        {image && <img className="info-popup__image" src={image} alt={title} />}
+        <ul className="info-popup__services">
+          {services.map((service, index) => (
+            <li key={index}>{service}</li>
           ))}
         </ul>
       </div>
-    </div>
+    </Modal>
   );
 };
-
 
 export default InfoPopup;

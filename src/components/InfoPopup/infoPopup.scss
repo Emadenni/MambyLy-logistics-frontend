@@ -1,147 +1,53 @@
-.popup-overlay {
-  position: fixed; /* Assicurati che il popup sia fisso nella finestra */
-  top: 75%;
-  left: 20%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.87);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: auto; /* Per garantire che si possa scorrere su schermi piccoli */
-}
-.popup-content {
-  background-color: #fff;
-  width: 40%;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  overflow-y: auto;
-  max-height: 70vh;
-  position: relative;
-  bottom: 8%;
-  animation: popupIn 0.3s ease-in-out;
-  box-sizing: border-box;
-  
-}
-
-/* Animazione di entrata del contenuto */
-@keyframes popupIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* Pulsante di chiusura */
-.close-btn {
-  position: absolute;
-  top: 0px;
-  right: 5px;
-  font-size: 1.5rem;
-  background: transparent;
-  border: none;
-  color: #333;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-  color: #f44336; 
-}
-
-/* Titolo e descrizione sovrapposti sull'immagine */
-.popup-content .image-container {
-  position: relative; /* Contenitore per l'immagine e i testi sovrapposti */
-  width: 100%;
-  height: 300px; /* Imposta un'altezza fissa per l'immagine */
-  overflow: hidden;
-}
-
-.popup-content .image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.popup-content .image-container .text-overlay {
+.info-popup {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra il testo nell'immagine */
-  text-align: center;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.75); /* Trasparenza per il background */
-  padding: 10px 20px;
-  border-radius: 8px;
-}
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1300;
 
-.popup-content h2 {
-  font-size: 1.5rem;
-  color: #6fc1dd;
-  margin-bottom: 10px;
-}
+  // Aggiunto per lo scroll
+  max-height: 90vh;
+  overflow-y: auto;
 
-/* Descrizione */
-.popup-content p {
-  font-size: 1rem;
-  color: #dfdcdc;
-  margin-bottom: 15px;
-  line-height: 1.6;
-}
-
-/* Lista dei servizi */
-.popup-content ul {
-  padding-left: 20px;
-}
-
-.popup-content ul li {
-  font-size: 1rem;
-  color: #333;
-  margin: 5px 0;
-  list-style-type: disc;
-}
-
-/* Media Query per schermi più piccoli */
-@media (max-width: 768px) {
-  .popup-content {
-    padding: 15px;
-    width: 95%;
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
   }
 
-  .popup-content h2 {
-    font-size: 1.3rem;
+  &__title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
 
-  .popup-content p {
-    font-size: 0.9rem;
+  &__description {
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
 
-  .popup-content ul li {
-    font-size: 0.9rem;
-  }
-
-  .close-btn {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 385px) {
-  .popup-content {
+  &__image {
     width: 100%;
-    max-width: 100%;
-    padding: 10px;
+    margin-bottom: 1rem;
+    border-radius: 8px;
   }
 
-  .popup-content h2 {
-    font-size: 1.2rem;
-  }
+  &__services {
+    list-style: disc;
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
 
-  .popup-content p {
-    font-size: 0.8rem;
-  }
-
-  .popup-content ul li {
-    font-size: 0.8rem;
+    li {
+      margin-bottom: 0.5rem;
+    }
   }
 }
