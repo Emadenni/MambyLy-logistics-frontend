@@ -22,6 +22,7 @@
   border: 1px solid rgb(220, 220, 146);
   box-shadow: 0 0 10px rgba(255, 255, 0, 0.7);
   animation: entrance 2s ease-out forwards;
+  padding: 0;
 
   &:hover {
     opacity: 0.9;
@@ -141,12 +142,12 @@
 
 @media (max-width: 385px) {
   .icons-container {
-    gap: 0px !important;
+    gap: 1px !important;
   }
 
-  .icon-card {
-    width: 49px;
-    height: 49px;
+  .icons-container .icon-card {
+    width: 48px;
+    height: 47px;
     font-size: 1.5rem;
   }
 }

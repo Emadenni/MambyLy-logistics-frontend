@@ -39,7 +39,6 @@ const Services = () => {
               key={servicesData[0].id}
               title={servicesData[0].title}
               shortDescription={servicesData[0].shortDescription}
-              image={servicesData[0].image}
               color={servicesData[0].color}
               background_color={servicesData[0].background_color}
               id={servicesData[0].id}

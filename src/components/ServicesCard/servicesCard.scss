@@ -164,8 +164,9 @@
   }
 
   .service_card__background {
+    top: 3%;
     background-image: url("../../assets/images/serviceImg.webp");
-    margin-top: 0;
+    
     background-size: cover;
     background-position: 75% 30%;
     background-repeat: no-repeat;
