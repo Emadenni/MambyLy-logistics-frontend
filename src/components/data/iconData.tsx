@@ -33,7 +33,7 @@ export const iconData = [
     id: 2,
     icon: "FaShoppingBag",
     image: shop,
-    title: "Liten Butik",
+    title: "Butik",
     info: "Driver du en liten butik?",
     description: "Här är några av de digitala lösningarna vi kan erbjuda för att effektivisera och utveckla din butik:",
     services: [
@@ -121,7 +121,7 @@ export const iconData = [
     id: 7,
     icon: "FaLaptopCode",
     image: freelance,
-    title: "Onlineplattform för Yrkesverksamma",
+    title: "Frilansplattform",
     info: "Är du en yrkesverksam inom teknik, kreativt arbete eller någon annan bransch som behöver en onlineplattform?",
     description: "Följande tjänster passar för att förbättra din online-närvaro:",
     services: [
@@ -155,7 +155,7 @@ export const iconData = [
     id: 9,
     icon: "FaBullhorn",
     image:media,
-    title: "Kommunikationsbyrå/Webbyrå",
+    title: "Webbyrå",
     info: "Är du en kommunikationsbyrå eller webbyrå?",
     description: "Vi hjälper din byrå att ta nästa steg med avancerade lösningar som stärker din online-närvaro och effektiviserar dina arbetsflöden.",
     services: [
