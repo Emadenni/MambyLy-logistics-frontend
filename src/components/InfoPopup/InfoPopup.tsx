@@ -59,7 +59,7 @@ const InfoPopup: React.FC<{
     style={{
       margin: 0,
       fontSize: "1.8rem",
-      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)", // Aggiungi l'ombra al titolo
+      textShadow: "2px 2px 4px rgba(0, 0, 0, 0.6)", 
     }}
   >
     {title}
@@ -68,7 +68,7 @@ const InfoPopup: React.FC<{
     style={{
       marginTop: "0.5rem",
       fontSize: "1rem",
-      textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)", // Aggiungi l'ombra alla descrizione
+      textShadow: "1px 1px 3px rgba(0, 0, 0, 0.5)", 
     }}
   >
     {description}
