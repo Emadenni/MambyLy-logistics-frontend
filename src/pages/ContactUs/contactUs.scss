@@ -137,5 +137,21 @@
 }
 
 #contact_form {
-  padding-top: 0px;
+padding: 7rem 2rem;
+
+scroll-margin-top: 3rem;
+  width: 100vw;
+  background-color: #dce3ea;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+
+  
+  h3 {
+    margin-top: -2rem;
+    color:$text-green;
+  }
 }
+
