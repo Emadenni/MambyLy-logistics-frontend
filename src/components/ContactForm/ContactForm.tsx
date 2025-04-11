@@ -68,24 +68,23 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <Box
-      noValidate
-      data-testid="contact-form"
-      component="form"
-      onSubmit={handleFormSubmit}
-      sx={{
-        maxWidth: 600,
-        mx: "auto",
-        p: 4,
-        boxShadow: 5,
-        borderRadius: 3,
-        backgroundColor: "#F5F5F5",
-        border: "1px solid #B0BEC5",
-        "& .MuiTextField-root": {
-          backgroundColor: "#FFFFFF",
-          borderRadius: "8px",
-        },
-      }}
-    >
+    noValidate
+    data-testid="contact-form"
+    component="form"
+    onSubmit={handleFormSubmit}
+    sx={{
+      maxWidth: 600,
+      mx: "auto",
+      p: 4,
+      boxShadow: 4,
+      borderRadius: 3,
+      backgroundColor: "#FAFAF9", 
+      border: "1px solid #E0E0E0",
+      "& .MuiTextField-root": {
+        borderRadius: 2,
+      },
+    }}
+  >
       <FormControl fullWidth margin="normal">
         <TextField
           label="Namn / Företag"

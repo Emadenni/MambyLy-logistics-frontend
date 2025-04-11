@@ -4,6 +4,7 @@ import "./contactUs.scss";
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import TitleBox from "../../components/TitleBox/TitleBox";
+import Logo from "../../components/Logo/Logo";
 
 const ContactUs = () => {
   const location = useLocation();
@@ -21,17 +22,15 @@ const ContactUs = () => {
             <div className="step step-1">
               <div className="step_number">1</div>
               <p className="step_title">Steg 1</p>
-              <p className="step_description">
-                Du kontaktar oss och förklarar dina behov i detalj.
-              </p>
-              <a href="#contact_form" className="step_link">Gå till formuläret</a>
+              <p className="step_description">Du kontaktar oss och förklarar dina behov i detalj.</p>
+              <a href="#contact_form" className="step_link">
+                Gå till formuläret
+              </a>
             </div>
             <div className="step step-2">
               <div className="step_number">2</div>
               <p className="step_title">Steg 2</p>
-              <p className="step_description">
-                Vi skickar ett frågeformulär för att förstå dina behov bättre.
-              </p>
+              <p className="step_description">Vi skickar ett frågeformulär för att förstå dina behov bättre.</p>
             </div>
             <div className="step step-3">
               <div className="step_number">3</div>
@@ -55,6 +54,13 @@ const ContactUs = () => {
             </p>
           </div>
           <div id="contact_form">
+          
+            <h2>
+              Berätta för oss hur vi kan hjälpa dig 
+            </h2>
+            <h3>Vi ser verkligen fram emot att få stötta dig med våra
+            tjänster!</h3>
+            
             <ContactForm subjectFromCard={subjectFromCard} />
           </div>
         </div>
