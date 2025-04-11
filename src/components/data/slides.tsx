@@ -2,7 +2,7 @@ import qualityIcon from "../../assets/images/carousel/quality.png";
 import timeIcon from "../../assets/images/carousel/time.png";
 import customerIcon from "../../assets/images/carousel/customer.png";
 import futureIcon from "../../assets/images/carousel/future.png";
-
+import React from "react";
 
 export interface Slide {
   text: JSX.Element;
@@ -11,19 +11,19 @@ export interface Slide {
 
 export const slides: Slide[] = [
   {
-    text: <>Varje kilometer vi kör är ett åtagande för excellens: <strong>pålitlighet</strong> och <strong>säkerhet</strong> utan kompromisser.</>,
+    text: <>Varje digital lösning vi skapar bygger på <strong>pålitlighet</strong> och <strong>effektivitet</strong> för att optimera ditt arbetsflöde.</>,
     icon: qualityIcon, 
   },
   {
-    text: <><strong>Tid</strong> är värdefullt: vi arbetar varje dag för att garantera en <strong>felfri punktlighet</strong>.</>,
+    text: <><strong>Tid</strong> är avgörande: vi levererar snabba och exakta lösningar som effektiviserar din verksamhet.</>,
     icon: timeIcon,
   },
   {
-    text: <>Vi transporterar inte bara varor, utan <strong>förtroende</strong>: <strong>skräddarsydda lösningar</strong> för varje behov.</>,
+    text: <>Vi skapar inte bara system, vi bygger <strong>relationer</strong>: <strong>anpassade digitala lösningar</strong> för ditt företag.</>,
     icon: customerIcon,
   },
   {
-    text: <>År av <strong>erfarenhet</strong>, men blicken mot <strong>framtiden</strong>: vi utvecklas ständigt för att ge dig det bästa.</>,
+    text: <>Med <strong>innovation</strong> och <strong>erfarenhet</strong>: vi utvecklar ständigt nya teknologier för att hålla dig i framkant.</>,
     icon: futureIcon,
   }
 ];

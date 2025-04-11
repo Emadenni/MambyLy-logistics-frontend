@@ -12,26 +12,31 @@ const AboutUs: React.FC = () => {
         <div className="aboutUs_container">
           <TitleBox
             title="Programmerade för att växa"
-            subTitle="Med vårt engagemang vill vi vara din pålitliga logistiklösning"
+            subTitle="Med vårt engagemang vill vi vara din pålitliga digitallösning"
           />
-          <div className="aboutUs_container__main-text">
-            <p>
-              <strong>Mambyly Logistics</strong> är ett ungt företag, men med ett team fyllt med erfarenhet och stor
-              teknisk kompetens. Vår mission är att göra arbetsflödet smidigt, effektivt och intelligent för våra
-              kunder. Vi garanterar pålitlighet, engagemang och erbjuder flexibilitet samt skräddarsydda lösningar.
-            </p>
-            <div className="aboutUs_container__secondary-text">
-              <p>
-                Vi ansvarar för att transportera era släp till de önskade destinationerna, med en punktlig och säker
-                service. Varje kund får tillgång till ett grundläggande digitalt paket, med stora möjligheter till
-                anpassning, för att få full kontroll och en optimerad hantering av operationerna.
-              </p>
-              <p>
-                Vi är redo att arbeta i Sverige och hela Nordeuropa, med ett dynamiskt och innovativt förhållningssätt.
-                Vi är övertygade om att lyssnande på era behov är det första steget mot ett framgångsrikt samarbete.
-              </p>
-            </div>
-          </div>
+   <div className="aboutUs_intro-card">
+  <div className="aboutUs_intro-card__content">
+    <p className="aboutUs_intro-card__lead">
+      <strong>Mambyly Solutions</strong> är ett ungt initiativ inom den digitala världen – en liten studio med stor
+      drivkraft.
+    </p>
+    <p>
+      Vi hjälper företag att ta sina första (eller nästa) digitala steg genom smarta lösningar som förenklar, förbättrar
+      och automatiserar vardagliga arbetsflöden. Från lättanvända e-handelslösningar till skräddarsydda interna verktyg
+      och till och med decentraliserade applikationer (DApps) – vi är nyfikna, flexibla och alltid engagerade.
+    </p>
+    <p>
+      Vår styrka ligger i närheten till kunden och möjligheten att snabbt anpassa oss efter behov. Vi tror på tydlig
+      kommunikation, enkel design och teknik som gör skillnad – oavsett om det gäller ett litet projekt eller en större
+      idé.
+    </p>
+    <p className="aboutUs_intro-card__closing">
+      Vi bygger inte bara kod – vi bygger relationer, förtroende och framtidens digitala möjligheter.
+    </p>
+  </div>
+</div>
+
+
           <Carousel />
           <ContactsListBox />{" "}
         </div>
