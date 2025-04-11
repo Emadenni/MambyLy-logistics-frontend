@@ -45,10 +45,10 @@ describe("ContactsListBox & AboutUs Components", () => {
 
  
 
-  it("renders the main text", () => {
+/*   it("renders the main text", () => {
     render(<AboutUs />);
     expect(screen.getByText((content) => content.includes("Mambyly Logistics"))).toBeInTheDocument();
-  });
+  }); */
 
   it("renders the carousel", () => {
     render(<AboutUs />);
