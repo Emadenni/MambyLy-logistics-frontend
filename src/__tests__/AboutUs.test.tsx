@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import ContactsListBox from "../components/ContactsListBox/ContactsListBox";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import { teamMembersData } from "../components/data/teamMembers";
+import React from "react";
 
 vi.mock("../components/Layout/Layout", () => ({
   default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
