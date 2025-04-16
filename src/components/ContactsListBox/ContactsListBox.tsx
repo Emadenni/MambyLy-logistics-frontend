@@ -46,38 +46,50 @@ const ContactsListBox = () => {
       
       
       <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        
-        gap={5}
-        data-testid="contacts-list-box"
-      >
-        {teamMembersData.map((member, index) => (
-          <Box key={index} textAlign="center" sx={{ width: "100%", sm: "33%", maxWidth: 350 }}>
-            <Avatar
-              alt={member.name}
-              src={member.imageUrl}
-              sx={{
-                width: 100,
-                height: 100,
-                margin: "0 auto",
-                borderRadius: "50%",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              }}
-            />
-            <Typography variant="subtitle1">{member.name}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              {member.role}
-            </Typography>
-            <Typography variant="body2">
-              <a href={`mailto:${member.email}`} style={{ textDecoration: "none", color: "inherit" }}>
-                {member.email}
-              </a>
-            </Typography>
-          </Box>
-        ))}
-      </Box>
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  gap={10}
+  flexDirection={{ xs: "column", sm: "row" }} 
+  data-testid="contacts-list-box"
+>
+  {teamMembersData.map((member, index) => (
+    <Box
+      key={index}
+      textAlign="center"
+      sx={{
+        width: "100%", 
+        sm: "33%", 
+        maxWidth: 350
+      }}
+    >
+      <Avatar
+        alt={member.name}
+        src={member.imageUrl}
+        sx={{
+          width: 100,
+          height: 100,
+          margin: "0 auto",
+          borderRadius: "50%",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        }}
+      />
+      <Typography variant="subtitle1">{member.name}</Typography>
+      <Typography variant="body2" color="textSecondary">
+        {member.role}
+      </Typography>
+      <Typography variant="body2">
+        <a
+          href={`mailto:${member.email}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {member.email}
+        </a>
+      </Typography>
+    </Box>
+  ))}
+</Box>
+
     </Box>
   );
 };
