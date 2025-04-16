@@ -68,3 +68,36 @@
 .aboutUs_wrapper {
   background: linear-gradient(to bottom, #f2f2f2, #ffffff);
 }
+
+.aboutUs_intro-card {
+  background: linear-gradient(145deg, #e1e9f3, #d4e4e6);
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  max-width: 960px;
+  margin: 0 auto 3rem auto;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  &__content {
+    color: #2d3748;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  &__lead {
+    font-size: 1.25rem;
+    color: #1a202c;
+    margin-bottom: 1rem;
+  }
+
+  &__closing {
+    font-style: italic;
+    margin-top: 1.5rem;
+    color: #197012;
+  }
+}

@@ -5,6 +5,7 @@
 .home_container {
   width: 100%;
   @include flexbox(column, center, center);
+  letter-spacing: 1.9;
 
   .transition_container {
     width: 50%;
@@ -20,17 +21,22 @@
     gap: 2rem;
     border-radius: 5px;
     padding: 0;
+    position: fixed;
+    font-family: "Poppins", sans-serif;
 
     .dynamic_title {
-      color: $background-color;
+      color: white;
       font-size: 1.6rem;
       @include flexbox(column, center, center);
-   
+      letter-spacing: 1.2px;
+      font-weight: 300;
     }
 
     .home_title {
-      font-size: 2rem;
+      font-size: 1.6rem;
       color: yellow;
+      letter-spacing: 1.2px;
+      font-weight: 400;
     }
   }
 
@@ -38,27 +44,34 @@
     @include flexbox(row, center, center);
     width: 100%;
     gap: 1rem;
-    position: absolute;
-    top: 70%;
+    top: 65%;
     z-index: 9;
+    position: fixed;
   }
-
-
 }
 
-
 @media (max-width: 545px) {
-  .home_container  .home_CTA_box {
+  .home_container .home_CTA_box {
     @include flexbox(column, center, center);
-   top: 75%;
-  } 
+    top: 64%;
+    
+  }
+
+  .home_container .cta_button {
+    font-size: 0.85rem;
+    padding: 9px !important;
+  }
 
   .home_container .transition_container .home_title {
-    font-size: 1.6rem;
+    font-size: 0.9rem;
     color: yellow;
+    padding-top: 50px;
   }
 
   .home_container .transition_container .dynamic_title {
-    font-size: 1.3rem;
+    font-size: 1rem;
+    margin-bottom: 4rem;
   }
+
+ 
 }

@@ -17,3 +17,152 @@
     padding-top: 100px;
   }
 }
+
+.popup-overlay {
+  position: fixed; /* Posiziona il popup in modo fisso sulla schermata */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: auto; 
+}
+.popup-content {
+  background-color: #fff;
+  width: 40%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 70vh;
+  position: relative;
+  bottom: 8%;
+  animation: popupIn 0.3s ease-in-out;
+  box-sizing: border-box;
+  
+}
+
+/* Animazione di entrata del contenuto */
+@keyframes popupIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Pulsante di chiusura */
+.close-btn {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #f44336; 
+}
+
+/* Titolo e descrizione sovrapposti sull'immagine */
+.popup-content .image-container {
+  position: relative; /* Contenitore per l'immagine e i testi sovrapposti */
+  width: 100%;
+  height: 300px; /* Imposta un'altezza fissa per l'immagine */
+  overflow: hidden;
+}
+
+.popup-content .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.popup-content .image-container .text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra il testo nell'immagine */
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75); /* Trasparenza per il background */
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.popup-content h2 {
+  font-size: 1.5rem;
+  color: #6fc1dd;
+  margin-bottom: 10px;
+}
+
+/* Descrizione */
+.popup-content p {
+  font-size: 1rem;
+  color: #dfdcdc;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+/* Lista dei servizi */
+.popup-content ul {
+  padding-left: 20px;
+}
+
+.popup-content ul li {
+  font-size: 1rem;
+  color: #333;
+  margin: 5px 0;
+  list-style-type: disc;
+}
+
+/* Media Query per schermi più piccoli */
+@media (max-width: 768px) {
+  .popup-content {
+    padding: 15px;
+    width: 95%;
+  }
+
+  .popup-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .popup-content p {
+    font-size: 0.9rem;
+  }
+
+  .popup-content ul li {
+    font-size: 0.9rem;
+  }
+
+  .close-btn {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 385px) {
+  .popup-content {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .popup-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .popup-content p {
+    font-size: 0.8rem;
+  }
+
+  .popup-content ul li {
+    font-size: 0.8rem;
+  }
+}

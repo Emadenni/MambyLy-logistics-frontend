@@ -3,11 +3,11 @@
 .mambyLy_logo {
     height: auto;
     &.small {
-        width: 26%;
+        width: 16%;
       }
     
       &.medium {
-        width: 40%;
+        width: 27%;
       }
     
       &.large {
@@ -18,7 +18,7 @@
 @media (max-width: 1024px) {
 .mambyLy_logo {
   &.medium {
-    width: 70%;
+    width: 50%;
   }
   }
 }

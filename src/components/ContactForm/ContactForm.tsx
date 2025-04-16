@@ -68,19 +68,23 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <Box
-      noValidate
-      data-testid="contact-form"
-      component="form"
-      onSubmit={handleFormSubmit}
-      sx={{
-        maxWidth: 500,
-        mx: "auto",
-        p: 3,
-        boxShadow: 3,
+    noValidate
+    data-testid="contact-form"
+    component="form"
+    onSubmit={handleFormSubmit}
+    sx={{
+      maxWidth: 600,
+      mx: "auto",
+      p: 4,
+      boxShadow: 4,
+      borderRadius: 3,
+      backgroundColor: "#FAFAF9", 
+      border: "1px solid #E0E0E0",
+      "& .MuiTextField-root": {
         borderRadius: 2,
-        backgroundColor: "rgb(253, 249, 249)",
-      }}
-    >
+      },
+    }}
+  >
       <FormControl fullWidth margin="normal">
         <TextField
           label="Namn / Företag"
@@ -90,6 +94,16 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           required
           error={!!errors.name}
           helperText={errors.name}
+          sx={{
+            borderRadius: 2,
+            "& .MuiInputBase-root": {
+              borderRadius: 2,
+              backgroundColor: "#FAFAFA",
+              "&:hover": {
+                backgroundColor: "#F1F1F1",
+              },
+            },
+          }}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -102,6 +116,16 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           required
           error={!!errors.email}
           helperText={errors.email}
+          sx={{
+            borderRadius: 2,
+            "& .MuiInputBase-root": {
+              borderRadius: 2,
+              backgroundColor: "#FAFAFA",
+              "&:hover": {
+                backgroundColor: "#F1F1F1",
+              },
+            },
+          }}
         />
       </FormControl>
       <FormControl fullWidth margin="normal">
@@ -115,20 +139,41 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             fullWidth
             error={!!errors.subject}
             helperText={errors.subject}
+            sx={{
+              borderRadius: 2,
+              "& .MuiInputBase-root": {
+                borderRadius: 2,
+                backgroundColor: "#FAFAFA",
+                "&:hover": {
+                  backgroundColor: "#F1F1F1",
+                },
+              },
+            }}
           />
         ) : (
-          <Select
+          <TextField
+            label="Subject *"
             name="subject"
             value={formData.subject}
             onChange={handleChange}
             error={!!errors.subject}
+            sx={{
+              borderRadius: 2,
+              "& .MuiInputBase-root": {
+                borderRadius: 2,
+                backgroundColor: "#FAFAFA",
+                "&:hover": {
+                  backgroundColor: "#F1F1F1",
+                },
+              },
+            }}
           >
             {microservices.map((service, index) => (
               <MenuItem key={index} value={service}>
                 {service}
               </MenuItem>
             ))}
-          </Select>
+          </TextField>
         )}
       </FormControl>
 
@@ -143,21 +188,48 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           required
           error={!!errors.message}
           helperText={errors.message}
+          sx={{
+            borderRadius: 2,
+            "& .MuiInputBase-root": {
+              borderRadius: 2,
+              backgroundColor: "#FAFAFA",
+              "&:hover": {
+                backgroundColor: "#F1F1F1",
+              },
+            },
+          }}
         />
       </FormControl>
 
       {isJobApplication && (
         <>
           <FormControl fullWidth margin="normal">
-            <Typography variant="body2">Ladda upp ditt CV:</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1, color: "#4CAF50" }}>
+              Ladda upp ditt CV:
+            </Typography>
             <input type="file" onChange={handleFileChange} required />
-            {formData.file && <Typography variant="caption">{formData.file.name}</Typography>}
+            {formData.file && <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>{formData.file.name}</Typography>}
             {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
           </FormControl>
         </>
       )}
 
-      <Button type="submit" variant="contained" color="primary" fullWidth disabled={isSubmitting}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        disabled={isSubmitting}
+        sx={{
+          borderRadius: 3,
+          padding: "12px 0",
+          fontSize: "16px",
+          backgroundColor: "#1976D2",
+          "&:hover": {
+            backgroundColor: "#1565C0",
+          },
+        }}
+      >
         {isSubmitting ? "Skickar..." : "Skicka"}
       </Button>
 

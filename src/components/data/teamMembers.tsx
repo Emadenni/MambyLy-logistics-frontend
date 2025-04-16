@@ -1,20 +1,17 @@
+import EmanuelePic from "../../assets/images/profileEmanuele.png"
+import MarijaPic from "../../assets/images/marijaPic.jpg"
+
 export const teamMembersData = [
     {
       name: "Marija Markova",
       role: "Verksamhetschef",
       email: "operations@mambyly.se",
-      imageUrl: "https://via.placeholder.com/150",
-    },
-    {
-      name: "Zoran Markov",
-      role: "Logistikchef",
-      email: "logistics@mambyly.se",
-      imageUrl: "https://via.placeholder.com/150",
+      imageUrl: MarijaPic,
     },
     {
       name: "Emanuele De Negri",
-      role: "IT & Digital Manager",
+      role: "Fullstack-utvecklare",
       email: "it-digital@mambyly.se",
-      imageUrl: "https://via.placeholder.com/150",
+      imageUrl:  EmanuelePic,
     },
   ];

@@ -1,0 +1,54 @@
+/* .info-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1300;
+
+  // Aggiunto per lo scroll
+  max-height: 90vh;
+  overflow-y: auto;
+
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &__image {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  &__services {
+    list-style: disc;
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+ */

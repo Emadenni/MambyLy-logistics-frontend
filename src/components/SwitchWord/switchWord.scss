@@ -3,7 +3,7 @@
 @use "../../styles/mixins" as *;
 
 .highlighted {
-    color: $secondary-color; 
+  color: #91ceee;
     font-weight: bold; 
     text-align: center;
     transition: color 0.5s ease-in-out;

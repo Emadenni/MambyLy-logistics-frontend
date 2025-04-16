@@ -1,8 +1,17 @@
 import { Service } from "../../types/common";
 import truck_img from "../../assets/images/truckImg.png";
-import digital_img from "../../assets/images/digitalImg.jpg";
+import digital_img from "../../assets/images/serviceImg.jpg";
 
 export const servicesData: Service[] = [
+  {
+    title: "Stärk ditt företag med digitala lösningar",
+    shortDescription:
+      "Från skräddarsydda hemsidor och webbappar till digitala automatiseringar, hjälper vi små och medelstora företag att växa i den digitala eran. Våra användarvänliga dashboards och innovativa tjänster är designade för att öka din effektivitet och förenkla komplexa uppgifter.",
+    image: digital_img,
+    color: "black",
+    background_color: "white",
+    id: "service2",
+  },
   {
     title: "Transporttjänster",
     shortDescription:
@@ -11,14 +20,5 @@ export const servicesData: Service[] = [
     color: "black",
     background_color: "rgb(231, 241, 232)",
     id: "service1",
-  },
-  {
-    title: "Digitala tjänster",
-    shortDescription:
-      "Vi tillhandahåller verktygen för att säkerställa en kontrollerad och effektiv transportprocess med breda anpassningsmöjligheter.",
-    image: digital_img,
-    color: "black",
-    background_color: "rgb(231, 241, 232)",
-    id: "service2",
   },
 ];
