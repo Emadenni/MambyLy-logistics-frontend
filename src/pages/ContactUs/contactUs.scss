@@ -6,10 +6,11 @@
   width: 100%;
   min-height: 100vh;
   @include flexbox(column, center, center);
+ 
 
   gap: 1.5rem;
   padding-top: 160px;
-  padding-bottom: 100px;
+  padding-bottom: 0px;
 
   @media (max-width: 768px) {
     padding-top: 0px;
@@ -138,7 +139,7 @@
 
 #contact_form {
 padding: 7rem 2rem;
-
+border-top:solid 1px #28923c;
 scroll-margin-top: 3rem;
   width: 100vw;
   background-color: #dce3ea;
