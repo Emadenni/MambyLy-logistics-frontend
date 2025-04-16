@@ -4,17 +4,18 @@
 
 .contact-box {
   @include flexbox(column, center, center);
-  
+  background-color: rgb(243, 246, 244);
   text-align: center;
-  gap: 1rem;
+  gap: 2rem;
   width: 100%;
+  padding: 2rem
 }
 
 .contact-box .MuiList-root {
   @include flexbox(row, center, center);
   padding: 0;
   width: 100%;
-  background-color: rgb(247, 244, 230);
+ 
 
   @media (max-width: 545px) {
     @include flexbox(column, center, center);

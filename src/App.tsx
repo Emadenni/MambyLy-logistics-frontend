@@ -12,12 +12,15 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
+    <> 
     <Router>
+    <ScrollToTop />
       <Routes>
         <Route>
           <Route path="/" element={<Home />} />
@@ -33,6 +36,7 @@ const App = () => {
         <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
+    </>
   );
 };
 

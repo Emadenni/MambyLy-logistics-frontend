@@ -30,7 +30,7 @@ const ContactUs = () => {
             <div className="step step-2">
               <div className="step_number">2</div>
               <p className="step_title">Steg 2</p>
-              <p className="step_description">Vi skickar ett frågeformulär för att förstå dina behov bättre.</p>
+              <p className="step_description">Vi skickar ett frågeformulär med några specifika och riktade frågor för att bättre förstå dina behov.</p>
             </div>
             <div className="step step-3">
               <div className="step_number">3</div>
@@ -49,7 +49,7 @@ const ContactUs = () => {
           </div>
           <div className="note">
             <p>
-              Denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst möta dina
+              Vi tror att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst möta dina
               behov.
             </p>
           </div>
