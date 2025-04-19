@@ -8,7 +8,7 @@
   @include flexbox(column, center, center);
   gap: 3rem;
   padding-top: 180px;
-  padding-bottom: 100px;
+
 
   @media (max-width: 768px) {
     padding-top: 0px;
@@ -65,8 +65,23 @@
   }
 }
 
-.aboutUs_wrapper {
+/* .aboutUs_wrapper {
   background: linear-gradient(to bottom, #f2f2f2, #ffffff);
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+} */
+
+.aboutUs_wrapper {
+  background: linear-gradient(-45deg, #f0e6d8, #e9ebe6, #ced6e4a8, #ffffff);
+  background-size: 400% 400%;
+  animation: gradientBackground 15s ease infinite;
+  min-height: 100vh;
+  padding: 0rem 0;
+}
+
+@keyframes gradientBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .aboutUs_intro-card {
