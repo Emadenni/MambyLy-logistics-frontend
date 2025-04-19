@@ -7,6 +7,8 @@
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
 
+ 
+
   .transition_container {
     width: 50%;
     height: 20%;
@@ -23,6 +25,8 @@
     padding: 0;
     position: fixed;
     font-family: "Poppins", sans-serif;
+
+   
 
     .dynamic_title {
       color: white;
@@ -47,6 +51,10 @@
     top: 65%;
     z-index: 9;
     position: fixed;
+
+    @media (max-width: 1300px) {
+      margin-top: 1rem;
+    }
   }
 }
 
