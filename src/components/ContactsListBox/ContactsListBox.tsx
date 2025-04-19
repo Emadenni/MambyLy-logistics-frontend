@@ -64,16 +64,17 @@ const ContactsListBox = () => {
       }}
     >
       <Avatar
-        alt={member.name}
-        src={member.imageUrl}
-        sx={{
-          width: 100,
-          height: 100,
-          margin: "0 auto",
-          borderRadius: "50%",
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        }}
-      />
+  alt={member.name}
+  src={member.imageUrl}
+  sx={{
+    width: 120,
+    height: 120,
+    margin: "0 auto",
+    borderRadius: "50%",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    objectFit: "cover", // <-- questa è la chiave
+  }}
+/>
       <Typography variant="subtitle1">{member.name}</Typography>
       <Typography variant="body2" color="textSecondary">
         {member.role}

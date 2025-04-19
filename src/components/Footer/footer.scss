@@ -9,8 +9,13 @@
   width: 100vw;
   gap: 0.6rem;
   border-top: solid 1px green;
-  background-color: rgb(244, 240, 240,0.7);
+  background-color: rgb(244, 240, 240, 0.7);
+
   z-index: 1000;
+
+  @media (max-width: 1300px) {
+    background-color: rgb(244, 240, 240);
+  }
 
   &__logo_container {
     @include flexbox(row, center, center);
