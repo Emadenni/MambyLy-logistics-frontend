@@ -4,7 +4,7 @@
 
 .contact-box {
   @include flexbox(column, center, center);
-  background-color: rgb(243, 246, 244);
+  background-color: rgba(243, 246, 244, 0.888);
   text-align: center;
   gap: 2rem;
   width: 100%;
@@ -37,4 +37,8 @@
 
 .contact-box .MuiGrid-container {
   width: 60%;
+}
+
+.list_items {
+  color: rgb(24, 164, 66);
 }

@@ -5,6 +5,7 @@
 .carousel-container .slide-text {
   padding: 0rem;
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
@@ -30,4 +31,12 @@
 .slide-icon {
   max-width: 100%;
   height: auto;
+}
+
+.css-16xl4zq-MuiTypography-root {
+  color: rgb(242, 246, 246);
+
+  @media (max-width: 768px) {
+    color: rgb(10, 54, 54);
+  }
 }

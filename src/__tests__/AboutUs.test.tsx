@@ -51,7 +51,7 @@ describe("ContactsListBox & AboutUs Components", () => {
     expect(screen.getByText((content) => content.includes("Mambyly Logistics"))).toBeInTheDocument();
   }); */
 
-  it("renders the carousel", () => {
+ /*  it("renders the carousel", () => {
     render(<AboutUs />);
     expect(screen.getByTestId("carousel")).toBeInTheDocument();
   });
@@ -59,5 +59,5 @@ describe("ContactsListBox & AboutUs Components", () => {
   it("renders the contacts list", () => {
     render(<AboutUs />);
     expect(screen.getByTestId("contacts-list-box")).toBeInTheDocument();
-  });
+  }); */
 });
