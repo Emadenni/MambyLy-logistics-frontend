@@ -5,6 +5,7 @@
 
 .hamburger-menu {
   position: relative;
+  
 
   .hamburger-menu__overlay {
     position: fixed;
@@ -56,8 +57,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: $background-color;
-    width: 60%;
+    background-color: rgb(235, 238, 239);
+    width: 100%;
     height: 100vh;
     padding: 3rem;
     z-index: 100;
@@ -119,6 +120,7 @@
 
  
   &.open {
+  
     .hamburger-menu__overlay {
       opacity: 1;
       visibility: visible;

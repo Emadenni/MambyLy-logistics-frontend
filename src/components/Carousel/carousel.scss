@@ -31,12 +31,18 @@
 .slide-icon {
   max-width: 100%;
   height: auto;
+
+  @media (max-width: 768px) {
+    color: rgb(5, 10, 10);
+    height: 80px;
+    
+  }
 }
 
 .css-16xl4zq-MuiTypography-root {
   color: rgb(242, 246, 246);
 
   @media (max-width: 768px) {
-    color: rgb(10, 54, 54);
+    color: rgb(5, 10, 10);
   }
 }

@@ -144,4 +144,8 @@ border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    background-color: #356a9f60;
+  }
 }
