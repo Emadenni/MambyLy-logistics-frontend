@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./hero.scss";
-import hero_img from "../../assets/video-placeholder.png";
+import hero_img from "../../assets/video-placeholder.webp";
 import hero_video from "../../assets/video/hero-video.mp4";
 
 const Hero: React.FC = () => {
