@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, FormControl, Box, Typography, SelectChangeEvent } from "@mui/material";
+import { TextField, Button, MenuItem, Select, FormControl, Box, Typography, SelectChangeEvent, Checkbox, FormControlLabel } from "@mui/material";
 import { FormData } from "../../types/common";
 import { positionsData } from "../data/positions";
 import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { microservices } from "../data/microservices";
 import { validateForm } from "../../utils/formValidation";
+import Terms from "../Terms/Terms";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
@@ -16,10 +17,12 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     message: "",
     subject: subjectFromCard || "",
     file: null,
+    termsAccepted: false,
   });
 
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   const { isSubmitting, error, handleSubmit } = useSubmitMessages(isJobApplication);
 
@@ -43,13 +46,23 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   };
 
+  const handleTermsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAcceptTerms(e.target.checked);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formErrors = validateForm(formData, isJobApplication);
     setErrors(formErrors);
 
-    if (Object.keys(formErrors).length > 0) return;
+    if (Object.keys(formErrors).length > 0 || !acceptTerms) {
+      setErrors((prev) => ({
+        ...prev,
+        terms: "Du måste acceptera villkoren för att skicka formuläret.",
+      }));
+      return;
+    }
 
     const result = await handleSubmit(formData);
 
@@ -59,6 +72,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       message: "",
       subject: subjectFromCard || "",
       file: null,
+      termsAccepted:false,
     });
 
     if (result.success && !error) {
@@ -68,23 +82,23 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <Box
-    noValidate
-    data-testid="contact-form"
-    component="form"
-    onSubmit={handleFormSubmit}
-    sx={{
-      maxWidth: 600,
-      mx: "auto",
-      p: 4,
-      boxShadow: 4,
-      borderRadius: 3,
-      backgroundColor: "#FAFAF9", 
-      border: "1px solid #E0E0E0",
-      "& .MuiTextField-root": {
-        borderRadius: 2,
-      },
-    }}
-  >
+      noValidate
+      data-testid="contact-form"
+      component="form"
+      onSubmit={handleFormSubmit}
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        p: 4,
+        boxShadow: 4,
+        borderRadius: 3,
+        backgroundColor: "#FAFAF9",
+        border: "1px solid #E0E0E0",
+        "& .MuiTextField-root": {
+          borderRadius: 2,
+        },
+      }}
+    >
       <FormControl fullWidth margin="normal">
         <TextField
           label="Namn / Företag"
@@ -213,6 +227,15 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           </FormControl>
         </>
       )}
+
+      <FormControl fullWidth margin="normal" sx={{ display: "flex", alignItems: "center" }}>
+        <FormControlLabel
+          control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
+          label="Jag accepterar villkoren"
+        />
+        <Terms /> 
+        {errors.terms && <Typography color="error.main" variant="caption">{errors.terms}</Typography>}
+      </FormControl>
 
       <Button
         type="submit"

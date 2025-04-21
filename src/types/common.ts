@@ -37,6 +37,7 @@ export interface FormData {
   message: string;
   subject: string;
   file: File | null;
+  termsAccepted: boolean;
 }
 
 export interface FormProps {
