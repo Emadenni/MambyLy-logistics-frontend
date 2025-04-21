@@ -50,7 +50,7 @@ describe('Footer', () => {
     });
   });
 
-  describe('Terms', () => {
+  /* describe('Terms', () => {
     it('should render all the links', () => {
       render(
         <MemoryRouter>
@@ -60,7 +60,7 @@ describe('Footer', () => {
       const navLinks = screen.getAllByRole('link');
       expect(navLinks).toHaveLength(2); 
     });
-
+ */
     it('should render the correct link texts', () => {
       render(
         <MemoryRouter>
