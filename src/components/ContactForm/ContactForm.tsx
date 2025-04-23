@@ -252,15 +252,15 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
     label={
       <>
-        Jag accepterar villkoren.{" "}
+        Jag accepterar villkoren.{""} <br />
         <Typography
-          variant="body2"
-          component="span"
-          color="primary"
-          sx={{ cursor: "pointer",}}
-        >
-          Kolla länkarna under formuläret
-        </Typography>
+  variant="caption"
+  component="span"
+  color="primary"
+  sx={{ cursor: "pointer" }}
+>
+  Kolla länkarna under formuläret
+</Typography>
       </>
     }
   />
@@ -277,6 +277,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         sx={{
           borderRadius: 3,
           padding: "12px 0",
+          marginTop:"20px",
           fontSize: "16px",
           backgroundColor: "#1976D2",
           "&:hover": {
