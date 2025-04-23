@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, FormControl, Box, Typography, SelectChangeEvent, Checkbox, FormControlLabel } from "@mui/material";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  Box,
+  Typography,
+  SelectChangeEvent,
+  Checkbox,
+  FormControlLabel
+} from "@mui/material";
 import { FormData } from "../../types/common";
-import { positionsData } from "../data/positions";
-import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { microservices } from "../data/microservices";
+import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { validateForm } from "../../utils/formValidation";
 import Terms from "../Terms/Terms";
 
@@ -32,10 +42,20 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   }, [subjectFromCard]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
+  ) => {
     const { name, value } = e.target;
     if (name) {
-      setFormData({ ...formData, [name]: value as string });
+      setFormData((prev) => ({ ...prev, [name]: value as string }));
+
+      if (errors[name]) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -72,7 +92,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       message: "",
       subject: subjectFromCard || "",
       file: null,
-      termsAccepted:false,
+      termsAccepted: false,
     });
 
     if (result.success && !error) {
@@ -81,6 +101,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   };
 
   return (
+    <>
     <Box
       noValidate
       data-testid="contact-form"
@@ -216,26 +237,25 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       </FormControl>
 
       {isJobApplication && (
-        <>
-          <FormControl fullWidth margin="normal">
-            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1, color: "#4CAF50" }}>
-              Ladda upp ditt CV:
-            </Typography>
-            <input type="file" onChange={handleFileChange} required />
-            {formData.file && <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>{formData.file.name}</Typography>}
-            {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
-          </FormControl>
-        </>
+        <FormControl fullWidth margin="normal">
+          <Typography variant="body2" sx={{ fontWeight: 500, mb: 1, color: "#4CAF50" }}>
+            Ladda upp ditt CV:
+          </Typography>
+          <input type="file" onChange={handleFileChange} required />
+          {formData.file && <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>{formData.file.name}</Typography>}
+          {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
+        </FormControl>
       )}
 
-      <FormControl fullWidth margin="normal" sx={{ display: "flex", alignItems: "center" }}>
+      {/* Handling Terms outside of form */}
+      <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
         <FormControlLabel
           control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
           label="Jag accepterar villkoren"
         />
-        <Terms /> 
         {errors.terms && <Typography color="error.main" variant="caption">{errors.terms}</Typography>}
-      </FormControl>
+      </Box>
+
 
       <Button
         type="submit"
@@ -268,6 +288,9 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         </Typography>
       )}
     </Box>
+    
+    <Terms /> {/* This will be your Terms Component */}
+    </>
   );
 };
 
