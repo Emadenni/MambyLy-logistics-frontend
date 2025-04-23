@@ -247,14 +247,25 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         </FormControl>
       )}
 
-      {/* Handling Terms outside of form */}
-      <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
-        <FormControlLabel
-          control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
-          label="Jag accepterar villkoren"
-        />
-        {errors.terms && <Typography color="error.main" variant="caption">{errors.terms}</Typography>}
-      </Box>
+<Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
+  <FormControlLabel
+    control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
+    label={
+      <>
+        Jag accepterar villkoren.{" "}
+        <Typography
+          variant="body2"
+          component="span"
+          color="primary"
+          sx={{ cursor: "pointer",}}
+        >
+          Kolla länkarna under formuläret
+        </Typography>
+      </>
+    }
+  />
+  {errors.terms && <Typography color="error.main" variant="caption">{errors.terms}</Typography>}
+</Box>
 
 
       <Button
@@ -289,7 +300,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       )}
     </Box>
     
-    <Terms /> {/* This will be your Terms Component */}
+    <Terms /> 
     </>
   );
 };
