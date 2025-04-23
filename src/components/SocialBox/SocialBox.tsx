@@ -30,9 +30,6 @@ const SocialBox: React.FC = () => {
       <a href="https://www.tiktok.com/@mambyly" aria-label="TikTok">
         <img src={tiktok_icon} alt="tiktok_icon" className="social_icon extra" />
       </a>
-      <a href="viber://chat?number=%2B46722116422">
-        <img src={viber_icon} alt="viber_icon" className="social_icon" />
-      </a>
     </div>
   );
 };
