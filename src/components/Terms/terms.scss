@@ -11,6 +11,8 @@
         &__item {
             font-size: 0.7rem;
             @include primary-font(600);
+
+          
         }
         &__item button {
             background: none;
@@ -19,6 +21,10 @@
             cursor: pointer;
             font-size: 1rem;
             text-decoration: underline;
+
+            @media (min-width: 1920px) {
+              font-size: 1.5rem;
+            }
           }
         }
       }
@@ -45,6 +51,12 @@
         position: relative;
         overflow-y: auto;
         max-height: 80vh;
+
+        @media (min-width: 1920px) {
+          font-size: 1.5rem;
+          padding: 3rem;
+        
+        }
       }
       
       .modal__close {

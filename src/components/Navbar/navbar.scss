@@ -7,6 +7,11 @@
     @include flexbox(row, center, center);
     margin-bottom: 1.3rem;
 
+    @media (min-width: 2500px) {
+      font-size: 1.85rem;
+      padding: 0px 5rem;
+    }
+
     &__item {
       @include primary-font(600);
       color: $text-green;
@@ -18,6 +23,11 @@
       @media (max-width: 1300px) {
         font-size: 1.02rem;
       }
+
+      @media (min-width: 2500px) {
+        font-size: 1.95rem;
+        padding: 0 2rem;
+      }
     }
 
     &__item:hover {
@@ -27,7 +37,6 @@
 
     .navbar_link--active {
       color: $text-blue;
-      
     }
   }
 }
