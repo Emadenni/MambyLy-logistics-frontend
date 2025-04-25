@@ -67,6 +67,11 @@
   @media (max-width: 1300px) {
     font-size: 2rem;
   }
+
+  @media (min-width: 2500px) {
+    font-size: 3.85rem;
+  
+  }
 }
 
 .service_card__content__p {
@@ -85,6 +90,16 @@
   @media (max-width: 1300px) {
     font-size: 1rem;
   }
+
+  @media (min-width: 2500px) {
+    font-size: 1.85rem;
+  
+  }
+
+  @media (min-width:1920px) {
+    font-size: 1.55rem;
+  
+  }
 }
 
 .service_card__content__extra {
@@ -96,6 +111,15 @@
 
   @media (max-width: 1300px) {
     font-size: 1rem;
+  }
+
+  @media (min-width: 2500px) {
+    font-size: 1.85rem;
+  
+  }
+  @media (min-width:1920px) {
+    font-size: 1.55rem;
+  
   }
 }
 

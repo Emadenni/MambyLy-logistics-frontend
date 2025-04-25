@@ -4,14 +4,14 @@ import MarijaPic from "../../assets/images/marijaPic.png"
 export const teamMembersData = [
     {
       name: "Marija Markova",
-      role: "Intern Relationsansvarig",
-      email: "intern@mambyly.se",
+      role: "Relationsansvarig",
+      email: "intern@mambylysolutions.se",
       imageUrl: MarijaPic,
     },
     {
       name: "Emanuele De Negri",
       role: "Fullstack-utvecklare",
-      email: "it-digital@mambyly.se",
+      email: "it-digitalmambylysolutions.se",
       imageUrl:  EmanuelePic,
     },
   ];

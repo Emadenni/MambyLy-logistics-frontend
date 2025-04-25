@@ -17,12 +17,22 @@ const Carousel = () => {
 
   return (
     <Box sx={{ position: "relative", width: "100%", maxWidth: 600, margin: "auto" }}>
-      <Box sx={{ padding: 2, textAlign: "center" }}>
-        <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
-        <Typography variant="h5" sx={{ color: "rgb(12, 68, 35)" }} className="slide-text">
-  {slides[currentIndex].text}
-</Typography>
-      </Box>
+  <Box sx={{ padding: 2, textAlign: "center" }}>
+  <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
+  <Typography
+    variant="h5"
+    sx={{
+      color: "rgb(12, 68, 35)",
+      "@media (min-width: 2560px)": {
+        fontSize: "2.6rem", 
+      },
+    }}
+    className="slide-text"
+  >
+    {slides[currentIndex].text}
+  </Typography>
+</Box>
+
 
       <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
         {slides.map((_, index) => (

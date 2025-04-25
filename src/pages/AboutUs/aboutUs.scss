@@ -15,7 +15,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    
+
     background-color: #efefec37;
     background-size: 400% 400%;
     animation: gradientBackground 15s ease infinite;
@@ -26,7 +26,7 @@
     }
   }
 
-  // Immagine di sfondo fissa sopra il gradient
+ 
   .about_card__background {
     position: fixed;
     top: 0;
@@ -41,8 +41,6 @@
   }
 }
 
-
-
 .aboutUs_container {
   width: 100%;
   min-height: 100vh;
@@ -56,8 +54,14 @@
     padding-top: 10px;
   }
 
-  @media (min-width: 2640px) {
-    padding-top: 300px;
+  @media (min-width: 2560px) {
+    padding-top: 330px;
+    
+  }
+
+  @media (min-width: 1920px) {
+    padding-top: 280px;
+   
   }
 
   &__main-text {
@@ -100,13 +104,20 @@
 
 .aboutUs_intro-card {
   background: rgba(16, 17, 16, 0.88);
-border-radius: 0.5rem;
+  border-radius: 0.5rem;
   padding: 2.5rem;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
   max-width: 1060px;
   margin: 2rem auto 3rem auto;
   transition: all 0.3s ease;
   z-index: 2;
+
+  @media (min-width: 2560px) {
+    max-width: 1660px;
+  }
+  @media (min-width: 1920px) {
+    max-width: 1320px;
+  }
 
   @media (max-width: 768px) {
     border-radius: 0px;
@@ -122,12 +133,25 @@ border-radius: 0.5rem;
     line-height: 1.7;
     font-weight: 300;
     letter-spacing: 1.2px;
+
+    @media (min-width: 2560px) {
+      font-size: 34px;
+    }
+    @media (min-width: 1920px) {
+      font-size: 24px;
+    }
   }
 
   &__lead {
     font-size: 1.25rem;
     color: #a1cfe7;
     margin-bottom: 1rem;
+    @media (min-width: 2560px) {
+      font-size: 34px;
+    }
+    @media (min-width: 1920px) {
+      font-size: 24px;
+    }
   }
 
   &__closing {

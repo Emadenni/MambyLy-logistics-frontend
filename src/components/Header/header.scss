@@ -22,8 +22,6 @@
     @include flexbox(row, center, space-between);
     padding: 2rem 4rem;
   }
-
-  
 }
 
 @media (max-width: 545px) {
@@ -36,5 +34,4 @@
   .logo_container {
     width: 80%;
   }
-  
 }

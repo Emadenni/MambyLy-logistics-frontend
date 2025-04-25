@@ -1,24 +1,36 @@
-
-
 .mambyLy_logo {
-    height: auto;
-    &.small {
-        width: 16%;
-      }
-    
-      &.medium {
-        width: 27%;
-      }
-    
-      &.large {
-        width: 120px;
-      }
+  height: auto;
+  &.small {
+    width: 16%;
+
+    @media (min-width: 2500px) {
+      width: 36%;
+    }
+  }
+
+  &.medium {
+    width: 27%;
+  }
+
+  &.large {
+    width: 120px;
+  }
 }
 
 @media (max-width: 1024px) {
-.mambyLy_logo {
-  &.medium {
-    width: 50%;
-  }
+  .mambyLy_logo {
+    &.medium {
+      width: 50%;
+    }
   }
 }
+@media (max-width: 2560px) {
+  .mambyLy_logo {
+    &.medium {
+      width: 38%;
+      padding: 1rem;
+    }
+  }
+}
+
+

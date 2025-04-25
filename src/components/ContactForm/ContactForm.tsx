@@ -102,24 +102,52 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <>
-    <Box
-      noValidate
-      data-testid="contact-form"
-      component="form"
-      onSubmit={handleFormSubmit}
-      sx={{
-        maxWidth: 600,
-        mx: "auto",
-        p: 4,
-        boxShadow: 4,
-        borderRadius: 3,
-        backgroundColor: "#FAFAF9",
-        border: "1px solid #E0E0E0",
-        "& .MuiTextField-root": {
-          borderRadius: 2,
-        },
-      }}
-    >
+  <Box
+  noValidate
+  data-testid="contact-form"
+  component="form"
+  onSubmit={handleFormSubmit}
+  sx={{
+    maxWidth: 600,
+    mx: "auto",
+    p: 4,
+    boxShadow: 4,
+    borderRadius: 3,
+    backgroundColor: "#FAFAF9",
+    border: "1px solid #E0E0E0",
+    "& .MuiTextField-root": {
+      borderRadius: 2,
+      fontSize: "1rem",
+    },
+    "@media (min-width: 1920px)": {
+  maxWidth: 1200,
+  p: 6,
+  "& .MuiTextField-root": {
+    fontSize: "2rem",
+  },
+  "& button": {
+    fontSize: "2rem",
+    padding: "18px 34px",
+  },
+  "& h6": {
+    fontSize: "1.6rem",
+  },
+  "& label": {
+    fontSize: "2rem",
+  },
+  "& textarea": {
+    fontSize: "2rem",
+  },
+  "& input": {
+    fontSize: "2.5rem",
+    padding: "38px 34px",
+  },
+  "& .MuiFormHelperText-root.Mui-error": {
+    fontSize: "1.8rem",
+  },
+}
+  }}
+>
       <FormControl fullWidth margin="normal">
         <TextField
           label="Namn / Företag"
@@ -213,59 +241,140 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       </FormControl>
 
       <FormControl fullWidth margin="normal">
-        <TextField
-          label="Meddelande"
-          name="message"
-          multiline
-          rows={4}
-          value={formData.message}
-          onChange={handleChange}
-          required
-          error={!!errors.message}
-          helperText={errors.message}
-          sx={{
-            borderRadius: 2,
-            "& .MuiInputBase-root": {
-              borderRadius: 2,
-              backgroundColor: "#FAFAFA",
-              "&:hover": {
-                backgroundColor: "#F1F1F1",
-              },
-            },
-          }}
-        />
-      </FormControl>
+  <TextField
+    label="Meddelande"
+    name="message"
+    multiline
+    rows={4}
+    value={formData.message}
+    onChange={handleChange}
+    required
+    error={!!errors.message}
+    helperText={errors.message}
+    sx={{
+      borderRadius: 2,
+      "& .MuiInputBase-root": {
+        borderRadius: 2,
+        backgroundColor: "#FAFAFA",
+        "&:hover": {
+          backgroundColor: "#F1F1F1",
+        },
+      },
+      "& .MuiInputBase-inputMultiline": {
+        padding: "12px",
+        lineHeight: 1.6,
+        "@media (min-width: 1920px)": {
+          padding: "20px",
+          lineHeight: 2,
+          fontSize: "2.5rem",
+        },
+      },
+    }}
+  />
+</FormControl>
 
-      {isJobApplication && (
-        <FormControl fullWidth margin="normal">
-          <Typography variant="body2" sx={{ fontWeight: 500, mb: 1, color: "#4CAF50" }}>
-            Ladda upp ditt CV:
-          </Typography>
-          <input type="file" onChange={handleFileChange} required />
-          {formData.file && <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>{formData.file.name}</Typography>}
-          {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
-        </FormControl>
-      )}
+
+{isJobApplication && (
+  <FormControl fullWidth margin="normal">
+    <Typography
+  variant="body2"
+  sx={{
+    fontWeight: 500,
+    mb: 1,
+    color: "#4CAF50",
+    "@media (min-width: 1920px)": {
+      fontSize: "1.85rem", 
+    },
+  }}
+>
+  Ladda upp ditt CV:
+</Typography>
+    <input type="file" onChange={handleFileChange} required />
+    {formData.file && (
+      <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>
+        {formData.file.name}
+      </Typography>
+    )}
+    {errors.file && (
+      <Typography
+        color="error.main"
+        variant="caption"
+        sx={{
+          "@media (min-width: 1920px)": {
+            fontSize: "2rem", 
+          },
+        }}
+      >
+        {errors.file}
+      </Typography>
+    )}
+  </FormControl>
+)}
+
 
 <Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
   <FormControlLabel
-    control={<Checkbox checked={acceptTerms} onChange={handleTermsChange} />}
+    control={
+      <Checkbox
+        checked={acceptTerms}
+        onChange={handleTermsChange}
+        sx={{
+          // default
+          "& .MuiSvgIcon-root": {
+            fontSize: 24,
+          },
+          // schermi ≥2560px
+          "@media (min-width: 1920px)": {
+            "& .MuiSvgIcon-root": {
+              fontSize: 34, 
+            },
+          },
+        }}
+      />
+    }
     label={
-      <>
-        Jag accepterar villkoren.{""} <br />
+      <Box
+        sx={{
+          fontSize: "0.875rem",
+          "@media (min-width: 1920px)": {
+            fontSize: "1.8rem",
+          },
+        }}
+      >
+        Jag accepterar villkoren. <br />
         <Typography
-  variant="caption"
-  component="span"
-  color="primary"
-  sx={{ cursor: "pointer" }}
->
-  Kolla länkarna under formuläret
-</Typography>
-      </>
+          variant="caption"
+          component="span"
+          color="primary"
+          sx={{
+            cursor: "pointer",
+            fontSize: "0.75rem",
+            "@media (min-width: 1920px)": {
+              fontSize: "1.5rem",
+            },
+          }}
+        >
+          Kolla länkarna under formuläret
+        </Typography>
+      </Box>
     }
   />
-  {errors.terms && <Typography color="error.main" variant="caption">{errors.terms}</Typography>}
+  {errors.terms && (
+    <Typography
+      color="error.main"
+      variant="caption"
+      sx={{
+        fontSize: "0.75rem",
+        "@media (min-width: 2560px)": {
+          fontSize: "1.8rem",
+        },
+      }}
+    >
+      {errors.terms}
+    </Typography>
+  )}
 </Box>
+
 
 
       <Button

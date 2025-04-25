@@ -8,7 +8,11 @@
   text-align: center;
   gap: 2rem;
   width: 100%;
-  padding: 2rem
+  padding: 2rem;
+
+  @media (min-width: 2560px) {
+    gap: 3rem;
+  }
 }
 
 .contact-box .MuiList-root {

@@ -23,15 +23,31 @@ const WorkWithUs = () => {
             subTitle="Kolla de lediga tjänsterna eller skicka in en spontanansökan."
           />
 
-          <Card
-            sx={{
-              mb: 4,
-              borderRadius: 3,
-              backgroundColor: "#F0FDF4",
-              border: "1px solid #A7F3D0",
-              boxShadow: 2,
-            }}
-          >
+<Card
+  sx={{
+    mb: 4,
+    borderRadius: 3,
+    backgroundColor: "#F0FDF4",
+    border: "1px solid #A7F3D0",
+    boxShadow: 2,
+    "@media (min-width: 2560px)": {
+      padding:"2rem",
+      "& .MuiTypography-h6": {
+        fontSize: "2.4rem",
+      },
+      "& .MuiTypography-body1": {
+        fontSize: "2rem",
+      },
+      "& .MuiTypography-body2": {
+        fontSize: "1.9rem",
+      },
+      "& ul": {
+        fontSize: "1.8rem",
+      }
+    }
+  }}
+>
+
             <CardContent>
               <Typography variant="h6" sx={{ color: "#047857", fontWeight: 600 }}>
                 Just nu har vi inga lediga tjänster.

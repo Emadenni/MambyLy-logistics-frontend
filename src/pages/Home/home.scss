@@ -26,6 +26,10 @@
     position: fixed;
     font-family: "Poppins", sans-serif;
 
+    @media (min-width: 2500px) {
+      gap: 2.6rem;
+    }
+
    
 
     .dynamic_title {
@@ -34,6 +38,9 @@
       @include flexbox(column, center, center);
       letter-spacing: 1.2px;
       font-weight: 300;
+      @media (min-width: 2500px) {
+        font-size: 3rem ;
+      }
     }
 
     .home_title {
@@ -41,6 +48,9 @@
       color: yellow;
       letter-spacing: 1.2px;
       font-weight: 400;
+        @media (min-width: 2500px) {
+        font-size: 3rem ;
+      }
     }
   }
 
@@ -55,6 +65,11 @@
     @media (max-width: 1300px) {
       margin-top: 1rem;
     }
+
+    @media (min-width: 1920px) {
+      margin-top: 1.6rem;
+    }
+
   }
 }
 
@@ -74,7 +89,10 @@
     font-size: 0.9rem;
     color: yellow;
     padding-top: 50px;
+ 
   }
+
+ 
 
   .home_container .transition_container .dynamic_title {
     font-size: 1rem;
