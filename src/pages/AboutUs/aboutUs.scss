@@ -167,3 +167,13 @@
     background-color: #356a9f56;
   }
 }
+
+.cta_container {
+  width: 30%;
+  margin: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+}

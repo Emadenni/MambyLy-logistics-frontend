@@ -44,6 +44,7 @@ const AboutUs: React.FC = () => {
             <div className="carousel_container">
               <Carousel />
               <Link to="/tjänster">
+              <div className="cta_container">
               <CTA
             text="UTFORSKA VÅRA TJÄNSTER OCH HÖR AV DIG TILL OSS IDAG!"
             backgroundColor="#91ceee;"
@@ -51,6 +52,7 @@ const AboutUs: React.FC = () => {
             hoverBackgroundColor="#fff"
             hoverColor="#DBD714"
           />
+          </div>
           </Link>
             </div>
             
