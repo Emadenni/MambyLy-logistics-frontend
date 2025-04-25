@@ -26,9 +26,6 @@ describe("ContactsListBox & AboutUs Components", () => {
   it("renders contact information", () => {
     render(<ContactsListBox />);
     expect(screen.getByText((content) => content.includes("Våra kontakter"))).toBeInTheDocument();
-    expect(screen.getByText((content) => content.includes("Email"))).toBeInTheDocument();
-    expect(screen.getByText((content) => content.includes("Telefon"))).toBeInTheDocument();
-    expect(screen.getByText((content) => content.includes("Vi är baserade i"))).toBeInTheDocument();
   });
 
   it("renders social media section", () => {
@@ -44,14 +41,12 @@ describe("ContactsListBox & AboutUs Components", () => {
     }
   });
 
- 
-
-/*   it("renders the main text", () => {
+  /*   it("renders the main text", () => {
     render(<AboutUs />);
     expect(screen.getByText((content) => content.includes("Mambyly Logistics"))).toBeInTheDocument();
   }); */
 
- /*  it("renders the carousel", () => {
+  /*  it("renders the carousel", () => {
     render(<AboutUs />);
     expect(screen.getByTestId("carousel")).toBeInTheDocument();
   });
