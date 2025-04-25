@@ -9,6 +9,9 @@
   border-bottom: solid 1px green;
   position: fixed;
   background-color: rgb(217, 217, 217, 0.9);
+  background-color: rgba(15, 12, 12);
+  background: linear-gradient(135deg, #0f0c0c, #1c1b1b, #0b0909, #0f0c0c);
+  background: linear-gradient(160deg, #0a0a0a, #141414, #090808, #0a0a0a);
 
   z-index: 100;
 }

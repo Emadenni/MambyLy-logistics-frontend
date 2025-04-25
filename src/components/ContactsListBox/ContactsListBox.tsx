@@ -16,10 +16,6 @@ const ContactsListBox = () => {
             fontSize: "2.6rem",
             padding: "3rem",
           },
-          "@media (min-width: 1920px)": {
-            fontSize: "2.2rem",
-            padding: "3rem",
-          },
         }}
       >
         Våra kontakter
@@ -30,7 +26,7 @@ const ContactsListBox = () => {
             primary={
               <Typography
                 sx={{
-                  "@media (min-width: 1920px)": {
+                  "@media (min-width: 2560px)": {
                     fontSize: "2rem",
                   },
                 }}
@@ -46,9 +42,6 @@ const ContactsListBox = () => {
                   "@media (min-width: 2560px)": {
                     fontSize: "2rem",
                   },
-                  "@media (min-width: 1920px)": {
-                    fontSize: "1.6rem",
-                  },
                 }}
               >
                 <Link href="mailto:info@mambyly.se" style={{ textDecoration: "none", color: "inherit" }}>
@@ -63,7 +56,7 @@ const ContactsListBox = () => {
             primary={
               <Typography
                 sx={{
-                  "@media (min-width: 1920px)": {
+                  "@media (min-width: 2560px)": {
                     fontSize: "2rem",
                   },
                 }}
@@ -79,9 +72,6 @@ const ContactsListBox = () => {
                   "@media (min-width: 2560px)": {
                     fontSize: "2rem",
                   },
-                  "@media (min-width: 1920px)": {
-                    fontSize: "1.6rem",
-                  },
                 }}
               >
                 <Link href="tel:+46722116422" style={{ textDecoration: "none", color: "inherit" }}>
@@ -96,7 +86,7 @@ const ContactsListBox = () => {
             primary={
               <Typography
                 sx={{
-                  "@media (min-width: 1920px)": {
+                  "@media (min-width: 2560px)": {
                     fontSize: "2rem",
                   },
                 }}
@@ -127,10 +117,8 @@ const ContactsListBox = () => {
           "@media (min-width: 2560px)": {
             fontSize: "2rem",
           },
-          "@media (min-width: 1920px)": {
-            fontSize: "1.6rem",
-          },
         }}
+        className="section-title"
       >
         Följ oss på sociala medier
       </Typography>
@@ -142,14 +130,11 @@ const ContactsListBox = () => {
           "@media (min-width: 2560px)": {
             fontSize: "2rem",
           },
-          "@media (min-width: 1920px)": {
-            fontSize: "1.6rem",
-          },
         }}
+        className="section-title"
       >
         För specifika frågor, kontakta våra nyckelpersoner
       </Typography>
-
       <Box
         display="flex"
         justifyContent="center"
@@ -186,9 +171,6 @@ const ContactsListBox = () => {
                 "@media (min-width: 2560px)": {
                   fontSize: "2rem",
                 },
-                "@media (min-width: 1920px)": {
-                  fontSize: "1.6rem",
-                },
               }}
             >
               {member.name}
@@ -200,10 +182,6 @@ const ContactsListBox = () => {
                 "@media (min-width: 2560px)": {
                   fontSize: "2rem",
                 },
-                "@media (min-width: 1920px)": {
-                  fontSize: "1.6rem",
-                },
-                
               }}
             >
               {member.role}
@@ -212,10 +190,7 @@ const ContactsListBox = () => {
               variant="body2"
               sx={{
                 "@media (min-width: 2560px)": {
-                  fontSize: "2rem",
-                },
-                "@media (min-width: 1920px)": {
-                  fontSize: "1.6rem",
+                  fontSize: "1.8rem",
                 },
                 whiteSpace: "nowrap",
                 display: "flex",

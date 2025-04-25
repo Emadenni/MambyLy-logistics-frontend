@@ -24,13 +24,14 @@
   animation: entrance 2s ease-out forwards;
   padding: 0;
 
-  @media (min-width: 2500px) {
+  @media (min-width: 1920px) {
+    width: 80px;
+    height: 80px;
+  }
+  
+  @media (min-width: 2560px) {
     width: 100px;
     height: 100px;
-  }
-  @media (min-width: 1920px) {
-    width: 90px;
-    height: 90px;
   }
 
   &:hover {

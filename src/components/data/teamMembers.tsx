@@ -11,7 +11,7 @@ export const teamMembersData = [
     {
       name: "Emanuele De Negri",
       role: "Fullstack-utvecklare",
-      email: "it-digitalmambylysolutions.se",
+      email: "it-digital@mambylysolutions.se",
       imageUrl:  EmanuelePic,
     },
   ];

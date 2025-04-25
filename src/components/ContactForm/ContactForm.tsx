@@ -119,7 +119,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       borderRadius: 2,
       fontSize: "1rem",
     },
-    "@media (min-width: 1920px)": {
+    "@media (min-width: 2560px)": {
   maxWidth: 1200,
   p: 6,
   "& .MuiTextField-root": {
@@ -263,7 +263,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       "& .MuiInputBase-inputMultiline": {
         padding: "12px",
         lineHeight: 1.6,
-        "@media (min-width: 1920px)": {
+        "@media (min-width: 2560px)": {
           padding: "20px",
           lineHeight: 2,
           fontSize: "2.5rem",
@@ -282,7 +282,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     fontWeight: 500,
     mb: 1,
     color: "#4CAF50",
-    "@media (min-width: 1920px)": {
+    "@media (min-width: 2560px)": {
       fontSize: "1.85rem", 
     },
   }}
@@ -300,7 +300,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         color="error.main"
         variant="caption"
         sx={{
-          "@media (min-width: 1920px)": {
+          "@media (min-width: 2560px)": {
             fontSize: "2rem", 
           },
         }}
@@ -324,7 +324,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             fontSize: 24,
           },
           // schermi ≥2560px
-          "@media (min-width: 1920px)": {
+          "@media (min-width: 2560px)": {
             "& .MuiSvgIcon-root": {
               fontSize: 34, 
             },
@@ -336,7 +336,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       <Box
         sx={{
           fontSize: "0.875rem",
-          "@media (min-width: 1920px)": {
+          "@media (min-width: 2560px)": {
             fontSize: "1.8rem",
           },
         }}
@@ -349,7 +349,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
           sx={{
             cursor: "pointer",
             fontSize: "0.75rem",
-            "@media (min-width: 1920px)": {
+            "@media (min-width: 2560px)": {
               fontSize: "1.5rem",
             },
           }}

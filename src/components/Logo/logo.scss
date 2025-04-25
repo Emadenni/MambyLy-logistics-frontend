@@ -9,7 +9,7 @@
   }
 
   &.medium {
-    width: 27%;
+    width: 31%;
   }
 
   &.large {
@@ -24,7 +24,7 @@
     }
   }
 }
-@media (max-width: 2560px) {
+@media (min-width: 2560px) {
   .mambyLy_logo {
     &.medium {
       width: 38%;

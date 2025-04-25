@@ -26,6 +26,7 @@ const Carousel = () => {
       "@media (min-width: 2560px)": {
         fontSize: "2.6rem", 
       },
+      
     }}
     className="slide-text"
   >

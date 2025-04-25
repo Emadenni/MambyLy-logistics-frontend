@@ -4,7 +4,9 @@
 
 .contact-box {
   @include flexbox(column, center, center);
-  background-color: rgba(243, 246, 244, 0.888);
+  background-color: #f6f5e8e2;
+  background-color: rgba(233, 231, 227, 0.902);
+
   text-align: center;
   gap: 2rem;
   width: 100%;
@@ -45,4 +47,28 @@
 
 .list_items {
   color: rgb(24, 164, 66);
+}
+
+.section-title {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #333;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #f4a261;
+    border-radius: 50%;
+    transform: translateY(-50%);
+  }
+
+ 
 }

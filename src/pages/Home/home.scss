@@ -38,7 +38,7 @@
       @include flexbox(column, center, center);
       letter-spacing: 1.2px;
       font-weight: 300;
-      @media (min-width: 2500px) {
+      @media (min-width: 2560px) {
         font-size: 3rem ;
       }
     }
@@ -48,7 +48,7 @@
       color: yellow;
       letter-spacing: 1.2px;
       font-weight: 400;
-        @media (min-width: 2500px) {
+        @media (min-width: 2560px) {
         font-size: 3rem ;
       }
     }
@@ -66,7 +66,7 @@
       margin-top: 1rem;
     }
 
-    @media (min-width: 1920px) {
+    @media (min-width: 2560px) {
       margin-top: 1.6rem;
     }
 

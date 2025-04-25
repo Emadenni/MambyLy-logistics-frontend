@@ -60,7 +60,7 @@
   }
 
   @media (min-width: 1920px) {
-    padding-top: 280px;
+    padding-top: 240px;
    
   }
 
@@ -115,9 +115,7 @@
   @media (min-width: 2560px) {
     max-width: 1660px;
   }
-  @media (min-width: 1920px) {
-    max-width: 1320px;
-  }
+ 
 
   @media (max-width: 768px) {
     border-radius: 0px;
@@ -137,9 +135,7 @@
     @media (min-width: 2560px) {
       font-size: 34px;
     }
-    @media (min-width: 1920px) {
-      font-size: 24px;
-    }
+   
   }
 
   &__lead {
@@ -149,9 +145,7 @@
     @media (min-width: 2560px) {
       font-size: 34px;
     }
-    @media (min-width: 1920px) {
-      font-size: 24px;
-    }
+   
   }
 
   &__closing {
