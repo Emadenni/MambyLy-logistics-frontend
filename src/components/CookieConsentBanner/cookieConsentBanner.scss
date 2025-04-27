@@ -1,0 +1,34 @@
+.cookie-banner_container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgb(1, 2, 16);
+}
+
+.cookie-banner {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  align-items: center;
+}
+
+.cookie-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.terms {
+ 
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

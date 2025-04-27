@@ -13,6 +13,7 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop";
+import CookieConsentBanner from "./components/CookieConsentBanner/CookieConsentBanner";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -21,6 +22,7 @@ const App = () => {
     <> 
     <Router>
     <ScrollToTop />
+    <CookieConsentBanner />
       <Routes>
         <Route>
           <Route path="/" element={<Home />} />

@@ -3,6 +3,11 @@
 @use "../../styles/mixins" as *;
 
 .terms {
+  z-index: 1001;
+
+  h2 {
+    text-align: center
+  }
 
     &__list {
         @include flexbox(row, center, center);
@@ -67,4 +72,10 @@
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
+      }
+
+      .green {
+        color: green;
+        margin-top: 10px;
+        font-style: italic;
       }
