@@ -41,7 +41,7 @@ const AboutUs: React.FC = () => {
               </div>
             </div>
             <ContactsListBox />
-            <div className="carousel_container">
+            <div className="carousel_container_home">
               <Carousel />
               <Link to="/tjänster">
               <div className="cta_container">

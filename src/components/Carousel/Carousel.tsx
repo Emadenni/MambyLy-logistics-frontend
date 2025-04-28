@@ -16,13 +16,17 @@ const Carousel = () => {
   }, []);
 
   return (
+
+    <>
+    <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
     <Box sx={{ position: "relative", width: "100%", maxWidth: 600, margin: "auto" }}>
+      
   <Box sx={{ padding: 2, textAlign: "center" }}>
-  <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
+ 
   <Typography
     variant="h5"
     sx={{
-      color: "rgb(12, 68, 35)",
+      color: "rgb(2, 35, 16)",
       "@media (min-width: 2560px)": {
         fontSize: "2.6rem", 
       },
@@ -52,6 +56,7 @@ const Carousel = () => {
         ))}
       </Box>
     </Box>
+    </>
   );
 };
 
