@@ -92,10 +92,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra il testo nell'immagine */
+  transform: translate(-50%, -50%); 
   text-align: center;
   color: white;
-  background-color: rgba(0, 0, 0, 0.75); /* Trasparenza per il background */
+  background-color: rgba(0, 0, 0, 0.75); 
   padding: 10px 20px;
   border-radius: 8px;
 }
@@ -106,7 +106,7 @@
   margin-bottom: 10px;
 }
 
-/* Descrizione */
+
 .popup-content p {
   font-size: 1rem;
   color: #dfdcdc;
@@ -114,7 +114,6 @@
   line-height: 1.6;
 }
 
-/* Lista dei servizi */
 .popup-content ul {
   padding-left: 20px;
 }
@@ -126,7 +125,7 @@
   list-style-type: disc;
 }
 
-/* Media Query per schermi più piccoli */
+
 @media (max-width: 768px) {
   .popup-content {
     padding: 15px;
