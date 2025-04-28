@@ -14,6 +14,10 @@
     gap: 5rem;
     padding: 2rem;
   }
+  @media (max-width: 768px) {
+    gap: 2rem;
+   
+  }
 }
 
 .service_card__background {
