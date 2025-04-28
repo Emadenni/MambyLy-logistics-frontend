@@ -9,11 +9,8 @@ const CookieConsentBanner: React.FC = () => {
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
-      const timer = setTimeout(() => {
-        setShowBanner(true);
-      }, 500); // ritarda di 500ms
-
-      return () => clearTimeout(timer);
+      // Inizializza il banner senza ritardi inutili
+      setShowBanner(true);
     }
   }, []);
 
