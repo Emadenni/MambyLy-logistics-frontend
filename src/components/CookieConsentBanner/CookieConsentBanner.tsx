@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Button, Box, Typography, Paper } from "@mui/material";
-import "./cookieConsentBanner.scss";
+import { useState, useEffect } from "react";
 import Terms from "../Terms/Terms";
+import "./cookieConsentBanner.scss";
+import React from "react";
+import IconLogo from "../../assets/images/iconLogo.png"
 
-const CookieConsentBanner = () => {
-  const [showBanner, setShowBanner] = useState(false);
+const CookieConsentBanner: React.FC = () => {
+  const [showBanner, setShowBanner] = useState<boolean>(false);
 
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
@@ -13,61 +14,29 @@ const CookieConsentBanner = () => {
     }
   }, []);
 
-  const acceptAllCookies = () => {
-    localStorage.setItem("cookieConsent", "all");
-    loadAnalytics();
+  const handleConsent = (choice: "all" | "essential" | "none") => {
+    localStorage.setItem("cookieConsent", choice);
     setShowBanner(false);
-  };
-
-  const acceptEssentialOnly = () => {
-    localStorage.setItem("cookieConsent", "essential");
-    setShowBanner(false);
-  };
-
-  const rejectAllCookies = () => {
-    localStorage.setItem("cookieConsent", "none");
-    setShowBanner(false);
-  };
-
-  const loadAnalytics = () => {
-    console.log("Analytics / Clarity loaded");
   };
 
   if (!showBanner) return null;
 
   return (
-    <div className="cookie-banner_container">
-      <Paper className="cookie-banner" elevation={6}>
-        <Typography variant="body1">
-          Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka cookies du accepterar.
-        </Typography>
-        <Box className="cookie-buttons">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={acceptAllCookies}
-          >
-            Acceptera alla cookies
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={acceptEssentialOnly}
-          >
-            Endast nödvändiga cookies
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={rejectAllCookies}
-          >
-            Avvisa alla cookies
-          </Button>
-        </Box>
-      </Paper>
-      <div className="terms">
+    <div className="cookie-banner">
+      
+
+      <p>
+        Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka cookies du accepterar.
+      </p>
+      <div className="cookie-banner-buttons">
+        <button onClick={() => handleConsent("all")}>Acceptera alla</button>
+        <button onClick={() => handleConsent("essential")}>Endast nödvändiga</button>
+        <button onClick={() => handleConsent("none")}>Avvisa alla</button>
+      </div>
+      <div className="cookie-banner-terms">
         <Terms />
       </div>
+    
     </div>
   );
 };
