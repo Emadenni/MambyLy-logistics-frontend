@@ -26,4 +26,7 @@
 .workWithUs_wrapper {
 
   background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    margin-top: -6rem;
+  }
 }

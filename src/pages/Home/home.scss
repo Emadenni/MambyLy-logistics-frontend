@@ -3,11 +3,14 @@
 @use "../../styles/mixins" as *;
 
 .home_container {
+ 
   width: 100%;
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
 
  
+
+}
 
   .transition_container {
     width: 50%;
@@ -30,6 +33,12 @@
       gap: 2.6rem;
     }
 
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      top: 100%;
+      position: absolute;
+      gap: 13.6rem;
+    }
+
    
 
     .dynamic_title {
@@ -41,6 +50,10 @@
       @media (min-width: 2560px) {
         font-size: 3rem ;
       }
+      @media screen and (max-width: 1023px) and (orientation: landscape) {
+        font-size: 1.3rem;
+        
+      }
     }
 
     .home_title {
@@ -50,6 +63,9 @@
       font-weight: 400;
         @media (min-width: 2560px) {
         font-size: 3rem ;
+      }
+      @media screen and (max-width: 1023px) and (orientation: landscape) {
+        font-size: 1.3rem;
       }
     }
   }
@@ -69,9 +85,13 @@
     @media (min-width: 2560px) {
       margin-top: 1.6rem;
     }
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      top: 78%;
+      position: absolute;
+    }
 
   }
-}
+
 
 @media (max-width: 545px) {
   .home_container .home_CTA_box {

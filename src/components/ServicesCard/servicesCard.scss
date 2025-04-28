@@ -28,7 +28,7 @@
   height: 100%;
   background-image: url("../../assets/images/serviceImg.webp");
   background-size: cover;
-  background-position: center;
+  background-position: 70% center;
   filter: brightness(0.7) blur(1px);
   z-index: 1;
   transition: transform 0.4s ease-in-out;
@@ -92,7 +92,11 @@
     @media (min-width: 2560px) {
       font-size: 3.55rem;
     }
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      font-size: 1.3rem;
+    }
   }
+ 
 }
 
 .service_card__content__p {
@@ -123,6 +127,9 @@
   @media (min-width: 2560px) {
     font-size: 2.2rem;
   }
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    font-size: 0.9rem;
+  }
 }
 
 .service_card__content__extra {
@@ -141,6 +148,9 @@
 
   @media (min-width: 2560px) {
     font-size: 1.95rem;
+  }
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    font-size: 0.9rem;
   }
 }
 

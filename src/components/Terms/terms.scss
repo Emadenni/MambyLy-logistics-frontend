@@ -5,6 +5,10 @@
 .terms {
   z-index: 1001;
 
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    z-index:1000;
+  }
+
   h2 {
     text-align: center
   }
