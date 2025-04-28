@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
 import React from "react";
-import IconLogo from "../../assets/images/iconLogo.png"
 
 const CookieConsentBanner: React.FC = () => {
-  const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
-      setShowBanner(true);
+      const timer = setTimeout(() => {
+        setShowBanner(true);
+      }, 500); // ritarda di 500ms
+
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -23,11 +26,7 @@ const CookieConsentBanner: React.FC = () => {
 
   return (
     <div className="cookie-banner">
-      
-
-      <p>
-        Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka cookies du accepterar.
-      </p>
+      <p>Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka cookies du accepterar.</p>
       <div className="cookie-banner-buttons">
         <button onClick={() => handleConsent("all")}>Acceptera alla</button>
         <button onClick={() => handleConsent("essential")}>Endast nödvändiga</button>
@@ -36,7 +35,6 @@ const CookieConsentBanner: React.FC = () => {
       <div className="cookie-banner-terms">
         <Terms />
       </div>
-    
     </div>
   );
 };
