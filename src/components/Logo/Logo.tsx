@@ -12,7 +12,6 @@ const sizeMap = {
 
 const Logo: React.FC<logoProps> = ({ size = "medium" }) => {
   const [currentSize, setCurrentSize] = useState(size);
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -22,9 +21,11 @@ const Logo: React.FC<logoProps> = ({ size = "medium" }) => {
       }
     };
 
-    const debounceResize = setTimeout(handleResize, 150); 
+    handleResize(); // Set initial size
 
-    return () => clearTimeout(debounceResize);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [size]);
 
   const { width, height } = sizeMap[currentSize];
@@ -37,7 +38,7 @@ const Logo: React.FC<logoProps> = ({ size = "medium" }) => {
         className={`mambyLy_logo ${currentSize}`}
         width={width}
         height={height}
-        loading="eager"
+        loading="lazy"
         decoding="async"
       />
     </Link>
