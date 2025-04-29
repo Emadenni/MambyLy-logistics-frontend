@@ -1,5 +1,5 @@
-import EmanuelePic from "../../assets/images/profileEmanuele.png"
-import MarijaPic from "../../assets/images/marijaPic.png"
+import EmanuelePic from "../../assets/images/profileEmanuele.webp"
+import MarijaPic from "../../assets/images/marijaPic.webp"
 
 export const teamMembersData = [
     {
