@@ -15,9 +15,16 @@
   gap: 1rem;
   border: solid 2px black;
 
+  
+
   @media (max-width: 600px) {
     padding: 18px 0;
   }
+}
+
+
+.cookie-banner.show {
+  opacity: 1;
 }
 
 .cookie-banner p {
