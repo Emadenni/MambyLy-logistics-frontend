@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../../assets/images/mambylyLogoRestyled.png";
+import logo from "../../assets/images/mambylyLogoRestyled.webp";
 import "./logo.scss";
 import { logoProps } from "../../types/common";
 
