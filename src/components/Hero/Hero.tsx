@@ -28,15 +28,6 @@ const Hero: React.FC = () => {
 
   return (
     <div className="hero">
-      <img
-        src={hero_img}
-        alt=""
-        className={`hero_img ${videoReady ? "hidden" : ""}`}
-        loading="eager"
-        decoding="async"
-        width="1920"
-        height="1080"
-      />
       {isBrowser && (
         <video
           ref={videoRef}

@@ -11,7 +11,7 @@ const Navbar: React.FC  = () => {
             to="/"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            HEM
+            Hem
           </NavLink>
         </li>
 
@@ -20,7 +20,7 @@ const Navbar: React.FC  = () => {
             to="/tjänster"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            TJÄNSTER
+            Tjänster
           </NavLink>
         </li>
 
@@ -29,7 +29,7 @@ const Navbar: React.FC  = () => {
             to="/kontaktaOss"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            KONTAKTA OSS
+            Kontakta Oss
           </NavLink>
         </li>
 
@@ -38,7 +38,7 @@ const Navbar: React.FC  = () => {
             to="/jobbaMedOss"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            JOBB
+            Jobb
           </NavLink>
         </li>
 
@@ -47,7 +47,7 @@ const Navbar: React.FC  = () => {
             to="/omOss"
             className={({ isActive }) => (isActive ? "navbar_link navbar_link--active" : "navbar_link")}
           >
-            OM OSS
+            Om Oss
           </NavLink>
         </li>
       </ul>

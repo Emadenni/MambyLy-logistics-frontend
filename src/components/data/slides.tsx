@@ -1,7 +1,7 @@
-import qualityIcon from "../../assets/images/carousel/quality.png";
-import timeIcon from "../../assets/images/carousel/time.png";
-import customerIcon from "../../assets/images/carousel/customer.png";
-import futureIcon from "../../assets/images/carousel/future.png";
+import qualityIcon from "../../assets/images/carousel/quality.webp";
+import timeIcon from "../../assets/images/carousel/time.webp";
+import customerIcon from "../../assets/images/carousel/customer.webp";
+import futureIcon from "../../assets/images/carousel/future.webp";
 import React from "react";
 
 export interface Slide {
