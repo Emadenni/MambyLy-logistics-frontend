@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import "./hero.scss"
 import hero_img from "../../assets/video-placeholder.webp"
-import hero_video from "../../assets/video/hero-video.mp4"
+import hero_video from "../../assets/video/hero-video.webm"
 
 const Hero: React.FC = () => {
   const [videoReady, setVideoReady] = useState(false)
