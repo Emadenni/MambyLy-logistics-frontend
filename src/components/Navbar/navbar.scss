@@ -14,11 +14,16 @@
 
     &__item {
       @include primary-font(600);
-      color: $text-green;
-      font-size: 1.25rem;
+      color: rgb(233, 238, 224);
+      color: rgb(6, 143, 56);
+
+   
+      font-size: 1.3rem;
       padding: 0 16px;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 1px 1px 4px rgba(251, 252, 247, 0.2);
       text-align: center;
+      letter-spacing: 1.2px;
+
 
       @media (max-width: 1300px) {
         font-size: 1.02rem;
@@ -31,7 +36,7 @@
     }
 
     &__item:hover {
-      color: $green-background;
+      color: yellow;
       scale: 1.1;
     }
 

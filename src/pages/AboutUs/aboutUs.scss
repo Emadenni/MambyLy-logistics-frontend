@@ -51,7 +51,7 @@
   width: 100%;
   min-height: 100vh;
   @include flexbox(column, center, center);
-  gap: 0rem;
+  gap: 1rem;
   padding-top: 160px;
   position: relative;
   z-index: 1;
@@ -61,12 +61,12 @@
   }
 
   @media (min-width: 2560px) {
-    padding-top: 330px;
+    padding-top: 220px;
     
   }
 
   @media (min-width: 1920px) {
-    padding-top: 240px;
+    padding-top: 200px;
    
   }
 
