@@ -9,8 +9,10 @@ const CookieConsentBanner: React.FC = () => {
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
     if (!consent) {
-      // Inizializza il banner senza ritardi inutili
-      setShowBanner(true);
+     
+      setTimeout(() => {
+        setShowBanner(true);
+      }, 3000); 
     }
   }, []);
 
@@ -22,7 +24,7 @@ const CookieConsentBanner: React.FC = () => {
   if (!showBanner) return null;
 
   return (
-    <div className="cookie-banner">
+    <div className={`cookie-banner ${showBanner ? "show" : ""}`}>
       <p>Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka cookies du accepterar.</p>
       <div className="cookie-banner-buttons">
         <button onClick={() => handleConsent("all")}>Acceptera alla</button>
