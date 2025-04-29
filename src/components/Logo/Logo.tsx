@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/mambylyLogoRestyled.webp";
 import "./logo.scss";
 import { logoProps } from "../../types/common";
-
 
 const sizeMap = {
   small: { width: 160, height: 40 },
@@ -12,22 +11,31 @@ const sizeMap = {
 };
 
 const Logo: React.FC<logoProps> = ({ size = "medium" }) => {
-  const { width, height } = sizeMap[size];
+  const [currentSize, setCurrentSize] = useState(size);
+
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setCurrentSize("small"); 
+    } else {
+      setCurrentSize(size); 
+    }
+  }, [size]);
+
+  const { width, height } = sizeMap[currentSize];
 
   return (
     <Link to="/" className="mambyLy_logo-container">
       <img
         src={logo}
         alt="mambyLy-logo"
-        className={`mambyLy_logo ${size}`}
+        className={`mambyLy_logo ${currentSize}`}
         width={width}
         height={height}
-        loading="eager" 
+        loading="eager"
         decoding="async"
       />
     </Link>
   );
 };
-
 
 export default Logo;
