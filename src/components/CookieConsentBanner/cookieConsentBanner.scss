@@ -15,16 +15,18 @@
   gap: 1rem;
   border: solid 2px black;
 
-  
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
 
   @media (max-width: 600px) {
     padding: 18px 0;
   }
 }
 
-
 .cookie-banner.show {
   opacity: 1;
+  pointer-events: all;
 }
 
 .cookie-banner p {
@@ -62,20 +64,16 @@
 .cookie-banner-buttons button:nth-child(2) {
   background: #e2ece0;
   color: #415a06;
-  border:solid 1px #0e8626;
+  border: solid 1px #0e8626;
 }
-
 
 .cookie-banner-buttons button:nth-child(3) {
   background: #e0e0e0;
   color: #9c1839;
-  border:solid 1px #630211;
+  border: solid 1px #630211;
 }
 
-
 .terms {
- 
-
   margin-top: 10px;
   margin-bottom: 10px;
 }
