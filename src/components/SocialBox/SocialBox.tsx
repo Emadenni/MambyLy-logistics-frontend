@@ -11,13 +11,13 @@ const SocialBox: React.FC = () => {
   return (
     <div className="socials_box__container">
       <a href="https://www.facebook.com/profile.php?id=61565198694451" aria-label="Facebook">
-        <img src={facebook_icon} alt="facebook_icon" className="social_icon" />
+        <img src={facebook_icon} alt="facebook_icon" className="social_icon" loading="lazy" />
       </a>
       <a href="https://www.instagram.com/mamby.ly.se/" aria-label="Instagram">
-        <img src={instagram_icon} alt="instagram_icon" className="social_icon extra" />
+        <img src={instagram_icon} alt="instagram_icon" className="social_icon extra"  loading="lazy"/>
       </a>
       <a href="https://www.linkedin.com/company/104626842/" aria-label="LinkedIn">
-        <img src={linkedin_icon} alt="linkedin_icon" className="social_icon" />
+        <img src={linkedin_icon} alt="linkedin_icon" className="social_icon" loading="lazy" />
       </a>
       <a
         href="https://wa.me/46722116422?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
@@ -25,10 +25,10 @@ const SocialBox: React.FC = () => {
         rel="noopener noreferrer"
         aria-label="WhatsApp"
       >
-        <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" />
+        <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
       </a>
       <a href="https://www.tiktok.com/@mambyly" aria-label="TikTok">
-        <img src={tiktok_icon} alt="tiktok_icon" className="social_icon extra" />
+        <img src={tiktok_icon} alt="tiktok_icon" className="social_icon extra" loading="lazy" />
       </a>
     </div>
   );

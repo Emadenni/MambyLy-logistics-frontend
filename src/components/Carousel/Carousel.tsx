@@ -18,7 +18,7 @@ const Carousel = () => {
   return (
 
     <>
-    <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
+    <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" loading="lazy"/>
     <Box sx={{ position: "relative", width: "100%", maxWidth: 600, margin: "auto" }}>
       
   <Box sx={{ padding: 2, textAlign: "center" }}>

@@ -21,7 +21,7 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, id
       <div className="service_card__background"></div>
 
       <div className="service_card__content">
-        <img src="/assets/images/serviceImg.webp" alt="" style={{ display: "none" }} />
+        <img src="/assets/images/serviceImg.webp" alt="" style={{ display: "none" }} loading="lazy" />
         <h3>{title}</h3>
         <p className="service_card__content__p">{shortDescription}</p>
         <div>{children}</div>

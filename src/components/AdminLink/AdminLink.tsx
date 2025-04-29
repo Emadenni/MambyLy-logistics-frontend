@@ -7,7 +7,7 @@ const AdminLink: React.FC = () => {
   return (
     <div className="admin_link_container">
       <Link to="/admin">
-        <img src={admin_link_icon} alt="admin_link_icon" className="admin_link_icon" />
+        <img src={admin_link_icon} alt="admin_link_icon" className="admin_link_icon" loading="lazy" />
       </Link>
     </div>
   );
