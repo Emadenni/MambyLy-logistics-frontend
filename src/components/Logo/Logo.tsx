@@ -14,11 +14,17 @@ const Logo: React.FC<logoProps> = ({ size = "medium" }) => {
   const [currentSize, setCurrentSize] = useState(size);
 
   useEffect(() => {
-    if (window.innerWidth <= 768) {
-      setCurrentSize("small"); 
-    } else {
-      setCurrentSize(size); 
-    }
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCurrentSize("small");
+      } else {
+        setCurrentSize(size);
+      }
+    };
+
+    const debounceResize = setTimeout(handleResize, 150); 
+
+    return () => clearTimeout(debounceResize);
   }, [size]);
 
   const { width, height } = sizeMap[currentSize];
