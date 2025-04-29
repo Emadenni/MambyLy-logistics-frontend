@@ -1,4 +1,4 @@
-/* import { Service } from "../../types/common";
+import { Service } from "../../types/common";
 
 export const servicesData: Service[] = [
   {
@@ -10,4 +10,3 @@ export const servicesData: Service[] = [
     id: "service2",
   },
 ];
- */
