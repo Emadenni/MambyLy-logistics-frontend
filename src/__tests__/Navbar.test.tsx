@@ -2,6 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom'; 
 import Navbar from '../components/Navbar/Navbar'; 
+import React from 'react';
+import { describe, it, expect } from 'vitest';
 
 describe('Navbar', () => {
   it('should render all the nav links', () => {

@@ -18,6 +18,10 @@
     gap: 2rem;
    
   }
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    margin-top: -110px;
+  }
+
 }
 
 .service_card__background {
@@ -69,6 +73,7 @@
     box-shadow: none;
   }
 
+ 
   h3 {
     font-family: "Poppins", sans-serif;
     font-size: 2.2rem;

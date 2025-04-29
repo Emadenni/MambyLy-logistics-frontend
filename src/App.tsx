@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import "./styles/globals.scss";
+
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
 import ContactUs from "./pages/ContactUs/ContactUs";
@@ -13,18 +14,17 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop";
-import CookieConsentBanner from "./components/CookieConsentBanner/CookieConsentBanner";
+import PublicLayout from "./components/PublicLayout";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
-    <> 
     <Router>
-    <ScrollToTop />
-    <CookieConsentBanner />
+      <ScrollToTop />
       <Routes>
-        <Route>
+      
+        <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/tjänster" element={<Services />} />
           <Route path="/kontaktaOss" element={<ContactUs />} />
@@ -34,11 +34,9 @@ const App = () => {
         </Route>
 
         <Route path="/login" element={<LoginForm />} />
-
         <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
-    </>
   );
 };
 
