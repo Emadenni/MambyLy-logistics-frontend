@@ -8,11 +8,12 @@ const CookieConsentBanner: React.FC = () => {
 
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
+
     if (!consent) {
-     
+      const delay = window.innerWidth <= 768 ? 6000 : 4000; 
       setTimeout(() => {
         setShowBanner(true);
-      }, 3000); 
+      }, delay);
     }
   }, []);
 
