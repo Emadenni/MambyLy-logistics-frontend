@@ -1,11 +1,11 @@
 import React from "react";
 import "./socialBox.scss";
-import facebook_icon from "../../assets/images/socials/facebook_icon.png";
-import instagram_icon from "../../assets/images/socials/instagram_icon.png";
-import linkedin_icon from "../../assets/images/socials/linkedin_icon.png";
-import tiktok_icon from "../../assets/images/socials/tiktok_icon.png";
-import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.png";
-import viber_icon from "../../assets/images/socials/viber_icon.png";
+import facebook_icon from "../../assets/images/socials/facebook_icon.webp";
+import instagram_icon from "../../assets/images/socials/instagram_icon.webp";
+import linkedin_icon from "../../assets/images/socials/linkedin_icon.webp";
+import tiktok_icon from "../../assets/images/socials/tiktok_icon.webp";
+import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.webp";
+
 
 const SocialBox: React.FC = () => {
   return (

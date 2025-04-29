@@ -4,11 +4,6 @@ import Layout from "../../components/Layout/Layout";
 import "./services.scss";
 import ServicesCard from "../../components/ServicesCard/ServicesCard";
 import { servicesData } from "../../components/data/service";
-import MicroserviceCard from "../../components/MicroservicesCard/MicroservicesCard";
-import { microservicesData } from "../../components/data/microservices";
-import CTA from "../../components/Cta/Cta";
-import ContactForm from "../../components/ContactForm/ContactForm";
-import TitleBox from "../../components/TitleBox/TitleBox";
 import React from "react";
 
 

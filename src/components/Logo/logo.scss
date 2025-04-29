@@ -1,38 +1,17 @@
 .mambyLy_logo {
   height: auto;
-  &.small {
-    width: 16%;
+  display: block;
+  aspect-ratio: 2.5 / 1;
 
-    @media (min-width: 2500px) {
-      width: 36%;
-    }
+  &.small {
+    width: 160px;
   }
 
   &.medium {
-    width: 31%;
+    width: 240px;
   }
 
   &.large {
-    width: 120px;
+    width: 320px;
   }
 }
-
-@media (max-width: 1024px) {
-  .mambyLy_logo {
-    &.medium {
-      width: 50%;
-    }
-  }
-}
-@media (min-width: 2560px) {
-  .mambyLy_logo {
-    &.medium {
-      width: 38%;
-      padding: 1rem;
-    }
-  }
-}
-
-
-
-
