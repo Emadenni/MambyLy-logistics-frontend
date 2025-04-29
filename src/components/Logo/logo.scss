@@ -1,19 +1,17 @@
 .mambyLy_logo {
   height: auto;
   display: block;
-  aspect-ratio: 2.5 / 1;
+  width: 100%;
 
   &.small {
-    width: 120px;
-
-
+    max-width: 120px;
   }
 
   &.medium {
-    width: 220px;
+    max-width: 240px;
   }
 
   &.large {
-    width: 320px;
+    max-width: 320px;
   }
 }
