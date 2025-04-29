@@ -36,7 +36,8 @@
     @media screen and (max-width: 1023px) and (orientation: landscape) {
       top: 100%;
       position: absolute;
-      gap: 13.6rem;
+      gap: 8rem;
+      
     }
 
    
@@ -51,7 +52,7 @@
         font-size: 3rem ;
       }
       @media screen and (max-width: 1023px) and (orientation: landscape) {
-        font-size: 1.3rem;
+        font-size: 1rem;
         
       }
     }
@@ -65,7 +66,7 @@
         font-size: 3rem ;
       }
       @media screen and (max-width: 1023px) and (orientation: landscape) {
-        font-size: 1.3rem;
+        font-size: 1rem;
       }
     }
   }
