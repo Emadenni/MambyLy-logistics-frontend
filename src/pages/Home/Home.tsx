@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TextTransition, { presets } from "react-text-transition";
 import "./home.scss";
 import Hero from "../../components/Hero/Hero";
-
 import CTA from "../../components/Cta/Cta";
 import Layout from "../../components/Layout/Layout";
 import SwitchWord from "../../components/SwitchWord/SwitchWord";
 
 const Home: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Differire l'animazione finché il titolo non è visibile
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 1000); // Ritardo di 1 secondo
+  }, []);
+
   return (
     <Layout>
       <div className="home_container">
         <Hero />
 
         <section className="transition_container">
-          <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
-          <h2 className="dynamic_title">
-            Inte bara digitala tjänster, men
-            <SwitchWord
-              words={["innovation", "säkerhet", "effektivitet", "pålitlighet", "automatisering", "smarta lösningar"]}
-            />
-          </h2>
+          <h1 className="title home_title">
+            Linköping. Sverige. Var som helst.
+          </h1>
+          {isVisible && (
+            <h2 className="dynamic_title">
+              Inte bara digitala tjänster, men
+              <SwitchWord
+                words={[
+                  "innovation",
+                  "säkerhet",
+                  "effektivitet",
+                  "pålitlighet",
+                  "automatisering",
+                  "smarta lösningar",
+                ]}
+              />
+            </h2>
+          )}
         </section>
+
         <div className="home_CTA_box">
           <Link to="/tjänster">
             <CTA
