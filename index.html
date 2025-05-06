@@ -2,8 +2,7 @@
 <html lang="sv">
   <head>
     <meta charset="UTF-8" />
-
-
+    <!-- Preload Images -->
     <link rel="preload" as="image" href="/src/assets/images/mambylyLogoRestyled.webp" />
     <link rel="preload" as="image" href="/src/assets/images/about-bkg.webp" />
     <link rel="preload" as="image" href="/src/assets/video-placeholder.webp" />
@@ -17,32 +16,33 @@
     <link rel="preload" as="image" href="/src/assets/images/popupImgs/media.webp" />
     <link rel="preload" as="image" href="/src/assets/images/popupImgs/logistics.webp" />
     <link rel="preload" as="image" href="/src/assets/images/serviceImg.webp" />
+
+    <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
+    
+    <!-- Preload Social Icons -->
     <link rel="preload" href="/src/assets/images/socials/facebook_icon.webp" as="image">
     <link rel="preload" href="/src/assets/images/socials/instagram_icon.webp" as="image">
     <link rel="preload" href="/src/assets/images/socials/linkedin_icon.webp" as="image">
     <link rel="preload" href="/src/assets/images/socials/tiktok_icon.webp" as="image">
     <link rel="preload" href="/src/assets/images/socials/whatsapp_icon.webp" as="image">
+    
+    <!-- Preconnect for Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <!--  <link
-    rel="preload"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap"
-    as="style"
-  /> -->
-
-    <!-- Font -->
-  
-
-    <!-- Favicon -->
+    
+    <!-- Favicon and Web App Icons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.webp" type="image/webp" />
-    
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-192x192.png" sizes="192x192" type="image/png" />
+    <link rel="icon" href="/favicon-512x512.png" sizes="512x512" type="image/png" />
 
-    <!-- Meta tag tema -->
+    <!-- Meta Tag for Theme Color -->
     <meta name="theme-color" content="#ffffff" />
 
-    <!-- Meta tag SEO -->
+    <!-- Meta Tags for SEO -->
     <meta
       name="description"
       content="MambyLy Solutions erbjuder digitala och webbtjänster för små och medelstora företag. Vi hjälper till att förbättra din online-närvaro och skapa anpassade lösningar som möter dina behov."
@@ -52,21 +52,32 @@
       content="digitala tjänster, webbtjänster, småföretag, medelstora företag, online-närvaro, anpassade lösningar"
     />
     <meta name="author" content="MambyLy Solutions" />
-
-    <!-- Open Graph meta tag per social -->
+    
+    <!-- Open Graph Meta Tags (for social sharing) -->
     <meta property="og:title" content="MambyLy Solutions - Digitala och Webbtjänster för Företag" />
     <meta
       property="og:description"
       content="Vi erbjuder digitala och webbtjänster för små och medelstora företag och hjälper till att förbättra din online-närvaro."
     />
-
     <meta property="og:image" content="https://mambylysolutions.se/ogImage7.png" />
     <meta property="og:url" content="https://mambylysolutions.se" />
     <meta property="og:type" content="website" />
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MambyLy Solutions - Digitala och Webbtjänster för Företag" />
+    <meta
+      name="twitter:description"
+      content="Vi erbjuder digitala och webbtjänster för små och medelstora företag och hjälper till att förbättra din online-närvaro."
+    />
+    <meta name="twitter:image" content="https://mambylysolutions.se/ogImage7.png" />
 
-    <!-- Viewport e titolo -->
+    <!-- Viewport & Title -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MambyLy Solutions</title>
+    
+    <!-- Link to manifest.json for PWA -->
+    <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <div id="root"></div>
