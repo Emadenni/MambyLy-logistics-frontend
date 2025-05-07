@@ -5,7 +5,7 @@
   right: 0;
   background: #fff;
   border-top: 1px solid #ccc;
-  padding: 68px;
+  padding: 46px;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   font-size: 14px;
   z-index: 9999;
@@ -20,7 +20,7 @@
   transition: opacity 0.3s ease-in-out;
 
   @media (max-width: 600px) {
-    padding: 18px 0;
+    padding: 12px 0;
   }
 }
 
@@ -33,44 +33,84 @@
   margin: 0 0 12px 0;
   text-align: center;
   font-size: 1.2rem;
+  color: rgb(50, 49, 49);
 
   @media (max-width: 600px) {
-    padding: 0.4rem;
+    padding: 0.1rem;
+    font-size: 0.8rem;
   }
 }
 
 .cookie-banner-buttons {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .cookie-banner-buttons button {
-  padding: 8px 12px;
-  border: none;
+  padding: 12px 18px;
+  border: 2px solid #1976d2;
   background: #1976d2;
   color: white;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 600;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  min-width: 120px; 
 
   @media (max-width: 600px) {
     font-size: 14px;
-    padding: 8px 8px;
+    padding: 10px 16px;
   }
 }
 
+.cookie-banner-buttons button:hover {
+  background: #1565c0;
+  border-color: #1565c0;
+  transform: translateY(-3px);
+}
+
+.cookie-banner-buttons button:active {
+  background: #0d47a1;
+  border-color: #0d47a1;
+  transform: translateY(2px);
+}
+
 .cookie-banner-buttons button:nth-child(2) {
-  background: #e2ece0;
-  color: #415a06;
-  border: solid 1px #0e8626;
+  background: #e4e8e4;
+  color: #192202;
+  border: solid 2px #80ad89;
+  font-weight: 600;
+}
+
+.cookie-banner-buttons button:nth-child(2):hover {
+  background: #dfe1d9;
+  color: #0d1206;
+}
+
+.cookie-banner-buttons button:nth-child(2):active {
+  background: #8a9e6b;
 }
 
 .cookie-banner-buttons button:nth-child(3) {
   background: #e0e0e0;
-  color: #9c1839;
-  border: solid 1px #630211;
+  color: #29040d;
+  border: solid 2px #7d7677;
+  font-weight: 600;
+}
+
+.cookie-banner-buttons button:nth-child(3):hover {
+  background: #d4d4d4;
+  color: #7c0b25;
+}
+
+.cookie-banner-buttons button:nth-child(3):active {
+  background: #9e0d2a;
 }
 
 .terms {

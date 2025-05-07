@@ -28,15 +28,14 @@ const ServicesCard: React.FC<ServicesCardProps> = ({ title, shortDescription, id
         <Link to="/kontaktaOss">
           <CTA
             text="KONTAKTA OSS"
-            backgroundColor="#91ceee;"
-            color="rgba(66, 165, 245)"
+            backgroundColor="#5bb4b1de"
+            color=" rgb(3, 38, 4)"
             hoverBackgroundColor="#fff"
-            hoverColor="#DBD714"
+            hoverColor="darkgreen"
           />
         </Link>
-          <p className="service_card__content__extra">
-          Kolla om du tillhör något av de här scenarierna och upptäck våra tjänster. Om du inte gör det, oroa dig inte,
-          vi kan troligtvis hjälpa även dig
+        <p className="service_card__content__extra">
+        Kolla om du tillhör något av de här scenarierna och upptäck våra tjänster. Om du inte gör det, ingen fara – vi kan sannolikt hjälpa dig ändå.
         </p>
       </div>
 

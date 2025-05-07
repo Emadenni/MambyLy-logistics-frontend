@@ -28,7 +28,7 @@ const AboutUs: React.FC = () => {
                   Vi hjälper företag att ta sina första (eller nästa) digitala steg genom smarta lösningar som
                   förenklar, förbättrar och automatiserar vardagliga arbetsflöden. Från lättanvända e-handelslösningar
                   till skräddarsydda interna verktyg och moderna digitala produkter (som webbplatser, webbsidor,
-                  webbappar, eller till och med DApps) – vi är nyfikna, flexibla och alltid engagerade.
+                  webbappar, dashboards) – vi är nyfikna, flexibla och alltid engagerade.
                 </p>
                 <p>
                   Vår styrka ligger i närheten till kunden och möjligheten att snabbt anpassa oss efter behov. Vi tror
