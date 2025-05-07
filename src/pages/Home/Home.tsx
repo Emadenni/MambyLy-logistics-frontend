@@ -23,20 +23,22 @@ const Home: React.FC = () => {
         <Hero />
 
         <section className="transition_container">
-          <h1 className="title home_title">
-            Linköping. Sverige. Var som helst.
-          </h1>
+          <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
           {isVisible && (
             <h2 className="dynamic_title">
-              Inte bara digitala tjänster, men
+              Din tekniska partner i varje steg
               <SwitchWord
                 words={[
-                  "innovation",
-                  "säkerhet",
-                  "effektivitet",
-                  "pålitlighet",
-                  "automatisering",
-                  "smarta lösningar",
+                  "webbappar",
+                  "hemsidor",
+                  "integrationer",
+                  "dashboards",
+                  "automatiseringar",
+                  "affärssystem",
+                  "bokningssystem",
+                  "API-integrationer",
+                  "API-utveckling",
+                  "SEO-optimering",
                 ]}
               />
             </h2>
@@ -49,9 +51,9 @@ const Home: React.FC = () => {
               className="cta_button"
               text="VARA TJÄNSTER"
               backgroundColor="#fff"
-              color="rgba(66, 165, 245)"
-              hoverBackgroundColor="#fff"
-              hoverColor="#0B770B"
+              color="rgb(4 57 111)"
+              hoverBackgroundColor="darkgreen"
+              hoverColor="#DBD714"
             />
           </Link>
           <Link to="/kontaktaOss">
@@ -60,7 +62,7 @@ const Home: React.FC = () => {
               text="KONTAKTA OSS"
               backgroundColor="#DBD714"
               color="#045D17"
-              hoverBackgroundColor="#fff"
+              hoverBackgroundColor="darkgreen"
               hoverColor="#DBD714"
             />
           </Link>
