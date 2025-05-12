@@ -16,6 +16,7 @@ import { microservices } from "../data/microservices";
 import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { validateForm } from "../../utils/formValidation";
 import Terms from "../Terms/Terms";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
@@ -33,6 +34,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const { isSubmitting, error, handleSubmit } = useSubmitMessages(isJobApplication);
 
@@ -70,16 +72,21 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     setAcceptTerms(e.target.checked);
   };
 
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formErrors = validateForm(formData, isJobApplication);
     setErrors(formErrors);
 
-    if (Object.keys(formErrors).length > 0 || !acceptTerms) {
+    if (Object.keys(formErrors).length > 0 || !acceptTerms || !captchaValue) { 
       setErrors((prev) => ({
         ...prev,
         terms: "Du måste acceptera villkoren för att skicka formuläret.",
+        captcha: "Du måste bekräfta att du inte är en robot." 
       }));
       return;
     }
@@ -373,6 +380,18 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       {errors.terms}
     </Typography>
   )}
+
+<FormControl fullWidth margin="normal">
+          <ReCAPTCHA
+            sitekey="6LeS2TYrAAAAAFF6P92E6zNNIF43uFwZ6KouVLwg" 
+            onChange={handleCaptchaChange}
+          />
+          {errors.captcha && (
+            <Typography color="error.main" variant="caption" sx={{ mt: 1 }}>
+              {errors.captcha}
+            </Typography>
+          )}
+        </FormControl>
 </Box>
 
 
