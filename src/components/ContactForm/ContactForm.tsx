@@ -380,18 +380,32 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       {errors.terms}
     </Typography>
   )}
-
 <FormControl fullWidth margin="normal">
-          <ReCAPTCHA
-            sitekey="6LeS2TYrAAAAAFF6P92E6zNNIF43uFwZ6KouVLwg" 
-            onChange={handleCaptchaChange}
-          />
-          {errors.captcha && (
-            <Typography color="error.main" variant="caption" sx={{ mt: 1 }}>
-              {errors.captcha}
-            </Typography>
-          )}
-        </FormControl>
+  <Box
+    sx={{
+      width: '100%',
+      maxWidth: '320px',
+      overflow: 'hidden',
+      display: 'flex',
+      justifyContent: 'center',
+      '& > div': {
+        transform: 'scale(0.95)',
+        transformOrigin: '0 0',
+      },
+    }}
+  >
+    <ReCAPTCHA
+      sitekey="6LeS2TYrAAAAAFF6P92E6zNNIF43uFwZ6KouVLwg"
+      onChange={handleCaptchaChange}
+    />
+  </Box>
+  {errors.captcha && (
+    <Typography color="error.main" variant="caption" sx={{ mt: 1 }}>
+      {errors.captcha}
+    </Typography>
+  )}
+</FormControl>
+
 </Box>
 
 
