@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { JobPosition } from "../types/common";
 import { useAuthStore } from "../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 
 const useJobPositions = () => {
+  const navigate = useNavigate();
   const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +88,7 @@ const useJobPositions = () => {
       setError("No authentication token found.");
       return;
     }
-  
+
     try {
       const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/jobPositions/${positionId}`;
       const response = await fetch(apiUrl, {
@@ -105,14 +107,12 @@ const useJobPositions = () => {
         window.location.reload();
         return;
       }
-  
+
       if (!response.ok) {
         throw new Error("Failed to delete job position.");
       }
-  
-      setJobPositions((prevPositions) =>
-        prevPositions.filter((position) => position.positionId !== positionId)
-      );
+
+      setJobPositions((prevPositions) => prevPositions.filter((position) => position.positionId !== positionId));
       alert("Position successfully deleted.");
     } catch (err) {
       setError("Failed to delete job position.");
@@ -125,8 +125,8 @@ const useJobPositions = () => {
     error,
     addJobPosition,
     isSubmitting,
-    setJobPositions, 
-    deleteJobPosition
+    setJobPositions,
+    deleteJobPosition,
   };
 };
 

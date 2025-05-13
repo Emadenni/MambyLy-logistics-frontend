@@ -17,6 +17,7 @@ const Footer: React.FC  = () => {
       <Terms />
       <SocialBox />
       <FooterMenu />
+      <p>© {new Date().getFullYear()} MambyLy Solutions. Alla rättigheter förbehållna.</p>
      
     </footer>
   );

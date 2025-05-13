@@ -15,6 +15,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
 import ScrollToTop from "./components/ScrollToTop";
 import PublicLayout from "./components/PublicLayout";
+import PromoBanner from "./components/PromoBanner/PromoBanner";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -22,6 +23,7 @@ const App = () => {
   return (
     <Router>
       <ScrollToTop />
+      <PromoBanner />
       <Routes>
       
         <Route element={<PublicLayout />}>
