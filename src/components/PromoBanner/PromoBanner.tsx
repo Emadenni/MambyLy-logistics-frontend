@@ -33,10 +33,11 @@ const PromoBanner = () => {
           style={{
             position: "fixed",
             bottom: "20px",
-            left: "20px",
+            left: "0px",
             backgroundColor: "#ff5722", 
             color: "white",
-            padding: "22px",
+            padding: "16px",
+            margin:"5px",
             borderRadius: "10px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             zIndex: 1000,

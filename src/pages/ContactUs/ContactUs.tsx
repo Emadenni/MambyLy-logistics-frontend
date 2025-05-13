@@ -4,7 +4,7 @@ import "./contactUs.scss";
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import TitleBox from "../../components/TitleBox/TitleBox";
-import Logo from "../../components/Logo/Logo";
+import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.webp";
 
 const ContactUs = () => {
   const location = useLocation();
@@ -30,7 +30,9 @@ const ContactUs = () => {
             <div className="step step-2">
               <div className="step_number">2</div>
               <p className="step_title">Steg 2</p>
-              <p className="step_description">Vi skickar ett frågeformulär med några specifika och riktade frågor för att bättre förstå dina behov.</p>
+              <p className="step_description">
+                Vi skickar ett frågeformulär med några specifika och riktade frågor för att bättre förstå dina behov.
+              </p>
             </div>
             <div className="step step-3">
               <div className="step_number">3</div>
@@ -49,22 +51,27 @@ const ContactUs = () => {
           </div>
           <div className="note">
             <p>
-              Vi tror att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst möta dina
-              behov.
+              Vi tror att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst
+              möta dina behov.
             </p>
           </div>
           <div id="contact_form">
-          
-            <h2>
-              Berätta för oss hur vi kan hjälpa dig 
-            </h2>
-            <h3>Vi ser verkligen fram emot att få stötta dig med våra
-            tjänster!</h3>
-            
+            <h2>Berätta för oss hur vi kan hjälpa dig</h2>
+            <h3>Vi ser verkligen fram emot att få stötta dig med våra tjänster!</h3>
+
             <ContactForm subjectFromCard={subjectFromCard} />
           </div>
         </div>
       </div>
+      <a
+        href="https://wa.me/46722116422?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        className="whatsapp-icon"
+      >
+        <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
+      </a>
     </Layout>
   );
 };

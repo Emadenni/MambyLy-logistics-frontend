@@ -204,3 +204,38 @@
     padding: 1rem;
   }
 }
+
+.whatsapp-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: bounce 1.5s infinite alternate; 
+  background-color: rgb(0, 0, 0);
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  &:hover {
+    background-color: #128c7e;
+  }
+}
+
+/* Animazione bounce */
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  
+  }
+}
