@@ -7,6 +7,7 @@
   min-height: 100vh;
   @include flexbox(column, center, center);
 
+
   gap: 1.5rem;
   padding-top: 160px;
   padding-bottom: 0px;
@@ -29,6 +30,7 @@
 
 .contactUs_wrapper {
   background: linear-gradient(to bottom, #f2f2f2, #ffffff);
+
   @media screen and (max-width: 1023px) and (orientation: landscape) {
     margin-top: -6rem;
   }

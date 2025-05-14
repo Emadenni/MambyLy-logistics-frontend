@@ -8,7 +8,12 @@ import "./contactsListBox.scss";
 const ContactsListBox = () => {
   return (
     <Box className="contact-box">
+         <Typography variant="h5" className="section-title">
+        Följ oss på sociala medier
+      </Typography>
+      <SocialBox />
       <div className="contacts_wrapper">
+      
         <Typography variant="h5" gutterBottom className="section-title">
           Våra kontakter
         </Typography>
@@ -45,6 +50,7 @@ const ContactsListBox = () => {
           </ListItem>
         </List>
       </div>
+       
       <div className="special_contacts_wrapper">
         {teamMembersData.map((member, index) => (
           <Box
@@ -84,10 +90,7 @@ const ContactsListBox = () => {
         ))}
       </div>
 
-      <Typography variant="h5" className="section-title">
-        Följ oss på sociala medier
-      </Typography>
-      <SocialBox />
+    
       <div>
         <Box
           display="flex"

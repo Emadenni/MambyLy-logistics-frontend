@@ -20,7 +20,7 @@ const CTA: React.FC<CTAProps> = ({
 
   return (
     <button
-      className={`cta-button ${className}`} // <- Usata qui
+      className={`cta-button ${className}`} 
       style={buttonStyle}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}

@@ -361,7 +361,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             },
           }}
         >
-          Kolla länkarna under formuläret
+          Kolla länkarna i footern
         </Typography>
       </Box>
     }
@@ -443,7 +443,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       )}
     </Box>
     
-    <Terms /> 
+ 
     </>
   );
 };

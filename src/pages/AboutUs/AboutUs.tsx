@@ -7,12 +7,13 @@ import TitleBox from "../../components/TitleBox/TitleBox";
 import ContactsListBox from "../../components/ContactsListBox/ContactsListBox";
 import CTA from "../../components/Cta/Cta";
 
+
 const AboutUs: React.FC = () => {
   return (
     <>
       <Layout>
         <div className="aboutUs_wrapper">
-          <div className="about_card__background"></div> {/* Spostato qui */}
+          <div className="about_card__background"></div> 
           <div className="aboutUs_container">
             <TitleBox
               title="Programmerade för att växa"
@@ -41,23 +42,24 @@ const AboutUs: React.FC = () => {
               </div>
             </div>
             <ContactsListBox />
-            <div className="carousel_container_home">
+            {/* <div className="carousel_container_home">
               <Carousel />
               <Link to="/tjänster">
               <div className="cta_container">
               <CTA
             text="UTFORSKA VÅRA TJÄNSTER OCH HÖR AV DIG TILL OSS IDAG!"
-            backgroundColor="#91ceee;"
-            color="rgba(66, 165, 245)"
+             backgroundColor="#DBD714"
+            color="#045D17"
             hoverBackgroundColor="#fff"
             hoverColor="#DBD714"
           />
           </div>
           </Link>
-            </div>
+            </div> */}
             
           </div>
         </div>
+    
       </Layout>
     </>
   );

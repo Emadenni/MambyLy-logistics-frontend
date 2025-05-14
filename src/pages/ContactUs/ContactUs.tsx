@@ -4,7 +4,7 @@ import "./contactUs.scss";
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import TitleBox from "../../components/TitleBox/TitleBox";
-import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.webp";
+
 
 const ContactUs = () => {
   const location = useLocation();
@@ -57,21 +57,14 @@ const ContactUs = () => {
           </div>
           <div id="contact_form">
             <h2>Berätta för oss hur vi kan hjälpa dig</h2>
-            <h3>Vi ser verkligen fram emot att få stötta dig med våra tjänster!</h3>
+           
 
             <ContactForm subjectFromCard={subjectFromCard} />
+             <h3>Vi ser verkligen fram emot att få stötta dig med våra tjänster!</h3>
           </div>
         </div>
       </div>
-      <a
-        href="https://wa.me/46722116422?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="WhatsApp"
-        className="whatsapp-icon"
-      >
-        <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
-      </a>
+
     </Layout>
   );
 };

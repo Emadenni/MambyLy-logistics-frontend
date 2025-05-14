@@ -3,15 +3,16 @@
 @use "../../styles/mixins" as *;
 
 .footer {
+  position: relative;
   @include flexbox(column, center, center);
   padding: 1rem 2rem;
-  margin: auto;
   width: 100vw;
   gap: 0.6rem;
   border-top: solid 1px green;
-  background-color: rgb(244, 240, 240);
+  background-color: rgba(244, 240, 240, 0.9);
 
-  z-index: 1000;
+  z-index: 
+  3000;
 
   @media (max-width: 1300px) {
     background-color: rgb(244, 240, 240);
@@ -40,4 +41,30 @@
   @media (max-width: 545px) {
     font-size: 0.6rem;
   }
+}
+
+.footer--visible {
+  opacity: 1;
+
+  transform: translateY(0);
+}
+
+.overlay {
+  position: fixed;
+  top: 145px;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(106, 200, 164, 0.01);
+  backdrop-filter: blur(3px);
+  z-index: 2000; 
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overlay.visible {
+  opacity: 1;
+  
 }

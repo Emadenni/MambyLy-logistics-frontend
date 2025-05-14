@@ -88,3 +88,35 @@
           font-size: 14px;
         }
       }
+
+      .terms__list__item button {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  border: none;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 114, 255, 0.5);
+    background: linear-gradient(135deg, #738498, #00c6ff);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 114, 255, 0.3);
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 1.5rem;
+    padding: 0.8rem 1.5rem;
+  }
+}
