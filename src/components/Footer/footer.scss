@@ -33,3 +33,11 @@
     padding: 1rem 0.5rem;
   }
 }
+
+.copyright {
+  font-size: 0.8rem;
+
+  @media (max-width: 545px) {
+    font-size: 0.6rem;
+  }
+}
