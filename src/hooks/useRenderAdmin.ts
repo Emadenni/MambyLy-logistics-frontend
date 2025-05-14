@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AdminData, ApiResponse } from "../types/common";
+import { AdminData, ApiResponse, NewAdminData } from "../types/common";
 import { useAuthStore } from "../store/useAuthStore";
 
 const useRenderAdmin = () => {
@@ -27,6 +27,7 @@ const useRenderAdmin = () => {
 
       if (response.status === 401) {
         useAuthStore.getState().handleUnauthorized();
+        return;
       }
 
       if (!response.ok) {
@@ -38,23 +39,20 @@ const useRenderAdmin = () => {
       if (data && typeof data === "object") {
         const { success, ...adminData } = data;
 
-        const adminsArray = Object.values(adminData).map((admin: AdminData) => {
-          const createdAtString = admin.createdAt;
-          let createdAtDate: Date | null = null;
+const adminsArray: AdminData[] = Object.values(adminData).map((admin) => {
+  const adminTyped = admin as AdminData; // usa AdminData direttamente
 
-          if (typeof createdAtString === "string") {
-            createdAtDate = new Date(createdAtString);
-          }
+  const createdAtDate = new Date(adminTyped.createdAt);
+  const isValidDate = createdAtDate && !isNaN(createdAtDate.getTime()) ? createdAtDate : null;
 
-          const isValidDate = createdAtDate && !isNaN(createdAtDate.getTime()) ? createdAtDate : null;
+  return {
+    ...adminTyped,
+    createdAt: isValidDate ? createdAtDate.toISOString() : "Invalid Date",
+  };
+});
 
-          return {
-            ...admin,
-            createdAt: isValidDate ? createdAtDate.toISOString() : "Invalid Date",
-          };
-        });
+setAdmins(adminsArray); // nessun errore, il tipo è corretto
 
-        setAdmins(adminsArray);
       } else {
         throw new Error("Invalid response structure: Data is not an object");
       }
@@ -101,10 +99,10 @@ const useRenderAdmin = () => {
     }
   };
 
-  const updateAdmin = async (adminId: string, updatedData: any) => {
+  const updateAdmin = async (adminId: string, updatedData: Partial<NewAdminData>) => {
     const token = getToken();
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
-    
+
     const { password, ...filteredData } = updatedData;
 
     try {
@@ -129,7 +127,7 @@ const useRenderAdmin = () => {
         throw new Error(`Failed to update admin: ${responseBody || "Unknown error"}`);
       }
 
-      const updatedAdmin = await response.json();
+      const updatedAdmin: NewAdminData = await response.json();
       setAdmins((prevAdmins) =>
         prevAdmins.map((admin) => (admin.id === adminId ? { ...admin, ...updatedAdmin } : admin))
       );

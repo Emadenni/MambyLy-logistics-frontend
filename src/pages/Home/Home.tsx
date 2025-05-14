@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TextTransition, { presets } from "react-text-transition";
 import "./home.scss";
 import Hero from "../../components/Hero/Hero";
-
 import CTA from "../../components/Cta/Cta";
 import Layout from "../../components/Layout/Layout";
 import SwitchWord from "../../components/SwitchWord/SwitchWord";
 
 const Home: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Differire l'animazione finché il titolo non è visibile
+  useEffect(() => {
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 1000); // Ritardo di 1 secondo
+  }, []);
+
   return (
     <Layout>
       <div className="home_container">
@@ -16,22 +24,36 @@ const Home: React.FC = () => {
 
         <section className="transition_container">
           <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
-          <h2 className="dynamic_title">
-            Inte bara digitala tjänster, men
-            <SwitchWord
-              words={["innovation", "säkerhet", "effektivitet", "pålitlighet", "automatisering", "smarta lösningar"]}
-            />
-          </h2>
+          {isVisible && (
+            <h2 className="dynamic_title">
+              Din tekniska partner i varje steg
+              <SwitchWord
+                words={[
+                  "webbappar",
+                  "hemsidor",
+                  "integrationer",
+                  "dashboards",
+                  "automatiseringar",
+                  "affärssystem",
+                  "bokningssystem",
+                  "API-integrationer",
+                  "API-utveckling",
+                  "SEO-optimering",
+                ]}
+              />
+            </h2>
+          )}
         </section>
+
         <div className="home_CTA_box">
           <Link to="/tjänster">
             <CTA
               className="cta_button"
               text="VARA TJÄNSTER"
               backgroundColor="#fff"
-              color="rgba(66, 165, 245)"
-              hoverBackgroundColor="#fff"
-              hoverColor="#0B770B"
+              color="rgb(4 57 111)"
+              hoverBackgroundColor="darkgreen"
+              hoverColor="#DBD714"
             />
           </Link>
           <Link to="/kontaktaOss">
@@ -40,7 +62,7 @@ const Home: React.FC = () => {
               text="KONTAKTA OSS"
               backgroundColor="#DBD714"
               color="#045D17"
-              hoverBackgroundColor="#fff"
+              hoverBackgroundColor="darkgreen"
               hoverColor="#DBD714"
             />
           </Link>

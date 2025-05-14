@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), viteMockServe()],
     define: {
-   
+      // eventuali definizioni globali
     },
     test: {
       globals: true,
@@ -19,5 +19,11 @@ export default defineConfig(({ mode }) => {
       },
       enabled: !isProduction, 
     },
+
+    // 🔽 AGGIUNGI QUESTO
+    server: {
+      host: '0.0.0.0',
+      port: 5173
+    }
   };
 });

@@ -6,47 +6,85 @@
   width: 100%;
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
+}
 
-  .transition_container {
-    width: 50%;
-    height: 20%;
+.transition_container {
+  width: 50%;
+  height: 20%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  max-width: 700px;
+  text-align: center;
+  @include flexbox(column, center, center);
+  gap: 2rem;
+  border-radius: 5px;
+  padding: 0;
+  position: fixed;
+  font-family: "Poppins", sans-serif;
+  @media (min-width: 2500px) {
+    gap: 2.6rem;
+  }
+
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    top: 100%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    max-width: 700px;
-    text-align: center;
-    @include flexbox(column, center, center);
-    gap: 2rem;
-    border-radius: 5px;
-    padding: 0;
-    position: fixed;
-    font-family: "Poppins", sans-serif;
+    gap: 8rem;
+  }
 
-    .dynamic_title {
-      color: white;
-      font-size: 1.6rem;
-      @include flexbox(column, center, center);
-      letter-spacing: 1.2px;
-      font-weight: 300;
+  .dynamic_title {
+    color: white;
+    font-size: 1.6rem;
+    @include flexbox(column, center, center);
+    letter-spacing: 1.2px;
+    font-weight: 300;
+    @media (min-width: 2560px) {
+      font-size: 3rem;
     }
 
-    .home_title {
-      font-size: 1.6rem;
-      color: yellow;
-      letter-spacing: 1.2px;
-      font-weight: 400;
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      font-size: 1rem;
     }
   }
 
-  .home_CTA_box {
-    @include flexbox(row, center, center);
-    width: 100%;
-    gap: 1rem;
-    top: 65%;
-    z-index: 9;
-    position: fixed;
+  .home_title {
+    font-size: 1.6rem;
+    color: yellow;
+    letter-spacing: 1.2px;
+    font-weight: 400;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    @media (min-width: 2560px) {
+      font-size: 3rem;
+    }
+
+    @media screen and (max-width: 1023px) and (orientation: landscape) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.home_CTA_box {
+  @include flexbox(row, center, center);
+  width: 100%;
+  gap: 1rem;
+  top: 65%;
+  z-index: 9;
+  position: fixed;
+
+  @media (max-width: 1300px) {
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 2560px) {
+    margin-top: 1.6rem;
+  }
+
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    top: 78%;
+    position: absolute;
   }
 }
 
@@ -54,7 +92,6 @@
   .home_container .home_CTA_box {
     @include flexbox(column, center, center);
     top: 64%;
-    
   }
 
   .home_container .cta_button {
@@ -72,6 +109,4 @@
     font-size: 1rem;
     margin-bottom: 4rem;
   }
-
- 
 }

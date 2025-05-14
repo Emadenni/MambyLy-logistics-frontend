@@ -21,10 +21,13 @@ import useUpdatePassword from "../../hooks/useUpdatePassword";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../LogoutButton/LogoutButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { AdminData } from "../../types/common";
+
 
 const AdminInfoBox: React.FC = () => {
   const adminId = useAuthStore((state) => state.adminId);
+  
+if (!adminId) return <Typography color="error">Admin ID not available</Typography>;
+
   const { admin, isLoading, error } = useAdminData(adminId);
   const { isUploading, error: uploadError, imageUrl, uploadImage } = useUpdateProfileImage();
   const { isLoading: isUpdatingPassword, error: passwordError, success, updatePassword } = useUpdatePassword();
@@ -54,12 +57,10 @@ const AdminInfoBox: React.FC = () => {
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  
-  if (isLoading) return <CircularProgress />;
+
+if (isLoading) return <CircularProgress />;
 if (error) return <Typography color="error">{error}</Typography>;
-
-if (!admin) return <Typography color="error">Admin data not loaded yet</Typography>; // Aggiungi un controllo per admin
-
+if (!admin) return <Typography color="error">Admin data not loaded</Typography>;
 
   return (
     <>

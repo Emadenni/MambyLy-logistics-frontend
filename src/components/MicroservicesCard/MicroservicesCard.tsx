@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./microservicesCards.scss";
 import { MicroserviceCardProps } from "../../types/common";
-import { Microservices } from "../data/microservices";
+
 
 const MicroserviceCard: React.FC<MicroserviceCardProps> = ({ title, description, type, id, image, onSelect }) => {
   return (

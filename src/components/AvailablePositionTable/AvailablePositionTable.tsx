@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import {
   Table,
   TableBody,
@@ -163,3 +163,4 @@ const AvailablePositionTable: React.FC<AvailablePositionTableProps> = ({ onSelec
 };
 
 export default AvailablePositionTable;
+ */

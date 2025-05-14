@@ -1,0 +1,116 @@
+.promo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  overflow: auto; /* Abilita lo scrolling se necessario */
+}
+
+.promo-modal-content {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+
+  padding: 40px;
+  border-radius: 15px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  color: white;
+  font-family: Arial, sans-serif;
+  max-height: 100vh;
+  overflow-y: auto; /* Aggiungi scrolling per il contenuto lungo */
+}
+
+.logo-container {
+  background-color: #ffffff; /* Sfondo bianco per il logo */
+  padding: 15px; /* Distanza tra il logo e il bordo */
+  border-radius: 10px; /* Rende gli angoli arrotondati */
+  display: inline-block; /* Per evitare che il logo occupi tutta la larghezza */
+  margin-bottom: 20px; /* Spazio tra il logo e il resto del contenuto */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Leggera ombra per il logo */
+}
+
+.promo-modal-content h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #bdefc5;
+}
+
+.promo-modal-content p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  font-weight: normal;
+  color: #f1f1f1;
+}
+
+.promo-modal-content ul {
+  text-align: left;
+  margin-bottom: 30px;
+  padding-left: 20px;
+  font-size: 16px;
+  color: #f1f1f1;
+  list-style-type: none; 
+  padding-left: 30px;
+}
+
+.promo-modal-content ul li {
+  position: relative;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.promo-modal-content ul li::before {
+  content: '';
+  position: absolute;
+  left: -20px; 
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: #ffeb3b;
+  border-radius: 50%;
+}
+
+.promo-modal-content .offer-price {
+  font-size: 24px ;
+  font-weight: bold;
+  color: #ffeb3b ;
+  margin-bottom: 20px;
+}
+
+.promo-modal-content .footer-text {
+  font-size: 18px;
+   color: #ffeb3b ;
+  margin-bottom: 30px;
+}
+
+.close-button {
+  padding: 12px 25px;
+  border-radius: 50px;
+  border: none;
+  background-color: #1a73e8;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+.close-button:hover {
+  background-color: #1565c0;
+}

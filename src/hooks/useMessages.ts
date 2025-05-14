@@ -31,19 +31,18 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
       if (response.status === 401) {
         useAuthStore.getState().handleUnauthorized();
-
       }
 
       if (!response.ok) {
         throw new Error("Failed to fetch messages");
       }
 
-      const data: ApiResponse = await response.json();
+      const data: any = await response.json();
 
-      if (data && typeof data === "object") {
-        const { success, ...messageData } = data;
+      if (data && !Array.isArray(data) && Object.keys(data).length > 0 && data.success) {
+        const messagesArray = Object.values(data).filter((item) => item !== true);
 
-        const messageArray = Object.values(messageData).map((message: Message) => {
+        const messageArray = messagesArray.map((message: any) => {
           const sentAtString = message.sentAt;
           let sentAtDate: Date | null = null;
 
@@ -55,23 +54,26 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
           return {
             ...message,
-            sentAt: isValidDate ? sentAtDate.toISOString() : "Invalid Date",
+            sentAt: isValidDate?.toISOString() ?? "Invalid Date",
           };
         });
 
-  
         const sortedMessages = messageArray.sort((a, b) => {
           const dateA = new Date(a.sentAt).getTime();
           const dateB = new Date(b.sentAt).getTime();
-          return dateA - dateB; 
+          return dateA - dateB;
         });
 
         setMessages(sortedMessages);
       } else {
-        throw new Error("Invalid response structure: Data is not an object");
+        throw new Error("Invalid response structure");
       }
-    } catch (err) {
-      setError(err.message || "Failed to fetch messages");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Failed to fetch messages");
+      } else {
+        setError("An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -106,9 +108,10 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
       if (!response.ok) {
         throw new Error("Failed to delete message");
       }
+
       setMessages((prevMessages) => prevMessages.filter((msg) => msg[idKey] !== messageId));
     } catch (err) {
-      setError(err.message || "Failed to delete message");
+      setError(err instanceof Error ? err.message : "Failed to delete message");
     }
   };
 

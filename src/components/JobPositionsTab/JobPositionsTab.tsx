@@ -19,23 +19,39 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useJobPositions from "../../hooks/useJobPositions";
 import { formatDate } from "../../utils/dateUtils";
 
+interface PositionInput {
+  positionId: string;
+  createdAt: string;
+  departure: string;
+  destination: string;
+  distance: number | string; // <-- accetta anche stringa
+  type: string;
+}
+
 const JobPositionsTab: React.FC = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [positionToDelete, setPositionToDelete] = useState<number | null>(null);
   const [openAddPosition, setOpenAddPosition] = useState(false);
-  const [newPosition, setNewPosition] = useState({
-    departure: "",
-    destination: "",
-    distance: "",
-    type: "",
-  });
-  const [fieldErrors, setFieldErrors] = useState({
-    departure: "",
-    destination: "",
-    distance: "",
-    type: "",
-  });
-  const { jobPositions, loading, error, setJobPositions, addJobPosition, deleteJobPosition } = useJobPositions();
+
+const [newPosition, setNewPosition] = useState<PositionInput>({
+  positionId: "", 
+  createdAt: "",  
+  departure: "",
+  destination: "",
+  distance: "", 
+  type: "",
+});
+
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof PositionInput, string>>>({});
+
+  const {
+    jobPositions,
+    loading,
+    error,
+    setJobPositions,
+    addJobPosition,
+    deleteJobPosition,
+  } = useJobPositions();
 
   const handleDeletePosition = (index: number) => {
     setPositionToDelete(index);
@@ -44,8 +60,8 @@ const JobPositionsTab: React.FC = () => {
 
   const confirmDelete = async () => {
     if (positionToDelete !== null) {
-      const positionToDeleteObj = jobPositions[positionToDelete];
-      const { positionId, createdAt } = positionToDeleteObj;
+      const position = jobPositions[positionToDelete];
+      const { positionId, createdAt } = position;
       await deleteJobPosition(positionId, createdAt);
       setOpenDeleteDialog(false);
       setPositionToDelete(null);
@@ -57,17 +73,17 @@ const JobPositionsTab: React.FC = () => {
     setPositionToDelete(null);
   };
 
-  const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    field: keyof PositionInput
+  ) => {
     const { value } = e.target;
+    setNewPosition((prev) => ({ ...prev, [field]: value }));
     setFieldErrors((prevErrors) => ({ ...prevErrors, [field]: "" }));
-    setNewPosition((prevPosition) => ({
-      ...prevPosition,
-      [field]: value,
-    }));
   };
 
-  const validatePositionData = (data: typeof newPosition) => {
-    const errors: { [key: string]: string } = {};
+  const validatePositionData = (data: PositionInput) => {
+    const errors: Partial<Record<keyof PositionInput, string>> = {};
     if (!data.departure) errors.departure = "Departure is required";
     if (!data.destination) errors.destination = "Destination is required";
     if (!data.distance) errors.distance = "Distance is required";
@@ -81,17 +97,16 @@ const JobPositionsTab: React.FC = () => {
       setFieldErrors(errors);
       return;
     }
-    await addJobPosition(newPosition);
-    setNewPosition({ departure: "", destination: "", distance: "", type: "" });
-    setOpenAddPosition(false);
+await addJobPosition({
+  ...newPosition,
+  distance: Number(newPosition.distance),
+});
   };
 
   if (loading) {
     return (
       <Box sx={{ marginBottom: 3 }}>
-        <Typography variant="h6" component="h2">
-          Loading...
-        </Typography>
+        <Typography variant="h6">Loading...</Typography>
       </Box>
     );
   }
@@ -104,11 +119,7 @@ const JobPositionsTab: React.FC = () => {
 
       {jobPositions.map((position, index) => (
         <Accordion key={position.positionId || index}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`panel${position.positionId || index}-content`}
-            id={`panel${position.positionId || index}-header`}
-          >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>{position.positionId || `Position #${index}`}</Typography>
           </AccordionSummary>
           <AccordionDetails>
@@ -130,7 +141,12 @@ const JobPositionsTab: React.FC = () => {
               </ListItem>
             </List>
           </AccordionDetails>
-          <Button variant="outlined" color="error" onClick={() => handleDeletePosition(index)} sx={{ marginTop: 1 }}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleDeletePosition(index)}
+            sx={{ marginTop: 1, ml: 2 }}
+          >
             Delete Position
           </Button>
         </Accordion>
@@ -142,12 +158,14 @@ const JobPositionsTab: React.FC = () => {
 
       {openAddPosition && (
         <Box sx={{ marginTop: 2, padding: 2, border: "1px solid #ddd" }}>
-          <Typography variant="h6">Add New Position</Typography>
+          <Typography variant="h6" gutterBottom>
+            Add New Position
+          </Typography>
 
           <TextField
             label="Departure"
             value={newPosition.departure}
-            onChange={(e) => handleFieldChange(e, 'departure')}
+            onChange={(e) => handleFieldChange(e, "departure")}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.departure}
@@ -157,7 +175,7 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Destination"
             value={newPosition.destination}
-            onChange={(e) => handleFieldChange(e, 'destination')}
+            onChange={(e) => handleFieldChange(e, "destination")}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.destination}
@@ -167,7 +185,7 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Distance"
             value={newPosition.distance}
-            onChange={(e) => handleFieldChange(e, 'distance')}
+            onChange={(e) => handleFieldChange(e, "distance")}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.distance}
@@ -178,12 +196,13 @@ const JobPositionsTab: React.FC = () => {
           <TextField
             label="Service Type"
             value={newPosition.type}
-            onChange={(e) => handleFieldChange(e, 'type')}
+            onChange={(e) => handleFieldChange(e, "type")}
             fullWidth
             sx={{ marginBottom: 2 }}
             error={!!fieldErrors.type}
             helperText={fieldErrors.type}
           />
+
           <Button variant="contained" color="primary" onClick={handleAddNewPosition} sx={{ marginTop: 2 }}>
             Add Position
           </Button>
