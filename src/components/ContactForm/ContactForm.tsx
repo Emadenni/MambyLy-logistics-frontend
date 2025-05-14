@@ -15,7 +15,6 @@ import { FormData } from "../../types/common";
 import { microservices } from "../data/microservices";
 import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { validateForm } from "../../utils/formValidation";
-import Terms from "../Terms/Terms";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
@@ -109,6 +108,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
 
   return (
     <>
+    
   <Box
   noValidate
   data-testid="contact-form"
@@ -156,6 +156,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   }}
 >
       <FormControl fullWidth margin="normal">
+  
         <TextField
           label="Namn / Företag"
           name="name"
@@ -361,7 +362,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             },
           }}
         >
-          Kolla länkarna under formuläret
+          Kolla länkarna i fottern
         </Typography>
       </Box>
     }
@@ -443,7 +444,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       )}
     </Box>
     
-    <Terms /> 
+
     </>
   );
 };
