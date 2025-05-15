@@ -10,7 +10,7 @@ import SwitchWord from "../../components/SwitchWord/SwitchWord";
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Differire l'animazione finché il titolo non è visibile
+
   useEffect(() => {
     setTimeout(() => {
       setIsVisible(true);
@@ -24,25 +24,30 @@ const Home: React.FC = () => {
 
         <section className="transition_container">
           <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
-          {isVisible && (
-            <h2 className="dynamic_title">
-              Din tekniska partner i varje steg
-              <SwitchWord
-                words={[
-                  "webbappar",
-                  "hemsidor",
-                  "integrationer",
-                  "dashboards",
-                  "automatiseringar",
-                  "affärssystem",
-                  "bokningssystem",
-                  "API-integrationer",
-                  "API-utveckling",
-                  "SEO-optimering",
-                ]}
-              />
-            </h2>
-          )}
+         <h2
+  className="dynamic_title"
+  style={{
+    opacity: isVisible ? 1 : 0,
+    transition: "opacity 0.8s ease-in-out",
+    minHeight: "3em", // riserva spazio
+  }}
+>
+  Din tekniska partner i varje steg
+  <SwitchWord
+    words={[
+      "webbappar",
+      "hemsidor",
+      "integrationer",
+      "dashboards",
+      "automatiseringar",
+      "affärssystem",
+      "bokningssystem",
+      "API-integrationer",
+      "API-utveckling",
+      "SEO-optimering",
+    ]}
+  />
+</h2>
         </section>
 
         <div className="home_CTA_box">

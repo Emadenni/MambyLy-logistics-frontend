@@ -4,6 +4,7 @@
 
 .home_container {
   width: 100%;
+   min-height: 100vh;
   @include flexbox(column, center, center);
   letter-spacing: 1.9;
 }
@@ -37,6 +38,9 @@
   .dynamic_title {
     color: white;
     font-size: 1.6rem;
+      min-height: 3em; // o quello che ti serve
+  transition: opacity 0.3s ease-in-out;
+
     @include flexbox(column, center, center);
     letter-spacing: 1.2px;
     font-weight: 300;
