@@ -27,9 +27,11 @@ const WorkWithUs = () => {
   sx={{
     mb: 4,
     borderRadius: 3,
-    backgroundColor: "#F0FDF4",
+    backgroundColor: "rgba(167, 243, 208, 0.88)",
     border: "1px solid #A7F3D0",
     boxShadow: 2,
+    marginBottom: 20,
+    marginTop:5,
     "@media (min-width: 2560px)": {
       padding:"2rem",
       "& .MuiTypography-h6": {
@@ -44,6 +46,10 @@ const WorkWithUs = () => {
       "& ul": {
         fontSize: "1.8rem",
       }
+    },
+    "@media (max-width: 1200px)": {
+  margin:0,
+   backgroundColor: "rgba(167, 243, 208)",
     }
   }}
 >
@@ -52,7 +58,7 @@ const WorkWithUs = () => {
               <Typography variant="h6" sx={{ color: "#047857", fontWeight: 600 }}>
                 Just nu har vi inga lediga tjänster.
               </Typography>
-              <Typography variant="body1" sx={{ mt: 1, color: "#065F46" }}>
+              <Typography variant="body1" sx={{ mt: 1, color: "#065F4" }}>
                 Men du är varmt välkommen att skicka in en spontanansökan! Vi letar ofta efter
                 konsulter inom IT, till exempel:
               </Typography>

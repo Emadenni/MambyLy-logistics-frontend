@@ -185,7 +185,7 @@
   background-image: url(../../assets//images/contactUs.webp);
   background-repeat: no-repeat;
   background-size: cover;
-background-position: 90px top ;
+background-position: 90px 80px;
    background-color: #f1f4f6;
   display: flex;
   flex-direction: column;
@@ -199,6 +199,9 @@ background-position: 90px top ;
 
   @media (min-width: 2560px) {
     font-size: 1.4rem;
+  }
+  @media (max-width: 1400px) {
+background-position: 90px 240px;
   }
 
   h3 {

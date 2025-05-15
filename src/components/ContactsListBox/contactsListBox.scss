@@ -5,6 +5,7 @@
 .contact-box {
   @include flexbox(column, center, center);
   background-color: #efefefe2;
+  
 
   text-align: center;
   gap: 2rem;

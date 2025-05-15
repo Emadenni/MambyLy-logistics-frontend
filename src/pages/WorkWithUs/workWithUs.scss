@@ -6,6 +6,14 @@
   width: 100%;
   min-height: 100vh;
   @include flexbox(column, center, center);
+  
+  background: linear-gradient(135deg, #868e9f6f, #2a529865);
+  background-image: url(../../assets//images/job.webp);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 0 250px;
+
+ 
 
   gap: 3rem;
   padding-top: 160px;
@@ -13,6 +21,7 @@
 
   @media (max-width: 768px) {
     padding-top: 0px;
+    background-image: none;
   }
   
   @media (min-width: 1920px) {
@@ -24,8 +33,9 @@
 }
 
 .workWithUs_wrapper {
+  gap: 10px;
 
-  background: linear-gradient(to bottom, #F2F2F2, #FFFFFF);
+/*   background: linear-gradient(to bottom, #F2F2F2, #FFFFFF); */
   @media screen and (max-width: 1023px) and (orientation: landscape) {
     margin-top: -6rem;
   }
