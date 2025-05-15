@@ -193,6 +193,10 @@ background-position: 90px 80px;
   align-items: center;
   gap: 3rem;
 
+    @media (max-width: 600px) {
+    background-image: none;
+  }
+
   @media (min-width: 2560px) {
     font-size: 1.8rem;
   }
@@ -254,7 +258,7 @@ background-position: 90px 240px;
 
 .note {
   background-color: #f2f8f9;
-  border-left: 5px solid #0077cc; /* Linea laterale elegante */
+  border-left: 5px solid #0077cc; 
   padding: 25px 30px;
   margin: 40px auto;
   max-width: 700px;
@@ -269,7 +273,7 @@ background-position: 90px 240px;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #2f2c2c; /* Colore testo più chiaro */
+    color: #2f2c2c;
     margin: 0;
     letter-spacing: 0.5px;
   }
@@ -283,14 +287,14 @@ background-position: 90px 240px;
   }
 }
 
-/* Stili per la modal */
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Sfondo semi-trasparente */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -341,7 +345,4 @@ background-position: 90px 240px;
   background-color: #d32f2f;
 }
 
-/* .note {
-  font-size: 1rem;
-  color: #333;
-} */
+
