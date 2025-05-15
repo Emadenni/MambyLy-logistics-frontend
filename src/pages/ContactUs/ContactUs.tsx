@@ -4,11 +4,12 @@ import "./contactUs.scss";
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import TitleBox from "../../components/TitleBox/TitleBox";
+import Logo from "../../components/Logo/Logo";
 
 const ContactUs = () => {
   const location = useLocation();
   const subjectFromCard = location.state?.subject || "";
-  
+
   // Stato per gestire la visibilità della modal
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -26,18 +27,17 @@ const ContactUs = () => {
             title="Skicka ett meddelande till oss"
             subTitle="Ta ett ögonblick för att läsa vårt workflow och förstå hur vi hanterar din förfrågan."
           />
-          
-          
-          
+
           {/* Modal */}
           {isModalVisible && (
             <div className="modal-overlay">
               <div className="modal-content">
+                 <Logo size="medium" />
                 <div className="note">
                   <p>
-                    Vi anser att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst
-                    möta dina behov. Vi tror också att på detta sätt förblir det som skrivs klart och tydligt, vilket minskar
-                    risken för missförstånd och garanterar en bättre förståelse.
+                    Vi anser att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att
+                    bäst möta dina behov. Vi tror också att på detta sätt förblir det som skrivs klart och tydligt,
+                    vilket minskar risken för missförstånd och garanterar en bättre förståelse.
                   </p>
                 </div>
                 <button onClick={closeModal} className="close-modal-button">
@@ -78,14 +78,14 @@ const ContactUs = () => {
               </p>
             </div>
             {/* Bottone per aprire la modal */}
-          <button onClick={openModal} className="open-modal-button">
-            Läs mer om vårt arbetssätt
-          </button>
+            <button onClick={openModal} className="open-modal-button">
+              Läs mer om vårt arbetssätt
+            </button>
           </div>
 
           <div id="contact_form">
-                    <h2>Berätta för oss hur vi kan hjälpa dig</h2>
-                           <h3>Vi ser verkligen fram emot att få stötta dig med våra tjänster!</h3>
+            <h2>Berätta för oss hur vi kan hjälpa dig</h2>
+            <h3>Vi ser verkligen fram emot att få stötta dig med våra tjänster!</h3>
             <ContactForm subjectFromCard={subjectFromCard} />
           </div>
         </div>
