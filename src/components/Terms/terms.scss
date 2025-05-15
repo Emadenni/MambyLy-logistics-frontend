@@ -5,120 +5,104 @@
 .terms {
   z-index: 1001;
 
-  @media screen and (max-width: 1023px) and (orientation: landscape) {
-    z-index:1000;
-  }
-
   h2 {
-    text-align: center
+    text-align: center;
   }
 
-    &__list {
-        @include flexbox(row, center, center);
-        gap: 10px;
-        margin-top: -0.4rem;
-        &__item {
-            font-size: 0.7rem;
-            @include primary-font(600);
+  &__list {
+    @include flexbox(row, center, center);
+    gap: 10px;
+    margin-top: -0.4rem;
 
-          
-        }
-        &__item button {
-            background: none;
-            border: none;
-            color: #0077cc;
-            cursor: pointer;
-            font-size: 1rem;
-            text-decoration: underline;
+    &__item {
+      font-size: 0.7rem;
+      @include primary-font(600);
 
-            @media (min-width: 1920px) {
-              font-size: 1.5rem;
-            }
-          }
+      button {
+        background-color: #017ea1;
+        border: none;
+        color: white;
+        font-size: 0.6rem;
+        font-weight: 600;
+        padding: 0.6rem 1.2rem;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 16px rgba(0, 114, 255, 0.5);
+          background: linear-gradient(135deg, #0072ff, #00c6ff);
         }
-      }
-      
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-      
-      .modal__content {
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        width: 80%;
-        max-width: 600px;
-        position: relative;
-        overflow-y: auto;
-        max-height: 80vh;
+
+        &:active {
+          transform: scale(0.98);
+          box-shadow: 0 2px 6px rgba(0, 114, 255, 0.3);
+        }
 
         @media (min-width: 1920px) {
-          font-size: 1.5rem;
-          padding: 3rem;
-        
+          font-size: 0.7rem;
+          padding: 0.8rem 1.5rem;
         }
       }
-      
-      .modal__close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
+    }
+  }
+}
 
-      .green {
-        color: green;
-        margin-top: 10px;
-        
-        padding: 10px;
-        
-        a {
-          font-size: 14px;
-        }
-      }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
 
-      .terms__list__item button {
-/*   background: linear-gradient(135deg, #032029, #032b5d); */
-   background-color: #017ea1;
-  border: none;
-  color: white;
-  font-size: 0.6rem;
-  font-weight: 600;
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 114, 255, 0.3);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  &__content {
+    position: relative; // 👈 NECESSARIO per il bottone di chiusura
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 98%;
+    max-width: 600px;
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 114, 255, 0.5);
-    background: linear-gradient(135deg, #0072ff, #00c6ff);
-   
+    @media (min-width: 1920px) {
+      font-size: 1.5rem;
+      padding: 3rem;
+    }
   }
 
-  &:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 6px rgba(0, 114, 255, 0.3);
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
   }
+}
 
-  @media (min-width: 1920px) {
-    font-size: 0.7rem;
-    padding: 0.8rem 1.5rem;
+.green {
+  color: green;
+  margin-top: 10px;
+  padding: 10px;
+
+  a {
+    font-size: 14px;
   }
+}
+
+.no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { ReactNode } from "react";
+import "./layout.scss"
 
 interface LayoutProps {
     children: ReactNode; 

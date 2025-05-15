@@ -57,9 +57,9 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4); /* Nero semi-trasparente */
-  z-index: 999; /* Assicurati che sia sotto al footer */
-  pointer-events: none; /* Impedisce l'interazione con l'overlay */
+  background-color: rgba(0, 0, 0, 0.4); 
+  z-index: 999; 
+  pointer-events: none; 
   opacity: 0;
   transition: opacity 0.3s ease;
 }

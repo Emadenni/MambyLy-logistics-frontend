@@ -43,6 +43,7 @@ const Footer: React.FC = () => {
           © {new Date().getFullYear()} MambyLy Solutions. Alla rättigheter förbehållna.
         </p>
       </footer>
+      
     </>
   );
 };
