@@ -1,0 +1,68 @@
+.section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 4rem 2rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  
+
+  .intro-text,
+  .intro-cta {
+    flex: 1;
+    text-align: center;
+    max-width: 100%;
+    position: relative;
+
+    h2, h3 {
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #222;
+      padding-left: 1rem;
+      border-left: 4px solid #0da812; // accento verde soft
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #444;
+      line-height: 1.6;
+    }
+  }
+
+  .highlight {
+    color: #f1c40f; // giallo attenuato
+    font-weight: 600;
+  }
+
+  .cta-button {
+    margin-top: 1.5rem;
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: #2196f3; // azzurro Material UI
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(165, 214, 167, 0.3); // ombra verdina appena accennata
+    transition: background-color 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      background-color: #1976d2;
+      box-shadow: 0 6px 12px rgba(33, 150, 243, 0.25), 0 0 4px rgba(165, 214, 167, 0.4);
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+
+    .intro-text,
+    .intro-cta {
+      text-align: left;
+      max-width: 50%;
+    }
+  }
+}
+

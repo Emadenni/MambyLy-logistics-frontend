@@ -5,14 +5,14 @@
 .admin_link_icon {
   max-width: 26px;
   position: absolute;
-    right: 0; 
-    bottom: 0;
+  right: 100px;
+  bottom: 0;
 }
 
-
-@media (max-width: 545px) { 
+@media (max-width: 545px) {
   .admin_link_icon {
     max-width: 18px;
-  
+    right: 10px;
+    bottom: 180px;
   }
 }
