@@ -25,7 +25,7 @@ const SocialBox: React.FC = () => {
         rel="noopener noreferrer"
         aria-label="WhatsApp"
       >
-        <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
+        <img src={whatsapp_icon} alt="" className="social_icon" loading="lazy" />
       </a>
       <a href="http://tiktok.com/@mambylysolutions" aria-label="TikTok">
         <img src={tiktok_icon} alt="tiktok_icon" className="social_icon extra" loading="lazy" />

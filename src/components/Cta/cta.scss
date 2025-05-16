@@ -3,42 +3,69 @@
 @use "../../styles/mixins" as *;
 
 .cta-button {
-  @include flexbox (row, center, center);
+  @include flexbox(row, center, center);
   width: 100%;
-  min-width: 150px;
-  height: auto;
-  padding:  16px 20px !important ;
+  min-width: 180px;
+  padding: 16px 28px;
   font-size: 1rem;
-  @include primary-font(600);
-  border-radius: 55px;
+  @include primary-font(700);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out; 
-  z-index: 10;
-  box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.3);
   border: none;
+  position: relative;
+  overflow: hidden;
+  background: var(--cta-bg, #000);
+  color: var(--cta-color, #fff);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  // Shimmer effect
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.4s ease;
+    z-index: 0;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  span {
+    position: relative;
+    z-index: 1;
+  }
 
   @media (min-width: 2500px) {
-    font-size: 2rem ;
-    padding:  28px 30px !important ;
+    font-size: 2rem;
+    padding: 28px 36px;
   }
 
   @media (min-width: 3840px) {
-    font-size: 1.6rem ;
-    padding:  20px 20px !important ;
-  }
-
-}
-
-.home_CTA_box .cta-button:hover {
-    background-color: $button-hover-background; 
- 
-    scale: 1.1;
+    font-size: 1.6rem;
+    padding: 24px 32px;
   }
 
   @media (max-width: 545px) {
-   .cta-button {
-     padding: 8px;
-     font-size: 0.8rem;
-     
-    } 
+    padding: 12px 20px;
+    font-size: 0.85rem;
   }
+}
