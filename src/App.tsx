@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
       </Routes>
         <a
-        href="https://wa.me/46722116422?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
+        href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"

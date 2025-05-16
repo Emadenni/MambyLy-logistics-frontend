@@ -34,7 +34,7 @@ const ContactsListBox = () => {
               primary={<Phone className="contact-icon" />}
               secondary={
                 <Typography variant="body1">
-                  <Link href="tel:+46722116422" className="contact-link">
+                  <Link href="tel:+46764510582" className="contact-link">
                     +46 72 211 64 22
                   </Link>
                 </Typography>
