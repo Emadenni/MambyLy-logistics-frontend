@@ -49,7 +49,7 @@ const WorkWithUs = () => {
     },
     "@media (max-width: 1200px)": {
   margin:0,
-   backgroundColor: "rgba(167, 243, 208)",
+   backgroundColor: "rgb(170 243 210)",
     }
   }}
 >

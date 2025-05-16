@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Layout from "../../components/Layout/Layout";
 import "./services.scss";
 import ServicesCard from "../../components/ServicesCard/ServicesCard";
 import { servicesData } from "../../components/data/service";
+import ServicesGrid from "../../components/ServicesGrid/ServicesGrid";
+import CTA from "../../components/Cta/Cta";
 import React from "react";
 
 
@@ -40,6 +42,20 @@ const Services = () => {
               path=""
             ></ServicesCard>
           )}
+                  <ServicesGrid />
+                   <Link to="/kontaktaOss">
+                   <div className="servicesCTA-container">
+              <CTA
+                className="cta_button"
+                text="Boka en kostnadsfri konsultation idag"
+                backgroundColor="#2196f3"
+                color="#fff"
+                hoverBackgroundColor="darkgreen"
+                hoverColor="#DBD714"
+              />
+ 
+              </div>
+            </Link>
           
         </div>
      {/*  </div> */}

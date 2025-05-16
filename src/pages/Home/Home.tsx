@@ -76,7 +76,7 @@ const Home: React.FC = () => {
       </Hero>
 
       <SectionIntro />
-     <CardsCarousel showCount={5} />
+     <CardsCarousel showCount={4} />
     </Layout>
   );
 };

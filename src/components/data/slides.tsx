@@ -1,9 +1,14 @@
-// slides.ts
-import qualityIcon from "../../assets/images/carousel/quality.webp";
-import timeIcon from "../../assets/images/carousel/time.webp";
-import customerIcon from "../../assets/images/carousel/customer.webp";
-import futureIcon from "../../assets/images/carousel/future.webp";
+
 import React from "react";
+import responsive from "../../assets/images/carousel/responsive.webp"
+import seo from "../../assets/images/carousel/seo.webp"
+import share from "../../assets/images/carousel/share.webp"
+import cart from "../../assets/images/carousel/cart.webp"
+import dashboard from "../../assets/images/carousel/dashboard.webp"
+import book  from "../../assets/images/carousel/book.webp"
+import database from "../../assets/images/carousel/database.webp"
+import integration from "../../assets/images/carousel/integration.webp"
+import gdpr from "../../assets/images/carousel/gdpr.webp"
 
 export interface Slide {
   id: number;
@@ -15,57 +20,57 @@ export interface Slide {
 export const slides: Slide[] = [
   {
     id: 1,
-    title: "Pålitlighet & Effektivitet",
-    description: <>Varje digital lösning vi skapar bygger på <strong>pålitlighet</strong> och <strong>effektivitet</strong> för att optimera ditt arbetsflöde.</>,
-    icon: qualityIcon,
+    title: "Webbdesign Responsiv",
+    description: <>Vi skapar moderna och responsiva webbplatser som fungerar perfekt på alla enheter. Perfekt för företag som vill ha en användarvänlig och professionell online-närvaro.</>,
+    icon: responsive,
   },
   {
     id: 2,
-    title: "Tid är avgörande",
-    description: <>Vi levererar snabba och exakta lösningar som effektiviserar din verksamhet.</>,
-    icon: timeIcon,
+    title: "SEO - Sökmotoroptimering",
+    description: <>Vi optimerar din webbplats för att förbättra dess synlighet på sökmotorer som Google och öka trafiken till din sida.</>,
+    icon: seo,
   },
   {
     id: 3,
-    title: "Relationer & Anpassning",
-    description: <>Vi bygger <strong>relationer</strong> och <strong>anpassade digitala lösningar</strong> för ditt företag.</>,
-    icon: customerIcon,
+    title: "Social Media & Kartintegration",
+    description: <>Integrera dina sociala medier och Google Maps på din webbplats för att förbättra kundinteraktion och lokalisering.</>,
+    icon: share,
   },
   {
     id: 4,
-    title: "Innovation & Erfarenhet",
-    description: <>Vi utvecklar ständigt nya teknologier för att hålla dig i framkant.</>,
-    icon: futureIcon,
+    title: "Webbutik",
+    description: <>Vi bygger anpassade e-handelslösningar som hjälper dig att sälja online på ett enkelt och effektivt sätt.</>,
+    icon:cart ,
   },
-  // Aggiungi altre 5 cards con dati fittizi o reali simili...
+
   {
     id: 5,
-    title: "Support 24/7",
-    description: <>Vi erbjuder support dygnet runt för att hjälpa dig när du behöver det mest.</>,
-    icon: qualityIcon,
+    title: "Administrativa dashboards",
+    description: <>Vi skapar anpassade administrativa paneler som hjälper dig att hantera ditt företag och fatta datadrivna beslut.</>,
+    icon: dashboard,
   },
   {
     id: 6,
-    title: "Anpassade lösningar",
-    description: <>Varje projekt är unikt, och vi anpassar lösningarna efter dina behov.</>,
-    icon: timeIcon,
+    title: "Bokningssystem",
+    description: <>Vi skapar användarvänliga bokningssystem för att förenkla kundens bokningar och förbättra användarupplevelsen.</>,
+    icon: book,
   },
   {
     id: 7,
-    title: "Skalbarhet",
-    description: <>Våra system är byggda för att växa med ditt företag.</>,
-    icon: customerIcon,
+    title: "Databashantering",
+    description: <>Vi skapar och underhåller databaser som lagrar och hanterar dina affärsdata på ett säkert och strukturerat sätt.</>,
+    icon: database,
   },
   {
     id: 8,
-    title: "Säkerhet",
-    description: <>Säkerhet är en prioritet i alla våra digitala lösningar.</>,
-    icon: futureIcon,
+    title: "API Integration",
+    description: <>Vi utvecklar och integrerar API-lösningar för att förbättra funktionaliteten på din webbplats och förbinda den med andra tjänster.</>,
+    icon: integration,
   },
   {
     id: 9,
-    title: "Effektiv projektledning",
-    description: <>Vi levererar alltid i tid med effektiv planering och ledning.</>,
-    icon: qualityIcon,
+    title: "GDPR och Tillgänglighet",
+    description: <>Vi bygger webbplatser som är både säkra och inkluderande – i enlighet med GDPR och med fokus på tillgänglighet för alla användare.</>,
+    icon: gdpr,
   },
 ];

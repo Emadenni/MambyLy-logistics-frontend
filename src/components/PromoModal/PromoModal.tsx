@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react"; // aggiungi useEffect
 import { Link } from "react-router-dom";
 import CTA from "../Cta/Cta";
 import "./promoModal.scss";
 import Logo from "../Logo/Logo";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const PromoModal = ({ onClose }: { onClose: () => void }) => {
-  // Funzione per chiudere il modal
   const handleLinkClick = () => {
-    onClose(); // Chiude il modal
+    onClose();
   };
+
+  const copyPromoText = () => {
+    navigator.clipboard.writeText("specialerbjudande 5950");
+  };
+
+  useEffect(() => {
+    // Blocca lo scroll quando il modal è aperto
+    document.body.style.overflow = "hidden";
+
+    // Ripristina lo scroll quando il modal viene chiuso
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <div className="promo-modal-overlay">
@@ -19,7 +33,7 @@ const PromoModal = ({ onClose }: { onClose: () => void }) => {
 
         <h2>Exklusivt Erbjudande</h2>
         <p>
-         Få en snabb, modern och grundläggande hemsida för ditt företag designad med React JS. Perfekt för att växa online!
+          Få en snabb, modern och grundläggande hemsida för ditt företag designad med React JS. Perfekt för att växa online!
         </p>
         <ul>
           <li>Fullt responsiv design som ser fantastisk ut på alla enheter</li>
@@ -27,22 +41,26 @@ const PromoModal = ({ onClose }: { onClose: () => void }) => {
           <li>Integration av sociala medier, Google Maps och mer</li>
           <li>Modulär och skalbar, redo att utvecklas i framtiden</li>
         </ul>
+
         <p className="offer-price">
           Allt detta för endast <strong>5950 kr!</strong>
-          <br />
         </p>
 
         <p className="footer-text">
-          Detta erbjudande är en perfekt start för ditt företag online, med en lösning som är både kraftfull och
-          flexibel. <br /> Kom ihåg: Erbjudandet gäller under en begränsad tid.
+          Erbjudandet gäller under en begränsad tid och är perfekt för dig som vill komma igång snabbt online.
         </p>
 
-        <p>
-          Är du intresserad? Tveka inte att kontakta oss och nämna detta specialerbjudande när du skickar ditt
-          meddelande!
-        </p>
+        <div className="promo-copy-block">
+          <p>
+            Är du intresserad? Kopiera koden nedan och klistra in den i <em>ämnesraden</em> i ditt meddelande eller i ett WhatsApp-meddelande:
+          </p>
 
-        {/* Link to Kontakta Oss page */}
+          <div className="copy-box" onClick={copyPromoText}>
+            <span className="promo-code">specialerbjudande 5950</span>
+            <ContentCopyIcon className="copy-icon" />
+          </div>
+        </div>
+
         <Link to="/kontaktaOss" onClick={handleLinkClick}>
           <CTA
             className="cta_button"
@@ -54,7 +72,6 @@ const PromoModal = ({ onClose }: { onClose: () => void }) => {
           />
         </Link>
 
-        {/* Close button */}
         <button onClick={onClose} className="close-button">
           Stäng
         </button>
