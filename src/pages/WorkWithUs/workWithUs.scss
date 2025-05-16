@@ -34,6 +34,7 @@
 
 .workWithUs_wrapper {
   gap: 10px;
+    overflow-x: hidden;
 
 /*   background: linear-gradient(to bottom, #F2F2F2, #FFFFFF); */
   @media screen and (max-width: 1023px) and (orientation: landscape) {
