@@ -16,6 +16,7 @@
     flex-direction: column;
   }
 
+ 
   .services_container > * {
     flex-grow: 1;
   }
@@ -166,4 +167,17 @@
   .popup-content ul li {
     font-size: 0.8rem;
   }
+
+
+}
+
+.servicesCTA-container {
+  width: 50%;
+  margin: auto;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+
+@media (max-width: 385px) {
+  width: 80%;
+}
 }
