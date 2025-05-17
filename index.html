@@ -72,6 +72,31 @@
     />
     <meta name="twitter:image" content="https://mambylysolutions.se/ogImage7.png" />
 
+    <!-- Structured Data - JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "MambyLy Solutions",
+      "url": "https://mambylysolutions.se",
+      "logo": "https://mambylysolutions.se/favicon-512x512.png",
+      "description": "MambyLy Solutions erbjuder digitala och webbtjänster för små och medelstora företag.",
+      "email": "info@mambylysolutions.se",
+      "telephone": "+46764510582",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "SE"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/mambylysolutions",
+        "https://www.facebook.com/mambylysolutions",
+        "https://www.instagram.com/mambylysolutions",
+        "https://www.tiktok.com/@mambylysolutions",
+        "https://wa.me/46764510582"
+      ]
+    }
+    </script>
+
     <!-- Viewport & Title -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MambyLy Solutions</title>
@@ -79,9 +104,9 @@
     <!-- Link to manifest.json for PWA -->
     <link rel="manifest" href="/manifest.json" />
   </head>
-<body>
-  <div id="root"></div>
-  <div id="modal-root"></div> 
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+  <body>
+    <div id="root"></div>
+    <div id="modal-root"></div> 
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
