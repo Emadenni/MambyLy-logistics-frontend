@@ -7,8 +7,10 @@
     "strict": true,
     "skipLibCheck": true,
     "allowJs": true,
-    "jsx": "react"
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "generate-sitemap.ts"], 
+  "include": ["src/**/*", "generate-sitemap.ts"],
   "exclude": ["node_modules"]
 }
