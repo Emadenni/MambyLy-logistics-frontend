@@ -66,10 +66,7 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
                 filter: `drop-shadow(0 0 2px ${yellowBorder})`,
               }}
             />
-            <Typography
-              variant="h6"
-              sx={{ color: blueTitle, fontWeight: 600, mb: 1 }}
-            >
+            <Typography variant="h6" sx={{ color: blueTitle, fontWeight: 600, mb: 1 }}>
               {slide.title}
             </Typography>
             <Typography variant="body2" sx={{ color: "#222" }}>
@@ -99,7 +96,7 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
               },
               scrollSnapAlign: "start",
             }}
-            onClick={() => navigate("/services")}
+            onClick={() => navigate("/tjänster#servicesGrid")}
           >
             <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
               Se alla tjänster

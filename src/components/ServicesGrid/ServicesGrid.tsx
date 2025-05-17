@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import { slides } from "../data/slides";
 
 const yellowBorder = "#FFD700";
@@ -7,7 +7,16 @@ const blueTitle = "#1976d2";
 
 const ServicesGrid: React.FC = () => {
   return (
-    <Box sx={{ maxWidth: 1600, margin: "auto", px: 2, py: 4 }}>
+    <Box
+      id="servicesGrid"
+      sx={{
+        maxWidth: 1600,
+        margin: "auto",
+        px: 2,
+        py: 6,
+        scrollMarginTop: { xs: "80px", md: "120px" },
+      }}
+    >
       <Grid container spacing={4}>
         {slides.map((slide, i) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={i}>

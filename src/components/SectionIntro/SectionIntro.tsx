@@ -20,7 +20,7 @@ const SectionIntro = () => {
         <p>
           <strong>Låt oss skapa något starkt tillsammans.</strong> Hör av dig så tar vi fram en strategi som passar just dig och dina mål.
         </p>
-        <a href="/contact" className="cta-button">Kontakta oss</a>
+        <a href="/tjänster" className="cta-button">Kontakta oss</a>
       </article>
     </section>
   );
