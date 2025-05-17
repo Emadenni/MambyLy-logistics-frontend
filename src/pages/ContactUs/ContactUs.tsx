@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async"; // Importa Helmet
 import "./contactUs.scss";
 import Layout from "../../components/Layout/Layout";
 import ContactForm from "../../components/ContactForm/ContactForm";
@@ -10,17 +11,26 @@ const ContactUs = () => {
   const location = useLocation();
   const subjectFromCard = location.state?.subject || "";
 
-  // Stato per gestire la visibilità della modal
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // Funzione per aprire la modal
   const openModal = () => setIsModalVisible(true);
-
-  // Funzione per chiudere la modal
   const closeModal = () => setIsModalVisible(false);
 
   return (
     <Layout>
+      <Helmet>
+        <title>Kontakta oss – Få hjälp och support | Företagsnamn</title>
+        <meta
+          name="description"
+          content="Kontakta oss idag för att diskutera dina behov. Vi erbjuder personlig support och skräddarsydda lösningar för ditt företag."
+        />
+        <meta
+          name="keywords"
+          content="kontakt, support, hjälp, frågor, företagslösningar, skräddarsydda tjänster"
+        />
+        <link rel="canonical" href="https://dindoman.se/kontaktaOss" />
+      </Helmet>
+
       <div className="contactUs_wrapper">
         <div className="contactUs_container">
           <TitleBox
@@ -28,11 +38,10 @@ const ContactUs = () => {
             subTitle="Ta ett ögonblick för att läsa vårt workflow och förstå hur vi hanterar din förfrågan."
           />
 
-          {/* Modal */}
           {isModalVisible && (
             <div className="modal-overlay">
               <div className="modal-content">
-                 <Logo size="medium" />
+                <Logo size="medium" />
                 <div className="note">
                   <p>
                     Vi anser att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att
@@ -77,7 +86,6 @@ const ContactUs = () => {
                 Om du accepterar erbjudandet, presenterar vi en road map och börjar arbeta tillsammans.
               </p>
             </div>
-            {/* Bottone per aprire la modal */}
             <button onClick={openModal} className="open-modal-button">
               Läs mer om vårt arbetssätt
             </button>

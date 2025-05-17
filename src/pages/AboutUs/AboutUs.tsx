@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async"; // Importa Helmet
 import { Link } from "react-router-dom";
 import "./aboutUs.scss";
 import Layout from "../../components/Layout/Layout";
@@ -10,9 +11,22 @@ import CTA from "../../components/Cta/Cta";
 const AboutUs: React.FC = () => {
   return (
     <>
+      <Helmet>
+        <title>Om oss – Mambyly Solutions | Din digitala partner</title>
+        <meta
+          name="description"
+          content="Mambyly Solutions är en ung, engagerad digital studio som hjälper företag att växa med smarta, anpassade lösningar."
+        />
+        <meta
+          name="keywords"
+          content="digital studio, digitala lösningar, e-handel, webbappar, interna verktyg, digital utveckling"
+        />
+        <link rel="canonical" href="https://dindoman.se/omoss" />
+      </Helmet>
+
       <Layout>
         <div className="aboutUs_wrapper">
-          <div className="about_card__background"></div> {/* Spostato qui */}
+          <div className="about_card__background"></div>
           <div className="aboutUs_container">
             <TitleBox
               title="Programmerade för att växa"
@@ -44,18 +58,17 @@ const AboutUs: React.FC = () => {
             {/* <div className="carousel_container_home">
               <Carousel />
               <Link to="/tjänster">
-              <div className="cta_container">
-              <CTA
-            text="UTFORSKA VÅRA TJÄNSTER OCH HÖR AV DIG TILL OSS IDAG!"
-            backgroundColor="#91ceee;"
-            color="rgba(66, 165, 245)"
-            hoverBackgroundColor="#fff"
-            hoverColor="#DBD714"
-          />
-          </div>
-          </Link>
-            </div>
-             */}
+                <div className="cta_container">
+                  <CTA
+                    text="UTFORSKA VÅRA TJÄNSTER OCH HÖR AV DIG TILL OSS IDAG!"
+                    backgroundColor="#91ceee;"
+                    color="rgba(66, 165, 245)"
+                    hoverBackgroundColor="#fff"
+                    hoverColor="#DBD714"
+                  />
+                </div>
+              </Link>
+            </div> */}
           </div>
         </div>
       </Layout>

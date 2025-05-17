@@ -38,9 +38,8 @@ export const slides: Slide[] = [
   },
   {
     id: 4,
-    title: "Webbutik",
-    description: <>Vi bygger anpassade e-handelslösningar som hjälper dig att sälja online på ett enkelt och effektivt sätt.</>,
-    icon:cart ,
+    title: "Webbutik & E-handel",
+description: <>Vi bygger skräddarsydda e-handelslösningar som gör det enkelt och effektivt att sälja online med en smidig kundupplevelse.</>,    icon:cart ,
   },
 
   {

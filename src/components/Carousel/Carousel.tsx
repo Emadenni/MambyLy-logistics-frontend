@@ -15,23 +15,31 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
 
   return (
     <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4 }}>
-      <Box
-        sx={{
-          display: "flex",
-          gap: 3,
-          overflowX: "auto",
-          flexWrap: "nowrap",
-          scrollbarWidth: "thin",
-          "&::-webkit-scrollbar": {
-            height: 6,
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: yellowBorder,
-            borderRadius: 3,
-          },
-          scrollSnapType: "x mandatory",
-        }}
-      >
+<Box
+  sx={{
+    display: "flex",
+    gap: 3,
+    overflowX: "auto",
+    flexWrap: "nowrap",
+    paddingBottom: 4,
+    scrollSnapType: "x mandatory",
+
+    // ✅ FIX SCROLLBAR PER CHROME
+    "&::-webkit-scrollbar": {
+      height: "8px",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1", 
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "yellow",
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      background: "#388E3C",
+    },
+  }}
+>
         {displayedSlides.map((slide, i) => (
           <Box
             key={i}
