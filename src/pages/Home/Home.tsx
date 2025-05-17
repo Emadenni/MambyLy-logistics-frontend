@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";  // Importa Helmet
 import { Link } from "react-router-dom";
 import SwitchWord from "../../components/SwitchWord/SwitchWord";
 import Hero from "../../components/Hero/Hero";
 import CTA from "../../components/Cta/Cta";
 import Layout from "../../components/Layout/Layout";
 import SectionIntro from "../../components/SectionIntro/SectionIntro";
-import Carousel from "../../components/Carousel/Carousel";
-import "./home.scss";
 import CardsCarousel from "../../components/Carousel/Carousel";
+import "./home.scss";
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,36 +19,48 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
+      <Helmet>
+        <title>Din tekniska partner i Linköping och Sverige | Företagsnamn</title>
+        <meta
+          name="description"
+          content="Vi erbjuder skräddarsydda webbappar, hemsidor, integrationer och SEO-optimering för företag i Linköping, Sverige och var som helst."
+        />
+        <meta
+          name="keywords"
+          content="webbappar, hemsidor, integrationer, dashboards, automatiseringar, affärssystem, bokningssystem, API, SEO"
+        />
+        <link rel="canonical" href="https://dindoman.se/" />
+      </Helmet>
+
       <Hero>
         <section className="hero_content_container">
           <h1 className="title home_title">Linköping. Sverige. Var som helst.</h1>
-        <h2
-  className="dynamic_title"
-  style={{
-    opacity: isVisible ? 1 : 0,
-    transition: "opacity 0.8s ease-in-out",
-    minHeight: "3em",
-  }}
->
-  Din tekniska partner i varje steg{" "}
-  <span className="switchword_wrapper">
-    <SwitchWord
-      words={[
-        "webbappar",
-        "hemsidor",
-        "integrationer",
-        "dashboards",
-        "automatiseringar",
-        "affärssystem",
-        "bokningssystem",
-        "API-integrationer",
-        "API-utveckling",
-        "SEO-optimering",
-      ]}
-    />
-  </span>
-</h2>
-
+          <h2
+            className="dynamic_title"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transition: "opacity 0.8s ease-in-out",
+              minHeight: "3em",
+            }}
+          >
+            Din tekniska partner i varje steg{" "}
+            <span className="switchword_wrapper">
+              <SwitchWord
+                words={[
+                  "webbappar",
+                  "hemsidor",
+                  "integrationer",
+                  "dashboards",
+                  "automatiseringar",
+                  "affärssystem",
+                  "bokningssystem",
+                  "API-integrationer",
+                  "API-utveckling",
+                  "SEO-optimering",
+                ]}
+              />
+            </span>
+          </h2>
 
           <div className="home_CTA_box">
             <Link to="/tjänster">
@@ -76,7 +88,7 @@ const Home: React.FC = () => {
       </Hero>
 
       <SectionIntro />
-     <CardsCarousel showCount={4} />
+      <CardsCarousel showCount={4} />
     </Layout>
   );
 };

@@ -27,8 +27,8 @@ const ServicesGrid: React.FC = () => {
           sx={{
             flex: "1 1 320px",
             maxWidth: 320,
-            minHeight: 320,
-            padding: 4,
+            minHeight: 300, // Altezza un po' più bassa
+            padding:5, // Padding ridotto da 4 a 3
             borderRadius: 3,
             border: `2px solid ${yellowBorder}`,
             backgroundColor: "#fff",
@@ -56,10 +56,7 @@ const ServicesGrid: React.FC = () => {
               filter: `drop-shadow(0 0 3px ${yellowBorder})`,
             }}
           />
-          <Typography
-            variant="h5"
-            sx={{ color: blueTitle, fontWeight: 700, mb: 2, minHeight: 48 }}
-          >
+          <Typography variant="h5" sx={{ color: blueTitle, fontWeight: 700, mb: 2, minHeight: 48 }}>
             {slide.title}
           </Typography>
           <Typography variant="body1" sx={{ color: "#222", flexGrow: 1 }}>
