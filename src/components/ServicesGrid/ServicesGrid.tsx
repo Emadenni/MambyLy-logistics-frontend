@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { slides } from "../data/slides";
 
 const yellowBorder = "#FFD700";
@@ -11,56 +11,62 @@ const ServicesGrid: React.FC = () => {
       id="servicesGrid"
       sx={{
         maxWidth: 1600,
-        margin: "auto",
+        margin: "0 auto",
         px: 2,
         py: 6,
         scrollMarginTop: { xs: "80px", md: "120px" },
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 6,
+        justifyContent: "center",
       }}
     >
-      <Grid container spacing={4}>
-        {slides.map((slide, i) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-            <Box
-              sx={{
-                padding: 3,
-                borderRadius: 2,
-                border: `2px solid ${yellowBorder}`,
-                backgroundColor: "#fff",
-                transition: "background-color 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "#fff9db",
-                },
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                height: "100%",
-              }}
-            >
-              <img
-                src={slide.icon}
-                alt={slide.title}
-                loading="lazy"
-                style={{
-                  width: 60,
-                  height: 60,
-                  marginBottom: 12,
-                  filter: `drop-shadow(0 0 2px ${yellowBorder})`,
-                }}
-              />
-              <Typography
-                variant="h6"
-                sx={{ color: blueTitle, fontWeight: 600, mb: 1 }}
-              >
-                {slide.title}
-              </Typography>
-              <Typography variant="body2" sx={{ color: "#222" }}>
-                {slide.description}
-              </Typography>
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
+      {slides.map((slide, i) => (
+        <Box
+          key={i}
+          sx={{
+            flex: "1 1 320px",
+            maxWidth: 320,
+            minHeight: 320,
+            padding: 4,
+            borderRadius: 3,
+            border: `2px solid ${yellowBorder}`,
+            backgroundColor: "#fff",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+            transition: "background-color 0.3s ease, box-shadow 0.3s ease",
+            "&:hover": {
+              backgroundColor: "#fff9db",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+            },
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <Box
+            component="img"
+            src={slide.icon}
+            alt={slide.title}
+            loading="lazy"
+            sx={{
+              width: 60,
+              height: 60,
+              marginBottom: 3,
+              filter: `drop-shadow(0 0 3px ${yellowBorder})`,
+            }}
+          />
+          <Typography
+            variant="h5"
+            sx={{ color: blueTitle, fontWeight: 700, mb: 2, minHeight: 48 }}
+          >
+            {slide.title}
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#222", flexGrow: 1 }}>
+            {slide.description}
+          </Typography>
+        </Box>
+      ))}
     </Box>
   );
 };
