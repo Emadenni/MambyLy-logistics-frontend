@@ -395,10 +395,10 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       },
     }}
   >
-    <ReCAPTCHA
+{/*     <ReCAPTCHA
       sitekey="6LeS2TYrAAAAAFF6P92E6zNNIF43uFwZ6KouVLwg"
       onChange={handleCaptchaChange}
-    />
+    /> */}
   </Box>
   {errors.captcha && (
     <Typography color="error.main" variant="caption" sx={{ mt: 1 }}>
