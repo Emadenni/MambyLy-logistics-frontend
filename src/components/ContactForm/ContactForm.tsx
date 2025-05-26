@@ -362,7 +362,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
             },
           }}
         >
-          Kolla länkarna i fottern
+          Kontrollera länkarna i sidfoten.
         </Typography>
       </Box>
     }
