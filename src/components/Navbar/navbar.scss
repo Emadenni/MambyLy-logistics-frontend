@@ -6,7 +6,7 @@
   &__list {
     @include flexbox(row, center, center);
     flex-wrap: nowrap;
-    gap: 1rem; // opzionale: puoi gestire gli spazi tra gli item
+    gap: 1rem; 
 
     @media (min-width: 2500px) {
       font-size: 1.85rem;

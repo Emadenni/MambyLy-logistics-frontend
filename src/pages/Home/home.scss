@@ -30,6 +30,10 @@
   font-size: 2rem;
   font-weight: 400;
   line-height: 1.5;
+    @media (max-width: 600px) {
+        font-size: 1.2rem;
+        max-width: 200px;
+      }
 }
 
 .home_CTA_box {

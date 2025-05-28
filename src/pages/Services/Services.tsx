@@ -8,6 +8,7 @@ import ServicesGrid from "../../components/ServicesGrid/ServicesGrid";
 import CTA from "../../components/Cta/Cta";
 import { Helmet } from "react-helmet-async"; 
 import PricingPackages from "../../components/PricingPackages/PricingPackages";
+import ExtraServices from "../../components/ExtraServices/ExtraServices";
 
 const Services: React.FC = () => {
   const location = useLocation();
@@ -67,6 +68,7 @@ const Services: React.FC = () => {
         </Link>
       </div>
       <PricingPackages/>
+      <ExtraServices />
     </Layout>
   );
 };
