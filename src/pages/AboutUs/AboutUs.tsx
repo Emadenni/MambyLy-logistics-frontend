@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet-async"; // Importa Helmet
+import { Helmet } from "react-helmet-async"; 
 import { Link } from "react-router-dom";
 import "./aboutUs.scss";
 import Layout from "../../components/Layout/Layout";
@@ -21,7 +21,7 @@ const AboutUs: React.FC = () => {
           name="keywords"
           content="digital studio, digitala lösningar, e-handel, webbappar, interna verktyg, digital utveckling"
         />
-        <link rel="canonical" href="https://dindoman.se/omoss" />
+        <link rel="canonical" href="https://mambylysolutions.se/omOss" />
       </Helmet>
 
       <Layout>

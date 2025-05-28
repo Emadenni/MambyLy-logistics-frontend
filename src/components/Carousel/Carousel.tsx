@@ -10,43 +10,43 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const displayedSlides = slides.slice(0, showCount);
-
   const isInServices = location.pathname === "/tjänster";
 
   return (
     <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4 }}>
-<Box
-  sx={{
-    display: "flex",
-    gap: 3,
-    overflowX: "auto",
-    flexWrap: "nowrap",
-    paddingBottom: 4,
-    scrollSnapType: "x mandatory",
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          overflowX: "auto",
+          flexWrap: "nowrap",
+          paddingBottom: 4,
+          scrollSnapType: "x mandatory",
+          scrollPaddingRight: "2rem", // per visibilità finale
+          px: 1,
 
-    // ✅ FIX SCROLLBAR PER CHROME
-    "&::-webkit-scrollbar": {
-      height: "8px",
-    },
-    "&::-webkit-scrollbar-track": {
-      background: "#f1f1f1", 
-    },
-    "&::-webkit-scrollbar-thumb": {
-      background: "yellow",
-      borderRadius: "10px",
-    },
-    "&::-webkit-scrollbar-thumb:hover": {
-      background: "#388E3C",
-    },
-  }}
->
+          "&::-webkit-scrollbar": {
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "yellow",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#388E3C",
+          },
+        }}
+      >
         {displayedSlides.map((slide, i) => (
           <Box
             key={i}
             sx={{
-              flex: { xs: "0 0 75%", sm: "0 0 50%", md: "0 0 30%", lg: "0 0 22%" },
-              minWidth: 220,
+              flex: "0 0 calc(95vw / 1.2)",
               maxWidth: 300,
+              minWidth: 260,
               padding: 3,
               borderRadius: 2,
               border: `2px solid ${yellowBorder}`,
@@ -86,8 +86,8 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
         {!isInServices && (
           <Box
             sx={{
-              flex: { xs: "0 0 75%", sm: "0 0 50%", md: "0 0 30%", lg: "0 0 22%" },
-              minWidth: 220,
+              flex: "0 0 calc(95vw / 1.2)",
+              minWidth: 260,
               maxWidth: 300,
               padding: 3,
               borderRadius: 2,
@@ -128,6 +128,16 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
             </Button>
           </Box>
         )}
+
+        {/* Spacer finale per evitare taglio dell'ultima card */}
+        <Box
+          sx={{
+            flex: "0 0 5%",
+            minWidth: 20,
+            height: "100%",
+            scrollSnapAlign: "end",
+          }}
+        />
       </Box>
     </Box>
   );
