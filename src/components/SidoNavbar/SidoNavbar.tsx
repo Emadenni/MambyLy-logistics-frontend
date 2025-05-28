@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import "./SidoNavbar.scss";
+import "./sidoNavbar.scss";
 import React from "react";
 
 const SidoNavbar = () => {
