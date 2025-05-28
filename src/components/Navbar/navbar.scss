@@ -5,7 +5,8 @@
 .navbar {
   &__list {
     @include flexbox(row, center, center);
-    
+    flex-wrap: nowrap;
+    gap: 1rem; // opzionale: puoi gestire gli spazi tra gli item
 
     @media (min-width: 2500px) {
       font-size: 1.85rem;
@@ -14,14 +15,18 @@
 
     &__item {
       @include primary-font(400);
-
       color: rgb(224, 236, 228);
-
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       padding: 0 16px;
       text-shadow: 1px 1px 4px rgba(251, 252, 247, 0.2);
       text-align: center;
       letter-spacing: 1.2px;
+
+      // Evita che vada su due righe
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
 
       @media (max-width: 1300px) {
         font-size: 1.02rem;
@@ -31,15 +36,15 @@
         font-size: 1.95rem;
         padding: 0 2rem;
       }
-    }
 
-    &__item:hover {
-      color: yellow;
-      scale: 1.1;
-    }
+      &:hover {
+        color: yellow;
+        scale: 1.1;
+      }
 
-    .navbar_link--active {
-      color: $text-blue;
+      .navbar_link--active {
+        color: $text-blue;
+      }
     }
   }
 }
