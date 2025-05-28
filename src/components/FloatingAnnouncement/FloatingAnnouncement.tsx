@@ -1,6 +1,6 @@
 // src/components/FloatingAnnouncement/FloatingAnnouncement.tsx
 import React, { useEffect, useState } from "react";
-import "./FloatingAnnouncement.scss";
+import "./floatingAnnouncement.scss";
 
 const FloatingAnnouncement = () => {
   const [visible, setVisible] = useState(true);
