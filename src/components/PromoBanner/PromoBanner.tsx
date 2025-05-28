@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import PromoModal from "../PromoModal/PromoModal";
 
 const PromoBanner = () => {
   const [showBanner, setShowBanner] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
+
+  // ⛔ Escludi la visualizzazione su /sido-butik o pagine simili
+  const isStorePage = location.pathname.startsWith("/sidoButik");
 
   useEffect(() => {
+    if (isStorePage) return; // non fare nulla nello store
+
     const timer = setTimeout(() => {
       setShowBanner(true);
     }, 5000); // mostra dopo 5s
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isStorePage]);
 
   useEffect(() => {
+    if (isStorePage) return;
+
     if (showBanner && !isMinimized) {
       const autoMinimize = setTimeout(() => {
         setIsMinimized(true); // riduce dopo 15s
@@ -22,9 +31,9 @@ const PromoBanner = () => {
 
       return () => clearTimeout(autoMinimize);
     }
-  }, [showBanner, isMinimized]);
+  }, [showBanner, isMinimized, isStorePage]);
 
-  if (!showBanner && !isMinimized) return null;
+  if (isStorePage || (!showBanner && !isMinimized)) return null;
 
   return (
     <>
@@ -34,10 +43,10 @@ const PromoBanner = () => {
             position: "fixed",
             bottom: "20px",
             left: "0px",
-            backgroundColor: "#ff5722", 
+            backgroundColor: "#ff5722",
             color: "white",
             padding: "16px",
-            margin:"5px",
+            margin: "5px",
             borderRadius: "10px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             zIndex: 1000,
@@ -47,7 +56,11 @@ const PromoBanner = () => {
           Behöver du en enkel hemsida för ditt företag?{" "}
           <span
             onClick={() => setShowModal(true)}
-            style={{ textDecoration: "underline", cursor: "pointer", fontWeight: "bold" }}
+            style={{
+              textDecoration: "underline",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
           >
             Se vårt erbjudande!
           </span>
@@ -92,7 +105,7 @@ const PromoBanner = () => {
         >
           📣
         </div>
-       )}
+      )}
 
       {showModal && <PromoModal onClose={() => setShowModal(false)} />}
     </>

@@ -1,0 +1,38 @@
+.sido-navbar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.sido-navbar-link {
+  font-size: 0.95rem;
+  color: white;
+  text-decoration: none;
+  position: relative;
+
+  &:hover {
+    color: #4f46e5;
+  }
+
+  &.active {
+    font-weight: 600;
+    color: #4f46e5;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+}
+
+.inaktive {
+    color: gray !important;
+    cursor: none !important;
+}
