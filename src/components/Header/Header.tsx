@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./header.scss";
+import { Link } from "react-router-dom";
 import { useDeviceStore } from "../../store/useDeviceStore";
 import Logo from "../Logo/Logo";
 import Navbar from "../Navbar/Navbar";
@@ -28,7 +29,22 @@ const Header: React.FC = () => {
       <div className="logo_container">
         <Logo size="medium" />
       </div>
-      {isMobile ? <HamburgerMenu /> : <Navbar />}
+
+      {isMobile ? (
+        <div className="header-mobile-right">
+          <Link to="/sidoButik" className="sido-butik-link">
+            ✨ Sido Butik
+          </Link>
+          <HamburgerMenu />
+        </div>
+      ) : (
+        <div className="header-desktop-right">
+          <Navbar />
+          <Link to="/sidoButik" className="sido-butik-link">
+            ✨ Sido Butik
+          </Link>
+        </div>
+      )}
     </header>
   );
 };

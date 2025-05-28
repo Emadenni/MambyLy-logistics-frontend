@@ -39,3 +39,44 @@
     width: 80%;
   }
 }
+
+.header-mobile-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding-right: 1rem;
+}
+
+.header-desktop-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 1rem;
+  padding-right: 2rem;
+}
+
+.sido-butik-link {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  @media (max-width: 545px)  {
+  font-size: 0.75rem;
+  margin-right: 1rem;
+}
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  }
+}
+
+
+

@@ -14,6 +14,7 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
+import SidoButik from "./pages/SidoButik/SidoButik";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/kontaktaOss" element={<ContactUs />} />
             <Route path="/jobbaMedOss" element={<WorkWithUs />} />
             <Route path="/omOss" element={<AboutUs />} />
+            <Route path="/sidoButik" element={<SidoButik />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/login" element={<LoginForm />} />
