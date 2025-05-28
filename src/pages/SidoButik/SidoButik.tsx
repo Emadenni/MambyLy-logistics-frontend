@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Helmet } from "react-helmet-async"; 
 import { Link } from "react-router-dom";
 import "./sidoButik.scss";
 import SidoHeader from "../../components/SidoHeader/SidoHeader";
@@ -12,6 +13,39 @@ const SidoButik = () => {
 
   return (
     <>
+    <Helmet>
+  <title>Sido Butik | Mallgalleri av React-templates | Mambyly Solutions</title>
+  <meta
+    name="description"
+    content="Sido Butik är ett galleri med utvalda React-mallar för småföretag. Budgetvänliga, högpresterande templates – perfekt för en snabb digital start."
+  />
+  <meta
+    name="keywords"
+    content="React templates, React mallar, hemsidemallar, småföretag, webbutveckling, frontend, Mambyly Solutions, Sido Butik"
+  />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://mambylysolutions.se/sidoButik" />
+
+  {/* Open Graph */}
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sido Butik | React-mallar för småföretag" />
+  <meta
+    property="og:description"
+    content="Utforska vårt mallgalleri för småföretag – färdiga React-mallar med fokus på prestanda, design och enkelhet."
+  />
+  <meta property="og:url" content="https://mambylysolutions.se/sidoButik" />
+  <meta property="og:image" content="https://mambylysolutions.se/logoButic.webp" />
+
+  {/* Twitter Card */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sido Butik | React-mallar för småföretag" />
+  <meta
+    name="twitter:description"
+    content="Hitta färdiga React-mallar för småföretag i Sido Butik. Snabbt, enkelt, budgetvänligt. By Mambyly Solutions."
+  />
+  <meta name="twitter:image" content="https://mambylysolutions.se/logoButic.webp" />
+</Helmet>
+
       <SidoHeader />
       
       <FloatingAnnouncement />

@@ -19,7 +19,7 @@ const ContactUs = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Kontakta oss – Få hjälp och support | Företagsnamn</title>
+        <title>Kontakta oss – Få hjälp och support | Mambyly Solutions</title>
         <meta
           name="description"
           content="Kontakta oss idag för att diskutera dina behov. Vi erbjuder personlig support och skräddarsydda lösningar för ditt företag."
@@ -28,7 +28,7 @@ const ContactUs = () => {
           name="keywords"
           content="kontakt, support, hjälp, frågor, företagslösningar, skräddarsydda tjänster"
         />
-        <link rel="canonical" href="https://dindoman.se/kontaktaOss" />
+        <link rel="canonical" href="https://mambylysolutions.se/kontaktaOss" />
       </Helmet>
 
       <div className="contactUs_wrapper">

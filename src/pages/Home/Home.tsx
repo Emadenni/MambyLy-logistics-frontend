@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <Helmet>
-        <title>Din tekniska partner i Linköping och Sverige | Företagsnamn</title>
+        <title>Din tekniska partner i Linköping och Sverige | Mambyly Solutions</title>
         <meta
           name="description"
           content="Vi erbjuder skräddarsydda webbappar, hemsidor, integrationer och SEO-optimering för företag i Linköping, Sverige och var som helst."
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
           name="keywords"
           content="webbappar, hemsidor, integrationer, dashboards, automatiseringar, affärssystem, bokningssystem, API, SEO"
         />
-        <link rel="canonical" href="https://dindoman.se/" />
+        <link rel="canonical" href="https://mambylysolutions.se/" />
       </Helmet>
 
       <Hero>
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
       </Hero>
 
       <SectionIntro />
-      <CardsCarousel showCount={4} />
+      <CardsCarousel showCount={6} />
     </Layout>
   );
 };
