@@ -5,25 +5,46 @@
 .navbar {
   &__list {
     @include flexbox(row, center, center);
-    margin-bottom: 1.3rem;
+    flex-wrap: nowrap;
+    gap: 1rem; 
+
+    @media (min-width: 2500px) {
+      font-size: 1.85rem;
+      padding: 0px 5rem;
+    }
 
     &__item {
-      @include primary-font(600);
-      color: $text-green;
-      font-size: 1.25rem;
+      @include primary-font(400);
+      color: rgb(224, 236, 228);
+      font-size: 1.3rem;
       padding: 0 16px;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+      text-shadow: 1px 1px 4px rgba(251, 252, 247, 0.2);
       text-align: center;
-    }
+      letter-spacing: 1.2px;
 
-    &__item:hover {
-      color: $green-background;
-      scale: 1.1;
-    }
+      // Evita che vada su due righe
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 0;
 
-    .navbar_link--active {
-      color: $text-blue;
-      
+      @media (max-width: 1300px) {
+        font-size: 1.02rem;
+      }
+
+      @media (min-width: 2500px) {
+        font-size: 1.95rem;
+        padding: 0 2rem;
+      }
+
+      &:hover {
+        color: yellow;
+        scale: 1.1;
+      }
+
+      .navbar_link--active {
+        color: $text-blue;
+      }
     }
   }
 }

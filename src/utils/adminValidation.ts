@@ -35,7 +35,7 @@ const createSchema = Joi.object({
   }),
 });
 
-export const adminValidation = (adminData: AdminData) => {
+export const adminValidation = (adminData: any) => {
   const { error } = createSchema.validate(adminData, {
     abortEarly: false,
   });

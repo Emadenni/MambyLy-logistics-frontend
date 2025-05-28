@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface CTAProps {
   text: string;
   backgroundColor?: string;
@@ -37,6 +39,7 @@ export interface FormData {
   message: string;
   subject: string;
   file: File | null;
+  termsAccepted: boolean;
 }
 
 export interface FormProps {
@@ -63,10 +66,14 @@ export interface TeamMember {
   imageUrl: string;
 }
 
-interface Admin {
+export interface Admin {
+  createdAt?: string; // Obbligatorio
+  adminId: string;
+  email: string;
+  profileImageUrl?: any;
   firstName: string;
   lastName: string;
-  profilePicture: string;
+  profilePicture?: string; 
   role: string;
 }
 
@@ -74,19 +81,14 @@ interface AdminInfoBoxProps {
   admin: Admin;
 }
 
-export interface FormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  file: File | null;
-}
-
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
-  data?: T;
+  token?: string;
+  adminIdts?: string;  // O il tipo corretto per adminIdts
+  data?: T; 
 }
+
 
 export interface RegisterResult {
   success: boolean;
@@ -94,12 +96,20 @@ export interface RegisterResult {
 }
 
 export interface AdminData {
+  id: string;
+  profileImageUrl?:any;
+  role: string;
+  createdAt?: any;
+  adminId: string;
   firstName: string;
   lastName: string;
   email: string;
   password?: string;
   profileImage?: string;
+  profilePicture?: string;
+
 }
+
 
 export interface FieldErrors {
   firstName: string | null;
@@ -109,6 +119,7 @@ export interface FieldErrors {
 }
 
 export interface Message {
+  clientMessageId: string;
   jobMessageId: string;
   name: string;
   email: string;
@@ -117,6 +128,7 @@ export interface Message {
   sentAt: string;
   uploadCv?: string;
 }
+
 export interface AuthState {
   isAuthenticated: boolean;
   adminId: string | null;
@@ -131,11 +143,21 @@ export interface JobPosition {
   createdAt: string;
   departure: string;
   destination: string;
-  distance: number;
+ distance: number | string;
   type: string;
 }
+
 export interface AddAdminProps {
   open: boolean;
   onClose: () => void;
   onAddAdmin: () => void;
 }
+
+export type NewAdminData = {
+  createdAt: any;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  profileImage: string;
+};

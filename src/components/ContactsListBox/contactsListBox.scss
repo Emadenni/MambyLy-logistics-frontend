@@ -4,18 +4,29 @@
 
 .contact-box {
   @include flexbox(column, center, center);
-  background-color: rgb(243, 246, 244);
+  background-color: #efefefe2;
+  
+
   text-align: center;
   gap: 2rem;
   width: 100%;
-  padding: 2rem
+  padding: 2rem;
+
+  @media (min-width: 2560px) {
+    gap: 3rem;
+  }
+
+  // Mobile-first adjustments
+  @media (max-width: 600px) {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
 }
 
 .contact-box .MuiList-root {
   @include flexbox(row, center, center);
   padding: 0;
   width: 100%;
- 
 
   @media (max-width: 545px) {
     @include flexbox(column, center, center);
@@ -25,15 +36,163 @@
 .contact-box .MuiListItem-root {
   @include flexbox(row, center, center);
   padding: 0.5rem 0;
-  
- 
+  width: 100%;
+  gap: 1rem; // Spacing between icon and text
+
+  @media (max-width: 600px) {
+    gap: 0.5rem; // Smaller gap on mobile
+  }
 }
 
 .contact-box .MuiListItemText-root {
   text-align: center;
-  
 }
 
 .contact-box .MuiGrid-container {
   width: 60%;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.list_items {
+  color: rgb(24, 164, 66);
+}
+.section-title {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  padding-left: 30px;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #066d70;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background-color: #61d0d6;
+    border-radius: 2px; /* Un angolo leggermente arrotondato */
+    transform: translateY(-50%);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  &:hover:before {
+    background-color: #f4a261; /* Cambia il colore al passaggio del mouse */
+    transform: translateY(-50%) scale(1.2); /* Aumenta la dimensione al passaggio del mouse */
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.5rem;
+    margin-bottom: 15px;
+  }
+}
+
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.contact-icon {
+  font-size: 5.5rem;
+  color: #0c7b35;
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+
+.contact-link {
+  color: #0077b6;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Style for the social media section
+.social-section {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.social-icon {
+  font-size: 2rem;
+  color: #0077b6;
+  transition: color 0.3s ease;
+}
+
+// Team member cards
+.team-member {
+  text-align: center;
+  padding: 20px;
+  
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  width: 100%;
+  max-width: 350px;
+  margin: 10px auto;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    gap: 0;
+  }
+}
+
+.team-member-name {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.team-member-role {
+  color: #777;
+}
+
+.team-member-email {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  display: inline-block; 
+}
+.team-member-email a {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.contacts_wrapper {
+  width: 70%;
+}
+
+.special_contacts_wrapper {
+  display: flex;
+  gap: 25px;
+
+  @media (max-width: 600px) {
+   flex-direction: column;
+  }
+
 }

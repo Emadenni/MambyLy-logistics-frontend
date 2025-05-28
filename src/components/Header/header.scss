@@ -5,12 +5,16 @@
 .header {
   @include flexbox(row, flex-end, space-between);
   width: 100vw;
-  padding: 1rem 2rem;
+  padding: 2rem 2rem;
   border-bottom: solid 1px green;
   position: fixed;
-  background-color: rgb(217, 217, 217, 0.9);
+  background: linear-gradient(160deg, #0a0a0a, #141414, #090808, #0a0a0a);
 
   z-index: 100;
+
+  @media screen and (max-width: 1023px) and (orientation: landscape) {
+    position: sticky;
+  }
 }
 
 .logo_container {
@@ -22,8 +26,6 @@
     @include flexbox(row, center, space-between);
     padding: 2rem 4rem;
   }
-
-  
 }
 
 @media (max-width: 545px) {
@@ -36,5 +38,45 @@
   .logo_container {
     width: 80%;
   }
-  
 }
+
+.header-mobile-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding-right: 1rem;
+}
+
+.header-desktop-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 1rem;
+  padding-right: 2rem;
+}
+
+.sido-butik-link {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  @media (max-width: 545px)  {
+  font-size: 0.75rem;
+  margin-right: 1rem;
+}
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+  }
+}
+
+
+

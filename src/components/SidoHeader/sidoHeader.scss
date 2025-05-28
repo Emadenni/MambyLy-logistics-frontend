@@ -1,0 +1,71 @@
+.sido-subheader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.25rem 2rem;
+  border-bottom: 5px solid rgb(160, 86, 160);
+  background-color: #000;
+
+
+}
+
+.sido-subheader-left,
+.sido-subheader-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.sido-subheader-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sido-subheader-right {
+  justify-content: flex-end;
+}
+
+.sido-subheader-cart {
+  font-size: 1.8rem;
+  color: #ffffff;
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+}
+
+.sido-subheader a {
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover {
+    color: #a5b4fc;
+  }
+}
+
+/* ✅ Logo più grande solo su mobile */
+@media (max-width: 768px) {
+  .sido-subheader-left img {
+ width: 88px; /* aumenta dimensione rispetto al default */
+  }
+
+  .sido-subheader {
+  padding: 1rem 2rem;
+  }
+}

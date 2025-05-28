@@ -1,0 +1,175 @@
+/* src/pages/sido-butik.scss */
+
+.sido-butik-container {
+  min-height: 50vh;
+  background-color: #ffffff;
+ padding: 4rem 1.5rem 3rem;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sido-butik-content {
+  max-width: 768px;
+  width: 100%;
+  text-align: center;
+}
+
+.sido-butik-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+
+  .highlight {
+    color: #4f46e5;
+  }
+}
+
+.sido-butik-description {
+  font-size: 1.125rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.sido-butik-announcement {
+  background-color: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.sido-butik-back {
+  margin-top: 3rem;
+
+  a {
+    color: #4f46e5;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.sido-brand-hero {
+  text-align: center;
+  margin: 13rem 0 1rem;
+
+  img {
+    max-width: 200px;
+    height: auto;
+  }
+
+  .sido-brand-tagline {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.sido-benefits-card {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  padding: 2rem 1.75rem;
+  margin: 2.5rem auto;
+  max-width: 720px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+
+  .benefits-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #4338ca;
+  }
+
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+      background: #ffffff;
+      padding: 1rem 1.25rem;
+      border-radius: 0.5rem;
+      border-left: 5px solid #a78bfa;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #fdf4ff;
+      }
+
+      strong {
+        color: #4f46e5;
+        display: block;
+        margin-bottom: 0.3rem;
+      }
+    }
+  }
+}
+
+.sido-footer {
+  margin-top: 4rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  background-color: #111827;
+  color: #d1d5db;
+
+  span {
+    color: #a78bfa;
+    font-weight: 600;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #93c5fd;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.floating-announcement {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  animation: slideUpFade 0.8s ease-out both;
+
+  strong {
+    color: #facc15;
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}

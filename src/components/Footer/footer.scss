@@ -9,8 +9,13 @@
   width: 100vw;
   gap: 0.6rem;
   border-top: solid 1px green;
-  background-color: rgb(244, 240, 240,0.7);
+  background-color: rgb(244, 240, 240);
   z-index: 1000;
+
+
+  @media (max-width: 1300px) {
+    background-color: rgb(244, 240, 240);
+  }
 
   &__logo_container {
     @include flexbox(row, center, center);
@@ -27,4 +32,17 @@
     width: 100%;
     padding: 1rem 0.5rem;
   }
+}
+
+.copyright {
+  font-size: 0.8rem;
+
+  @media (max-width: 545px) {
+    font-size: 0.6rem;
+  }
+}
+
+
+.footer__logo_container {
+  padding: 1rem ;
 }

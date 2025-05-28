@@ -16,13 +16,14 @@
     flex-direction: column;
   }
 
+ 
   .services_container > * {
     flex-grow: 1;
   }
 }
 
 .popup-overlay {
-  position: fixed; /* Posiziona il popup in modo fisso sulla schermata */
+  position: fixed; 
   top: 0;
   left: 0;
   right: 0;
@@ -51,7 +52,6 @@
   
 }
 
-/* Animazione di entrata del contenuto */
 @keyframes popupIn {
   0% { transform: scale(0.8); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
@@ -74,11 +74,11 @@
   color: #f44336; 
 }
 
-/* Titolo e descrizione sovrapposti sull'immagine */
+
 .popup-content .image-container {
-  position: relative; /* Contenitore per l'immagine e i testi sovrapposti */
+  position: relative;
   width: 100%;
-  height: 300px; /* Imposta un'altezza fissa per l'immagine */
+  height: 300px; 
   overflow: hidden;
 }
 
@@ -92,10 +92,10 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra il testo nell'immagine */
+  transform: translate(-50%, -50%); 
   text-align: center;
   color: white;
-  background-color: rgba(0, 0, 0, 0.75); /* Trasparenza per il background */
+  background-color: rgba(0, 0, 0, 0.75); 
   padding: 10px 20px;
   border-radius: 8px;
 }
@@ -106,7 +106,7 @@
   margin-bottom: 10px;
 }
 
-/* Descrizione */
+
 .popup-content p {
   font-size: 1rem;
   color: #dfdcdc;
@@ -114,7 +114,6 @@
   line-height: 1.6;
 }
 
-/* Lista dei servizi */
 .popup-content ul {
   padding-left: 20px;
 }
@@ -126,7 +125,7 @@
   list-style-type: disc;
 }
 
-/* Media Query per schermi più piccoli */
+
 @media (max-width: 768px) {
   .popup-content {
     padding: 15px;
@@ -168,4 +167,17 @@
   .popup-content ul li {
     font-size: 0.8rem;
   }
+
+
+}
+
+.servicesCTA-container {
+  width: 50%;
+  margin: auto;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+
+@media (max-width: 385px) {
+  width: 80%;
+}
 }

@@ -1,77 +1,51 @@
-@use "../../styles/globals" as *;
-@use "../../styles/variables" as *;
-@use "../../styles/mixins" as *;
+.hero_content_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+  color: white;
+  padding: 2rem;
+  max-width: 90vw;
 
-.home_container {
-  width: 100%;
-  @include flexbox(column, center, center);
-  letter-spacing: 1.9;
-
-  .transition_container {
-    width: 50%;
-    height: 20%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    max-width: 700px;
-    text-align: center;
-    @include flexbox(column, center, center);
-    gap: 2rem;
-    border-radius: 5px;
-    padding: 0;
-    position: fixed;
-    font-family: "Poppins", sans-serif;
-
-    .dynamic_title {
-      color: white;
-      font-size: 1.6rem;
-      @include flexbox(column, center, center);
-      letter-spacing: 1.2px;
-      font-weight: 300;
-    }
-
-    .home_title {
-      font-size: 1.6rem;
-      color: yellow;
-      letter-spacing: 1.2px;
-      font-weight: 400;
-    }
-  }
-
-  .home_CTA_box {
-    @include flexbox(row, center, center);
-    width: 100%;
-    gap: 1rem;
-    top: 65%;
-    z-index: 9;
-    position: fixed;
-  }
+    @media (max-width: 600px) {
+        top: 40%;
+      }
 }
 
-@media (max-width: 545px) {
-  .home_container .home_CTA_box {
-    @include flexbox(column, center, center);
-    top: 64%;
-    
-  }
+.home_title {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: rgb(248, 248, 20);
 
-  .home_container .cta_button {
-    font-size: 0.85rem;
-    padding: 9px !important;
-  }
+  @media (max-width: 600px) {
+        font-size: 1.3rem;
+        max-width: 200px;
+      }
 
-  .home_container .transition_container .home_title {
-    font-size: 0.9rem;
-    color: yellow;
-    padding-top: 50px;
-  }
+}
 
-  .home_container .transition_container .dynamic_title {
-    font-size: 1rem;
-    margin-bottom: 4rem;
-  }
+.dynamic_title {
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.5;
+    @media (max-width: 600px) {
+        font-size: 1.2rem;
+        max-width: 200px;
+      }
+}
 
- 
+.home_CTA_box {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.switchword_wrapper {
+  display: inline-block;
+  margin-left: 0.5ch;
+  font-weight: bold;
 }

@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
 const useRegisterAdmin = () => {
-  const [newAdmin, setNewAdmin] = useState<AdminData>({
+  const [newAdmin, setNewAdmin] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
+    password: "",  // La password è presente qui
     profileImage: "",
   });
 
@@ -18,7 +18,7 @@ const useRegisterAdmin = () => {
     firstName: null,
     lastName: null,
     email: null,
-    password: null,
+    password: null,  // Aggiungi errori per la password
   });
 
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const useRegisterAdmin = () => {
       if (message.includes("firstName")) newFieldErrors.firstName = message;
       if (message.includes("lastName")) newFieldErrors.lastName = message;
       if (message.includes("email")) newFieldErrors.email = message;
-      if (message.includes("password")) newFieldErrors.password = message;
+      if (message.includes("password")) newFieldErrors.password = message;  // Gestisci l'errore della password
     });
 
     setFieldErrors(newFieldErrors);

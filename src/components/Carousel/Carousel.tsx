@@ -1,45 +1,146 @@
-import React, { useState, useEffect } from "react";
-import "./carousel.scss";
-import { Box, Typography } from "@mui/material";
+import React from "react";
+import { Box, Typography, Button } from "@mui/material";
 import { slides } from "../data/slides";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const Carousel = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const yellowBorder = "#FFD700";
+const blueTitle = "#1976d2";
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(nextSlide, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const displayedSlides = slides.slice(0, showCount);
+  const isInServices = location.pathname === "/tjänster";
 
   return (
-    <Box sx={{ position: "relative", width: "100%", maxWidth: 600, margin: "auto" }}>
-      <Box sx={{ padding: 2, textAlign: "center" }}>
-        <img src={slides[currentIndex].icon} alt="icon" className="slide-icon" />
-        <Typography variant="h5" className="slide-text">{slides[currentIndex].text}</Typography>
-      </Box>
+    <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          overflowX: "auto",
+          flexWrap: "nowrap",
+          paddingBottom: 4,
+          scrollSnapType: "x mandatory",
+          scrollPaddingRight: "2rem", // per visibilità finale
+          px: 1,
 
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
-        {slides.map((_, index) => (
+          "&::-webkit-scrollbar": {
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#f1f1f1",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "yellow",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: "#388E3C",
+          },
+        }}
+      >
+        {displayedSlides.map((slide, i) => (
           <Box
-            key={index}
+            key={i}
             sx={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              backgroundColor: index === currentIndex ? "black" : "lightgray",
-              margin: 1,
-              cursor: "pointer",
+              flex: "0 0 calc(95vw / 1.2)",
+              maxWidth: 300,
+              minWidth: 260,
+              padding: 3,
+              borderRadius: 2,
+              border: `2px solid ${yellowBorder}`,
+              backgroundColor: "#fff",
+              cursor: "default",
+              transition: "background-color 0.3s ease",
+              "&:hover": {
+                backgroundColor: "#fff9db",
+              },
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              scrollSnapAlign: "start",
             }}
-            onClick={() => setCurrentIndex(index)}
-          />
+          >
+            <img
+              src={slide.icon}
+              alt={slide.title}
+              loading="lazy"
+              style={{
+                width: 60,
+                height: 60,
+                marginBottom: 12,
+                filter: `drop-shadow(0 0 2px ${yellowBorder})`,
+              }}
+            />
+            <Typography variant="h6" sx={{ color: blueTitle, fontWeight: 600, mb: 1 }}>
+              {slide.title}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#222" }}>
+              {slide.description}
+            </Typography>
+          </Box>
         ))}
+
+        {!isInServices && (
+          <Box
+            sx={{
+              flex: "0 0 calc(95vw / 1.2)",
+              minWidth: 260,
+              maxWidth: 300,
+              padding: 3,
+              borderRadius: 2,
+              backgroundColor: blueTitle,
+              color: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              transition: "background-color 0.3s ease",
+              "&:hover": {
+                backgroundColor: "#155a9c",
+              },
+              scrollSnapAlign: "start",
+            }}
+            onClick={() => navigate("/tjänster#servicesGrid")}
+          >
+            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+              Se alla tjänster
+            </Typography>
+            <Button
+              variant="outlined"
+              sx={{
+                borderColor: "white",
+                color: "white",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                borderRadius: 50,
+                px: 4,
+                "&:hover": {
+                  borderColor: "#e6e6e6",
+                  backgroundColor: "rgba(255, 255, 255, 0.2)",
+                },
+              }}
+            >
+              Upptäck mer
+            </Button>
+          </Box>
+        )}
+
+        {/* Spacer finale per evitare taglio dell'ultima card */}
+        <Box
+          sx={{
+            flex: "0 0 5%",
+            minWidth: 20,
+            height: "100%",
+            scrollSnapAlign: "end",
+          }}
+        />
       </Box>
     </Box>
   );
 };
 
-export default Carousel;
+export default CardsCarousel;

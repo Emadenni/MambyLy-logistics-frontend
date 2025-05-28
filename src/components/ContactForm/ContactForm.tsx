@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, MenuItem, Select, FormControl, Box, Typography, SelectChangeEvent } from "@mui/material";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  Box,
+  Typography,
+  SelectChangeEvent,
+  Checkbox,
+  FormControlLabel
+} from "@mui/material";
 import { FormData } from "../../types/common";
-import { positionsData } from "../data/positions";
-import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { microservices } from "../data/microservices";
+import useSubmitMessages from "../../hooks/useSubmitMessage";
 import { validateForm } from "../../utils/formValidation";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolean }> = ({
   subjectFromCard,
@@ -16,10 +27,13 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     message: "",
     subject: subjectFromCard || "",
     file: null,
+    termsAccepted: false,
   });
 
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const { isSubmitting, error, handleSubmit } = useSubmitMessages(isJobApplication);
 
@@ -29,10 +43,20 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   }, [subjectFromCard]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<string>
+  ) => {
     const { name, value } = e.target;
     if (name) {
-      setFormData({ ...formData, [name]: value as string });
+      setFormData((prev) => ({ ...prev, [name]: value as string }));
+
+      if (errors[name]) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
     }
   };
 
@@ -43,13 +67,28 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
     }
   };
 
+  const handleTermsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAcceptTerms(e.target.checked);
+  };
+
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formErrors = validateForm(formData, isJobApplication);
     setErrors(formErrors);
 
-    if (Object.keys(formErrors).length > 0) return;
+    if (Object.keys(formErrors).length > 0 || !acceptTerms || !captchaValue) { 
+      setErrors((prev) => ({
+        ...prev,
+        terms: "Du måste acceptera villkoren för att skicka formuläret.",
+        captcha: "Du måste bekräfta att du inte är en robot." 
+      }));
+      return;
+    }
 
     const result = await handleSubmit(formData);
 
@@ -59,6 +98,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       message: "",
       subject: subjectFromCard || "",
       file: null,
+      termsAccepted: false,
     });
 
     if (result.success && !error) {
@@ -67,25 +107,56 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
   };
 
   return (
-    <Box
-    noValidate
-    data-testid="contact-form"
-    component="form"
-    onSubmit={handleFormSubmit}
-    sx={{
-      maxWidth: 600,
-      mx: "auto",
-      p: 4,
-      boxShadow: 4,
-      borderRadius: 3,
-      backgroundColor: "#FAFAF9", 
-      border: "1px solid #E0E0E0",
-      "& .MuiTextField-root": {
-        borderRadius: 2,
-      },
-    }}
-  >
+    <>
+    
+  <Box
+  noValidate
+  data-testid="contact-form"
+  component="form"
+  onSubmit={handleFormSubmit}
+  sx={{
+    maxWidth: 600,
+    mx: "auto",
+    p: 4,
+    boxShadow: 4,
+    borderRadius: 3,
+    backgroundColor: "#FAFAF9",
+    border: "1px solid #E0E0E0",
+    "& .MuiTextField-root": {
+      borderRadius: 2,
+      fontSize: "1rem",
+    },
+    "@media (min-width: 2560px)": {
+  maxWidth: 1200,
+  p: 6,
+  "& .MuiTextField-root": {
+    fontSize: "2rem",
+  },
+  "& button": {
+    fontSize: "2rem",
+    padding: "18px 34px",
+  },
+  "& h6": {
+    fontSize: "1.6rem",
+  },
+  "& label": {
+    fontSize: "2rem",
+  },
+  "& textarea": {
+    fontSize: "2rem",
+  },
+  "& input": {
+    fontSize: "2.5rem",
+    padding: "38px 34px",
+  },
+  "& .MuiFormHelperText-root.Mui-error": {
+    fontSize: "1.8rem",
+  },
+}
+  }}
+>
       <FormControl fullWidth margin="normal">
+  
         <TextField
           label="Namn / Företag"
           name="name"
@@ -178,41 +249,167 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
       </FormControl>
 
       <FormControl fullWidth margin="normal">
-        <TextField
-          label="Meddelande"
-          name="message"
-          multiline
-          rows={4}
-          value={formData.message}
-          onChange={handleChange}
-          required
-          error={!!errors.message}
-          helperText={errors.message}
+  <TextField
+    label="Meddelande"
+    name="message"
+    multiline
+    rows={4}
+    value={formData.message}
+    onChange={handleChange}
+    required
+    error={!!errors.message}
+    helperText={errors.message}
+    sx={{
+      borderRadius: 2,
+      "& .MuiInputBase-root": {
+        borderRadius: 2,
+        backgroundColor: "#FAFAFA",
+        "&:hover": {
+          backgroundColor: "#F1F1F1",
+        },
+      },
+      "& .MuiInputBase-inputMultiline": {
+        padding: "12px",
+        lineHeight: 1.6,
+        "@media (min-width: 2560px)": {
+          padding: "20px",
+          lineHeight: 2,
+          fontSize: "2.5rem",
+        },
+      },
+    }}
+  />
+</FormControl>
+
+
+{isJobApplication && (
+  <FormControl fullWidth margin="normal">
+    <Typography
+  variant="body2"
+  sx={{
+    fontWeight: 500,
+    mb: 1,
+    color: "#4CAF50",
+    "@media (min-width: 2560px)": {
+      fontSize: "1.85rem", 
+    },
+  }}
+>
+  Ladda upp ditt CV:
+</Typography>
+    <input type="file" onChange={handleFileChange} required />
+    {formData.file && (
+      <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>
+        {formData.file.name}
+      </Typography>
+    )}
+    {errors.file && (
+      <Typography
+        color="error.main"
+        variant="caption"
+        sx={{
+          "@media (min-width: 2560px)": {
+            fontSize: "2rem", 
+          },
+        }}
+      >
+        {errors.file}
+      </Typography>
+    )}
+  </FormControl>
+)}
+
+
+<Box sx={{ display: "flex", flexDirection: "column", mt: 2 }}>
+  <FormControlLabel
+    control={
+      <Checkbox
+        checked={acceptTerms}
+        onChange={handleTermsChange}
+        sx={{
+          // default
+          "& .MuiSvgIcon-root": {
+            fontSize: 24,
+          },
+          // schermi ≥2560px
+          "@media (min-width: 2560px)": {
+            "& .MuiSvgIcon-root": {
+              fontSize: 34, 
+            },
+          },
+        }}
+      />
+    }
+    label={
+      <Box
+        sx={{
+          fontSize: "0.875rem",
+          "@media (min-width: 2560px)": {
+            fontSize: "1.8rem",
+          },
+        }}
+      >
+        Jag accepterar villkoren. <br />
+        <Typography
+          variant="caption"
+          component="span"
+          color="primary"
           sx={{
-            borderRadius: 2,
-            "& .MuiInputBase-root": {
-              borderRadius: 2,
-              backgroundColor: "#FAFAFA",
-              "&:hover": {
-                backgroundColor: "#F1F1F1",
-              },
+            cursor: "pointer",
+            fontSize: "0.75rem",
+            "@media (min-width: 2560px)": {
+              fontSize: "1.5rem",
             },
           }}
-        />
-      </FormControl>
+        >
+          Kontrollera länkarna i sidfoten.
+        </Typography>
+      </Box>
+    }
+  />
+  {errors.terms && (
+    <Typography
+      color="error.main"
+      variant="caption"
+      sx={{
+        fontSize: "0.75rem",
+        "@media (min-width: 2560px)": {
+          fontSize: "1.8rem",
+        },
+      }}
+    >
+      {errors.terms}
+    </Typography>
+  )}
+<FormControl fullWidth margin="normal">
+  <Box
+    sx={{
+      width: '100%',
+      maxWidth: '320px',
+      overflow: 'hidden',
+      display: 'flex',
+      justifyContent: 'center',
+      '& > div': {
+        transform: 'scale(0.95)',
+        transformOrigin: '0 0',
+      },
+    }}
+  >
+{/*     <ReCAPTCHA
+      sitekey="6LeS2TYrAAAAAFF6P92E6zNNIF43uFwZ6KouVLwg"
+      onChange={handleCaptchaChange}
+    /> */}
+  </Box>
+  {errors.captcha && (
+    <Typography color="error.main" variant="caption" sx={{ mt: 1 }}>
+      {errors.captcha}
+    </Typography>
+  )}
+</FormControl>
 
-      {isJobApplication && (
-        <>
-          <FormControl fullWidth margin="normal">
-            <Typography variant="body2" sx={{ fontWeight: 500, mb: 1, color: "#4CAF50" }}>
-              Ladda upp ditt CV:
-            </Typography>
-            <input type="file" onChange={handleFileChange} required />
-            {formData.file && <Typography variant="caption" sx={{ mt: 1, color: "gray" }}>{formData.file.name}</Typography>}
-            {errors.file && <Typography color="error.main" variant="caption">{errors.file}</Typography>}
-          </FormControl>
-        </>
-      )}
+</Box>
+
+
 
       <Button
         type="submit"
@@ -223,6 +420,7 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         sx={{
           borderRadius: 3,
           padding: "12px 0",
+          marginTop:"20px",
           fontSize: "16px",
           backgroundColor: "#1976D2",
           "&:hover": {
@@ -245,6 +443,9 @@ const ContactForm: React.FC<{ subjectFromCard: string; isJobApplication?: boolea
         </Typography>
       )}
     </Box>
+    
+
+    </>
   );
 };
 
