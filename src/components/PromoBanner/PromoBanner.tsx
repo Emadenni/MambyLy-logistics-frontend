@@ -49,7 +49,7 @@ const PromoBanner = () => {
             margin: "5px",
             borderRadius: "10px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            zIndex: 1000,
+            zIndex: 1002,
             fontSize: "18px",
           }}
         >

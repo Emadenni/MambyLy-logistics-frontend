@@ -1,125 +1,260 @@
-/* src/pages/sido-butik.scss */
+.sido-home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 0;
+  animation: fadeIn 1s ease-out;
+}
 
-.sido-butik-container {
-  min-height: 50vh;
-  background-color: #ffffff;
- padding: 4rem 1.5rem 3rem;
-  
+.section-welcome {
+  background-image: url("../../assets/images/SidoButik/backgroundSidoHome.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 5rem 1.5rem;
+  margin-top: 9rem;
+  width: 100%;
+  animation: slideInTop 1s ease-out;
+}
+
+.section-intro {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1.2s ease-out;
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .intro-content {
+    text-align: center;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 768px) {
+      margin-bottom: 0;
+    }
+
+    .sido-brand-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        max-width: 200px;
+      }
+
+      .sido-brand-tagline {
+        font-size: 0.9rem;
+        color: #666;
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 1rem;
+      animation: fadeIn 1.2s ease-in;
+
+      @media (max-width: 768px) {
+        font-size: 1.8rem;
+      }
+
+      .highlight {
+        color: var(--primary-color, #2a70ff);
+      }
+    }
+
+    p {
+      font-size: 1rem;
+      max-width: 700px;
+      margin: 0.75rem auto;
+      color: #333;
+    }
+
+    .cta-link,
+    .cta-anchor {
+      margin-top: 1.5rem;
+      background-color: var(--primary-color, #2a70ff);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        background-color: #1f52b6;
+        color: #fff;
+      }
+    }
+
+    .cta-anchor {
+      display: inline-block;
+      margin-top: 1rem;
+      background: none;
+      color: #2a70ff;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .features-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      animation: fadeInUp 1.3s ease-in-out;
+
+      .icon-wrapper {
+        font-size: 2rem;
+        color: var(--primary-color, #2a70ff);
+        flex-shrink: 0;
+      }
+
+      .feature-text {
+        h3 {
+          font-size: 1.1rem;
+          margin: 0 0 0.25rem;
+          color: #111;
+        }
+
+        p {
+          font-size: 0.95rem;
+          color: #333;
+        }
+      }
+    }
+  }
+}
+
+.section-feature {
+  padding: 2rem 0rem;
+  background-color: #111827;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-}
-
-.sido-butik-content {
-  max-width: 768px;
-  width: 100%;
-  text-align: center;
-}
-
-.sido-butik-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-
-  .highlight {
-    color: #4f46e5;
-  }
-}
-
-.sido-butik-description {
-  font-size: 1.125rem;
-  color: #4b5563;
-  margin-bottom: 2rem;
-}
-
-.sido-butik-announcement {
-  background-color: #fef3c7;
-  border: 1px solid #fde68a;
-  color: #92400e;
-  padding: 1.25rem;
-  border-radius: 0.5rem;
-  margin-bottom: 2rem;
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.sido-butik-back {
-  margin-top: 3rem;
-
-  a {
-    color: #4f46e5;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.sido-brand-hero {
-  text-align: center;
-  margin: 13rem 0 1rem;
-
-  img {
-    max-width: 200px;
-    height: auto;
-  }
-
-  .sido-brand-tagline {
-    font-size: 0.875rem;
-    color: #9ca3af;
-    margin-top: 0.25rem;
-    letter-spacing: 0.05em;
-  }
-}
-
-.sido-benefits-card {
-  background-color: #f3f4f6;
-  border: 1px solid #d1d5db;
-  border-radius: 0.75rem;
-  padding: 2rem 1.75rem;
-  margin: 2.5rem auto;
-  max-width: 720px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  margin: auto;
+  animation: fadeIn 1.2s ease-out;
 
   .benefits-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
     text-align: center;
-    color: #4338ca;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #faf5f5;
+
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+      color: #e6c9ac;
+    }
   }
 
-  .benefits-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  .template-card {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
 
-    li {
-      font-size: 1rem;
-      line-height: 1.65;
-      margin-bottom: 1.5rem;
-      background: #ffffff;
-      padding: 1rem 1.25rem;
-      border-radius: 0.5rem;
-      border-left: 5px solid #a78bfa;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-      transition: background-color 0.2s;
+.section-benefits {
+  padding: 5rem 1.5rem;
+  background-color: #f9fafb;
+  animation: fadeInUp 1.3s ease-out;
 
-      &:hover {
-        background-color: #fdf4ff;
+  .sido-benefits-card {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    .benefits-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: #111;
+
+      @media (max-width: 768px) {
+        font-size: 1.2rem !important;
+      }
+    }
+
+    .benefits-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 2rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       }
 
-      strong {
-        color: #4f46e5;
-        display: block;
-        margin-bottom: 0.3rem;
+      li {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: #ffffff;
+        border-radius: 1.25rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+          animation: fadeInUp 0.8s ease;
+  animation-fill-mode: both;
+  opacity: 0;
+
+  &:nth-child(1) { animation-delay: 0.2s; }
+  &:nth-child(2) { animation-delay: 0.4s; }
+  &:nth-child(3) { animation-delay: 0.6s; }
+  &:nth-child(4) { animation-delay: 0.8s; }
+  &:nth-child(5) { animation-delay: 1s; }
+  &:nth-child(6) { animation-delay: 1.2s; }
+}
+
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .benefit-icon {
+          font-size: 2.2rem;
+          color: var(--primary-color, #2a70ff);
+          flex-shrink: 0;
+          margin-top: 0.3rem;
+        }
+
+        div {
+          font-size: 0.95rem;
+          color: #222;
+          line-height: 1.6;
+
+          strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 700;
+            color: #111;
+          }
+        }
       }
     }
   }
-}
+
 
 .sido-footer {
   margin-top: 4rem;
@@ -128,6 +263,8 @@
   font-size: 0.875rem;
   background-color: #111827;
   color: #d1d5db;
+  width: 100%;
+  animation: fadeIn 1.5s ease-in-out;
 
   span {
     color: #a78bfa;
@@ -160,6 +297,41 @@
 
   strong {
     color: #facc15;
+  }
+}
+
+#benefits {
+  scroll-margin-top: 100px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
