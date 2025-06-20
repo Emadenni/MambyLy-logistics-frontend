@@ -5,7 +5,7 @@ import React from "react";
 const SidoNavbar = () => {
   return (
     <nav className="sido-navbar">
-      <NavLink to="/" className="sido-navbar-link">
+      <NavLink to="/sidoButik" className="sido-navbar-link">
         Hem
       </NavLink>
       <NavLink to="/policy" className="sido-navbar-link">
@@ -14,7 +14,7 @@ const SidoNavbar = () => {
       <NavLink to="/kontaktaOss" className="sido-navbar-link">
         Kontakt
       </NavLink>
-      <NavLink to="/kontaktaOss" className="sido-navbar-link inaktive">
+      <NavLink to="/mallar" className="sido-navbar-link">
         Mallar
       </NavLink>
     </nav>
