@@ -15,6 +15,7 @@ const TemplateFeatureCard = ({
     <div className="template-feature-card-modern">
       <div className="card-image" style={{ backgroundImage: `url(${image})` }}>
         <div className="diagonal-banner">{badge}</div>
+        <div className="price-badge"> Pris från 1 990 kr</div>
 
         <div className="card-overlay">
           <div className="card-content">

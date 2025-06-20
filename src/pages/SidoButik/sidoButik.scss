@@ -345,3 +345,49 @@
     opacity: 1;
   }
 }
+
+.workflow-steps {
+  max-width: 1000px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 1s ease-out;
+
+  .workflow-title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #111;
+  }
+
+  .workflow-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+
+    li {
+      font-size: 1rem;
+      line-height: 1.6;
+      padding-left: 2rem;
+      position: relative;
+
+      &::before {
+        content: "✔";
+        position: absolute;
+        left: 0;
+        top: 0.2rem;
+        color: var(--primary-color, #2a70ff);
+        font-weight: bold;
+      }
+
+      strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #2a70ff;
+      }
+    }
+  }
+}

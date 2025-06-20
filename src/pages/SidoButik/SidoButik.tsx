@@ -93,16 +93,20 @@ const SidoButik = () => {
                 <img src={logoButik} alt="Sido Butik" className="logo-butik" />
                 <div className="sido-brand-tagline">by Mambyly Solutions</div>
               </div>
+
               <h1>
-                Välkommen till <br /> <span className="highlight">Sido Butik</span>
+                En proffsig webbsida – <br /> utan att spräcka budgeten
               </h1>
+
               <p>
-                Utforska ett växande galleri av React-mallar. Testa varje mall i realtid, uppdatera innehållet direkt
-                och lansera den med vår hjälp.
+                Behöver du en snygg, snabb och modern hemsida för din verksamhet? Vi har gjort det enkelt med
+                React-mallar som du kan testa och anpassa direkt online.
               </p>
+
               <p className="sido-butik-cta-text">
-                Du får en webbplats som är både snygg, snabb och redo för framtiden.
+                Bygg själv, anpassa innehållet och se direkt hur din sida tar form – redo att lanseras med vår hjälp.
               </p>
+
               <Link to="/templates/mallar" className="cta-link">
                 Utforska mallarna →
               </Link>
@@ -125,6 +129,38 @@ const SidoButik = () => {
             </div>
           </section>
         </section>
+
+        <div className="workflow-steps">
+          <h2 className="workflow-title">Så här funkar det</h2>
+          <ol className="workflow-list">
+            <li>
+              <strong>1. Välj en mall</strong>
+              <br />
+              Vi håller på att bygga upp ett växande bibliotek med React-mallar. Inom kort kommer du att kunna välja
+              bland flera stilar för olika branscher.
+            </li>
+            <li>
+              <strong>2. Testa och anpassa</strong>
+              <br />I vår demo kan du själv uppdatera texter, bilder och färger – och se resultatet direkt.
+            </li>
+            <li>
+              <strong>3. Skicka in innehåll</strong>
+              <br />
+              När du är nöjd kan du skicka dina egna texter och bilder direkt via demon – så börjar vi jobba med din
+              version.
+            </li>
+            <li>
+              <strong>4. Vi optimerar allt</strong>
+              <br />
+              Vi återkommer snabbt med en färdig version. Du behöver bara granska och godkänna.
+            </li>
+            <li>
+              <strong>5. Lansering och fortsatt stöd</strong>
+              <br />
+              Vi hjälper dig att gå live. Sen väljer du om du vill fortsätta samarbeta med oss – helt efter dina behov.
+            </li>
+          </ol>
+        </div>
 
         <section className="section-feature">
           <h2 className="benefits-title">Förhandstitt på nästa mall</h2>

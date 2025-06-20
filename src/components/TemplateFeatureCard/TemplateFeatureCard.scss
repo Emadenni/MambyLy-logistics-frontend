@@ -171,3 +171,22 @@
     }
   }
 }
+
+.price-badge {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: #056d4a; // verde brillante
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+
+  @media (max-width: 600px) {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
