@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";  // Importa Helmet
+import { Helmet } from "react-helmet-async"; // Importa Helmet
 import { Link } from "react-router-dom";
 import SwitchWord from "../../components/SwitchWord/SwitchWord";
 import Hero from "../../components/Hero/Hero";
@@ -7,7 +7,10 @@ import CTA from "../../components/Cta/Cta";
 import Layout from "../../components/Layout/Layout";
 import SectionIntro from "../../components/SectionIntro/SectionIntro";
 import CardsCarousel from "../../components/Carousel/Carousel";
+import SidoButikBanner from "../../components/SidoButikBanner/SidoButikBanner";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./home.scss";
+import ScrollIndicator from "../../components/ScrollIndicator/ScrollIndicator";
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -84,11 +87,20 @@ const Home: React.FC = () => {
               />
             </Link>
           </div>
+
+          <ScrollIndicator />
         </section>
       </Hero>
 
-      <SectionIntro />
-      <CardsCarousel showCount={6} />
+      <div className="after-hero">
+        {" "}
+        <SectionIntro />
+      </div>
+
+      <div className="carousel-container ">
+        <CardsCarousel showCount={7} />
+      </div>
+      <SidoButikBanner />
     </Layout>
   );
 };

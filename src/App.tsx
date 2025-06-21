@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";  // import
+import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
 import ScrollToTop from "./components/ScrollToTop";
 import PromoBanner from "./components/PromoBanner/PromoBanner";
 import PublicLayout from "./components/PublicLayout";
+import IntroSplash from "./components/IntroSplash/IntroSplash";
 
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
@@ -20,9 +21,14 @@ import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const [splashDone, setSplashDone] = useState(false);
+
+  if (!splashDone) {
+    return <IntroSplash onFinish={() => setSplashDone(true)} />;
+  }
 
   return (
-    <HelmetProvider> 
+    <HelmetProvider>
       <Router>
         <ScrollToTop />
         <PromoBanner />
@@ -43,6 +49,7 @@ const App = () => {
             element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />}
           />
         </Routes>
+
         <a
           href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
           target="_blank"

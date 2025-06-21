@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { slides } from "../data/slides";
 import { useNavigate, useLocation } from "react-router-dom";
+import "./carousel.scss";
 
 const yellowBorder = "#FFD700";
 const blueTitle = "#1976d2";
@@ -13,20 +14,49 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
   const isInServices = location.pathname === "/tjänster";
 
   return (
-    <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4 }}>
+    <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4, backgroundColor:"rgba(255, 255, 255, 0.85)", padding:"2rem", borderRadius:"20px" }}>
+      {/* Titolo */}
+      <Typography
+      className="carousel-title"
+        variant="h4"
+        component="h2"
+        sx={{
+          textAlign: "center",
+          fontWeight: 700,
+          color: blueTitle,
+          mb: 4,
+        }}
+      >
+        Våra tjänster
+      </Typography>
+
+      {/* Carosello */}
       <Box
         sx={{
-          display: "flex",
+          display: {
+            xs: "flex",
+            md: "grid",
+          },
           gap: 3,
-          overflowX: "auto",
           flexWrap: "nowrap",
+          overflowX: {
+            xs: "auto",
+            md: "unset",
+          },
+          gridTemplateColumns: {
+            md: "repeat(auto-fill, minmax(260px, 1fr))",
+          },
           paddingBottom: 4,
-          scrollSnapType: "x mandatory",
-          scrollPaddingRight: "2rem", // per visibilità finale
+          scrollSnapType: {
+            xs: "x mandatory",
+            md: "none",
+          },
           px: 1,
-
           "&::-webkit-scrollbar": {
             height: "8px",
+            display: {
+              md: "none",
+            },
           },
           "&::-webkit-scrollbar-track": {
             background: "#f1f1f1",
@@ -44,7 +74,10 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
           <Box
             key={i}
             sx={{
-              flex: "0 0 calc(95vw / 1.2)",
+              flex: {
+                xs: "0 0 calc(95vw / 1.2)",
+                md: "unset",
+              },
               maxWidth: 300,
               minWidth: 260,
               padding: 3,
@@ -86,9 +119,13 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
         {!isInServices && (
           <Box
             sx={{
-              flex: "0 0 calc(95vw / 1.2)",
+              flex: {
+                xs: "0 0 calc(95vw / 1.2)",
+                md: "unset",
+              },
               minWidth: 260,
               maxWidth: 300,
+              height:280,
               padding: 3,
               borderRadius: 2,
               backgroundColor: blueTitle,
@@ -129,9 +166,13 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
           </Box>
         )}
 
-        {/* Spacer finale per evitare taglio dell'ultima card */}
+        {/* Spacer mobile finale */}
         <Box
           sx={{
+            display: {
+              xs: "block",
+              md: "none",
+            },
             flex: "0 0 5%",
             minWidth: 20,
             height: "100%",

@@ -1,0 +1,72 @@
+.sido-butik-banner {
+  position: relative;
+  padding: 6rem 2rem;
+/*   background: linear-gradient(135deg, #111, #1e1e1e, #222); */
+  background-color: #f3f2f2;
+  color: #171212;
+  overflow: hidden;
+  border-radius: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  margin: 6rem 0;
+
+  .background-pattern {
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='white'/%3E%3Cpath d='M0 40L40 0M-10 30L30 -10M10 50L50 10' stroke='%23ddd' stroke-width='1'/%3E%3C/svg%3E")
+    center/cover no-repeat;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+
+    .headline {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+
+      .highlight {
+        color: #ffcb3c;
+      }
+    }
+
+    .description {
+      font-size: 1.25rem;
+      color: #0c0a0a;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+    }
+
+    .cta-wrapper {
+      .cta-button {
+        display: inline-block;
+        background: #dfb407;
+        color: #000;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        border-radius: 999px;
+        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: #f5f5f5;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+.butik-logo {
+  width: 200px;
+  margin: 0 auto 1.5rem auto;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
