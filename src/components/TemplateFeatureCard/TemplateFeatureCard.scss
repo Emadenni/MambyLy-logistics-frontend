@@ -174,8 +174,8 @@
 
 .price-badge {
   position: absolute;
-  bottom: 1rem;
-  left: 1rem;
+  top: 1rem;
+  right: 1rem;
   background: #056d4a; // verde brillante
   color: white;
   font-size: 0.75rem;
@@ -186,7 +186,7 @@
   z-index: 2;
 
   @media (max-width: 600px) {
-    font-size: 0.65rem;
+    font-size: 0.5rem;
     padding: 0.3rem 0.6rem;
   }
 }

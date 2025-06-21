@@ -107,7 +107,7 @@ const SidoButik = () => {
                 Bygg själv, anpassa innehållet och se direkt hur din sida tar form – redo att lanseras med vår hjälp.
               </p>
 
-              <Link to="/templates/mallar" className="cta-link">
+              <Link to="mallar" className="cta-link">
                 Utforska mallarna →
               </Link>
 

@@ -5,16 +5,33 @@ import React from "react";
 const SidoNavbar = () => {
   return (
     <nav className="sido-navbar">
-      <NavLink to="/sidoButik" className="sido-navbar-link">
+      <NavLink
+        to="/sidoButik"
+        end
+        className={({ isActive }) =>
+          `sido-navbar-link ${isActive ? "active" : ""}`
+        }
+      >
         Hem
       </NavLink>
-      <NavLink to="/policy" className="sido-navbar-link">
+
+      <NavLink
+        to="/policy"
+        end
+        className={({ isActive }) =>
+          `sido-navbar-link ${isActive ? "active" : ""}`
+        }
+      >
         Policy
       </NavLink>
-      <NavLink to="/kontaktaOss" className="sido-navbar-link">
-        Kontakt
-      </NavLink>
-      <NavLink to="/mallar" className="sido-navbar-link">
+
+      <NavLink
+        to="/sidoButik/mallar"
+        end
+        className={({ isActive }) =>
+          `sido-navbar-link ${isActive ? "active" : ""}`
+        }
+      >
         Mallar
       </NavLink>
     </nav>

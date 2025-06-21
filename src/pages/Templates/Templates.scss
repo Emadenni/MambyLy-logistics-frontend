@@ -197,3 +197,16 @@
     transform: translate(0, 0);
   }
 }
+
+.logoButik-container {
+     
+    position: absolute;
+    bottom: 0.4rem;
+    background-color: rgba(255, 255, 255, 0.534);
+    
+
+    .logoButik-temps {
+        width: 100px;
+
+    }
+}

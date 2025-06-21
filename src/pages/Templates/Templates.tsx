@@ -1,5 +1,6 @@
 import React from "react";
 import SidoHeader from "../../components/SidoHeader/SidoHeader";
+import SidoButikLogo from "../../assets/images/logoButik.webp"
 import { Link } from "react-router-dom";
 import { templatesData } from "../../components/data/templateData";
 import "./Templates.scss";
@@ -16,9 +17,13 @@ const Templates = () => {
             style={{ animationDelay: `${i * 0.2}s` }}
           >
             <div className="template-image-wrapper">
+                 <div className="logoButik-container">
+                <img src={SidoButikLogo} alt="logo butik" className="logoButik-temps" />
+            </div>
               <div className="template-image" style={{ backgroundImage: `url(${tpl.image})` }} />
               {tpl.badge && <span className="badge">{tpl.badge}</span>}
             </div>
+           
             <div className="template-info">
               <img src={tpl.logo} alt={tpl.name} className="template-logo" />
               <h3>{tpl.name}</h3>
