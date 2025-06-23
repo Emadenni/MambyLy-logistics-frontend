@@ -1,0 +1,30 @@
+.info-banner {
+  background-color: transparent;
+  color: #856404;
+  padding: 6px 20px;
+  margin: 10px 0 20px 0;
+  border-radius: 5px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 0.8rem;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  z-index: 50000;
+  position: fixed;
+  top: 0;
+
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: 90vw;
+  white-space: normal; /* permette di andare a capo */
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .info-banner {
+    padding: 8px 12px;
+    font-size: 0.5rem;
+    min-width: 100vw;
+    margin: 5px 0 15px 0;
+  }
+}

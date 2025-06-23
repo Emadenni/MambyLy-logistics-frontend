@@ -3,13 +3,16 @@ import SidoHeader from "../../components/SidoHeader/SidoHeader";
 import SidoButikLogo from "../../assets/images/logoButik.webp";
 import { Link } from "react-router-dom";
 import { templatesData } from "../../components/data/templateData";
+import InfoBanner from "../../components/InfoBanner/InfoBanner";
 import "./Templates.scss";
 
 const Templates = () => {
   return (
     <div className="template-page">
       <SidoHeader />
+      <InfoBanner />
       <section className="template-grid">
+        
         {templatesData.map((tpl, i) => (
           <div
             key={tpl.id}
