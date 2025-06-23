@@ -44,7 +44,7 @@ export const templateDetails = {
 
     intro: sharedTemplateIntro,
 
-    demoLink: "http://main.d2nczcu0nsnr0f.amplifyapp.com/",
+    demoLink: "https://main.d2nczcu0nsnr0f.amplifyapp.com/",
     steps: sharedTemplateSteps,
   },
 };

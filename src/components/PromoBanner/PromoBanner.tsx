@@ -16,7 +16,7 @@ const PromoBanner = () => {
 
     const timer = setTimeout(() => {
       setShowBanner(true);
-    }, 5000); // mostra dopo 5s
+    }, 12000); // mostra dopo 5s
 
     return () => clearTimeout(timer);
   }, [isStorePage]);

@@ -8,6 +8,7 @@ import Layout from "../../components/Layout/Layout";
 import SectionIntro from "../../components/SectionIntro/SectionIntro";
 import CardsCarousel from "../../components/Carousel/Carousel";
 import SidoButikBanner from "../../components/SidoButikBanner/SidoButikBanner";
+import BivioSection from "../../components/BivioSection/BivioSection";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./home.scss";
 import ScrollIndicator from "../../components/ScrollIndicator/ScrollIndicator";
@@ -101,6 +102,7 @@ const Home: React.FC = () => {
         <CardsCarousel showCount={7} />
       </div>
       <SidoButikBanner />
+      <BivioSection/>
     </Layout>
   );
 };

@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import "./sidoButik.scss"
+import "./sidoButik.scss";
 
 import SidoHeader from "../../components/SidoHeader/SidoHeader";
 import CTA from "../../components/Cta/Cta";
 import logoButik from "../../assets/images/logoButik.webp";
 import FloatingAnnouncement from "../../components/FloatingAnnouncement/FloatingAnnouncement";
 import TemplateFeatureCard from "../../components/TemplateFeatureCard/TemplateFeatureCard";
-import comingSoonImage from "../../assets/images/SidoButik/featurePreviewPiazzaGrande.webp";
-import logoTemplate from "../../assets/images/SidoButik/logotemplatePiazaGrande.webp";
+import BivioSection from "../../components/BivioSection/BivioSection";
+
+import { templatesData } from "../../components/data/templateData";
 
 // Icons
 import SearchIcon from "@mui/icons-material/TravelExplore";
@@ -24,6 +25,7 @@ import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import GridViewIcon from "@mui/icons-material/GridView";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
 const features = [
@@ -74,11 +76,18 @@ const SidoButik = () => {
     document.title = "Sido Butik | Ditt mallgalleri";
   }, []);
 
+  // Qui puoi scegliere quale demo mostrare come anteprima
+  // Per esempio la prima del dataset
+  const firstTemplate = templatesData[0];
+
   return (
     <>
       <Helmet>
         <title>Sido Butik | Mallgalleri av React-templates | Mambyly Solutions</title>
-        <meta name="description" content="Sido Butik är ett galleri med utvalda React-mallar för småföretag." />
+        <meta
+          name="description"
+          content="Sido Butik är ett galleri med utvalda React-mallar för småföretag."
+        />
         <link rel="canonical" href="https://mambylysolutions.se/sidoButik" />
       </Helmet>
 
@@ -164,16 +173,19 @@ const SidoButik = () => {
 
         <section className="section-feature">
           <h2 className="benefits-title">Förhandstitt på nästa mall</h2>
-          <TemplateFeatureCard
-            name="Websmallen för din restaurang"
-            image={comingSoonImage}
-            logo={logoTemplate}
-            description="En elegant, snabb och mobilanpassad mall som lyfter fram din meny, förenklar bokningar och skapar en oförglömlig gästupplevelse – perfekt för moderna restauranger med höga ambitioner."
-            comingSoon={false}
-            badge="Nyhet"
-            link="/templates/piazza-grande"
-          />
+          {firstTemplate && (
+            <TemplateFeatureCard
+              name={firstTemplate.name}
+              image={firstTemplate.image}
+              logo={firstTemplate.logo}
+              description={firstTemplate.description}
+              comingSoon={firstTemplate.comingSoon}
+              badge={firstTemplate.badge}
+              link={`/sidoButik/mallar/${firstTemplate.id}`} // link dinamico
+            />
+          )}
         </section>
+
         <section id="benefits" className="section-benefits">
           <div className="sido-benefits-card">
             <h2 className="benefits-title">
@@ -231,30 +243,7 @@ const SidoButik = () => {
           </div>
         </section>
 
-       <section className="sido-bivio-section">
-  <h2>Vad passar dig bäst?</h2>
-  <p>Vi hjälper dig oavsett om du vill komma igång snabbt eller skapa något unikt från grunden.</p>
-  <div className="bivio-options">
-    <div className="bivio-card">
-      <h3>🚀 Startklar och budgetvänlig</h3>
-      <p>
-        Testa våra färdiga mallar – perfekt för småföretag som vill komma igång snabbt och billigt.
-      </p>
-      <Link to="/sidoButik/mallar" className="bivio-btn sido">
-        Utforska Sido Butik →
-      </Link>
-    </div>
-    <div className="bivio-card">
-      <h3>🎯 Skräddarsydd lösning</h3>
-      <p>
-        Behöver du något helt unikt? Vi bygger skräddarsydda lösningar anpassade till dina behov.
-      </p>
-      <a href="https://mambylysolutions.se/#kontakta" className="bivio-btn mambyly" target="_blank" rel="noreferrer">
-        Kontakta Mambyly →
-      </a>
-    </div>
-  </div>
-</section>
+        <BivioSection />
 
         <footer className="sido-footer">
           <p>
