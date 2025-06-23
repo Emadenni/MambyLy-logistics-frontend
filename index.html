@@ -19,18 +19,18 @@
 
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png" />
-    
+
     <!-- Preload Social Icons -->
-    <link rel="preload" href="/src/assets/images/socials/facebook_icon.webp" as="image">
-    <link rel="preload" href="/src/assets/images/socials/instagram_icon.webp" as="image">
-    <link rel="preload" href="/src/assets/images/socials/linkedin_icon.webp" as="image">
-    <link rel="preload" href="/src/assets/images/socials/tiktok_icon.webp" as="image">
-    <link rel="preload" href="/src/assets/images/socials/whatsapp_icon.webp" as="image">
-    
+    <link rel="preload" href="/src/assets/images/socials/facebook_icon.webp" as="image" />
+    <link rel="preload" href="/src/assets/images/socials/instagram_icon.webp" as="image" />
+    <link rel="preload" href="/src/assets/images/socials/linkedin_icon.webp" as="image" />
+    <link rel="preload" href="/src/assets/images/socials/tiktok_icon.webp" as="image" />
+    <link rel="preload" href="/src/assets/images/socials/whatsapp_icon.webp" as="image" />
+
     <!-- Preconnect for Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!-- Favicon and Web App Icons -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.webp" type="image/webp" />
@@ -52,7 +52,7 @@
       content="digitala tjänster, webbtjänster, småföretag, medelstora företag, online-närvaro, anpassade lösningar"
     />
     <meta name="author" content="MambyLy Solutions" />
-    
+
     <!-- Open Graph Meta Tags (for social sharing) -->
     <meta property="og:title" content="MambyLy Solutions - Digitala och Webbtjänster för Företag" />
     <meta
@@ -62,7 +62,7 @@
     <meta property="og:image" content="https://mambylysolutions.se/ogImage7.png" />
     <meta property="og:url" content="https://mambylysolutions.se" />
     <meta property="og:type" content="website" />
-    
+
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MambyLy Solutions - Digitala och Webbtjänster för Företag" />
@@ -74,39 +74,62 @@
 
     <!-- Structured Data - JSON-LD -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "MambyLy Solutions",
-      "url": "https://mambylysolutions.se",
-      "logo": "https://mambylysolutions.se/favicon-512x512.png",
-      "description": "MambyLy Solutions erbjuder digitala och webbtjänster för små och medelstora företag.",
-      "email": "info@mambylysolutions.se",
-      "telephone": "+46764510582",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "SE"
-      },
-      "sameAs": [
-        "https://www.linkedin.com/company/mambylysolutions",
-        "https://www.facebook.com/mambylysolutions",
-        "https://www.instagram.com/mambylysolutions",
-        "https://www.tiktok.com/@mambylysolutions",
-        "https://wa.me/46764510582"
-      ]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "MambyLy Solutions",
+        "url": "https://mambylysolutions.se",
+        "logo": "https://mambylysolutions.se/favicon-512x512.png",
+        "description": "MambyLy Solutions erbjuder digitala och webbtjänster för små och medelstora företag.",
+        "email": "info@mambylysolutions.se",
+        "telephone": "+46764510582",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "SE"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/mambylysolutions",
+          "https://www.facebook.com/mambylysolutions",
+          "https://www.instagram.com/mambylysolutions",
+          "https://www.tiktok.com/@mambylysolutions",
+          "https://wa.me/46764510582"
+        ]
+      }
     </script>
 
     <!-- Viewport & Title -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MambyLy Solutions</title>
-    
+
     <!-- Link to manifest.json for PWA -->
     <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
+    <div
+      id="initial-loader"
+      style="
+        position: fixed;
+        inset: 0;
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+        color: white;
+      "
+    >
+      <img
+        src="/src/assets/images/mambylyLogoRestyled.webp"
+        alt="Mambyly Solutions"
+        style="width: 100px; margin-bottom: 1rem"
+      />
+      <p style="font-size: 1rem; opacity: 0.8">Laddar...</p>
+    </div>
+
     <div id="root"></div>
-    <div id="modal-root"></div> 
+    <div id="modal-root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

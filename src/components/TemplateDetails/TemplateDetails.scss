@@ -1,0 +1,172 @@
+.template-details {
+  font-family: 'Inter', sans-serif;
+  color: #222;
+
+  .template-hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 5rem 2rem;
+    margin-top: 6rem;
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+       z-index: -1;
+    }
+
+    .template-logo {
+      position: relative;
+      max-width: 120px;
+      margin: 0 auto 1rem;
+    }
+
+    .template-title {
+      position: relative;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .template-intro {
+      position: relative;
+      background: #fff8e1;
+      border-left: 4px solid #ffca28;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      max-width: 700px;
+      margin:2rem auto 1rem;
+      color: #222;
+    }
+
+    .template-description {
+      position: relative;
+      font-size: 1.2rem;
+      font-weight: 500;
+      max-width: 700px;
+      margin: 0 auto;
+      color: #f0f0f0;
+    }
+  }
+
+  .template-steps {
+    padding: 2rem 1rem;
+
+    .steps-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+
+      button {
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        border: none;
+        background: none;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        font-size: 1rem;
+
+        &.active {
+          border-color: #000;
+          color: #000;
+        }
+
+        @media (max-width: 600px) {
+          font-size: 0.7rem;
+          padding: 0.4rem 0.6rem;
+        }
+      }
+    }
+
+    .steps-slider {
+      overflow: hidden;
+      position: relative;
+
+      .steps-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        width: 100%;
+
+        .step-card {
+          flex: 0 0 100%;
+          background: #f7f7f7;
+          padding: 2rem;
+          border-radius: 12px;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+          text-align: left;
+
+          h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+          }
+
+          p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+          }
+
+          .cta-demo-inside {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.2rem;
+            font-size: 1rem;
+            background-color: #ffca28;
+            color: #000;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            text-decoration: none;
+
+            &:hover {
+              background-color: #ffb300;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .template-not-found {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-size: 1.2rem;
+    color: #555;
+  }
+}
+
+.template-intro-contact {
+  background: #fffde7;
+  border-left: 4px solid #fbc02d;
+  padding: 1.25rem 1.5rem;
+  border-radius: 10px;
+  margin: 2rem auto 1.5rem;
+  max-width: 800px;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  a {
+    color: #d17b00;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #a66400;
+    }
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+    padding: 1rem 1.2rem;
+  }
+}

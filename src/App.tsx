@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
@@ -17,14 +17,27 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
 import SidoButik from "./pages/SidoButik/SidoButik";
 import Templates from "./pages/Templates/Templates";
+import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
 const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const [splashDone, setSplashDone] = useState(false);
+  const [splashDone, setSplashDone] = useState<boolean>(false);
+
+  useEffect(() => {
+    const seen = sessionStorage.getItem("introSeen");
+    if (seen === "true") {
+      setSplashDone(true);
+    }
+  }, []);
+
+  const handleSplashFinish = () => {
+    sessionStorage.setItem("introSeen", "true");
+    setSplashDone(true);
+  };
 
   if (!splashDone) {
-    return <IntroSplash onFinish={() => setSplashDone(true)} />;
+    return <IntroSplash onFinish={handleSplashFinish} />;
   }
 
   return (
@@ -41,6 +54,7 @@ const App = () => {
             <Route path="/omOss" element={<AboutUs />} />
             <Route path="/sidoButik" element={<SidoButik />} />
             <Route path="/sidoButik/mallar" element={<Templates />} />
+            <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
           <Route path="/login" element={<LoginForm />} />
