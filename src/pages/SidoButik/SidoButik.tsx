@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import "./SidoButik.scss"; //fixed
+import "./sidoButik.scss"
 
 import SidoHeader from "../../components/SidoHeader/SidoHeader";
 import CTA from "../../components/Cta/Cta";
