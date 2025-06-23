@@ -20,18 +20,14 @@ const TemplateDetails = () => {
         <img src={template.logo} alt={template.name} className="template-logo" />
         <h1 className="template-title">{template.name}</h1>
 
-        {/* ✅ Descrizione più sotto, con stile */}
         <p className="template-description">{template.description}</p>
 
-        {/* ✅ Messaggio comune evidenziato */}
         <div className="template-intro">{template.intro}</div>
 
         <p className="template-intro-contact">
-          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på 
-          <a href="mailto:info@mambylysolutions.se"> info@mambylysolutions.se</a>, via WhatsApp eller genom vårt
-          kontaktformulär på
+          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på{" "}
+          <a href="mailto:info@mambylysolutions.se">info@mambylysolutions.se</a>, via WhatsApp eller genom vårt kontaktformulär på{" "}
           <a href="https://mambylysolutions.se/kontaktaOss" target="_blank" rel="noopener noreferrer">
-            {" "}
             huvudsidan
           </a>
           .
@@ -56,11 +52,22 @@ const TemplateDetails = () => {
                 </h3>
                 <p>{step.text}</p>
 
-                {/* ✅ Solo nel primo step: mostra CTA demo */}
+                {/* Solo nel primo step: mostra CTA demo e iframe */}
                 {i === 0 && (
-                  <a href={template.demoLink} className="cta-demo-inside" target="_blank" rel="noopener noreferrer">
-                    Gå till demon →
-                  </a>
+                  <>
+                    <a href={template.demoLink} className="cta-demo-inside" target="_blank" rel="noopener noreferrer">
+                      Öppna demon för att anpassa innehållet →
+                    </a>
+
+                    <div className="demo-iframe-wrapper" style={{ marginTop: "1rem", border: "1px solid #ccc", borderRadius: "8px" }}>
+                      <iframe
+                        src={template.demoLink}
+                        title={`Demo di ${template.name}`}
+                        style={{ width: "100%", height: "600px", border: "none" }}
+                        loading="lazy"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
             ))}

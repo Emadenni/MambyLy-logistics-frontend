@@ -36,6 +36,7 @@ export const sharedTemplateIntro = `
 export const templateDetails = {
   "piazza-grande": {
     name: "Piazza Grande",
+
     logo: piazzaLogo,
     backgroundImage: piazzaImg,
 
@@ -43,7 +44,7 @@ export const templateDetails = {
 
     intro: sharedTemplateIntro,
 
-    demoLink: "/sidoButik/mallar/piazzaGrande",
+    demoLink: "http://main.d2nczcu0nsnr0f.amplifyapp.com/",
     steps: sharedTemplateSteps,
   },
 };
