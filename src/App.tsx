@@ -6,6 +6,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import PromoBanner from "./components/PromoBanner/PromoBanner";
 import PublicLayout from "./components/PublicLayout";
 import IntroSplash from "./components/IntroSplash/IntroSplash";
+import { CartProvider } from "./Context/CartContext";
 
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
@@ -41,7 +42,8 @@ const App = () => {
   }
 
   return (
-    <HelmetProvider>
+  <HelmetProvider>
+    <CartProvider>
       <Router>
         <ScrollToTop />
         <PromoBanner />
@@ -79,8 +81,9 @@ const App = () => {
           />
         </a>
       </Router>
-    </HelmetProvider>
-  );
+    </CartProvider>
+  </HelmetProvider>
+);
 };
 
 export default App;

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useCart } from "../../Context/CartContext";
 import "./Steps.scss";
 
 interface Extra {
@@ -64,6 +65,8 @@ interface StepTwoState {
 }
 
 const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) => {
+  const { setCount } = useCart();
+
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
   const [sectionsNoteText, setSectionsNoteText] = useState("");
@@ -73,14 +76,36 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
   const [noExtraPageNeeded, setNoExtraPageNeeded] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
 
+  // Questi sono gli ID degli extra che devono essere disabilitati se backend è selezionato
+  const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
-  // Toggle per extras
+  // Aggiorna il count del carrello: 1 per pacchetto base + extra selezionati + pagine extra
+  useEffect(() => {
+    if (wizardStep >= 1) {
+      const totalCount = 1 + selectedExtras.length + selectedPageOptionIds.length;
+      setCount(totalCount);
+    }
+  }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
+
+  // Toggle per extras con blocco su bokabord e avhaemtning se backend selezionato
   const toggleExtra = (id: string) => {
-    if (backendSelected && id !== "custom-backend") return;
-    setSelectedExtras((prev) =>
-      prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
-    );
+    if (backendSelected && extrasBlockedByBackend.includes(id)) return;
+
+    setSelectedExtras((prev) => {
+      if (id === "custom-backend" && prev.includes("custom-backend")) {
+        // Deseleziono backend, nessuna restrizione ora
+        return prev.filter((e) => e !== "custom-backend");
+      }
+
+      if (id === "custom-backend" && !prev.includes("custom-backend")) {
+        // Seleziono backend, tolgo bokabord e avhaemtning se presenti
+        return ["custom-backend", ...prev.filter(e => !extrasBlockedByBackend.includes(e))];
+      }
+
+      // Toggle normale per tutti gli altri extra
+      return prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
+    });
   };
 
   // Toggle per pagine extra
@@ -90,7 +115,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
     );
   };
 
-  // Gestione checkbox "Non voglio cambiare sezioni"
   const handleNoSectionChangesChange = () => {
     setNoSectionChanges((prev) => {
       if (!prev) setSectionsNoteText("");
@@ -98,7 +122,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
     });
   };
 
-  // Gestione checkbox "Non ho bisogno di pagina extra"
   const handleNoExtraPageNeededChange = () => {
     setNoExtraPageNeeded((prev) => {
       if (!prev) {
@@ -109,7 +132,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
     });
   };
 
-  // Calcolo totale prezzo
   const totalPrice =
     template.basePackage.price +
     selectedExtras.reduce((sum, id) => {
@@ -147,9 +169,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
       <h3>Detaljer och extrafunktioner</h3>
 
       <div className={`message ${contentSentViaDemo ? "success" : "warning"}`}>
-        {contentSentViaDemo
-          ? template.messages.contentSent
-          : template.messages.contentNotSent}
+        {contentSentViaDemo ? template.messages.contentSent : template.messages.contentNotSent}
       </div>
 
       {wizardStep === 1 && (
@@ -168,14 +188,14 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
               <label
                 key={extra.id}
                 className={`checkbox-label ${
-                  backendSelected && extra.id !== "custom-backend" ? "disabled" : ""
+                  backendSelected && extrasBlockedByBackend.includes(extra.id) ? "disabled" : ""
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={selectedExtras.includes(extra.id)}
                   onChange={() => toggleExtra(extra.id)}
-                  disabled={backendSelected && extra.id !== "custom-backend"}
+                  disabled={backendSelected && extrasBlockedByBackend.includes(extra.id)}
                 />
                 <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
                 <strong>{extra.price} kr</strong>
