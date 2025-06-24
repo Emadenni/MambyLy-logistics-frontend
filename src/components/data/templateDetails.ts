@@ -6,7 +6,8 @@ export const templateDetails = {
     name: "Piazza Grande",
     logo: piazzaLogo,
     backgroundImage: piazzaImg,
-    description: "En komplett och responsiv mall för restauranger – med menyer, bokningar och mer.",
+    description:
+      "En komplett och responsiv mall för restauranger – med menyer, bokningar och mer.",
     intro: `
       Gillar du den här mallen? Perfekt! Du kan återanvända den med dina egna texter och bilder – antingen via demon eller via mejl.
       Anpassa gallerier, byt sektioner eller lägg till en extra sida: vi hjälper dig hela vägen.
@@ -41,7 +42,7 @@ export const templateDetails = {
         price: 900,
       },
       {
-        id: "Avhämtning",
+        id: "avhaemtning",
         label: "Avhämtning",
         description:
           "Takeaway-lösning inklusive skapande av sidan och integration med externa system som Foodora, Uber Eats, DoorDash och andra.",
@@ -60,6 +61,13 @@ export const templateDetails = {
         description: "Eget formulär för kontakt med mailavisering, pris 500 kr.",
         price: 500,
       },
+      {
+        id: "reviews-section",
+        label: "Recensioner",
+        description:
+          "En sektion för kundrecensioner som kan visas på startsidan eller en annan sida.",
+        price: 800,
+      },
     ],
     messages: {
       contentSent:
@@ -72,6 +80,39 @@ export const templateDetails = {
       placeholder:
         "Exempel: Jag vill ändra 'Om oss', lägga till åtta bilder i galleriet istället för sex, eller flytta öppettiderna högst upp och galleriet längst ner.",
       note: "Skriv här vad du vill ändra eller omorganisera i sektionerna. Vi tar sedan kontakt för detaljer.",
+    },
+    staticPage: {
+      description:
+        "Du har rätt att inkludera en statisk sida i mallen, t.ex. en extra gallerisida eller en presentationssida.",
+      exampleText:
+        "Beskriv kort vad du vill ha på den statiska sidan, t.ex. 'Extra galleri med åtta bilder' eller 'Presentation av teamet'.",
+    },
+    extraPages: [
+      {
+        id: "events-page",
+        label: "Evenemangssida",
+        description:
+          "Dynamisk sida för hantering av evenemang, inklusive kalenderfunktion.",
+        price: 1500,
+      },
+      {
+        id: "blog-page",
+        label: "Bloggsida",
+        description: "En sida för blogg med möjligheter till nyhetsinlägg och artiklar.",
+        price: 1200,
+      },
+      {
+        id: "faq-page",
+        label: "FAQ-sida",
+        description: "Frågor och svar-sida för att informera dina kunder.",
+        price: 900,
+      },
+    ],
+    generalNotes: {
+      label: "Övriga anteckningar eller frågor",
+      placeholder:
+        "Här kan du skriva eventuella frågor, kommentarer eller särskilda önskemål du vill att vi ska känna till.",
+      note: `Observera att vi använder gratislösningar för mailutskick när det är möjligt, men beroende på restaurangens volym kan extra kostnader för tjänsteleverantörer tillkomma.`,
     },
 
     contentSentViaDemo: false,
