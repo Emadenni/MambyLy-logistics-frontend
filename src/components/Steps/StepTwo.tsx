@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useCart } from "../../Context/CartContext";
 import "./Steps.scss";
 
@@ -86,6 +86,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
+  // Aggiorna count carrello
   useEffect(() => {
     if (wizardStep >= 1) {
       const totalCount = 1 + selectedExtras.length + selectedPageOptionIds.length;
@@ -93,9 +94,12 @@ const StepTwo: React.FC<StepTwoProps> = ({
     }
   }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
 
-  // Aggiorna il padre in tempo reale con i dati correnti
+  // Memoizza onSave per evitare re-render inutili
+  const memoizedOnSave = useCallback(onSave, [onSave]);
+
+  // Aggiorna genitore in tempo reale (evita loop con useCallback)
   useEffect(() => {
-    onSave({
+    memoizedOnSave({
       contentSentViaDemo,
       selectedExtras,
       sectionsNoteText,
@@ -112,7 +116,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
     selectedPageOptionIds,
     staticPageDescription,
     noExtraPageNeeded,
-    onSave,
+    memoizedOnSave,
   ]);
 
   const toggleExtra = (id: string) => {
@@ -168,8 +172,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const handleNext = () => {
     if (wizardStep < 3) setWizardStep(wizardStep + 1);
     else {
-      // Chiamata finale per sicurezza
-      onSave({
+      memoizedOnSave({
         contentSentViaDemo,
         selectedExtras,
         sectionsNoteText,

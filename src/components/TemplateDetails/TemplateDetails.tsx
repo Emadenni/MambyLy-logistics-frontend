@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { templateDetails } from "../data/templateDetails";
 import SidoHeader from "../SidoHeader/SidoHeader";
@@ -24,14 +24,27 @@ const TemplateDetails = () => {
 
   const { setBasePackage, setSelectedExtras, setSelectedPages, setCount } = useCart();
 
-  // Inizializza carrello con basePackage e reset selezioni all’apertura/template cambiato
+  // Inizializza carrello base package e reset selezioni quando cambia il template
   useEffect(() => {
     if (!template) return;
     setBasePackage(template.basePackage);
     setSelectedExtras([]);
     setSelectedPages([]);
-    setCount(1); // pacchetto base conta come 1
+    setCount(1); // conta solo il base package
   }, [template, setBasePackage, setSelectedExtras, setSelectedPages, setCount]);
+
+  // Aggiorna carrello in tempo reale quando stepTwoData cambia
+  useEffect(() => {
+    if (!stepTwoData) return;
+
+    const { selectedExtras = [], selectedPageOptionIds = [] } = stepTwoData;
+
+    setSelectedExtras(template.extras.filter((e) => selectedExtras.includes(e.id)));
+    setSelectedPages(template.extraPages.filter((p) => selectedPageOptionIds.includes(p.id)));
+
+    const count = 1 + selectedExtras.length + selectedPageOptionIds.length;
+    setCount(count);
+  }, [stepTwoData, setSelectedExtras, setSelectedPages, setCount, template.extras, template.extraPages]);
 
   useEffect(() => {
     window.scrollTo({ top: 500, behavior: "smooth" });
@@ -40,10 +53,11 @@ const TemplateDetails = () => {
   const handleNext = () => setCurrentStep((prev) => prev + 1);
   const handleBack = () => setCurrentStep((prev) => (prev > 0 ? prev - 1 : 0));
 
-  const handleSaveStepTwo = (data: any) => {
+  // Memoizza la funzione per evitare loop di render infiniti
+  const handleSaveStepTwo = useCallback((data: any) => {
     setStepTwoData(data);
     console.log("Dati Step 2 salvati:", data);
-  };
+  }, []);
 
   const handleStep2Finish = () => {
     setCanAccessStep3(true);
