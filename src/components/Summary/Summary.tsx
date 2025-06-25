@@ -15,6 +15,11 @@ const Summary: React.FC = () => {
     setCount(1); // solo pacchetto base
   };
 
+  const advanceThreshold = 5000;
+  const needsSplitPayment = totalPrice > advanceThreshold;
+  const advancePayment = needsSplitPayment ? totalPrice * 0.3 : totalPrice;
+  const remainingPayment = needsSplitPayment ? totalPrice * 0.7 : 0;
+
   return (
     <section className="summary" aria-label="Order summary">
       <div className="summary-logo-container">
@@ -44,8 +49,20 @@ const Summary: React.FC = () => {
         </tbody>
       </table>
 
-      <div className="total-container">
-        Total: {totalPrice.toFixed(2)} kr
+      <div className="total-container">Total: {totalPrice.toFixed(2)} kr</div>
+
+      <div className="payment-info">
+        {needsSplitPayment ? (
+          <>
+            <p>Betalning delas upp:</p>
+            <ul>
+              <li>30% förskottsbetalning: {advancePayment.toFixed(2)} kr</li>
+              <li>70% återstående vid leverans: {remainingPayment.toFixed(2)} kr</li>
+            </ul>
+          </>
+        ) : (
+          <p>Betalning sker i sin helhet vid beställning: {totalPrice.toFixed(2)} kr</p>
+        )}
       </div>
 
       <button className="btn-reset" onClick={handleReset}>

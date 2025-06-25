@@ -123,3 +123,27 @@
     background-color: #ddd;
   }
 }
+
+.payment-info {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f0f8ff;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #003366;
+
+  p {
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    list-style-type: disc;
+
+    li {
+      margin-bottom: 0.2rem;
+    }
+  }
+}
