@@ -6,6 +6,7 @@ import StepOne from "../Steps/StepOne";
 import StepTwo from "../Steps/StepTwo";
 import StepThree from "../Steps/StepThree";
 import InfoBanner from "../../components/InfoBanner/InfoBanner";
+import { useCart } from "../../Context/CartContext";
 import "./TemplateDetails.scss";
 
 type TemplateId = keyof typeof templateDetails;
@@ -20,6 +21,17 @@ const TemplateDetails = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepTwoData, setStepTwoData] = useState<any>(null);
   const [canAccessStep3, setCanAccessStep3] = useState(false);
+
+  const { setBasePackage, setSelectedExtras, setSelectedPages, setCount } = useCart();
+
+  // Inizializza carrello con basePackage e reset selezioni all’apertura/template cambiato
+  useEffect(() => {
+    if (!template) return;
+    setBasePackage(template.basePackage);
+    setSelectedExtras([]);
+    setSelectedPages([]);
+    setCount(1); // pacchetto base conta come 1
+  }, [template, setBasePackage, setSelectedExtras, setSelectedPages, setCount]);
 
   useEffect(() => {
     window.scrollTo({ top: 500, behavior: "smooth" });

@@ -93,6 +93,28 @@ const StepTwo: React.FC<StepTwoProps> = ({
     }
   }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
 
+  // Aggiorna il padre in tempo reale con i dati correnti
+  useEffect(() => {
+    onSave({
+      contentSentViaDemo,
+      selectedExtras,
+      sectionsNoteText,
+      noSectionChanges,
+      selectedPageOptionIds,
+      staticPageDescription,
+      noExtraPageNeeded,
+    });
+  }, [
+    contentSentViaDemo,
+    selectedExtras,
+    sectionsNoteText,
+    noSectionChanges,
+    selectedPageOptionIds,
+    staticPageDescription,
+    noExtraPageNeeded,
+    onSave,
+  ]);
+
   const toggleExtra = (id: string) => {
     if (backendSelected && extrasBlockedByBackend.includes(id)) return;
 
@@ -146,6 +168,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const handleNext = () => {
     if (wizardStep < 3) setWizardStep(wizardStep + 1);
     else {
+      // Chiamata finale per sicurezza
       onSave({
         contentSentViaDemo,
         selectedExtras,
