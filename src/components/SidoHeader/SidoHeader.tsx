@@ -1,10 +1,9 @@
-import { FaShoppingCart } from "react-icons/fa";
+import { FaReceipt } from "react-icons/fa";
 import "./sidoHeader.scss";
 import React from "react";
 import Logo from "../Logo/Logo";
 import SidoNavbar from "../SidoNavbar/SidoNavbar";
 import { useCart } from "../../Context/CartContext";
-
 
 const SidoHeader = () => {
   const { count } = useCart();
@@ -19,9 +18,9 @@ const SidoHeader = () => {
         <SidoNavbar />
       </div>
 
-       <div className="sido-subheader-right">
+      <div className="sido-subheader-right">
         <div className="sido-subheader-cart">
-          <FaShoppingCart />
+          <FaReceipt />
           <span className="cart-badge">{count}</span>
         </div>
       </div>

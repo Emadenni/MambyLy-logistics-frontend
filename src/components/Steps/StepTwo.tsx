@@ -52,6 +52,7 @@ interface StepTwoProps {
   onNext: () => void;
   onBack: () => void;
   onSave: (data: StepTwoState) => void;
+  onStep2Finish: () => void;  // Nuova prop
 }
 
 interface StepTwoState {
@@ -64,7 +65,7 @@ interface StepTwoState {
   noExtraPageNeeded: boolean;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) => {
+const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onStep2Finish }) => {
   const { setCount } = useCart();
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
@@ -76,11 +77,9 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
   const [noExtraPageNeeded, setNoExtraPageNeeded] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
 
-  // Questi sono gli ID degli extra che devono essere disabilitati se backend è selezionato
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
-  // Aggiorna il count del carrello: 1 per pacchetto base + extra selezionati + pagine extra
   useEffect(() => {
     if (wizardStep >= 1) {
       const totalCount = 1 + selectedExtras.length + selectedPageOptionIds.length;
@@ -88,27 +87,22 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
     }
   }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
 
-  // Toggle per extras con blocco su bokabord e avhaemtning se backend selezionato
   const toggleExtra = (id: string) => {
     if (backendSelected && extrasBlockedByBackend.includes(id)) return;
 
     setSelectedExtras((prev) => {
       if (id === "custom-backend" && prev.includes("custom-backend")) {
-        // Deseleziono backend, nessuna restrizione ora
         return prev.filter((e) => e !== "custom-backend");
       }
 
       if (id === "custom-backend" && !prev.includes("custom-backend")) {
-        // Seleziono backend, tolgo bokabord e avhaemtning se presenti
         return ["custom-backend", ...prev.filter(e => !extrasBlockedByBackend.includes(e))];
       }
 
-      // Toggle normale per tutti gli altri extra
       return prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
     });
   };
 
-  // Toggle per pagine extra
   const togglePageOption = (id: string) => {
     setSelectedPageOptionIds((prev) =>
       prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
@@ -155,7 +149,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
         staticPageDescription,
         noExtraPageNeeded,
       });
-      onNext();
+      onStep2Finish();  // Chiamo questa invece di onNext
     }
   };
 
@@ -267,7 +261,10 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave }) =
           <h4 style={{ marginTop: "2rem" }}>Extra sidalternativ (tilläggskostnad)</h4>
           <div
             className="extras-section"
-            style={{ opacity: noExtraPageNeeded ? 0.5 : 1, pointerEvents: noExtraPageNeeded ? "none" : "auto" }}
+            style={{
+              opacity: noExtraPageNeeded ? 0.5 : 1,
+              pointerEvents: noExtraPageNeeded ? "none" : "auto",
+            }}
           >
             {template.extraPages.map((pageOption) => (
               <label key={pageOption.id} className="checkbox-label">

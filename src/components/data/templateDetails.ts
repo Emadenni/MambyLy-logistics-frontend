@@ -21,12 +21,8 @@ export const templateDetails = {
       },
       { title: "Detaljer", text: "Välj eventuella extrafunktioner eller sektioner." },
       {
-        title: "Betala",
+        title: "Slutför",
         text: "När du är redo går du vidare till betalningen – snabbt och tryggt direkt via plattformen.",
-      },
-      {
-        title: "Vi tar över",
-        text: "Vi bygger klart din mall, optimerar och återkopplar med en version redo att lanseras.",
       },
     ],
     basePackage: {

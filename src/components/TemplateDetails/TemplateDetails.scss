@@ -2,55 +2,55 @@
   font-family: 'Inter', sans-serif;
   color: #222;
 
-  .template-hero {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 5rem 2rem;
-    margin-top: 6rem;
+.template-hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 3rem 2rem; // ridotto da 5rem a 3rem
+  margin-top: 6rem;
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: -1;
-    }
-
-    .template-logo {
-      position: relative;
-      max-width: 120px;
-      margin: 0 auto 1rem;
-    }
-
-    .template-title {
-      position: relative;
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .template-intro {
-      position: relative;
-      background: #fff8e1;
-      border-left: 4px solid #ffca28;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      font-size: 1rem;
-      max-width: 700px;
-      margin: 2rem auto 1rem;
-      color: #222;
-    }
-
-    .template-description {
-      position: relative;
-      font-size: 1.2rem;
-      font-weight: 500;
-      max-width: 700px;
-      margin: 0 auto;
-      color: #f0f0f0;
-    }
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
   }
+
+  .template-logo {
+    position: relative;
+    max-width: 90px; 
+    margin: 3rem auto 1rem;
+  }
+
+  .template-title {
+    position: relative;
+    font-size: 1.6rem; 
+    margin-bottom: 0.75rem; 
+  }
+
+  .template-intro {
+    position: relative;
+    background: #fff8e1;
+    border-left: 4px solid #ffca28;
+    padding: 0.75rem 1.25rem; 
+    border-radius: 8px;
+    font-size: 0.9rem; 
+    max-width: 700px;
+    margin: 1.5rem auto 1rem; 
+    color: #222;
+  }
+
+  .template-description {
+    position: relative;
+    font-size: 1rem; 
+    font-weight: 500;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #f0f0f0;
+  }
+}
 
   .template-not-found {
     text-align: center;
