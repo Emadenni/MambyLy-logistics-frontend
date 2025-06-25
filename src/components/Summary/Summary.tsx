@@ -1,25 +1,20 @@
 import React from "react";
 import Logo from "../../assets/images/mambylyLogoRestyled.webp";
-import "./Summary.scss"
+import "./Summary.scss";
+import { useCart } from "../../Context/CartContext";
 
-interface Extra {
-  id: string;
-  label: string;
-  price: number;
-}
+const Summary: React.FC = () => {
+  const { basePackage, selectedExtras, selectedPages, setSelectedExtras, setSelectedPages, setCount } = useCart();
 
-interface BasePackage {
-  description: string;
-  price: number;
-}
+  const extras = [...selectedExtras, ...selectedPages];
+  const totalPrice = basePackage.price + extras.reduce((sum, e) => sum + e.price, 0);
 
-interface SummaryProps {
-  basePackage: BasePackage;
-  extras: Extra[];
-  totalPrice: number;
-}
+  const handleReset = () => {
+    setSelectedExtras([]);
+    setSelectedPages([]);
+    setCount(1); // solo pacchetto base
+  };
 
-const Summary: React.FC<SummaryProps> = ({ basePackage, extras, totalPrice }) => {
   return (
     <section className="summary" aria-label="Order summary">
       <div className="summary-logo-container">
@@ -52,6 +47,10 @@ const Summary: React.FC<SummaryProps> = ({ basePackage, extras, totalPrice }) =>
       <div className="total-container">
         Total: {totalPrice.toFixed(2)} kr
       </div>
+
+      <button className="btn-reset" onClick={handleReset}>
+        Reset extras
+      </button>
     </section>
   );
 };

@@ -21,7 +21,7 @@
   }
 
   h2 {
-    font-size: 2.4rem;
+    font-size: 1.8rem;
     margin-bottom: 1.3rem;
     text-align: center;
     font-weight: 700;
@@ -45,7 +45,7 @@
 
     th,
     td {
-      padding: 0.85rem 1.2rem;
+      padding: 0.85rem 1rem;
       border-bottom: 1px solid #ddd;
     }
 
@@ -60,7 +60,7 @@
     td.description {
       text-align: left;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
 
     td.price {
@@ -76,7 +76,7 @@
     background-color: #ffca28;
     padding: 1.2rem 1.8rem;
     border-radius: 12px;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 900;
     text-align: right;
     color: #222;
@@ -106,5 +106,20 @@
     .total-container {
       font-size: 1.5rem;
     }
+  }
+}
+
+.btn-reset {
+  margin-top: 1rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #ddd;
   }
 }
