@@ -304,3 +304,18 @@
     }
   }
 }
+
+ .btn-back-end{
+      background-color: #cccccc;
+      color: #333;
+            flex: 1;
+      padding: 0.85rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
+      transition: background-color 0.3s ease;
+      font-family: "Inter", sans-serif;
+    }

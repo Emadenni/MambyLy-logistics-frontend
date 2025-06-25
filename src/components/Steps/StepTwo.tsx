@@ -52,7 +52,7 @@ interface StepTwoProps {
   onNext: () => void;
   onBack: () => void;
   onSave: (data: StepTwoState) => void;
-  onStep2Finish: () => void;  // Nuova prop
+  onStep2Finish: () => void;
 }
 
 interface StepTwoState {
@@ -65,7 +65,13 @@ interface StepTwoState {
   noExtraPageNeeded: boolean;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onStep2Finish }) => {
+const StepTwo: React.FC<StepTwoProps> = ({
+  template,
+  onNext,
+  onBack,
+  onSave,
+  onStep2Finish,
+}) => {
   const { setCount } = useCart();
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
@@ -96,7 +102,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
       }
 
       if (id === "custom-backend" && !prev.includes("custom-backend")) {
-        return ["custom-backend", ...prev.filter(e => !extrasBlockedByBackend.includes(e))];
+        return ["custom-backend", ...prev.filter((e) => !extrasBlockedByBackend.includes(e))];
       }
 
       return prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
@@ -149,7 +155,7 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
         staticPageDescription,
         noExtraPageNeeded,
       });
-      onStep2Finish();  // Chiamo questa invece di onNext
+      onStep2Finish();
     }
   };
 

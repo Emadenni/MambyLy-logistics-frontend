@@ -1,24 +1,56 @@
 import React from "react";
+import Summary from "../Summary/Summary";
+import "./Steps.scss"
 
 interface StepThreeProps {
   title: string;
   text: string;
   onBack: () => void;
-  // eventualmente onFinish per concludere tutto
+  summaryData: {
+    selectedExtras: string[];
+    selectedPageOptionIds: string[];
+  };
+  template: {
+    basePackage: {
+      description: string;
+      price: number;
+    };
+    extras: {
+      id: string;
+      label: string;
+      price: number;
+    }[];
+    extraPages: {
+      id: string;
+      label: string;
+      price: number;
+    }[];
+    steps: { title: string; text: string }[];
+  };
 }
 
-const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack }) => {
+const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack, summaryData, template }) => {
+  const { basePackage, extras, extraPages } = template;
+  const { selectedExtras, selectedPageOptionIds } = summaryData;
+
+  const selectedExtrasDetails = extras.filter((e) => selectedExtras.includes(e.id));
+  const selectedPagesDetails = extraPages.filter((p) => selectedPageOptionIds.includes(p.id));
+
+  const totalPrice =
+    basePackage.price +
+    selectedExtrasDetails.reduce((sum, e) => sum + e.price, 0) +
+    selectedPagesDetails.reduce((sum, p) => sum + p.price, 0);
+
   return (
     <div className="step-three">
-      <h3>{title}</h3>
-      <p>{text}</p>
-      <div style={{ marginTop: "2rem" }}>
-        {/* Qui puoi aggiungere qualsiasi testo di prova o info */}
-        <p>Här kan du lägga till information eller instruktioner för betalningen.</p>
-        <p>Vi skickar fakturan till dig via e-post efter att beställningen är klar.</p>
-      </div>
+      <Summary
+        basePackage={basePackage}
+        extras={[...selectedExtrasDetails, ...selectedPagesDetails]}
+        totalPrice={totalPrice}
+      />
+
       <div className="wizard-buttons" style={{ marginTop: "3rem" }}>
-        <button className="btn-back" onClick={onBack}>
+        <button className="btn-back-end" onClick={onBack}>
           ← Tillbaka
         </button>
       </div>

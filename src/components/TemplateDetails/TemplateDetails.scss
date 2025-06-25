@@ -138,3 +138,10 @@
     }
   }
 }
+
+.steps-nav button.disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  pointer-events: none;
+  user-select: none;
+}

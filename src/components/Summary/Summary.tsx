@@ -1,76 +1,58 @@
 import React from "react";
-import { useCart } from "../../Context/CartContext";
-import "./Summary.scss";
+import Logo from "../../assets/images/mambylyLogoRestyled.webp";
+import "./Summary.scss"
 
-interface SummaryProps {
-  basePackage: { description: string; price: number };
-  selectedExtras: { id: string; label: string; price: number }[];
-  selectedPages: { id: string; label: string; price: number }[];
-  sectionsNoteText: string;
-  staticPageDescription: string;
-  onRemoveExtra: (id: string) => void;
-  onRemovePage: (id: string) => void;
+interface Extra {
+  id: string;
+  label: string;
+  price: number;
 }
 
-const Summary: React.FC<SummaryProps> = ({
-  basePackage,
-  selectedExtras,
-  selectedPages,
-  sectionsNoteText,
-  staticPageDescription,
-  onRemoveExtra,
-  onRemovePage,
-}) => {
-  const extrasTotal = selectedExtras.reduce((sum, e) => sum + e.price, 0);
-  const pagesTotal = selectedPages.reduce((sum, p) => sum + p.price, 0);
-  const totalPrice = basePackage.price + extrasTotal + pagesTotal;
+interface BasePackage {
+  description: string;
+  price: number;
+}
 
+interface SummaryProps {
+  basePackage: BasePackage;
+  extras: Extra[];
+  totalPrice: number;
+}
+
+const Summary: React.FC<SummaryProps> = ({ basePackage, extras, totalPrice }) => {
   return (
-    <div className="summary">
-      <h2>Beställningsöversikt</h2>
+    <section className="summary" aria-label="Order summary">
+      <div className="summary-logo-container">
+        <img src={Logo} alt="Company Logo" className="summary-logo" />
+      </div>
 
-      <h3>Bas paket</h3>
-      <p>{basePackage.description}</p>
-      <p><strong>Pris: {basePackage.price} kr</strong></p>
+      <h2>Order Summary</h2>
 
-      <h3>Valda extrafunktioner</h3>
-      {selectedExtras.length === 0 && <p>Inga extrafunktioner valda.</p>}
-      <ul>
-        {selectedExtras.map((extra) => (
-          <li key={extra.id}>
-            <span>{extra.label} — {extra.price} kr</span>
-            <button onClick={() => onRemoveExtra(extra.id)}>Ta bort</button>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Pris (kr)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="description">{basePackage.description} (Bas Paket)</td>
+            <td className="price">{basePackage.price.toFixed(2)}</td>
+          </tr>
+          {extras.map((extra) => (
+            <tr key={extra.id}>
+              <td className="description">{extra.label}</td>
+              <td className="price">{extra.price.toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-      <h3>Valda extra sidor</h3>
-      {selectedPages.length === 0 && <p>Inga extra sidor valda.</p>}
-      <ul>
-        {selectedPages.map((page) => (
-          <li key={page.id}>
-            <span>{page.label} — {page.price} kr</span>
-            <button onClick={() => onRemovePage(page.id)}>Ta bort</button>
-          </li>
-        ))}
-      </ul>
-
-      <h3>Anteckningar om sektioner</h3>
-      {sectionsNoteText ? (
-        <p>{sectionsNoteText}</p>
-      ) : (
-        <p>Inga anteckningar tillagda.</p>
-      )}
-
-      <h3>Beskrivning statisk sida</h3>
-      {staticPageDescription ? (
-        <p>{staticPageDescription}</p>
-      ) : (
-        <p>Ingen statisk sida beskriven.</p>
-      )}
-
-      <div className="total-price">Totalt pris: <strong>{totalPrice} kr</strong></div>
-    </div>
+      <div className="total-container">
+        Total: {totalPrice.toFixed(2)} kr
+      </div>
+    </section>
   );
 };
 
