@@ -86,18 +86,17 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
-  // Aggiorna count carrello
+  // Aggiorna count carrello in base solo agli extra e pagine, NON aggiunge il pacchetto base
   useEffect(() => {
     if (wizardStep >= 1) {
-      const totalCount = 1 + selectedExtras.length + selectedPageOptionIds.length;
+      const totalCount = selectedExtras.length + selectedPageOptionIds.length;
       setCount(totalCount);
     }
   }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
 
-  // Memoizza onSave per evitare re-render inutili
   const memoizedOnSave = useCallback(onSave, [onSave]);
 
-  // Aggiorna genitore in tempo reale (evita loop con useCallback)
+  // Aggiorna genitore con stato attuale
   useEffect(() => {
     memoizedOnSave({
       contentSentViaDemo,

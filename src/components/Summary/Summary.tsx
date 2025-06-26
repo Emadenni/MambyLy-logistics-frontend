@@ -4,21 +4,41 @@ import "./Summary.scss";
 import { useCart } from "../../Context/CartContext";
 
 const Summary: React.FC = () => {
-  const { basePackage, selectedExtras, selectedPages, setSelectedExtras, setSelectedPages, setCount } = useCart();
+  const {
+    basePackage,
+    selectedExtras,
+    selectedPages,
+    resetCart,
+  } = useCart();
 
   const extras = [...selectedExtras, ...selectedPages];
-  const totalPrice = basePackage.price + extras.reduce((sum, e) => sum + e.price, 0);
+  const baseSelected = basePackage.price > 0;
+  const hasExtras = extras.length > 0;
 
-  const handleReset = () => {
-    setSelectedExtras([]);
-    setSelectedPages([]);
-    setCount(1); // solo pacchetto base
-  };
+  const totalPrice = baseSelected
+    ? basePackage.price + extras.reduce((sum, e) => sum + e.price, 0)
+    : 0;
 
   const advanceThreshold = 5000;
   const needsSplitPayment = totalPrice > advanceThreshold;
   const advancePayment = needsSplitPayment ? totalPrice * 0.3 : totalPrice;
   const remainingPayment = needsSplitPayment ? totalPrice * 0.7 : 0;
+
+  // Se niente selezionato, mostra messaggio e bottone reset disabilitato
+  if (!baseSelected && !hasExtras) {
+    return (
+      <section className="summary" aria-label="Order summary">
+        <div className="summary-logo-container">
+          <img src={Logo} alt="Company Logo" className="summary-logo" />
+        </div>
+        <h2>Order Summary</h2>
+        <p className="empty-message">Ingen val har gjorts än.</p>
+        <button className="btn-reset" disabled>
+          Reset extras
+        </button>
+      </section>
+    );
+  }
 
   return (
     <section className="summary" aria-label="Order summary">
@@ -65,7 +85,7 @@ const Summary: React.FC = () => {
         )}
       </div>
 
-      <button className="btn-reset" onClick={handleReset}>
+      <button className="btn-reset" onClick={resetCart}>
         Reset extras
       </button>
     </section>

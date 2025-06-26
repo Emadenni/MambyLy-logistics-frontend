@@ -22,38 +22,41 @@ const TemplateDetails = () => {
   const [stepTwoData, setStepTwoData] = useState<any>(null);
   const [canAccessStep3, setCanAccessStep3] = useState(false);
 
-  const { setBasePackage, setSelectedExtras, setSelectedPages, setCount } = useCart();
+  const {
+    basePackage, setBasePackage,
+    selectedExtras, setSelectedExtras,
+    selectedPages, setSelectedPages,
+    count, setCount
+  } = useCart();
 
-  // Inizializza carrello base package e reset selezioni quando cambia il template
-  useEffect(() => {
-    if (!template) return;
-    setBasePackage(template.basePackage);
-    setSelectedExtras([]);
-    setSelectedPages([]);
-    setCount(1); // conta solo il base package
-  }, [template, setBasePackage, setSelectedExtras, setSelectedPages, setCount]);
+  // NON inizializzare più il pacchetto base qui
+  // Verrà aggiunto solo da StepTwo al primo extra
 
-  // Aggiorna carrello in tempo reale quando stepTwoData cambia
+  // Aggiorna carrello quando stepTwoData cambia
   useEffect(() => {
     if (!stepTwoData) return;
 
-    const { selectedExtras = [], selectedPageOptionIds = [] } = stepTwoData;
+    const { selectedExtras: selExtras = [], selectedPageOptionIds: selPages = [] } = stepTwoData;
 
-    setSelectedExtras(template.extras.filter((e) => selectedExtras.includes(e.id)));
-    setSelectedPages(template.extraPages.filter((p) => selectedPageOptionIds.includes(p.id)));
+    // Se ci sono extras ma basePackage non è settato, impostalo ora
+    if (selExtras.length > 0 && (!basePackage || !basePackage.description)) {
+      setBasePackage(template.basePackage);
+    }
 
-    const count = 1 + selectedExtras.length + selectedPageOptionIds.length;
-    setCount(count);
-  }, [stepTwoData, setSelectedExtras, setSelectedPages, setCount, template.extras, template.extraPages]);
+    setSelectedExtras(template.extras.filter(e => selExtras.includes(e.id)));
+    setSelectedPages(template.extraPages.filter(p => selPages.includes(p.id)));
+
+    setCount( (selExtras.length > 0 ? 1 : 0) + selExtras.length + selPages.length );
+    // Nota: il pacchetto base vale 1 solo se ci sono extra
+  }, [stepTwoData, setBasePackage, basePackage, setSelectedExtras, setSelectedPages, setCount, template.extras, template.extraPages]);
 
   useEffect(() => {
     window.scrollTo({ top: 500, behavior: "smooth" });
   }, [currentStep]);
 
-  const handleNext = () => setCurrentStep((prev) => prev + 1);
-  const handleBack = () => setCurrentStep((prev) => (prev > 0 ? prev - 1 : 0));
+  const handleNext = () => setCurrentStep(prev => prev + 1);
+  const handleBack = () => setCurrentStep(prev => (prev > 0 ? prev - 1 : 0));
 
-  // Memoizza la funzione per evitare loop di render infiniti
   const handleSaveStepTwo = useCallback((data: any) => {
     setStepTwoData(data);
     console.log("Dati Step 2 salvati:", data);
