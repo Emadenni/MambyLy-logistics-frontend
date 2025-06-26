@@ -79,11 +79,11 @@ const StepTwo: React.FC<StepTwoProps> = ({
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
   const [selectedExtras, setSelectedExtras] = useState<string[]>(parsed?.selectedExtras || stepTwoData?.selectedExtras || []);
-  const [sectionsNoteText, setSectionsNoteText] = useState<string>(stepTwoData?.sectionsNoteText || "");
-  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(stepTwoData?.noSectionChanges || false);
+  const [sectionsNoteText, setSectionsNoteText] = useState<string>(parsed?.sectionsNoteText || stepTwoData?.sectionsNoteText || "");
+  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(parsed?.noSectionChanges || stepTwoData?.noSectionChanges || false);
   const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []);
-  const [staticPageDescription, setStaticPageDescription] = useState<string>(stepTwoData?.staticPageDescription || "");
-  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(stepTwoData?.noExtraPageNeeded || false);
+  const [staticPageDescription, setStaticPageDescription] = useState<string>(parsed?.staticPageDescription || stepTwoData?.staticPageDescription || "");
+  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(parsed?.noExtraPageNeeded || stepTwoData?.noExtraPageNeeded || false);
   const [wizardStep, setWizardStep] = useState<number>(1);
 
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
@@ -102,10 +102,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
     if (setStepTwoData) setStepTwoData(state);
     onSave(state);
 
-    localStorage.setItem(
-      "stepTwoSelections",
-      JSON.stringify({ selectedExtras, selectedPageOptionIds })
-    );
+    localStorage.setItem("stepTwoSelections", JSON.stringify(state));
   }, [
     contentSentViaDemo,
     selectedExtras,
