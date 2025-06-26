@@ -23,32 +23,51 @@ const TemplateDetails = () => {
   const [canAccessStep3, setCanAccessStep3] = useState(false);
 
   const {
-    basePackage, setBasePackage,
-    selectedExtras, setSelectedExtras,
-    selectedPages, setSelectedPages,
-    count, setCount
+    basePackage,
+    setBasePackage,
+    selectedExtras,
+    setSelectedExtras,
+    selectedPages,
+    setSelectedPages,
+    resetCart,
   } = useCart();
 
-  // NON inizializzare più il pacchetto base qui
-  // Verrà aggiunto solo da StepTwo al primo extra
+  useEffect(() => {
+    if (stepTwoData !== null) return;
 
-  // Aggiorna carrello quando stepTwoData cambia
+    const savedData = localStorage.getItem("stepTwoData");
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        setStepTwoData(parsed);
+      } catch (e) {
+        console.error("Failed to parse stepTwoData from localStorage", e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (!stepTwoData) return;
 
+    localStorage.setItem("stepTwoData", JSON.stringify(stepTwoData));
+
     const { selectedExtras: selExtras = [], selectedPageOptionIds: selPages = [] } = stepTwoData;
 
-    // Se ci sono extras ma basePackage non è settato, impostalo ora
     if (selExtras.length > 0 && (!basePackage || !basePackage.description)) {
       setBasePackage(template.basePackage);
+    } else if (selExtras.length === 0) {
+      setBasePackage({ description: "", price: 0 });
     }
 
-    setSelectedExtras(template.extras.filter(e => selExtras.includes(e.id)));
-    setSelectedPages(template.extraPages.filter(p => selPages.includes(p.id)));
+    const extrasFromTemplate = template.extras.filter(e => selExtras.includes(e.id));
+    const pagesFromTemplate = template.extraPages.filter(p => selPages.includes(p.id));
 
-    setCount( (selExtras.length > 0 ? 1 : 0) + selExtras.length + selPages.length );
-    // Nota: il pacchetto base vale 1 solo se ci sono extra
-  }, [stepTwoData, setBasePackage, basePackage, setSelectedExtras, setSelectedPages, setCount, template.extras, template.extraPages]);
+    setSelectedExtras(extrasFromTemplate);
+    setSelectedPages(pagesFromTemplate);
+  }, [
+    stepTwoData?.selectedExtras?.join(","),
+    stepTwoData?.selectedPageOptionIds?.join(","),
+  ]);
 
   useEffect(() => {
     window.scrollTo({ top: 500, behavior: "smooth" });
@@ -59,7 +78,6 @@ const TemplateDetails = () => {
 
   const handleSaveStepTwo = useCallback((data: any) => {
     setStepTwoData(data);
-    console.log("Dati Step 2 salvati:", data);
   }, []);
 
   const handleStep2Finish = () => {
@@ -115,19 +133,15 @@ const TemplateDetails = () => {
         <div className="overlay" />
         <img src={template.logo} alt={template.name} className="template-logo" />
         <h1 className="template-title">{template.name}</h1>
-
         <p className="template-description">{template.description}</p>
-
         <div className="template-intro">{template.intro}</div>
-
         <p className="template-intro-contact">
           Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på{" "}
           <a href="mailto:info@mambylysolutions.se">info@mambylysolutions.se</a>, via WhatsApp eller genom vårt
           kontaktformulär på{" "}
           <a href="https://mambylysolutions.se/kontaktaOss" target="_blank" rel="noopener noreferrer">
             huvudsidan
-          </a>
-          .
+          </a>.
         </p>
       </div>
 

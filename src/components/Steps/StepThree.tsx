@@ -34,9 +34,8 @@ const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack, summaryData,
   const { basePackage, extras, extraPages } = template;
   const { selectedExtras, selectedPageOptionIds } = summaryData;
 
-  const { setBasePackage, setSelectedExtras, setSelectedPages, setCount } = useCart();
+  const { setBasePackage, setSelectedExtras, setSelectedPages } = useCart();
 
-  // Stati per il form
   const [email, setEmail] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [hasDomain, setHasDomain] = useState(false);
@@ -49,9 +48,6 @@ const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack, summaryData,
     setBasePackage(basePackage);
     setSelectedExtras(selectedExtrasDetails);
     setSelectedPages(selectedPagesDetails);
-
-    const newCount = 1 + selectedExtrasDetails.length + selectedPagesDetails.length;
-    setCount(newCount);
   }, [
     basePackage,
     extras,
@@ -61,10 +57,8 @@ const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack, summaryData,
     setBasePackage,
     setSelectedExtras,
     setSelectedPages,
-    setCount,
   ]);
 
-  // Funzione di submit (per ora solo log in console, da integrare invio mail)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -90,8 +84,6 @@ const StepThree: React.FC<StepThreeProps> = ({ title, text, onBack, summaryData,
 
     console.log("Order summary to send:", orderSummary);
     alert("Order submitted! Controlla console per il riepilogo.");
-
-    // Qui puoi chiamare la funzione per inviare i dati via mail o API
   };
 
   return (

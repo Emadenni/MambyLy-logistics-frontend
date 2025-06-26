@@ -86,7 +86,7 @@ const Summary: React.FC = () => {
       </div>
 
       <button className="btn-reset" onClick={resetCart}>
-        Reset extras
+        Rensa val
       </button>
     </section>
   );

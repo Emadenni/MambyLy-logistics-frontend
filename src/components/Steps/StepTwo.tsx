@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../Context/CartContext";
 import "./Steps.scss";
 
@@ -55,7 +55,7 @@ interface StepTwoProps {
   onStep2Finish: () => void;
 }
 
-interface StepTwoState {
+export interface StepTwoState {
   contentSentViaDemo: boolean;
   selectedExtras: string[];
   sectionsNoteText: string;
@@ -72,33 +72,25 @@ const StepTwo: React.FC<StepTwoProps> = ({
   onSave,
   onStep2Finish,
 }) => {
-  const { setCount } = useCart();
+  const { stepTwoData, setStepTwoData } = useCart();
+
+  const stored = localStorage.getItem("stepTwoSelections");
+  const parsed = stored ? JSON.parse(stored) : null;
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
-  const [sectionsNoteText, setSectionsNoteText] = useState("");
-  const [noSectionChanges, setNoSectionChanges] = useState(false);
-  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>([]);
-  const [staticPageDescription, setStaticPageDescription] = useState("");
-  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState(false);
-  const [wizardStep, setWizardStep] = useState(1);
+  const [selectedExtras, setSelectedExtras] = useState<string[]>(parsed?.selectedExtras || stepTwoData?.selectedExtras || []);
+  const [sectionsNoteText, setSectionsNoteText] = useState<string>(stepTwoData?.sectionsNoteText || "");
+  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(stepTwoData?.noSectionChanges || false);
+  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []);
+  const [staticPageDescription, setStaticPageDescription] = useState<string>(stepTwoData?.staticPageDescription || "");
+  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(stepTwoData?.noExtraPageNeeded || false);
+  const [wizardStep, setWizardStep] = useState<number>(1);
 
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
-  // Aggiorna count carrello in base solo agli extra e pagine, NON aggiunge il pacchetto base
   useEffect(() => {
-    if (wizardStep >= 1) {
-      const totalCount = selectedExtras.length + selectedPageOptionIds.length;
-      setCount(totalCount);
-    }
-  }, [selectedExtras, selectedPageOptionIds, setCount, wizardStep]);
-
-  const memoizedOnSave = useCallback(onSave, [onSave]);
-
-  // Aggiorna genitore con stato attuale
-  useEffect(() => {
-    memoizedOnSave({
+    const state: StepTwoState = {
       contentSentViaDemo,
       selectedExtras,
       sectionsNoteText,
@@ -106,7 +98,14 @@ const StepTwo: React.FC<StepTwoProps> = ({
       selectedPageOptionIds,
       staticPageDescription,
       noExtraPageNeeded,
-    });
+    };
+    if (setStepTwoData) setStepTwoData(state);
+    onSave(state);
+
+    localStorage.setItem(
+      "stepTwoSelections",
+      JSON.stringify({ selectedExtras, selectedPageOptionIds })
+    );
   }, [
     contentSentViaDemo,
     selectedExtras,
@@ -115,21 +114,17 @@ const StepTwo: React.FC<StepTwoProps> = ({
     selectedPageOptionIds,
     staticPageDescription,
     noExtraPageNeeded,
-    memoizedOnSave,
   ]);
 
   const toggleExtra = (id: string) => {
     if (backendSelected && extrasBlockedByBackend.includes(id)) return;
-
     setSelectedExtras((prev) => {
       if (id === "custom-backend" && prev.includes("custom-backend")) {
         return prev.filter((e) => e !== "custom-backend");
       }
-
       if (id === "custom-backend" && !prev.includes("custom-backend")) {
         return ["custom-backend", ...prev.filter((e) => !extrasBlockedByBackend.includes(e))];
       }
-
       return prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
     });
   };
@@ -169,24 +164,13 @@ const StepTwo: React.FC<StepTwoProps> = ({
     }, 0);
 
   const handleNext = () => {
-    if (wizardStep < 3) setWizardStep(wizardStep + 1);
-    else {
-      memoizedOnSave({
-        contentSentViaDemo,
-        selectedExtras,
-        sectionsNoteText,
-        noSectionChanges,
-        selectedPageOptionIds,
-        staticPageDescription,
-        noExtraPageNeeded,
-      });
-      onStep2Finish();
-    }
+    if (wizardStep < 3) setWizardStep((prev) => prev + 1);
+    else onStep2Finish();
   };
 
   const handleBack = () => {
     if (wizardStep === 1) onBack();
-    else setWizardStep(wizardStep - 1);
+    else setWizardStep((prev) => prev - 1);
   };
 
   return (
@@ -209,23 +193,26 @@ const StepTwo: React.FC<StepTwoProps> = ({
 
           <div className="extras-section">
             <h4>Välj eventuella extrafunktioner</h4>
-            {template.extras.map((extra) => (
-              <label
-                key={extra.id}
-                className={`checkbox-label ${
-                  backendSelected && extrasBlockedByBackend.includes(extra.id) ? "disabled" : ""
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedExtras.includes(extra.id)}
-                  onChange={() => toggleExtra(extra.id)}
-                  disabled={backendSelected && extrasBlockedByBackend.includes(extra.id)}
-                />
-                <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
-                <strong>{extra.price} kr</strong>
-              </label>
-            ))}
+            {template.extras.map((extra) => {
+              const isDisabled = backendSelected && extrasBlockedByBackend.includes(extra.id);
+              const isSelected = selectedExtras.includes(extra.id);
+              return (
+                <div key={extra.id} className={`extra-row ${isDisabled ? "disabled" : ""}`}>
+                  <button
+                    type="button"
+                    className={`btn-add ${isSelected ? "selected" : ""}`}
+                    onClick={() => toggleExtra(extra.id)}
+                    disabled={isDisabled}
+                  >
+                    {isSelected ? "✓" : "+"}
+                  </button>
+                  <span>
+                    <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
+                    <strong>{extra.price} kr</strong>
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <div className="total-price">
@@ -297,18 +284,25 @@ const StepTwo: React.FC<StepTwoProps> = ({
               pointerEvents: noExtraPageNeeded ? "none" : "auto",
             }}
           >
-            {template.extraPages.map((pageOption) => (
-              <label key={pageOption.id} className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={selectedPageOptionIds.includes(pageOption.id)}
-                  onChange={() => togglePageOption(pageOption.id)}
-                  disabled={noExtraPageNeeded}
-                />
-                <strong>{pageOption.label}</strong> — {pageOption.description} — Pris:{" "}
-                <strong>{pageOption.price} kr</strong>
-              </label>
-            ))}
+            {template.extraPages.map((pageOption) => {
+              const isSelected = selectedPageOptionIds.includes(pageOption.id);
+              return (
+                <div key={pageOption.id} className="extra-row">
+                  <button
+                    type="button"
+                    className={`btn-add ${isSelected ? "selected" : ""}`}
+                    onClick={() => togglePageOption(pageOption.id)}
+                    disabled={noExtraPageNeeded}
+                  >
+                    {isSelected ? "✓" : "+"}
+                  </button>
+                  <span>
+                    <strong>{pageOption.label}</strong> — {pageOption.description} — Pris:{" "}
+                    <strong>{pageOption.price} kr</strong>
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <div className="total-price" style={{ marginTop: "2rem" }}>

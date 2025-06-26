@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { StepTwoState } from "../components/Steps/StepTwo";
 
 interface Item {
   id: string;
@@ -13,7 +20,6 @@ interface BasePackage {
 
 interface CartContextType {
   count: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
   selectedExtras: Item[];
   setSelectedExtras: React.Dispatch<React.SetStateAction<Item[]>>;
   selectedPages: Item[];
@@ -21,54 +27,38 @@ interface CartContextType {
   basePackage: BasePackage;
   setBasePackage: React.Dispatch<React.SetStateAction<BasePackage>>;
   resetCart: () => void;
+  stepTwoData?: StepTwoState;
+  setStepTwoData?: (data: StepTwoState) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
-
 const CART_STORAGE_KEY = "cartState";
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  // Caricamento iniziale da localStorage con fallback valori di default
-  const [selectedExtras, setSelectedExtras] = useState<Item[]>(() => {
+  const [selectedExtras, setSelectedExtras] = useState<Item[]>([]);
+  const [selectedPages, setSelectedPages] = useState<Item[]>([]);
+  const [basePackage, setBasePackage] = useState<BasePackage>({
+    description: "",
+    price: 0,
+  });
+  const [stepTwoData, setStepTwoDataState] = useState<StepTwoState | undefined>(undefined);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(CART_STORAGE_KEY);
-      if (!saved) return [];
-      const parsed = JSON.parse(saved);
-      return parsed.selectedExtras ?? [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setSelectedExtras(parsed.selectedExtras ?? []);
+        setSelectedPages(parsed.selectedPages ?? []);
+        setBasePackage(parsed.basePackage ?? { description: "", price: 0 });
+        setStepTwoDataState(parsed.stepTwoData ?? undefined);
+      }
     } catch {
-      return [];
+      // fallback silenzioso
     }
-  });
+  }, []);
 
-  const [selectedPages, setSelectedPages] = useState<Item[]>(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      if (!saved) return [];
-      const parsed = JSON.parse(saved);
-      return parsed.selectedPages ?? [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [basePackage, setBasePackage] = useState<BasePackage>(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      if (!saved) return { description: "", price: 0 };
-      const parsed = JSON.parse(saved);
-      return parsed.basePackage ?? { description: "", price: 0 };
-    } catch {
-      return { description: "", price: 0 };
-    }
-  });
-
-  // Calcola count dinamico: basePackage conta come 1 solo se prezzo > 0
-  const [count, setCount] = useState(() => {
-    const baseCount = basePackage.price > 0 ? 1 : 0;
-    return baseCount + selectedExtras.length + selectedPages.length;
-  });
-
-  // Aggiorna count e salva tutto su localStorage quando cambia qualcosa
   useEffect(() => {
     const baseCount = basePackage.price > 0 ? 1 : 0;
     const newCount = baseCount + selectedExtras.length + selectedPages.length;
@@ -78,15 +68,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       selectedExtras,
       selectedPages,
       basePackage,
+      stepTwoData,
       count: newCount,
     };
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(dataToSave));
-  }, [selectedExtras, selectedPages, basePackage]);
+  }, [selectedExtras, selectedPages, basePackage, stepTwoData]);
+
+  const setStepTwoData = (data: StepTwoState) => {
+    setStepTwoDataState(data);
+  };
 
   const resetCart = () => {
     setSelectedExtras([]);
     setSelectedPages([]);
     setBasePackage({ description: "", price: 0 });
+    setStepTwoDataState(undefined);
     setCount(0);
     localStorage.removeItem(CART_STORAGE_KEY);
   };
@@ -95,7 +91,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     <CartContext.Provider
       value={{
         count,
-        setCount,
         selectedExtras,
         setSelectedExtras,
         selectedPages,
@@ -103,6 +98,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         basePackage,
         setBasePackage,
         resetCart,
+        stepTwoData,
+        setStepTwoData,
       }}
     >
       {children}
@@ -114,4 +111,4 @@ export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) throw new Error("useCart must be used within CartProvider");
   return context;
-};  
+};
