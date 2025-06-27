@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Summary from "../Summary/Summary";
 import "./Steps.scss";
 import { useCart } from "../../Context/CartContext";
+import { useOrderStore } from "../../store/useOrderStore"; 
+import sendOrderConfirmation from "../../services/sendOrderConfirmation";
 
 interface StepThreeProps {
   title: string;
@@ -34,6 +36,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
   const { basePackage, extras, extraPages } = template;
   const { selectedExtras, selectedPageOptionIds } = summaryData;
   const { setBasePackage, setSelectedExtras, setSelectedPages } = useCart();
+  const { updateOrderField } = useOrderStore();
 
   const storedContact = localStorage.getItem("stepThreeContact");
   const parsedContact = storedContact ? JSON.parse(storedContact) : null;
@@ -43,8 +46,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
   const [projectName, setProjectName] = useState(parsedContact?.projectName || "");
   const [hasDomain, setHasDomain] = useState(parsedContact?.hasDomain || false);
   const [domainName, setDomainName] = useState(parsedContact?.domainName || "");
-
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [finalNotes, setFinalNotes] = useState(parsedContact?.finalNotes || "");
 
   useEffect(() => {
     const selectedExtrasDetails = extras.filter((e) => selectedExtras.includes(e.id));
@@ -56,55 +58,65 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
   }, []);
 
   useEffect(() => {
-    const contact = { email, companyName, projectName, hasDomain, domainName };
-    localStorage.setItem("stepThreeContact", JSON.stringify(contact));
-  }, [email, companyName, projectName, hasDomain, domainName]);
-
-  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-  const isValidDomain = (value: string) => /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value.trim());
-
-  const validateForm = () => {
-    const errs: { [key: string]: string } = {};
-    if (!isValidEmail(email)) errs.email = "Ange en giltig e-postadress.";
-    if (companyName.trim().length < 2) errs.companyName = "Företagsnamnet är för kort.";
-    if (projectName.trim().length < 2) errs.projectName = "Projektnamnet är för kort.";
-    if (hasDomain && !isValidDomain(domainName)) errs.domainName = "Ange ett giltigt domännamn (exempel.se).";
-    return errs;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    const selectedExtrasDetails = extras.filter((e) => selectedExtras.includes(e.id));
-    const selectedPagesDetails = extraPages.filter((p) => selectedPageOptionIds.includes(p.id));
-    const totalPrice =
-      basePackage.price +
-      selectedExtrasDetails.reduce((sum, e) => sum + e.price, 0) +
-      selectedPagesDetails.reduce((sum, p) => sum + p.price, 0);
-
-    const orderSummary = {
-      basePackage,
-      extras: selectedExtrasDetails,
-      extraPages: selectedPagesDetails,
-      totalPrice,
-      contactInfo: {
-        email,
-        companyName,
-        projectName,
-        hasDomain,
-        domainName: hasDomain ? domainName : "",
-      },
+    const contact = {
+      email,
+      companyName,
+      projectName,
+      hasDomain,
+      domainName,
+      finalNotes,
     };
 
-    console.log("Order summary to send:", orderSummary);
-    alert("Beställningen är skickad! Kontrollera konsolen.");
-    setErrors({});
+    localStorage.setItem("stepThreeContact", JSON.stringify(contact));
+
+    updateOrderField("email", email);
+    updateOrderField("company_name", companyName);
+    updateOrderField("project_name", projectName);
+    updateOrderField("has_domain", hasDomain ? "true" : "false");
+    updateOrderField("domain_name", hasDomain ? domainName : "-");
+    updateOrderField("final_notes", finalNotes);
+  }, [email, companyName, projectName, hasDomain, domainName, finalNotes]);
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const selectedExtrasDetails = extras.filter((e) => selectedExtras.includes(e.id));
+  const selectedPagesDetails = extraPages.filter((p) => selectedPageOptionIds.includes(p.id));
+  const totalPrice =
+    basePackage.price +
+    selectedExtrasDetails.reduce((sum, e) => sum + e.price, 0) +
+    selectedPagesDetails.reduce((sum, p) => sum + p.price, 0);
+
+  const orderSummary = {
+    basePackage,
+    extras: selectedExtrasDetails,
+    extraPages: selectedPagesDetails,
+    totalPrice,
+    contactInfo: {
+      email,
+      companyName,
+      projectName,
+      hasDomain,
+      domainName: hasDomain ? domainName : "",
+      finalNotes,
+    },
   };
+
+  console.log("Order summary to send:", orderSummary);
+
+  try {
+    const response = await sendOrderConfirmation();
+    if (response.success) {
+      alert(`Beställningen är skickad! Order-ID: ${response.order_id}`);
+    } else {
+      console.error("EmailJS error:", response.error);
+      alert("Något gick fel när beställningen skickades. Försök igen senare.");
+    }
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    alert("Ett oväntat fel uppstod. Försök igen.");
+  }
+};
 
   return (
     <div className="step-three">
@@ -129,11 +141,10 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
             id="email"
             placeholder="exempel@mail.com"
             required
+            pattern="^[^\s@]+@[^\s@]+\.(com|se|org|net|info|io|co)$"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className={errors.email ? "error" : ""}
           />
-          {errors.email && <p className="error-message">{errors.email}</p>}
         </div>
 
         <div className="form-group">
@@ -145,9 +156,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
             required
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
-            className={errors.companyName ? "error" : ""}
           />
-          {errors.companyName && <p className="error-message">{errors.companyName}</p>}
         </div>
 
         <div className="form-group">
@@ -161,9 +170,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
             value={projectName}
             required
             onChange={(e) => setProjectName(e.target.value)}
-            className={errors.projectName ? "error" : ""}
           />
-          {errors.projectName && <p className="error-message">{errors.projectName}</p>}
         </div>
 
         <div className="form-group checkbox-group">
@@ -181,11 +188,20 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
               placeholder="exempel.se"
               onChange={(e) => setDomainName(e.target.value)}
               required={hasDomain}
-              className={errors.domainName ? "error" : ""}
             />
-            {errors.domainName && <p className="error-message">{errors.domainName}</p>}
           </div>
         )}
+
+        <div className="form-group">
+          <label htmlFor="finalNotes">Anteckningar / meddelande (valfritt)</label>
+          <textarea
+            id="finalNotes"
+            rows={4}
+            value={finalNotes}
+            placeholder=""
+            onChange={(e) => setFinalNotes(e.target.value)}
+          />
+        </div>
 
         <div className="wizard-buttons" style={{ marginTop: "2rem" }}>
           <button type="button" className="btn-back-end" onClick={onBack}>
@@ -204,9 +220,11 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
           Första versionen levereras inom 48–72 timmar efter mottagen betalning och material.
           <br />
           <br />
-          <strong>Vissa funktioner som exempelvis anpassade backend-lösningar eller extra tjänster som CMS kan förlänga
-          utvecklingstiden. I sådana fall ger vi dig en mer realistisk tidsuppskattning så snart vi har analyserat din
-          beställning.</strong>
+          <strong>
+            Vissa funktioner som exempelvis anpassade backend-lösningar eller extra tjänster som CMS kan förlänga
+            utvecklingstiden. I sådana fall ger vi dig en mer realistisk tidsuppskattning så snart vi har analyserat din
+            beställning.
+          </strong>
         </p>
       </form>
     </div>

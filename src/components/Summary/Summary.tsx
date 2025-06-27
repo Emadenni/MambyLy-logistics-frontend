@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "../../assets/images/mambylyLogoRestyled.webp";
 import "./Summary.scss";
 import { useCart } from "../../Context/CartContext";
+import { useOrderStore } from "../../store/useOrderStore"; // AGGIUNTA
 
 const Summary: React.FC = () => {
   const {
@@ -11,6 +12,8 @@ const Summary: React.FC = () => {
     resetCart,
   } = useCart();
 
+  const { updateOrderField } = useOrderStore(); // AGGIUNTA
+
   const [localExtras, setLocalExtras] = useState([...selectedExtras]);
   const [localPages, setLocalPages] = useState([...selectedPages]);
   const [localBase, setLocalBase] = useState(basePackage);
@@ -19,6 +22,23 @@ const Summary: React.FC = () => {
     setLocalExtras([...selectedExtras]);
     setLocalPages([...selectedPages]);
     setLocalBase(basePackage);
+
+    const extrasTotal = [...selectedExtras, ...selectedPages].reduce(
+      (sum, e) => sum + e.price,
+      0
+    );
+    const total = basePackage?.price + extrasTotal;
+    const advanceThreshold = 5000;
+    const advance = total > advanceThreshold ? total * 0.3 : total;
+    const remaining = total > advanceThreshold ? total * 0.7 : 0;
+
+    localStorage.setItem("total_price", total.toFixed(2));
+    localStorage.setItem("advance_payment", advance.toFixed(2));
+    localStorage.setItem("remaining_payment", remaining.toFixed(2));
+
+    updateOrderField("total_price", total.toFixed(2));
+    updateOrderField("advance_payment", advance.toFixed(2));
+    updateOrderField("remaining_payment", remaining.toFixed(2));
   }, [selectedExtras, selectedPages, basePackage]);
 
   const extras = [...localExtras, ...localPages];
@@ -36,12 +56,11 @@ const Summary: React.FC = () => {
 
   const handleFullReset = () => {
     resetCart();
-
-    // Pulizia anche dei dati step 2 e 3 se li usi
     localStorage.removeItem("stepTwoSelections");
     localStorage.removeItem("stepThreeContact");
-
-    // Svuota gli stati locali
+    localStorage.removeItem("total_price");
+    localStorage.removeItem("advance_payment");
+    localStorage.removeItem("remaining_payment");
     setLocalExtras([]);
     setLocalPages([]);
     setLocalBase({ description: "", price: 0 });

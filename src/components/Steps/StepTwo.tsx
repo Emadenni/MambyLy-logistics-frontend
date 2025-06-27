@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../Context/CartContext";
+import { useOrderStore } from "../../store/useOrderStore";
 import "./Steps.scss";
 
 interface Extra {
@@ -65,8 +66,15 @@ export interface StepTwoState {
   noExtraPageNeeded: boolean;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onStep2Finish }) => {
+const StepTwo: React.FC<StepTwoProps> = ({
+  template,
+  onNext,
+  onBack,
+  onSave,
+  onStep2Finish,
+}) => {
   const { stepTwoData, setStepTwoData, wasReset } = useCart();
+  const { updateOrderField } = useOrderStore();
 
   const stored = localStorage.getItem("stepTwoSelections");
   const parsed = stored ? JSON.parse(stored) : null;
@@ -95,7 +103,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
-  // RESET FORZATO se `wasReset` è attivo
   useEffect(() => {
     if (wasReset) {
       setSelectedExtras([]);
@@ -119,7 +126,6 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
     }
   }, [wasReset]);
 
-  // Salvataggio persistente
   useEffect(() => {
     const state: StepTwoState = {
       contentSentViaDemo,
@@ -130,9 +136,17 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
       staticPageDescription,
       noExtraPageNeeded,
     };
+
     if (setStepTwoData) setStepTwoData(state);
     onSave(state);
     localStorage.setItem("stepTwoSelections", JSON.stringify(state));
+
+    // ✅ Salva tutto nello store
+    updateOrderField("selected_extras", selectedExtras);
+    updateOrderField("section_changes", noSectionChanges ? "-" : sectionsNoteText);
+    updateOrderField("include_free_page", noExtraPageNeeded ? "true" : "false");
+    updateOrderField("static_page_description", staticPageDescription);
+    updateOrderField("paid_extra_pages", selectedPageOptionIds);
   }, [
     contentSentViaDemo,
     selectedExtras,
@@ -146,34 +160,47 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
   const toggleExtra = (id: string) => {
     if (backendSelected && extrasBlockedByBackend.includes(id)) return;
     setSelectedExtras((prev) => {
+      let updated: string[] = [];
       if (id === "custom-backend" && prev.includes("custom-backend")) {
-        return prev.filter((e) => e !== "custom-backend");
+        updated = prev.filter((e) => e !== "custom-backend");
+      } else if (id === "custom-backend") {
+        updated = ["custom-backend", ...prev.filter((e) => !extrasBlockedByBackend.includes(e))];
+      } else {
+        updated = prev.includes(id)
+          ? prev.filter((e) => e !== id)
+          : [...prev, id];
       }
-      if (id === "custom-backend" && !prev.includes("custom-backend")) {
-        return ["custom-backend", ...prev.filter((e) => !extrasBlockedByBackend.includes(e))];
-      }
-      return prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
+      return updated;
     });
   };
 
   const togglePageOption = (id: string) => {
-    setSelectedPageOptionIds((prev) => (prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]));
+    setSelectedPageOptionIds((prev) => {
+      const updated = prev.includes(id)
+        ? prev.filter((e) => e !== id)
+        : [...prev, id];
+      return updated;
+    });
   };
 
   const handleNoSectionChangesChange = () => {
     setNoSectionChanges((prev) => {
-      if (!prev) setSectionsNoteText("");
-      return !prev;
+      const newValue = !prev;
+      if (newValue) {
+        setSectionsNoteText("");
+      }
+      return newValue;
     });
   };
 
   const handleNoExtraPageNeededChange = () => {
     setNoExtraPageNeeded((prev) => {
-      if (!prev) {
+      const newValue = !prev;
+      if (newValue) {
         setStaticPageDescription("");
         setSelectedPageOptionIds([]);
       }
-      return !prev;
+      return newValue;
     });
   };
 
@@ -211,8 +238,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
               Pris: <strong>{template.basePackage.price} kr</strong>
             </p>
             <p style={{ marginTop: "1rem", fontSize: "0.95rem", color: "darkOrange" }}>
-              Allt du behöver för att lyckas direkt: SEO, mobilanpassning, snabba laddtider, sociala medier, Google Maps
-              och ett intuitivt gränssnitt – plus 2 månader kostnadsfri support efter lansering.
+              Allt du behöver för att lyckas direkt: SEO, mobilanpassning, snabba laddtider,
+              sociala medier, Google Maps och ett intuitivt gränssnitt – plus 2 månader kostnadsfri support efter lansering.
             </p>
           </div>
 
@@ -232,7 +259,8 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
                     {isSelected ? "✓" : "+"}
                   </button>
                   <span>
-                    <strong>{extra.label}</strong> — {extra.description} — Pris: <strong>{extra.price} kr</strong>
+                    <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
+                    <strong>{extra.price} kr</strong>
                   </span>
                 </div>
               );
@@ -243,7 +271,9 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
             Totalt pris: <strong>{totalPrice} kr</strong>
           </div>
 
-          <p className="evidence">* Detta tillval kan förlänga utvecklingstiden beroende på dina behov och den tekniska integrationen som krävs. </p>
+          <p className="evidence">
+            * Detta tillval kan förlänga utvecklingstiden beroende på dina behov och den tekniska integrationen som krävs.
+          </p>
         </>
       )}
 
@@ -262,7 +292,10 @@ const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onS
             style={{ width: "100%" }}
             placeholder={template.sectionsNote.placeholder}
             value={sectionsNoteText}
-            onChange={(e) => setSectionsNoteText(e.target.value)}
+            onChange={(e) => {
+              setSectionsNoteText(e.target.value);
+              updateOrderField("section_changes", e.target.value);
+            }}
             disabled={noSectionChanges}
           />
           <p className="note">{template.sectionsNote.note}</p>

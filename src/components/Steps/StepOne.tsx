@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDemoStore } from "../../store/useDemoStore";
+import { useOrderStore } from "../../store/useOrderStore";
 import "./Steps.scss";
 
 interface StepOneProps {
@@ -19,12 +19,12 @@ interface StepOneProps {
 }
 
 const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
-  const { setContentSentViaDemo } = useDemoStore();
+  const { updateOrderField } = useOrderStore();
   const [choice, setChoice] = useState<null | boolean>(null);
 
   const handleNext = () => {
     if (choice !== null) {
-      setContentSentViaDemo(choice);
+      updateOrderField("content_via_demo", choice ? "true" : "false");
       onNext();
     }
   };
@@ -89,7 +89,7 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
         )}
       </div>
 
-         <button
+      <button
         className="btn-next"
         onClick={handleNext}
         style={{ marginTop: "2rem" }}
@@ -97,8 +97,6 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
       >
         Nästa steg →
       </button>
-
-      
 
       <div
         className="demo-iframe-wrapper"
@@ -116,8 +114,6 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
           loading="lazy"
         />
       </div>
-
-   
     </div>
   );
 };
