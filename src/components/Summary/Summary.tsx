@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/images/mambylyLogoRestyled.webp";
 import "./Summary.scss";
 import { useCart } from "../../Context/CartContext";
@@ -11,12 +11,22 @@ const Summary: React.FC = () => {
     resetCart,
   } = useCart();
 
-  const extras = [...selectedExtras, ...selectedPages];
-  const baseSelected = basePackage.price > 0;
+  const [localExtras, setLocalExtras] = useState([...selectedExtras]);
+  const [localPages, setLocalPages] = useState([...selectedPages]);
+  const [localBase, setLocalBase] = useState(basePackage);
+
+  useEffect(() => {
+    setLocalExtras([...selectedExtras]);
+    setLocalPages([...selectedPages]);
+    setLocalBase(basePackage);
+  }, [selectedExtras, selectedPages, basePackage]);
+
+  const extras = [...localExtras, ...localPages];
+  const baseSelected = localBase?.price > 0;
   const hasExtras = extras.length > 0;
 
   const totalPrice = baseSelected
-    ? basePackage.price + extras.reduce((sum, e) => sum + e.price, 0)
+    ? localBase.price + extras.reduce((sum, e) => sum + e.price, 0)
     : 0;
 
   const advanceThreshold = 5000;
@@ -24,7 +34,19 @@ const Summary: React.FC = () => {
   const advancePayment = needsSplitPayment ? totalPrice * 0.3 : totalPrice;
   const remainingPayment = needsSplitPayment ? totalPrice * 0.7 : 0;
 
-  // Se niente selezionato, mostra messaggio e bottone reset disabilitato
+  const handleFullReset = () => {
+    resetCart();
+
+    // Pulizia anche dei dati step 2 e 3 se li usi
+    localStorage.removeItem("stepTwoSelections");
+    localStorage.removeItem("stepThreeContact");
+
+    // Svuota gli stati locali
+    setLocalExtras([]);
+    setLocalPages([]);
+    setLocalBase({ description: "", price: 0 });
+  };
+
   if (!baseSelected && !hasExtras) {
     return (
       <section className="summary" aria-label="Order summary">
@@ -34,7 +56,7 @@ const Summary: React.FC = () => {
         <h2>Order Summary</h2>
         <p className="empty-message">Ingen val har gjorts än.</p>
         <button className="btn-reset" disabled>
-          Reset extras
+          Rensa val
         </button>
       </section>
     );
@@ -57,8 +79,8 @@ const Summary: React.FC = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="description">{basePackage.description} (Bas Paket)</td>
-            <td className="price">{basePackage.price.toFixed(2)}</td>
+            <td className="description">{localBase.description} (Bas Paket)</td>
+            <td className="price">{localBase.price.toFixed(2)}</td>
           </tr>
           {extras.map((extra) => (
             <tr key={extra.id}>
@@ -85,7 +107,7 @@ const Summary: React.FC = () => {
         )}
       </div>
 
-      <button className="btn-reset" onClick={resetCart}>
+      <button className="btn-reset" onClick={handleFullReset}>
         Rensa val
       </button>
     </section>

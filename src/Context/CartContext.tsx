@@ -29,6 +29,7 @@ interface CartContextType {
   resetCart: () => void;
   stepTwoData?: StepTwoState;
   setStepTwoData?: (data: StepTwoState) => void;
+  wasReset: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -42,34 +43,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     price: 0,
   });
   const [stepTwoData, setStepTwoDataState] = useState<StepTwoState | undefined>(undefined);
-  const [count, setCount] = useState(0);
+  const [wasReset, setWasReset] = useState(false);
+
+  const count = (basePackage.price > 0 ? 1 : 0) + selectedExtras.length + selectedPages.length;
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      if (saved) {
+    const saved = localStorage.getItem(CART_STORAGE_KEY);
+    if (saved) {
+      try {
         const parsed = JSON.parse(saved);
         setSelectedExtras(parsed.selectedExtras ?? []);
         setSelectedPages(parsed.selectedPages ?? []);
         setBasePackage(parsed.basePackage ?? { description: "", price: 0 });
         setStepTwoDataState(parsed.stepTwoData ?? undefined);
+      } catch (e) {
+        console.error("Errore parsing cartState", e);
       }
-    } catch {
-      // fallback silenzioso
     }
   }, []);
 
   useEffect(() => {
-    const baseCount = basePackage.price > 0 ? 1 : 0;
-    const newCount = baseCount + selectedExtras.length + selectedPages.length;
-    setCount(newCount);
-
     const dataToSave = {
       selectedExtras,
       selectedPages,
       basePackage,
       stepTwoData,
-      count: newCount,
     };
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(dataToSave));
   }, [selectedExtras, selectedPages, basePackage, stepTwoData]);
@@ -79,12 +77,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resetCart = () => {
+    const emptyStepTwoData: StepTwoState = {
+      contentSentViaDemo: false,
+      selectedExtras: [],
+      sectionsNoteText: "",
+      noSectionChanges: false,
+      selectedPageOptionIds: [],
+      staticPageDescription: "",
+      noExtraPageNeeded: false,
+    };
+
     setSelectedExtras([]);
     setSelectedPages([]);
     setBasePackage({ description: "", price: 0 });
-    setStepTwoDataState(undefined);
-    setCount(0);
-    localStorage.removeItem(CART_STORAGE_KEY);
+    setStepTwoDataState(emptyStepTwoData);
+
+    const dataToSave = {
+      selectedExtras: [],
+      selectedPages: [],
+      basePackage: { description: "", price: 0 },
+      stepTwoData: emptyStepTwoData,
+    };
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(dataToSave));
+    localStorage.removeItem("stepTwoSelections");
+
+    setWasReset(true);
+    setTimeout(() => setWasReset(false), 500);
   };
 
   return (
@@ -100,6 +118,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         resetCart,
         stepTwoData,
         setStepTwoData,
+        wasReset,
       }}
     >
       {children}

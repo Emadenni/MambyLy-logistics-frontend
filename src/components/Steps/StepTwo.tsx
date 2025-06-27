@@ -72,7 +72,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   onSave,
   onStep2Finish,
 }) => {
-  const { stepTwoData, setStepTwoData } = useCart();
+  const { stepTwoData, setStepTwoData, wasReset } = useCart();
 
   const stored = localStorage.getItem("stepTwoSelections");
   const parsed = stored ? JSON.parse(stored) : null;
@@ -89,6 +89,28 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
 
+  // RESET FORZATO se `wasReset` è attivo
+  useEffect(() => {
+    if (wasReset) {
+      setSelectedExtras([]);
+      setSectionsNoteText("");
+      setNoSectionChanges(false);
+      setSelectedPageOptionIds([]);
+      setStaticPageDescription("");
+      setNoExtraPageNeeded(false);
+      localStorage.setItem("stepTwoSelections", JSON.stringify({
+        contentSentViaDemo,
+        selectedExtras: [],
+        sectionsNoteText: "",
+        noSectionChanges: false,
+        selectedPageOptionIds: [],
+        staticPageDescription: "",
+        noExtraPageNeeded: false,
+      }));
+    }
+  }, [wasReset]);
+
+  // Salvataggio persistente
   useEffect(() => {
     const state: StepTwoState = {
       contentSentViaDemo,
@@ -101,7 +123,6 @@ const StepTwo: React.FC<StepTwoProps> = ({
     };
     if (setStepTwoData) setStepTwoData(state);
     onSave(state);
-
     localStorage.setItem("stepTwoSelections", JSON.stringify(state));
   }, [
     contentSentViaDemo,
