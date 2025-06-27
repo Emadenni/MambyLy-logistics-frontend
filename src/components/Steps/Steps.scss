@@ -51,6 +51,7 @@
         h3 {
           font-size: 1.2rem;
           margin-bottom: 0.5rem;
+          text-align: center;
         }
 
         p {
@@ -233,52 +234,6 @@
     }
   }
 
-  .wizard-buttons {
-    margin-top: 3rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-
-    .btn-back,
-    .btn-next {
-      flex: 1;
-      padding: 0.85rem 1.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
-      transition: background-color 0.3s ease;
-      font-family: "Inter", sans-serif;
-    }
-
-    .btn-back {
-      background-color: #cccccc;
-      color: #333;
-
-      &:hover {
-        background-color: #b3b3b3;
-      }
-    }
-
-    .btn-next {
-      background-color: #dbd714;
-      color: #0e3155;
-
-      &:hover {
-        background-color: #c3b212;
-      }
-
-      &:disabled {
-        background-color: #f2f2f2;
-        color: #999;
-        cursor: not-allowed;
-        box-shadow: none;
-      }
-    }
-  }
-
   @media (max-width: 600px) {
     padding: 1.5rem 1rem;
 
@@ -293,34 +248,25 @@
     .total-price {
       font-size: 1.1rem;
     }
-
-    .wizard-buttons {
-      flex-direction: column;
-
-      .btn-back,
-      .btn-next {
-        width: 100%;
-      }
-    }
   }
 }
 
- .btn-back-end{
-      background-color: #cccccc;
-      color: #333;
-            flex: 1;
-      padding: 0.85rem 1.5rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
-      transition: background-color 0.3s ease;
-      font-family: "Inter", sans-serif;
-    }
+.btn-back-end {
+  background-color: #cccccc;
+  color: #333;
+  flex: 1;
+  padding: 0.85rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
+  transition: background-color 0.3s ease;
+  font-family: "Inter", sans-serif;
+}
 
-    .step-three {
+.step-three {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
@@ -433,13 +379,13 @@
   }
 
   .order-info {
-  margin-top: 1rem;
-  font-size: 0.85rem;
-  line-height: 1.4;
-  color: #555;
-  font-style: italic;
-  user-select: none;
-}
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #555;
+    font-style: italic;
+    user-select: none;
+  }
 }
 
 .extra-row {
@@ -526,35 +472,89 @@
     gap: 0.5rem;
     margin-bottom: 1rem;
   }
+}
 
-  .wizard-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-  }
+/* GLOBAL BUTTON STYLES - usali ovunque, fuori dai wrapper */
 
+.btn-next,
+.btn-back,
+.btn-back-end,
+.btn-submit {
+  flex: 1;
+  padding: 0.85rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-family: "Inter", sans-serif;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-next {
+  background-color: #dbd714;
+  color: #0e3155;
+  box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
+}
+.btn-next:hover {
+  background-color: #c3b212;
+}
+.btn-next:disabled {
+  background-color: #f2f2f2;
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-back {
+  background-color: #cccccc;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
+}
+.btn-back:hover {
+  background-color: #b3b3b3;
+}
+
+.btn-back-end {
+  background-color: #ccc;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(219, 215, 20, 0.5);
+}
+.btn-back-end:hover {
+  background-color: #b3b3b3;
+}
+
+.btn-submit {
+  background-color: #007acc;
+  color: white;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+.btn-submit:hover {
+  background-color: #005fa3;
+}
+
+/* RESPONSIVE - Mobile */
+@media (max-width: 600px) {
+  .btn-next,
+  .btn-back,
+  .btn-back-end,
   .btn-submit {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #000;
-    }
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    margin: 0.2rem;
   }
+}
 
-  .btn-back-end {
-    background: none;
-    border: 1px solid #ccc;
-    padding: 0.75rem 1.5rem;
-    border-radius: 4px;
-    cursor: pointer;
+.demo-iframe-wrapper h2 {
+  text-align: center;
+  font-size: 1rem;
+  margin: 1rem;
+}
 
-    &:hover {
-      border-color: #999;
-    }
-  }
+.evidence {
+  font-weight: 500;
+  margin: 2rem auto;
+  padding-bottom: 2rem;
 }

@@ -113,7 +113,9 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
       <div className="notes-section" style={{ marginTop: "2rem" }}>
         <h4>Noter</h4>
         <ul>
-          <li>Vi ansvarar för att implementera och konfigurera hosting, domän och automatisk e-post för ditt projekt.</li>
+          <li>
+            Vi ansvarar för att implementera och konfigurera hosting, domän och automatisk e-post för ditt projekt.
+          </li>
           <li>Kostnader för externa tjänster täcks av kunden om de överstiger eventuella gratispaket.</li>
           <li>Två månaders support ingår. Extra support kan ordnas efter överenskommelse.</li>
         </ul>
@@ -165,12 +167,7 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
         </div>
 
         <div className="form-group checkbox-group">
-          <input
-            type="checkbox"
-            id="hasDomain"
-            checked={hasDomain}
-            onChange={() => setHasDomain(!hasDomain)}
-          />
+          <input type="checkbox" id="hasDomain" checked={hasDomain} onChange={() => setHasDomain(!hasDomain)} />
           <label htmlFor="hasDomain">Jag har redan en befintlig domän</label>
         </div>
 
@@ -205,6 +202,11 @@ const StepThree: React.FC<StepThreeProps> = ({ onBack, summaryData, template }) 
           Om du inte redan har skickat in innehåll via demo, kommer du att få instruktioner för hur du gör detta.
           <br />
           Första versionen levereras inom 48–72 timmar efter mottagen betalning och material.
+          <br />
+          <br />
+          <strong>Vissa funktioner som exempelvis anpassade backend-lösningar eller extra tjänster som CMS kan förlänga
+          utvecklingstiden. I sådana fall ger vi dig en mer realistisk tidsuppskattning så snart vi har analyserat din
+          beställning.</strong>
         </p>
       </form>
     </div>

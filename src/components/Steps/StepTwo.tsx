@@ -65,25 +65,31 @@ export interface StepTwoState {
   noExtraPageNeeded: boolean;
 }
 
-const StepTwo: React.FC<StepTwoProps> = ({
-  template,
-  onNext,
-  onBack,
-  onSave,
-  onStep2Finish,
-}) => {
+const StepTwo: React.FC<StepTwoProps> = ({ template, onNext, onBack, onSave, onStep2Finish }) => {
   const { stepTwoData, setStepTwoData, wasReset } = useCart();
 
   const stored = localStorage.getItem("stepTwoSelections");
   const parsed = stored ? JSON.parse(stored) : null;
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
-  const [selectedExtras, setSelectedExtras] = useState<string[]>(parsed?.selectedExtras || stepTwoData?.selectedExtras || []);
-  const [sectionsNoteText, setSectionsNoteText] = useState<string>(parsed?.sectionsNoteText || stepTwoData?.sectionsNoteText || "");
-  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(parsed?.noSectionChanges || stepTwoData?.noSectionChanges || false);
-  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []);
-  const [staticPageDescription, setStaticPageDescription] = useState<string>(parsed?.staticPageDescription || stepTwoData?.staticPageDescription || "");
-  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(parsed?.noExtraPageNeeded || stepTwoData?.noExtraPageNeeded || false);
+  const [selectedExtras, setSelectedExtras] = useState<string[]>(
+    parsed?.selectedExtras || stepTwoData?.selectedExtras || []
+  );
+  const [sectionsNoteText, setSectionsNoteText] = useState<string>(
+    parsed?.sectionsNoteText || stepTwoData?.sectionsNoteText || ""
+  );
+  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(
+    parsed?.noSectionChanges || stepTwoData?.noSectionChanges || false
+  );
+  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(
+    parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []
+  );
+  const [staticPageDescription, setStaticPageDescription] = useState<string>(
+    parsed?.staticPageDescription || stepTwoData?.staticPageDescription || ""
+  );
+  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(
+    parsed?.noExtraPageNeeded || stepTwoData?.noExtraPageNeeded || false
+  );
   const [wizardStep, setWizardStep] = useState<number>(1);
 
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
@@ -98,15 +104,18 @@ const StepTwo: React.FC<StepTwoProps> = ({
       setSelectedPageOptionIds([]);
       setStaticPageDescription("");
       setNoExtraPageNeeded(false);
-      localStorage.setItem("stepTwoSelections", JSON.stringify({
-        contentSentViaDemo,
-        selectedExtras: [],
-        sectionsNoteText: "",
-        noSectionChanges: false,
-        selectedPageOptionIds: [],
-        staticPageDescription: "",
-        noExtraPageNeeded: false,
-      }));
+      localStorage.setItem(
+        "stepTwoSelections",
+        JSON.stringify({
+          contentSentViaDemo,
+          selectedExtras: [],
+          sectionsNoteText: "",
+          noSectionChanges: false,
+          selectedPageOptionIds: [],
+          staticPageDescription: "",
+          noExtraPageNeeded: false,
+        })
+      );
     }
   }, [wasReset]);
 
@@ -148,9 +157,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   };
 
   const togglePageOption = (id: string) => {
-    setSelectedPageOptionIds((prev) =>
-      prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]
-    );
+    setSelectedPageOptionIds((prev) => (prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id]));
   };
 
   const handleNoSectionChangesChange = () => {
@@ -195,10 +202,6 @@ const StepTwo: React.FC<StepTwoProps> = ({
     <div className="step-two">
       <h3>Detaljer och extrafunktioner</h3>
 
-      <div className={`message ${contentSentViaDemo ? "success" : "warning"}`}>
-        {contentSentViaDemo ? template.messages.contentSent : template.messages.contentNotSent}
-      </div>
-
       {wizardStep === 1 && (
         <>
           <div className="base-package">
@@ -206,6 +209,10 @@ const StepTwo: React.FC<StepTwoProps> = ({
             <p>{template.basePackage.description}</p>
             <p>
               Pris: <strong>{template.basePackage.price} kr</strong>
+            </p>
+            <p style={{ marginTop: "1rem", fontSize: "0.95rem", color: "darkOrange" }}>
+              Allt du behöver för att lyckas direkt: SEO, mobilanpassning, snabba laddtider, sociala medier, Google Maps
+              och ett intuitivt gränssnitt – plus 2 månader kostnadsfri support efter lansering.
             </p>
           </div>
 
@@ -225,8 +232,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
                     {isSelected ? "✓" : "+"}
                   </button>
                   <span>
-                    <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
-                    <strong>{extra.price} kr</strong>
+                    <strong>{extra.label}</strong> — {extra.description} — Pris: <strong>{extra.price} kr</strong>
                   </span>
                 </div>
               );
@@ -236,17 +242,15 @@ const StepTwo: React.FC<StepTwoProps> = ({
           <div className="total-price">
             Totalt pris: <strong>{totalPrice} kr</strong>
           </div>
+
+          <p className="evidence">* Detta tillval kan förlänga utvecklingstiden beroende på dina behov och den tekniska integrationen som krävs. </p>
         </>
       )}
 
       {wizardStep === 2 && (
         <>
           <label className="checkbox-label" style={{ marginBottom: "1rem" }}>
-            <input
-              type="checkbox"
-              checked={noSectionChanges}
-              onChange={handleNoSectionChangesChange}
-            />
+            <input type="checkbox" checked={noSectionChanges} onChange={handleNoSectionChangesChange} />
             <strong>Jag vill inte ändra några sektioner</strong>
           </label>
 
@@ -272,11 +276,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
       {wizardStep === 3 && (
         <>
           <label className="checkbox-label" style={{ marginBottom: "1rem" }}>
-            <input
-              type="checkbox"
-              checked={noExtraPageNeeded}
-              onChange={handleNoExtraPageNeededChange}
-            />
+            <input type="checkbox" checked={noExtraPageNeeded} onChange={handleNoExtraPageNeededChange} />
             <strong>Jag behöver ingen extra sida</strong>
           </label>
 

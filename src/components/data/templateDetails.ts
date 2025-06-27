@@ -6,12 +6,11 @@ export const templateDetails = {
     name: "Piazza Grande",
     logo: piazzaLogo,
     backgroundImage: piazzaImg,
-    description:
-      "En komplett och responsiv mall för restauranger – med menyer, bokningar och mer.",
+    description: "En komplett och responsiv mall för restauranger – med menyer, bokningar och mer.",
     intro: `
       Gillar du den här mallen? Perfekt! Du kan återanvända den med dina egna texter och bilder – antingen via demon eller via mejl.
       Anpassa gallerier, byt sektioner eller lägg till en extra sida: vi hjälper dig hela vägen.
-      När vi fått innehåll och betalning startar vi – din förhandsversion är klar inom 48 timmar!
+      När vi fått innehåll och betalning startar vi – din förhandsversion är klar inom 48-72 timmar!
     `,
     demoLink: "https://main.d2nczcu0nsnr0f.amplifyapp.com/",
     steps: [
@@ -46,11 +45,12 @@ export const templateDetails = {
       },
       {
         id: "custom-backend",
-        label: "Eget backend-system",
+        label: "* Eget backend-system",
         description:
-          "Skräddarsydd backend utan externa beroenden. Hög initial kostnad, men sparar pengar på lång sikt.",
+          "Fullständig kontroll över system som bordsbokning (Boka Bord) och avhämtning (Takeaway) utan beroende av tredjepartstjänster. Inkluderar en skräddarsydd widget (som visas i demon). Långsiktig investering som minskar driftskostnader. ",
         price: 8000,
       },
+
       {
         id: "contact-form",
         label: "Separat kontaktformulär",
@@ -60,9 +60,44 @@ export const templateDetails = {
       {
         id: "reviews-section",
         label: "Recensioner",
-        description:
-          "En sektion för kundrecensioner som kan visas på startsidan eller en annan sida.",
+        description: "En sektion för kundrecensioner som kan visas på startsidan eller en annan sida.",
         price: 800,
+      },
+      {
+        id: "analytics",
+        label: "Webbanalys (Google Analytics eller Matomo)",
+        description:
+          "Installation och grundläggande konfiguration av ett verktyg för webbstatistik – t.ex. Google Analytics 4 eller Matomo.",
+        price: 600,
+      },
+      {
+        id: "clarity",
+        label: "Microsoft Clarity (Heatmap & Sessions)",
+        description:
+          "Integrering av Microsoft Clarity för att spåra användarbeteende med heatmaps och sessioninspelningar.",
+        price: 600,
+      },
+      {
+        id: "multilang",
+        label: "Flerspråkigt stöd (t.ex. svenska/engelska)",
+        description:
+          "Implementering av struktur för flerspråkigt innehåll (2 språk), inklusive växlare och SEO-optimering.",
+        price: 1500,
+      },
+      {
+        id: "extra-support",
+        label: "Utökat supportpaket",
+        description:
+          "Förlänger den inkluderade supporten från 2 till 6 månader totalt. Få extra trygghet och hjälp under lanseringsfasen.",
+        price: 800,
+      },
+
+      {
+        id: "cms-advanced",
+        label: "* CMS – Avancerad innehållshantering",
+        description:
+          "Avancerat innehållshanteringssystem (CMS) som ger dig möjlighet att själv uppdatera texter, bilder och menyer via en enkel adminpanel. Exempelvis med Strapi. ",
+        price: 2800,
       },
     ],
     messages: {
@@ -87,8 +122,7 @@ export const templateDetails = {
       {
         id: "events-page",
         label: "Evenemangssida",
-        description:
-          "Dynamisk sida för hantering av evenemang, inklusive kalenderfunktion.",
+        description: "Dynamisk sida för hantering av evenemang, inklusive kalenderfunktion.",
         price: 1500,
       },
       {
