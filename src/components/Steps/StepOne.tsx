@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useOrderStore } from "../../store/useOrderStore";
 import "./Steps.scss";
 
@@ -21,6 +21,12 @@ interface StepOneProps {
 const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
   const { updateOrderField } = useOrderStore();
   const [choice, setChoice] = useState<null | boolean>(null);
+  const stepRef = useRef<HTMLDivElement>(null);
+
+  // Scrolla su questo blocco al mount (rispetta scroll-margin-top)
+  useEffect(() => {
+    stepRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
+  }, []);
 
   const handleNext = () => {
     if (choice !== null) {
@@ -30,7 +36,7 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
   };
 
   return (
-    <div className="step-one">
+    <div className="step-one" id="step-one" ref={stepRef}>
       <h3>{template.steps[0].title}</h3>
       <p>{template.steps[0].text}</p>
 

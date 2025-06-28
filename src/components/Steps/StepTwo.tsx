@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "../../Context/CartContext";
 import { useOrderStore } from "../../store/useOrderStore";
 import "./Steps.scss";
@@ -75,33 +75,26 @@ const StepTwo: React.FC<StepTwoProps> = ({
 }) => {
   const { stepTwoData, setStepTwoData, wasReset } = useCart();
   const { updateOrderField } = useOrderStore();
+  const stepRef = useRef<HTMLDivElement>(null);
 
   const stored = localStorage.getItem("stepTwoSelections");
   const parsed = stored ? JSON.parse(stored) : null;
 
   const [contentSentViaDemo] = useState(template.contentSentViaDemo);
-  const [selectedExtras, setSelectedExtras] = useState<string[]>(
-    parsed?.selectedExtras || stepTwoData?.selectedExtras || []
-  );
-  const [sectionsNoteText, setSectionsNoteText] = useState<string>(
-    parsed?.sectionsNoteText || stepTwoData?.sectionsNoteText || ""
-  );
-  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(
-    parsed?.noSectionChanges || stepTwoData?.noSectionChanges || false
-  );
-  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(
-    parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []
-  );
-  const [staticPageDescription, setStaticPageDescription] = useState<string>(
-    parsed?.staticPageDescription || stepTwoData?.staticPageDescription || ""
-  );
-  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(
-    parsed?.noExtraPageNeeded || stepTwoData?.noExtraPageNeeded || false
-  );
+  const [selectedExtras, setSelectedExtras] = useState<string[]>(parsed?.selectedExtras || stepTwoData?.selectedExtras || []);
+  const [sectionsNoteText, setSectionsNoteText] = useState<string>(parsed?.sectionsNoteText || stepTwoData?.sectionsNoteText || "");
+  const [noSectionChanges, setNoSectionChanges] = useState<boolean>(parsed?.noSectionChanges || stepTwoData?.noSectionChanges || false);
+  const [selectedPageOptionIds, setSelectedPageOptionIds] = useState<string[]>(parsed?.selectedPageOptionIds || stepTwoData?.selectedPageOptionIds || []);
+  const [staticPageDescription, setStaticPageDescription] = useState<string>(parsed?.staticPageDescription || stepTwoData?.staticPageDescription || "");
+  const [noExtraPageNeeded, setNoExtraPageNeeded] = useState<boolean>(parsed?.noExtraPageNeeded || stepTwoData?.noExtraPageNeeded || false);
   const [wizardStep, setWizardStep] = useState<number>(1);
 
   const extrasBlockedByBackend = ["bokabord", "avhaemtning"];
   const backendSelected = selectedExtras.includes("custom-backend");
+
+  useEffect(() => {
+    window.scrollTo({ top: 500, behavior: "smooth" });
+  }, [wizardStep]);
 
   useEffect(() => {
     if (wasReset) {
@@ -111,18 +104,15 @@ const StepTwo: React.FC<StepTwoProps> = ({
       setSelectedPageOptionIds([]);
       setStaticPageDescription("");
       setNoExtraPageNeeded(false);
-      localStorage.setItem(
-        "stepTwoSelections",
-        JSON.stringify({
-          contentSentViaDemo,
-          selectedExtras: [],
-          sectionsNoteText: "",
-          noSectionChanges: false,
-          selectedPageOptionIds: [],
-          staticPageDescription: "",
-          noExtraPageNeeded: false,
-        })
-      );
+      localStorage.setItem("stepTwoSelections", JSON.stringify({
+        contentSentViaDemo,
+        selectedExtras: [],
+        sectionsNoteText: "",
+        noSectionChanges: false,
+        selectedPageOptionIds: [],
+        staticPageDescription: "",
+        noExtraPageNeeded: false,
+      }));
     }
   }, [wasReset]);
 
@@ -141,7 +131,6 @@ const StepTwo: React.FC<StepTwoProps> = ({
     onSave(state);
     localStorage.setItem("stepTwoSelections", JSON.stringify(state));
 
-    // ✅ Salva tutto nello store
     updateOrderField("selected_extras", selectedExtras);
     updateOrderField("section_changes", noSectionChanges ? "-" : sectionsNoteText);
     updateOrderField("include_free_page", noExtraPageNeeded ? "true" : "false");
@@ -166,9 +155,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
       } else if (id === "custom-backend") {
         updated = ["custom-backend", ...prev.filter((e) => !extrasBlockedByBackend.includes(e))];
       } else {
-        updated = prev.includes(id)
-          ? prev.filter((e) => e !== id)
-          : [...prev, id];
+        updated = prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
       }
       return updated;
     });
@@ -176,9 +163,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
 
   const togglePageOption = (id: string) => {
     setSelectedPageOptionIds((prev) => {
-      const updated = prev.includes(id)
-        ? prev.filter((e) => e !== id)
-        : [...prev, id];
+      const updated = prev.includes(id) ? prev.filter((e) => e !== id) : [...prev, id];
       return updated;
     });
   };
@@ -186,9 +171,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   const handleNoSectionChangesChange = () => {
     setNoSectionChanges((prev) => {
       const newValue = !prev;
-      if (newValue) {
-        setSectionsNoteText("");
-      }
+      if (newValue) setSectionsNoteText("");
       return newValue;
     });
   };
@@ -226,7 +209,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
   };
 
   return (
-    <div className="step-two">
+    <div className="step-two scroll-anchor" id="step-two" ref={stepRef}>
       <h3>Detaljer och extrafunktioner</h3>
 
       {wizardStep === 1 && (
@@ -234,9 +217,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
           <div className="base-package">
             <h4>Bas paket inkluderat</h4>
             <p>{template.basePackage.description}</p>
-            <p>
-              Pris: <strong>{template.basePackage.price} kr</strong>
-            </p>
+            <p>Pris: <strong>{template.basePackage.price} kr</strong></p>
             <p style={{ marginTop: "1rem", fontSize: "0.95rem", color: "darkOrange" }}>
               Allt du behöver för att lyckas direkt: SEO, mobilanpassning, snabba laddtider,
               sociala medier, Google Maps och ett intuitivt gränssnitt – plus 2 månader kostnadsfri support efter lansering.
@@ -259,8 +240,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
                     {isSelected ? "✓" : "+"}
                   </button>
                   <span>
-                    <strong>{extra.label}</strong> — {extra.description} — Pris:{" "}
-                    <strong>{extra.price} kr</strong>
+                    <strong>{extra.label}</strong> — {extra.description} — Pris: <strong>{extra.price} kr</strong>
                   </span>
                 </div>
               );
@@ -292,10 +272,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
             style={{ width: "100%" }}
             placeholder={template.sectionsNote.placeholder}
             value={sectionsNoteText}
-            onChange={(e) => {
-              setSectionsNoteText(e.target.value);
-              updateOrderField("section_changes", e.target.value);
-            }}
+            onChange={(e) => setSectionsNoteText(e.target.value)}
             disabled={noSectionChanges}
           />
           <p className="note">{template.sectionsNote.note}</p>
@@ -363,9 +340,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
       )}
 
       <div className="wizard-buttons">
-        <button className="btn-back" onClick={handleBack}>
-          ← Tillbaka
-        </button>
+        <button className="btn-back" onClick={handleBack}>← Tillbaka</button>
         <button className="btn-next" onClick={handleNext}>
           {wizardStep < 3 ? "Nästa steg →" : "Slutför →"}
         </button>
