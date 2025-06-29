@@ -67,7 +67,7 @@ const TemplateDetails = () => {
   }, [stepTwoData?.selectedExtras?.join(","), stepTwoData?.selectedPageOptionIds?.join(",")]);
 
   useEffect(() => {
-    window.scrollTo({ top: 500, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentStep]);
 
   const handleNext = () => setCurrentStep(prev => prev + 1);
