@@ -212,6 +212,17 @@ const StepTwo: React.FC<StepTwoProps> = ({
     <div className="step-two scroll-anchor" id="step-two" ref={stepRef}>
       <h3>Detaljer och extrafunktioner</h3>
 
+       <p className="template-intro-details">
+          Alla våra mallar inkluderar även möjligheten att lägga till en valfri statisk sida utan extra kostnad – till
+          exempel en sida om hållbarhet, karriär, galleri eller erbjudanden'. Du kan även byta plats, ta bort eller
+          kombinera upp till 3 sektioner enligt dina önskemål. Några exempel:
+          <br />
+          – Byt plats på menyn och kontaktformuläret
+          <br />
+          – Slå ihop sektionen “Vår filosofi” med “Om oss”
+          <br />– Ta bort hero-knappen eller visa den längre ner på sidan
+        </p>
+
       {wizardStep === 1 && (
         <>
           <div className="base-package">
@@ -304,7 +315,7 @@ const StepTwo: React.FC<StepTwoProps> = ({
             disabled={noExtraPageNeeded}
           />
 
-          <h4 style={{ marginTop: "2rem" }}>Extra sidalternativ (tilläggskostnad)</h4>
+          <h4 style={{ marginTop: "2rem" }}>Extra sidalternativ (tilläggskostnad) *</h4>
           <div
             className="extras-section"
             style={{
@@ -331,6 +342,10 @@ const StepTwo: React.FC<StepTwoProps> = ({
                 </div>
               );
             })}
+
+            <p className="evidence">
+            * Detta tillval kan förlänga utvecklingstiden beroende på dina behov och den tekniska integrationen som krävs.
+          </p>
           </div>
 
           <div className="total-price" style={{ marginTop: "2rem" }}>

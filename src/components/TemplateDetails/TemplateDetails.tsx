@@ -24,15 +24,8 @@ const TemplateDetails = () => {
   const [canAccessStep3, setCanAccessStep3] = useState(false);
   const [hasAnsweredStepOne, setHasAnsweredStepOne] = useState(false);
 
-  const {
-    basePackage,
-    setBasePackage,
-    selectedExtras,
-    setSelectedExtras,
-    selectedPages,
-    setSelectedPages,
-    resetCart,
-  } = useCart();
+  const { basePackage, setBasePackage, selectedExtras, setSelectedExtras, selectedPages, setSelectedPages, resetCart } =
+    useCart();
 
   useEffect(() => {
     if (stepTwoData !== null) return;
@@ -59,8 +52,8 @@ const TemplateDetails = () => {
       setBasePackage({ description: "", price: 0 });
     }
 
-    const extrasFromTemplate = template.extras.filter(e => selExtras.includes(e.id));
-    const pagesFromTemplate = template.extraPages.filter(p => selPages.includes(p.id));
+    const extrasFromTemplate = template.extras.filter((e) => selExtras.includes(e.id));
+    const pagesFromTemplate = template.extraPages.filter((p) => selPages.includes(p.id));
 
     setSelectedExtras(extrasFromTemplate);
     setSelectedPages(pagesFromTemplate);
@@ -70,8 +63,8 @@ const TemplateDetails = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentStep]);
 
-  const handleNext = () => setCurrentStep(prev => prev + 1);
-  const handleBack = () => setCurrentStep(prev => (prev > 0 ? prev - 1 : 0));
+  const handleNext = () => setCurrentStep((prev) => prev + 1);
+  const handleBack = () => setCurrentStep((prev) => (prev > 0 ? prev - 1 : 0));
 
   const handleSaveStepTwo = useCallback((data: any) => {
     setStepTwoData(data);
@@ -132,14 +125,17 @@ const TemplateDetails = () => {
         <h1 className="template-title">{template.name}</h1>
         <p className="template-description">{template.description}</p>
         <div className="template-intro">{template.intro}</div>
+      
         <p className="template-intro-contact">
-          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på {" "}
+          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på{" "}
           <a href="mailto:info@mambylysolutions.se">info@mambylysolutions.se</a>, via WhatsApp eller genom vårt
-          kontaktformulär på {" "}
+          kontaktformulär på{" "}
           <a href="https://mambylysolutions.se/kontaktaOss" target="_blank" rel="noopener noreferrer">
             huvudsidan
-          </a>.
+          </a>
+          .
         </p>
+         
       </div>
 
       <section className="template-steps">
