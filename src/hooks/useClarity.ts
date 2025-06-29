@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { safeParse } from "../utils/safeParse"; // assicurati che il path sia corretto
 
 const clarityId = import.meta.env.VITE_CLARITY_ID;
 
@@ -6,7 +7,13 @@ const clarityId = import.meta.env.VITE_CLARITY_ID;
 export const useClarity = () => {
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
-    const parsed = consent ? JSON.parse(consent) : null;
+    const parsed = safeParse(consent);
+
+    // 🔧 Se il valore è malformato (es. "all"), lo rimuovo per forzare nuovo consenso
+    if (consent && !parsed) {
+      localStorage.removeItem("cookieConsent");
+      return; // esco subito, Clarity non va caricato
+    }
 
     if (clarityId && parsed?.analytics === true) {
       injectClarity();
