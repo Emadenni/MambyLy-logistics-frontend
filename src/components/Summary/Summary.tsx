@@ -2,21 +2,45 @@ import React, { useEffect, useState } from "react";
 import Logo from "../../assets/images/mambylyLogoRestyled.webp";
 import "./Summary.scss";
 import { useCart } from "../../Context/CartContext";
-import { useOrderStore } from "../../store/useOrderStore"; // AGGIUNTA
+import { useOrderStore } from "../../store/useOrderStore";
 
 const Summary: React.FC = () => {
   const {
     basePackage,
+    setBasePackage,
     selectedExtras,
+    setSelectedExtras,
     selectedPages,
+    setSelectedPages,
     resetCart,
   } = useCart();
 
-  const { updateOrderField } = useOrderStore(); // AGGIUNTA
+  const { updateOrderField } = useOrderStore();
 
   const [localExtras, setLocalExtras] = useState([...selectedExtras]);
   const [localPages, setLocalPages] = useState([...selectedPages]);
   const [localBase, setLocalBase] = useState(basePackage);
+
+  const baseSelected = localBase?.price > 0;
+  const hasExtras = localExtras.length > 0 || localPages.length > 0;
+
+  // Aggiunta: funzione per aggiungere solo il base package
+  const handleAddBasePackage = () => {
+    const base = {
+      description: "Bas paket med SEO, mobilanpassning, support mm.",
+      price: 1990, // <-- usa il prezzo reale
+    };
+    setLocalBase(base);
+    setBasePackage(base);
+
+    const updatedCart = {
+      selectedExtras: [],
+      selectedPages: [],
+      basePackage: base,
+      stepTwoData: undefined,
+    };
+    localStorage.setItem("cartState", JSON.stringify(updatedCart));
+  };
 
   useEffect(() => {
     setLocalExtras([...selectedExtras]);
@@ -41,12 +65,8 @@ const Summary: React.FC = () => {
     updateOrderField("remaining_payment", remaining.toFixed(2));
   }, [selectedExtras, selectedPages, basePackage]);
 
-  const extras = [...localExtras, ...localPages];
-  const baseSelected = localBase?.price > 0;
-  const hasExtras = extras.length > 0;
-
   const totalPrice = baseSelected
-    ? localBase.price + extras.reduce((sum, e) => sum + e.price, 0)
+    ? localBase.price + [...localExtras, ...localPages].reduce((sum, e) => sum + e.price, 0)
     : 0;
 
   const advanceThreshold = 5000;
@@ -74,12 +94,14 @@ const Summary: React.FC = () => {
         </div>
         <h2>Order Summary</h2>
         <p className="empty-message">Ingen val har gjorts än.</p>
-        <button className="btn-reset" disabled>
-          Rensa val
+        <button className="btn-add-base" onClick={handleAddBasePackage}>
+          Lägg till endast Bas Paket (1990 kr)
         </button>
       </section>
     );
   }
+
+  const extras = [...localExtras, ...localPages];
 
   return (
     <section className="summary" aria-label="Order summary">
@@ -97,10 +119,12 @@ const Summary: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="description">{localBase.description} (Bas Paket)</td>
-            <td className="price">{localBase.price.toFixed(2)}</td>
-          </tr>
+          {baseSelected && (
+            <tr>
+              <td className="description">{localBase.description} (Bas Paket)</td>
+              <td className="price">{localBase.price.toFixed(2)}</td>
+            </tr>
+          )}
           {extras.map((extra) => (
             <tr key={extra.id}>
               <td className="description">{extra.label}</td>
@@ -126,9 +150,9 @@ const Summary: React.FC = () => {
         )}
       </div>
 
-      <button className="btn-reset" onClick={handleFullReset}>
-        Rensa val
-      </button>
+    <button className="btn-reset" onClick={() => resetCart(false)}>
+  Rensa val
+</button>
     </section>
   );
 };

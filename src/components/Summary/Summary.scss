@@ -147,3 +147,19 @@
     }
   }
 }
+
+.btn-add-base {
+  background-color: #222;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.btn-add-base:hover {
+  background-color: #444;
+}

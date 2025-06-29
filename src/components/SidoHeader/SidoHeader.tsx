@@ -23,32 +23,11 @@ const SidoHeader = () => {
       </div>
 
       <div className="sido-subheader-right">
-        <div
-          className="sido-subheader-cart"
-          onClick={toggleSummary}
-          style={{ cursor: "pointer" }}
-          aria-label="Show order summary"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleSummary(); }}
-        >
+        <div className="sido-subheader-cart" role="presentation">
           <FaReceipt />
           <span className="cart-badge">{count}</span>
         </div>
       </div>
-
-      {showSummary && (
-        <div className="summary-modal" role="dialog" aria-modal="true" aria-label="Order Summary Modal">
-          <button
-            className="close-btn"
-            onClick={() => setShowSummary(false)}
-            aria-label="Close order summary"
-          >
-            ×
-          </button>
-          <Summary />
-        </div>
-      )}
     </header>
   );
 };
