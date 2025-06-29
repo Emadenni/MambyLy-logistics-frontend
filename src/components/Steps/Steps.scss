@@ -1,5 +1,5 @@
 .template-steps {
-  padding: 2rem 1rem;
+  padding: 2rem 0rem;
 
   .steps-nav {
     display: flex;
@@ -27,6 +27,7 @@
       @media (max-width: 600px) {
         font-size: 0.7rem;
         padding: 0.4rem 0.6rem;
+        text-align: center;
       }
     }
   }
@@ -82,6 +83,7 @@
 }
 
 .step-two {
+  width: 100%;
   max-width: 600px;
   margin: 2rem auto;
   padding: 2rem 1.5rem;
@@ -557,7 +559,4 @@
   font-weight: 500;
   margin: 2rem auto;
   padding-bottom: 2rem;
-}
-.scroll-anchor {
-  scroll-margin-top: 50rem !important;
 }
