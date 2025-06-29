@@ -16,17 +16,22 @@ interface StepOneProps {
     }[];
   };
   onNext: () => void;
+  onAnswered: () => void;
 }
 
-const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
+const StepOne: React.FC<StepOneProps> = ({ template, onNext, onAnswered }) => {
   const { updateOrderField } = useOrderStore();
   const [choice, setChoice] = useState<null | boolean>(null);
   const stepRef = useRef<HTMLDivElement>(null);
 
-  // Scrolla su questo blocco al mount (rispetta scroll-margin-top)
   useEffect(() => {
     stepRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
   }, []);
+
+  const handleSelect = (val: boolean) => {
+    setChoice(val);
+    onAnswered();
+  };
 
   const handleNext = () => {
     if (choice !== null) {
@@ -64,7 +69,7 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
             name="demoChoice"
             value="yes"
             checked={choice === true}
-            onChange={() => setChoice(true)}
+            onChange={() => handleSelect(true)}
           />{" "}
           Ja, jag har redan skickat innehållet via demon
         </label>
@@ -75,7 +80,7 @@ const StepOne: React.FC<StepOneProps> = ({ template, onNext }) => {
             name="demoChoice"
             value="no"
             checked={choice === false}
-            onChange={() => setChoice(false)}
+            onChange={() => handleSelect(false)}
           />{" "}
           Nej, jag vill skicka innehållet på ett annat sätt
         </label>

@@ -1,3 +1,4 @@
+// TemplateDetails.tsx
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { templateDetails } from "../data/templateDetails";
@@ -21,6 +22,7 @@ const TemplateDetails = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepTwoData, setStepTwoData] = useState<any>(null);
   const [canAccessStep3, setCanAccessStep3] = useState(false);
+  const [hasAnsweredStepOne, setHasAnsweredStepOne] = useState(false);
 
   const {
     basePackage,
@@ -34,7 +36,6 @@ const TemplateDetails = () => {
 
   useEffect(() => {
     if (stepTwoData !== null) return;
-
     const savedData = localStorage.getItem("stepTwoData");
     if (savedData) {
       try {
@@ -48,7 +49,6 @@ const TemplateDetails = () => {
 
   useEffect(() => {
     if (!stepTwoData) return;
-
     localStorage.setItem("stepTwoData", JSON.stringify(stepTwoData));
 
     const { selectedExtras: selExtras = [], selectedPageOptionIds: selPages = [] } = stepTwoData;
@@ -64,10 +64,7 @@ const TemplateDetails = () => {
 
     setSelectedExtras(extrasFromTemplate);
     setSelectedPages(pagesFromTemplate);
-  }, [
-    stepTwoData?.selectedExtras?.join(","),
-    stepTwoData?.selectedPageOptionIds?.join(","),
-  ]);
+  }, [stepTwoData?.selectedExtras?.join(","), stepTwoData?.selectedPageOptionIds?.join(",")]);
 
   useEffect(() => {
     window.scrollTo({ top: 500, behavior: "smooth" });
@@ -88,7 +85,7 @@ const TemplateDetails = () => {
   const renderStepContent = (stepIndex: number) => {
     switch (stepIndex) {
       case 0:
-        return <StepOne template={template} onNext={handleNext} />;
+        return <StepOne template={template} onNext={handleNext} onAnswered={() => setHasAnsweredStepOne(true)} />;
       case 1:
         return (
           <StepTwo
@@ -136,9 +133,9 @@ const TemplateDetails = () => {
         <p className="template-description">{template.description}</p>
         <div className="template-intro">{template.intro}</div>
         <p className="template-intro-contact">
-          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på{" "}
+          Följ gärna stegen nedan noggrant. Om du har några frågor är du välkommen att kontakta oss på {" "}
           <a href="mailto:info@mambylysolutions.se">info@mambylysolutions.se</a>, via WhatsApp eller genom vårt
-          kontaktformulär på{" "}
+          kontaktformulär på {" "}
           <a href="https://mambylysolutions.se/kontaktaOss" target="_blank" rel="noopener noreferrer">
             huvudsidan
           </a>.
@@ -148,7 +145,7 @@ const TemplateDetails = () => {
       <section className="template-steps">
         <div className="steps-nav">
           {template.steps.map((step, i) => {
-            const isDisabled = i === 2 && !canAccessStep3;
+            const isDisabled = (i === 1 && !hasAnsweredStepOne) || (i === 2 && !canAccessStep3);
             return (
               <button
                 key={i}
