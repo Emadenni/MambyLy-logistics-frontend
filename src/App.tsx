@@ -25,6 +25,17 @@ const App = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [splashDone, setSplashDone] = useState<boolean>(false);
 
+    const clarityId = import.meta.env.VITE_CLARITY_ID;
+
+  useEffect(() => {
+    if (clarityId && import.meta.env.MODE === "production") {
+      const script = document.createElement("script");
+      script.src = `https://www.clarity.ms/tag/${clarityId}`;
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
+
   useEffect(() => {
     const seen = sessionStorage.getItem("introSeen");
     if (seen === "true") {
