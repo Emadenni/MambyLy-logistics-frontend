@@ -7,6 +7,7 @@ import PromoBanner from "./components/PromoBanner/PromoBanner";
 import PublicLayout from "./components/PublicLayout";
 import IntroSplash from "./components/IntroSplash/IntroSplash";
 import { CartProvider } from "./Context/CartContext";
+import { useClarity } from "./hooks/useClarity";
 
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
@@ -22,19 +23,10 @@ import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
 const App = () => {
+  useClarity();
+
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [splashDone, setSplashDone] = useState<boolean>(false);
-
-    const clarityId = import.meta.env.VITE_CLARITY_ID;
-
-  useEffect(() => {
-    if (clarityId && import.meta.env.MODE === "production") {
-      const script = document.createElement("script");
-      script.src = `https://www.clarity.ms/tag/${clarityId}`;
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
 
   useEffect(() => {
     const seen = sessionStorage.getItem("introSeen");
@@ -53,48 +45,40 @@ const App = () => {
   }
 
   return (
-  <HelmetProvider>
-    <CartProvider>
-      <Router>
-        <ScrollToTop />
-        <PromoBanner />
-        <Routes>
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/tjänster" element={<Services />} />
-            <Route path="/kontaktaOss" element={<ContactUs />} />
-            <Route path="/jobbaMedOss" element={<WorkWithUs />} />
-            <Route path="/omOss" element={<AboutUs />} />
-            <Route path="/sidoButik" element={<SidoButik />} />
-            <Route path="/sidoButik/mallar" element={<Templates />} />
-            <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-          <Route path="/login" element={<LoginForm />} />
-          <Route
-            path="/admin"
-            element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />}
-          />
-        </Routes>
+    <HelmetProvider>
+      <CartProvider>
+        <Router>
+          <ScrollToTop />
+          <PromoBanner />
+          <Routes>
+            <Route element={<PublicLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/tjänster" element={<Services />} />
+              <Route path="/kontaktaOss" element={<ContactUs />} />
+              <Route path="/jobbaMedOss" element={<WorkWithUs />} />
+              <Route path="/omOss" element={<AboutUs />} />
+              <Route path="/sidoButik" element={<SidoButik />} />
+              <Route path="/sidoButik/mallar" element={<Templates />} />
+              <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
+          </Routes>
 
-        <a
-          href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="WhatsApp"
-          className="whatsapp-icon"
-        >
-          <img
-            src={whatsapp_icon}
-            alt="whatsapp_icon"
-            className="social_icon"
-            loading="lazy"
-          />
-        </a>
-      </Router>
-    </CartProvider>
-  </HelmetProvider>
-);
+          <a
+            href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="whatsapp-icon"
+          >
+            <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
+          </a>
+        </Router>
+      </CartProvider>
+    </HelmetProvider>
+  );
 };
 
 export default App;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
 import React from "react";
+import { injectClarity } from "../../hooks/useClarity"; // ← IMPORTA QUI
 
 const CookieConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -26,32 +27,24 @@ const CookieConsentBanner: React.FC = () => {
   }, [showBanner]);
 
   const handleConsent = (choice: "all" | "essential" | "custom" | "reject") => {
+    let finalConsent = {
+      essential: true,
+      analytics: false,
+      marketing: false,
+    };
+
     if (choice === "all") {
-      localStorage.setItem(
-        "cookieConsent",
-        JSON.stringify({
-          essential: true,
-          analytics: true,
-          marketing: true,
-        })
-      );
-    } else if (choice === "essential" || choice === "reject") {
-      localStorage.setItem(
-        "cookieConsent",
-        JSON.stringify({
-          essential: true,
-          analytics: false,
-          marketing: false,
-        })
-      );
+      finalConsent.analytics = true;
+      finalConsent.marketing = true;
     } else if (choice === "custom") {
-      localStorage.setItem(
-        "cookieConsent",
-        JSON.stringify({
-          essential: true,
-          ...preferences,
-        })
-      );
+      finalConsent = { essential: true, ...preferences };
+    }
+
+    localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
+
+    // 👉 Inietta lo script Clarity solo se analytics = true
+    if (finalConsent.analytics) {
+      injectClarity();
     }
 
     setShowBanner(false);
