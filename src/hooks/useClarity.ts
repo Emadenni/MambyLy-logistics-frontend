@@ -9,11 +9,6 @@ export const useClarity = () => {
     const consent = localStorage.getItem("cookieConsent");
     const parsed = safeParse(consent);
 
-    console.log("🧪 useClarity attivato");
-    console.log("📦 Consent letto:", parsed);
-    console.log("🌍 Env mode:", import.meta.env.MODE);
-    console.log("🆔 Clarity ID:", clarityId);
-
     if (consent && !parsed) {
       console.warn("❌ Consent non valido, lo rimuovo");
       localStorage.removeItem("cookieConsent");
@@ -22,10 +17,8 @@ export const useClarity = () => {
     }
 
     if (clarityId && parsed?.analytics === true) {
-      console.log("🚀 Avvio Clarity con ID:", clarityId);
       clarity.init(clarityId);
     } else {
-      console.log("⏹️ Clarity NON avviato: condizione non soddisfatta");
     }
   }, []);
 };
