@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
 import React from "react";
-import { injectClarity } from "../../hooks/useClarity"; // ← IMPORTA QUI
+import clarity from "@microsoft/clarity";
+
+const clarityId = import.meta.env.VITE_CLARITY_ID;
 
 const CookieConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -11,19 +13,31 @@ const CookieConsentBanner: React.FC = () => {
     marketing: false,
   });
 
+  // Mostra banner se non c'è consenso
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
-    if (!consent) {
+
+    try {
+      const parsed = consent ? JSON.parse(consent) : null;
+      if (!parsed || typeof parsed !== "object") {
+        throw new Error("Invalid consent format");
+      }
+    } catch {
+      localStorage.removeItem("cookieConsent");
       setShowBanner(true);
     }
   }, []);
 
+  // Ascolta evento esterno per forzare la riapertura del banner
   useEffect(() => {
-    if (showBanner) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    const reopen = () => setShowBanner(true);
+    window.addEventListener("invalidCookieConsent", reopen);
+    return () => window.removeEventListener("invalidCookieConsent", reopen);
+  }, []);
+
+  // Blocca scroll quando il banner è attivo
+  useEffect(() => {
+    document.body.style.overflow = showBanner ? "hidden" : "";
   }, [showBanner]);
 
   const handleConsent = (choice: "all" | "essential" | "custom" | "reject") => {
@@ -42,9 +56,10 @@ const CookieConsentBanner: React.FC = () => {
 
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
 
-    // 👉 Inietta lo script Clarity solo se analytics = true
-    if (finalConsent.analytics) {
-      injectClarity();
+    // 💥 Avvia immediatamente Clarity se c'è consenso analytics
+    if (finalConsent.analytics && clarityId) {
+      console.log("⚡ Avvio Clarity da banner");
+      clarity.init(clarityId);
     }
 
     setShowBanner(false);
@@ -58,33 +73,60 @@ const CookieConsentBanner: React.FC = () => {
   };
 
   return showBanner ? (
-    <div className="cookie-overlay" role="dialog" aria-modal="true" aria-labelledby="cookie-title">
+    <div
+      className="cookie-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cookie-title"
+    >
       <div className="cookie-modal">
         <h2 id="cookie-title">Integritet & cookies</h2>
-        <p>Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka kategorier du vill tillåta.</p>
+        <p>
+          Vi använder cookies för att förbättra din upplevelse. Du kan välja
+          vilka kategorier du vill tillåta.
+        </p>
 
         <div className="cookie-switches">
           <div className="cookie-switch">
             <span>Analytiska</span>
             <label className="switch">
-              <input type="checkbox" checked={preferences.analytics} onChange={() => handleSwitch("analytics")} />
+              <input
+                type="checkbox"
+                checked={preferences.analytics}
+                onChange={() => handleSwitch("analytics")}
+              />
               <span className="slider round"></span>
             </label>
           </div>
           <div className="cookie-switch">
             <span>Marknadsföring</span>
             <label className="switch">
-              <input type="checkbox" checked={preferences.marketing} onChange={() => handleSwitch("marketing")} />
+              <input
+                type="checkbox"
+                checked={preferences.marketing}
+                onChange={() => handleSwitch("marketing")}
+              />
               <span className="slider round"></span>
             </label>
           </div>
         </div>
 
         <div className="cookie-buttons">
-          <button className="essential" onClick={() => handleConsent("essential")}>Endast nödvändiga</button>
-          <button className="custom" onClick={() => handleConsent("custom")}>Spara val</button>
-          <button className="accept" onClick={() => handleConsent("all")}>Acceptera alla</button>
-          <button className="reject" onClick={() => handleConsent("reject")}>Avvisa alla</button>
+          <button
+            className="essential"
+            onClick={() => handleConsent("essential")}
+          >
+            Endast nödvändiga
+          </button>
+          <button className="custom" onClick={() => handleConsent("custom")}>
+            Spara val
+          </button>
+          <button className="accept" onClick={() => handleConsent("all")}>
+            Acceptera alla
+          </button>
+          <button className="reject" onClick={() => handleConsent("reject")}>
+            Avvisa alla
+          </button>
         </div>
 
         <div className="cookie-terms">
