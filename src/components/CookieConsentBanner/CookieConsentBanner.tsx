@@ -58,7 +58,6 @@ const CookieConsentBanner: React.FC = () => {
 
     // 💥 Avvia immediatamente Clarity se c'è consenso analytics
     if (finalConsent.analytics && clarityId) {
-      console.log("⚡ Avvio Clarity da banner");
       clarity.init(clarityId);
     }
 
