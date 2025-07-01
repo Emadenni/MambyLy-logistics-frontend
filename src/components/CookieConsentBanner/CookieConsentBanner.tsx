@@ -14,7 +14,7 @@ const CookieConsentBanner: React.FC = () => {
     marketing: false,
   });
 
-  // Mostra banner se il consenso è assente o non valido
+  // Mostra il banner se il consenso è assente o non valido
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
 
@@ -27,7 +27,7 @@ const CookieConsentBanner: React.FC = () => {
     }
   }, []);
 
-  // Consente la riapertura del banner dall'esterno
+  // Riapertura forzata del banner
   useEffect(() => {
     const reopen = () => setShowBanner(true);
     window.addEventListener("invalidCookieConsent", reopen);
@@ -56,9 +56,10 @@ const CookieConsentBanner: React.FC = () => {
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
 
     // ✅ Attiva strumenti in base al consenso
-    if (finalConsent.analytics) {
-      if (clarityId) clarity.init(clarityId);
+    if (finalConsent.analytics && clarityId) {
+      clarity.init(clarityId);
     }
+
     injectGoogleAnalytics({
       analytics: finalConsent.analytics,
       marketing: finalConsent.marketing,
