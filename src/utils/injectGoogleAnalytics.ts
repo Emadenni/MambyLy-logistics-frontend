@@ -8,23 +8,34 @@ declare global {
 export const injectGoogleAnalytics = () => {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
-  if (typeof window === "undefined") return; 
-  if (!measurementId) return;
+  if (typeof window === "undefined" || !measurementId) return;
 
-  const alreadyLoaded = document.querySelector(`script[src*="googletagmanager.com/gtag/js"]`);
-  if (alreadyLoaded) return;
-
-  const script = document.createElement("script");
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-  script.async = true;
-  document.head.appendChild(script);
-
-  window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
-    window.dataLayer.push(args);
+  // ✅ Sempre definisce gtag, anche se lo script è già presente
+  if (!window.dataLayer) {
+    window.dataLayer = [];
   }
-  window.gtag = gtag;
 
-  gtag("js", new Date());
-  gtag("config", measurementId);
+  if (!window.gtag) {
+    window.gtag = function (...args: any[]) {
+      window.dataLayer.push(args);
+    };
+  }
+
+  // ✅ Configura GA solo una volta
+  const alreadyLoaded = document.querySelector(
+    `script[src*="googletagmanager.com/gtag/js"]`
+  );
+
+  if (!alreadyLoaded) {
+    const script = document.createElement("script");
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    script.async = true;
+    document.head.appendChild(script);
+  }
+
+  // ✅ Sempre configura GA, anche se script già presente
+  window.gtag("js", new Date());
+  window.gtag("config", measurementId, {
+    anonymize_ip: true, // opzionale per GDPR
+  });
 };

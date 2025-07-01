@@ -14,29 +14,27 @@ const CookieConsentBanner: React.FC = () => {
     marketing: false,
   });
 
-  // Mostra banner se non c'è consenso
+  // Mostra il banner se il consenso non è valido o assente
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
 
     try {
       const parsed = consent ? JSON.parse(consent) : null;
-      if (!parsed || typeof parsed !== "object") {
-        throw new Error("Invalid consent format");
-      }
+      if (!parsed || typeof parsed !== "object") throw new Error("Invalid consent");
     } catch {
       localStorage.removeItem("cookieConsent");
       setShowBanner(true);
     }
   }, []);
 
-  // Ascolta evento esterno per forzare la riapertura del banner
+  // Riapertura banner forzata dall'esterno
   useEffect(() => {
     const reopen = () => setShowBanner(true);
     window.addEventListener("invalidCookieConsent", reopen);
     return () => window.removeEventListener("invalidCookieConsent", reopen);
   }, []);
 
-  // Blocca scroll quando il banner è attivo
+  // Blocca lo scroll quando il banner è visibile
   useEffect(() => {
     document.body.style.overflow = showBanner ? "hidden" : "";
   }, [showBanner]);
@@ -57,7 +55,7 @@ const CookieConsentBanner: React.FC = () => {
 
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
 
-    // Avvia Clarity e GA se c'è consenso analytics
+    // Traccia se analytics è attivo, anche in dev
     if (finalConsent.analytics) {
       if (clarityId) clarity.init(clarityId);
       injectGoogleAnalytics();
@@ -113,10 +111,7 @@ const CookieConsentBanner: React.FC = () => {
         </div>
 
         <div className="cookie-buttons">
-          <button
-            className="essential"
-            onClick={() => handleConsent("essential")}
-          >
+          <button className="essential" onClick={() => handleConsent("essential")}>
             Endast nödvändiga
           </button>
           <button className="custom" onClick={() => handleConsent("custom")}>
