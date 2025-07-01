@@ -3,6 +3,7 @@ import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
 import React from "react";
 import clarity from "@microsoft/clarity";
+import { injectGoogleAnalytics } from "../../utils/injectGoogleAnalytics";
 
 const clarityId = import.meta.env.VITE_CLARITY_ID;
 
@@ -56,9 +57,10 @@ const CookieConsentBanner: React.FC = () => {
 
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
 
-    // 💥 Avvia immediatamente Clarity se c'è consenso analytics
-    if (finalConsent.analytics && clarityId) {
-      clarity.init(clarityId);
+    // Avvia Clarity e GA se c'è consenso analytics
+    if (finalConsent.analytics) {
+      if (clarityId) clarity.init(clarityId);
+      injectGoogleAnalytics();
     }
 
     setShowBanner(false);
