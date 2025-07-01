@@ -5,48 +5,42 @@ declare global {
   }
 }
 
-export const injectGoogleAnalytics = (options?: { marketing?: boolean }) => {
+export const injectGoogleAnalytics = (consent: {
+  analytics: boolean;
+  marketing: boolean;
+}) => {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+
   if (typeof window === "undefined" || !measurementId) return;
 
-  // 1. Definisce sempre dataLayer e gtag
   window.dataLayer = window.dataLayer || [];
-  window.gtag =
-    window.gtag ||
-    function (...args: any[]) {
+  if (!window.gtag) {
+    window.gtag = function (...args: any[]) {
       window.dataLayer.push(args);
     };
+  }
 
-  // 2. Funzione per configurare Google Analytics
-  const configureGA = () => {
-    window.gtag!("js", new Date());
+  // ✅ Imposta consenso dinamico per GDPR
+  window.gtag("consent", "default", {
+    ad_storage: consent.marketing ? "granted" : "denied",
+    analytics_storage: consent.analytics ? "granted" : "denied",
+    wait_for_update: 500,
+  });
 
-    // 💡 Consent Mode v2: importantissimo per evitare "hit differiti"
-    window.gtag!("consent", "update", {
-      analytics_storage: "granted",
-      ad_storage: options?.marketing ? "granted" : "denied", // ⬅️ cambia se serve
-    });
-
-    window.gtag!("config", measurementId, {
-      anonymize_ip: true,
-      debug_mode: true, // rimuovi in produzione se vuoi
-    });
-
-    console.log(`📈 Google Analytics configurato con ID: ${measurementId}`);
-  };
-
-  // 3. Controlla se lo script è già presente
   const alreadyLoaded = document.querySelector(
     `script[src*="googletagmanager.com/gtag/js"]`
   );
-
   if (!alreadyLoaded) {
     const script = document.createElement("script");
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     script.async = true;
-    script.onload = configureGA;
     document.head.appendChild(script);
-  } else {
-    configureGA();
   }
+
+  window.gtag("js", new Date());
+  window.gtag("config", measurementId, {
+    anonymize_ip: true,
+  });
+
+  console.log("\u{1F4C8} GA attivato con GDPR dynamic consent:", consent);
 };
