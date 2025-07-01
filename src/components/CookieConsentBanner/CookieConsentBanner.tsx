@@ -54,9 +54,10 @@ const CookieConsentBanner: React.FC = () => {
     }
 
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
+    console.log("📢 Consenso salvato:", finalConsent);
 
-    // ✅ Attiva strumenti in base al consenso
     if (finalConsent.analytics && clarityId) {
+      console.log("🟢 Clarity attivato");
       clarity.init(clarityId);
     }
 
@@ -64,6 +65,15 @@ const CookieConsentBanner: React.FC = () => {
       analytics: finalConsent.analytics,
       marketing: finalConsent.marketing,
     });
+
+    // Debug: evento test tracciamento
+    if (window.gtag && finalConsent.analytics) {
+      console.log("✅ gtag definito, invio evento test");
+      window.gtag("event", "debug_event", {
+        event_category: "debug",
+        event_label: "Consent accepted",
+      });
+    }
 
     setShowBanner(false);
   };
