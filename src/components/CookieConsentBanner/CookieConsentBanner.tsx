@@ -55,10 +55,10 @@ const CookieConsentBanner: React.FC = () => {
 
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
 
-    // Traccia se analytics è attivo, anche in dev
+    // Attiva Clarity e Google Analytics con supporto Consent Mode
     if (finalConsent.analytics) {
       if (clarityId) clarity.init(clarityId);
-      injectGoogleAnalytics();
+      injectGoogleAnalytics({ marketing: finalConsent.marketing });
     }
 
     setShowBanner(false);
