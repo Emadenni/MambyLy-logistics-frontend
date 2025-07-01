@@ -10,22 +10,16 @@ export const injectGoogleAnalytics = () => {
 
   if (typeof window === "undefined" || !measurementId) return;
 
-  // ✅ Sempre definisce gtag, anche se lo script è già presente
-  if (!window.dataLayer) {
-    window.dataLayer = [];
-  }
-
+  // ✅ Inizializza sempre dataLayer e gtag
+  window.dataLayer = window.dataLayer || [];
   if (!window.gtag) {
-    window.gtag = function (...args: any[]) {
+    window.gtag = (...args: any[]) => {
       window.dataLayer.push(args);
     };
   }
 
-  // ✅ Configura GA solo una volta
-  const alreadyLoaded = document.querySelector(
-    `script[src*="googletagmanager.com/gtag/js"]`
-  );
-
+  // ✅ Aggiunge script solo se non già presente
+  const alreadyLoaded = document.querySelector(`script[src*="googletagmanager.com/gtag/js"]`);
   if (!alreadyLoaded) {
     const script = document.createElement("script");
     script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
@@ -33,9 +27,12 @@ export const injectGoogleAnalytics = () => {
     document.head.appendChild(script);
   }
 
-  // ✅ Sempre configura GA, anche se script già presente
+  // ✅ Sempre invia configurazione (essenziale per sessione attiva!)
   window.gtag("js", new Date());
   window.gtag("config", measurementId, {
-    anonymize_ip: true, // opzionale per GDPR
+    anonymize_ip: true,       // opzionale per GDPR
+    debug_mode: true,         // utile in DebugView
   });
+
+  console.log("📈 Google Analytics iniettato:", measurementId);
 };
