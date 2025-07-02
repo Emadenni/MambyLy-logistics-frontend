@@ -1,4 +1,3 @@
-// ✅ Estensione sicura del tipo Window
 declare global {
   interface Window {
     dataLayer: any[];
@@ -11,61 +10,60 @@ export const injectGoogleAnalytics = (consent: {
   marketing: boolean;
 }) => {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-
   if (typeof window === "undefined" || !measurementId) return;
 
-  // ✅ Inizializza dataLayer e gtag
+  // Inizializza dataLayer e gtag
   window.dataLayer = window.dataLayer || [];
   if (!window.gtag) {
-    window.gtag = (...args: any[]) => {
-      window.dataLayer.push(args);
-    };
+    window.gtag = (...args: any[]) => window.dataLayer.push(args);
     console.log("🔧 gtag inizializzato");
   }
 
-  // ✅ Consenso bloccato di default
-  console.log("🔒 Imposto consenso iniziale: denied");
+  // Imposta consenso di default
   window.gtag("consent", "default", {
     ad_storage: "denied",
     analytics_storage: "denied",
   });
+  console.log("🔒 Consenso iniziale impostato (denied)");
 
-  // ✅ Applica il consenso dell’utente
-  console.log("🔄 Aggiorno consenso effettivo:", consent);
+  // Aggiorna consenso effettivo
   window.gtag("consent", "update", {
     ad_storage: consent.marketing ? "granted" : "denied",
     analytics_storage: consent.analytics ? "granted" : "denied",
   });
+  console.log("✅ Consenso aggiornato:", consent);
 
   const alreadyLoaded = document.querySelector(
     'script[src*="googletagmanager.com/gtag/js"]'
   );
 
-  const configureGA = () => {
-    if (!window.gtag) return;
+  const runAfterScriptLoad = () => {
+    console.log("⚙️ Configurazione GA...");
 
-    console.log("⚙️ Configurazione GA in corso...");
-    window.gtag("js", new Date());
+    window.gtag!("js", new Date());
 
-    window.gtag("config", measurementId, {
+    // ✅ Config base
+    window.gtag!("config", measurementId, {
       anonymize_ip: true,
-      send_page_view: false, // ✅ Disattivo auto page_view per GDPR
+      send_page_view: false, // manuale
     });
 
-    // ✅ Invia manualmente una page_view
-    window.gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: window.location.pathname,
-    });
-    console.log("📡 Page_view inviata manualmente");
-
-    // ✅ Evento test facoltativo per debug
+    // ✅ Invia manualmente page_view
     if (consent.analytics) {
-      window.gtag("event", "debug_event", {
-        event_category: "debug",
-        event_label: "Consent accepted",
+      window.gtag!("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: window.location.pathname,
       });
+
+      // ✅ Invia evento test tracciabile
+      window.gtag!("event", "test_realtime_event", {
+        event_category: "debug",
+        event_label: "test_click",
+        non_interaction: true,
+      });
+
+      console.log("📡 Eventi inviati: page_view + test_realtime_event");
     }
   };
 
@@ -76,11 +74,10 @@ export const injectGoogleAnalytics = (consent: {
     script.async = true;
     script.onload = () => {
       console.log("✅ Script GA caricato");
-      configureGA();
+      runAfterScriptLoad();
     };
     document.head.appendChild(script);
   } else {
-    console.log("📦 Script GA già presente");
-    configureGA();
+    runAfterScriptLoad();
   }
 };
