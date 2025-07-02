@@ -45,6 +45,7 @@ export const injectGoogleAnalytics = (consent: {
   const alreadyLoaded = document.querySelector(
     'script[src*="googletagmanager.com/gtag/js"]'
   );
+
   const proceed = () => {
     // Applica il consenso aggiornato
     console.log("📜 Aggiornamento consenso:", consent);
@@ -58,6 +59,13 @@ export const injectGoogleAnalytics = (consent: {
     window.gtag!("js", new Date());
     window.gtag!("config", measurementId, {
       anonymize_ip: true,
+    });
+
+    // 🔥 Invio manuale evento page_view per visibilità Realtime
+    window.gtag!("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
     });
 
     // Evento test per debug
