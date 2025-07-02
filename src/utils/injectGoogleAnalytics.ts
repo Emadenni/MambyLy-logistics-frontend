@@ -52,12 +52,13 @@ export const injectGoogleAnalytics = (consent: {
     console.log("⚙️ Configurazione GA in corso...");
     window.gtag("js", new Date());
 
+    // ✅ Tracciamento automatico pagina
     window.gtag("config", measurementId, {
       anonymize_ip: true,
-      send_page_view: true, // ✅ lascia a GA il page_view automatico
+      send_page_view: true, // ✅ importante!
     });
 
-    // ✅ Evento debug (facoltativo)
+    // ✅ Evento test per debug
     if (consent.analytics) {
       window.gtag("event", "debug_event", {
         event_category: "debug",
