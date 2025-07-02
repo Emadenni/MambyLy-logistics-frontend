@@ -1,4 +1,4 @@
-// ✅ DEFINIZIONE SICURA GLOBAL WINDOW
+// ✅ Estensione sicura del tipo Window
 declare global {
   interface Window {
     dataLayer: any[];
@@ -12,27 +12,25 @@ export const injectGoogleAnalytics = (consent: {
 }) => {
   const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
 
-  if (typeof window === "undefined") return;
-  if (!measurementId) return;
+  if (typeof window === "undefined" || !measurementId) return;
 
+  // ✅ Inizializza dataLayer e gtag
   window.dataLayer = window.dataLayer || [];
-
-  // ✅ Inizializza gtag se non esiste
   if (!window.gtag) {
-    window.gtag = function (...args: any[]) {
+    window.gtag = (...args: any[]) => {
       window.dataLayer.push(args);
     };
     console.log("🔧 gtag inizializzato");
   }
 
-  // ✅ Imposta consenso iniziale
-  console.log("🔒 Consenso iniziale: denied");
+  // ✅ Consenso bloccato di default
+  console.log("🔒 Imposto consenso iniziale: denied");
   window.gtag("consent", "default", {
     ad_storage: "denied",
     analytics_storage: "denied",
   });
 
-  // ✅ Aggiorna consenso effettivo
+  // ✅ Applica il consenso dell’utente
   console.log("🔄 Aggiorno consenso effettivo:", consent);
   window.gtag("consent", "update", {
     ad_storage: consent.marketing ? "granted" : "denied",
@@ -43,35 +41,32 @@ export const injectGoogleAnalytics = (consent: {
     'script[src*="googletagmanager.com/gtag/js"]'
   );
 
-  const runAfterScriptLoad = () => {
-    if (!window.gtag) {
-      console.warn("❌ gtag non disponibile dopo il caricamento script");
-      return;
-    }
+  const configureGA = () => {
+    if (!window.gtag) return;
 
     console.log("⚙️ Configurazione GA in corso...");
     window.gtag("js", new Date());
 
-    // ✅ Tracciamento automatico pagina
     window.gtag("config", measurementId, {
       anonymize_ip: true,
-      send_page_view: true, // ✅ importante!
+      send_page_view: false, // ✅ Disattivo auto page_view per GDPR
     });
 
-    // ✅ Evento test per debug
+    // ✅ Invia manualmente una page_view
+    window.gtag("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+    });
+    console.log("📡 Page_view inviata manualmente");
+
+    // ✅ Evento test facoltativo per debug
     if (consent.analytics) {
       window.gtag("event", "debug_event", {
         event_category: "debug",
         event_label: "Consent accepted",
       });
     }
-
-    console.log("✅ GA configurato. Ora controllo se parte la richiesta 'collect'...");
-
-    // ✅ TEST: verifichiamo se GA collect è bloccato
-    fetch("https://www.google-analytics.com/g/collect", { mode: "no-cors" })
-      .then(() => console.log("✅ GA collect raggiungibile dal browser"))
-      .catch(() => console.warn("❌ GA collect BLOCCATO (rete o browser)"));
   };
 
   if (!alreadyLoaded) {
@@ -81,11 +76,11 @@ export const injectGoogleAnalytics = (consent: {
     script.async = true;
     script.onload = () => {
       console.log("✅ Script GA caricato");
-      runAfterScriptLoad();
+      configureGA();
     };
     document.head.appendChild(script);
   } else {
     console.log("📦 Script GA già presente");
-    runAfterScriptLoad();
+    configureGA();
   }
 };
