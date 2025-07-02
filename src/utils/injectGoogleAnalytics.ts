@@ -54,14 +54,10 @@ export const injectGoogleAnalytics = (consent: {
 
     window.gtag("config", measurementId, {
       anonymize_ip: true,
+      send_page_view: true, // ✅ lascia a GA il page_view automatico
     });
 
-    window.gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: window.location.pathname,
-    });
-
+    // ✅ Evento debug (facoltativo)
     if (consent.analytics) {
       window.gtag("event", "debug_event", {
         event_category: "debug",
