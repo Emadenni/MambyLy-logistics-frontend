@@ -21,18 +21,23 @@ export const injectGoogleAnalytics = (consent: {
     return;
   }
 
+  // ✅ STEP 1 - Inizializza gtag
   window.dataLayer = window.dataLayer || [];
   if (!window.gtag) {
     window.gtag = function (...args: any[]) {
       window.dataLayer.push(args);
     };
+    console.log("🔧 gtag inizializzato");
   }
 
+  // ✅ STEP 2 - Imposta consenso
+  console.log("🔒 Consenso iniziale: denied");
   window.gtag("consent", "default", {
     ad_storage: "denied",
     analytics_storage: "denied",
   });
 
+  console.log("🔄 Aggiorno consenso effettivo:", consent);
   window.gtag("consent", "update", {
     ad_storage: consent.marketing ? "granted" : "denied",
     analytics_storage: consent.analytics ? "granted" : "denied",
@@ -43,9 +48,10 @@ export const injectGoogleAnalytics = (consent: {
   );
 
   const configureGA = () => {
+    console.log("⚙️ Configurazione GA in corso...");
+
     window.gtag!("js", new Date());
 
-    // Ritarda la config per dare tempo al consenso di essere "applicato"
     setTimeout(() => {
       window.gtag!("config", measurementId, {
         anonymize_ip: true,
@@ -65,6 +71,16 @@ export const injectGoogleAnalytics = (consent: {
       }
 
       console.log("✅ GA configurato. Ora controllo se parte la richiesta 'collect'...");
+
+      // 🧪 TEST MANUALE: forziamo richiesta verso collect per verificarla
+      const testImg = new Image();
+      const testUrl = `https://www.google-analytics.com/g/collect?v=2&tid=${measurementId}&cid=555&t=event&en=ping_test`;
+      testImg.src = testUrl;
+      testImg.onload = () => console.log("📡 Ping manuale GA RICEVUTO: collect OK ✅");
+      testImg.onerror = () =>
+        console.warn(
+          "❌ Ping manuale GA FALLITO. Il browser o rete sta bloccando collect. 🔒"
+        );
     }, 500);
   };
 
