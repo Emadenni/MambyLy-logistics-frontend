@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
 import ScrollToTop from "./components/ScrollToTop";
 import PromoBanner from "./components/PromoBanner/PromoBanner";
+import CookieConsentBanner from "./components/CookieConsentBanner/CookieConsentBanner";
 import PublicLayout from "./components/PublicLayout";
 import IntroSplash from "./components/IntroSplash/IntroSplash";
 import { CartProvider } from "./Context/CartContext";
@@ -47,6 +48,7 @@ const App = () => {
   return (
     <HelmetProvider>
       <CartProvider>
+        <CookieConsentBanner /> {/* ✅ ORA VIENE ESEGUITO PRIMA DI TUTTO IL RESTO */}
         <Router>
           <ScrollToTop />
           <PromoBanner />
