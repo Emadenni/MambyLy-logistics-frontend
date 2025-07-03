@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
 import ScrollToTop from "./components/ScrollToTop";
@@ -29,31 +23,12 @@ import Templates from "./pages/Templates/Templates";
 import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
-// ✅ Componente per tracciare le page_view su cambio route
-const PageViewTracker = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "page_view", {
-        page_title: document.title,
-        page_location: window.location.href,
-        page_path: location.pathname,
-      });
-      console.log("📡 page_view inviato su route change:", location.pathname);
-    }
-  }, [location]);
-
-  return null;
-};
-
 const App = () => {
   useClarity();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [splashDone, setSplashDone] = useState<boolean>(false);
 
-  // ✅ Gestione splash iniziale
   useEffect(() => {
     const seen = sessionStorage.getItem("introSeen");
     if (seen === "true") {
@@ -66,27 +41,6 @@ const App = () => {
     setSplashDone(true);
   };
 
-  // ✅ Riapplica consenso cookie se già salvato
-  useEffect(() => {
-    if (!splashDone) return;
-
-    const savedConsent = localStorage.getItem("cookieConsent");
-    try {
-      const parsed = savedConsent ? JSON.parse(savedConsent) : null;
-      if (parsed?.analytics || parsed?.marketing) {
-        console.log("📦 Ricarico consenso salvato:", parsed);
-        import("./utils/injectGoogleAnalytics").then(({ injectGoogleAnalytics }) => {
-          injectGoogleAnalytics({
-            analytics: parsed.analytics,
-            marketing: parsed.marketing,
-          });
-        });
-      }
-    } catch (err) {
-      console.warn("❌ CookieConsent invalido o non parsabile");
-    }
-  }, [splashDone]);
-
   if (!splashDone) {
     return <IntroSplash onFinish={handleSplashFinish} />;
   }
@@ -94,9 +48,8 @@ const App = () => {
   return (
     <HelmetProvider>
       <CartProvider>
-        <CookieConsentBanner />
+        <CookieConsentBanner /> {/* ✅ ORA VIENE ESEGUITO PRIMA DI TUTTO IL RESTO */}
         <Router>
-          <PageViewTracker />
           <ScrollToTop />
           <PromoBanner />
           <Routes>
@@ -112,10 +65,7 @@ const App = () => {
               <Route path="*" element={<NotFoundPage />} />
             </Route>
             <Route path="/login" element={<LoginForm />} />
-            <Route
-              path="/admin"
-              element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />}
-            />
+            <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
           </Routes>
 
           <a
@@ -125,12 +75,7 @@ const App = () => {
             aria-label="WhatsApp"
             className="whatsapp-icon"
           >
-            <img
-              src={whatsapp_icon}
-              alt="whatsapp_icon"
-              className="social_icon"
-              loading="lazy"
-            />
+            <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
           </a>
         </Router>
       </CartProvider>

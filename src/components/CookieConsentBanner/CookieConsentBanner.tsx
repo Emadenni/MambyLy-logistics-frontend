@@ -3,7 +3,6 @@ import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
 import React from "react";
 import clarity from "@microsoft/clarity";
-import { injectGoogleAnalytics } from "../../utils/injectGoogleAnalytics";
 
 const clarityId = import.meta.env.VITE_CLARITY_ID;
 
@@ -59,20 +58,6 @@ const CookieConsentBanner: React.FC = () => {
     if (finalConsent.analytics && clarityId) {
       console.log("🟢 Clarity attivato");
       clarity.init(clarityId);
-    }
-
-    injectGoogleAnalytics({
-      analytics: finalConsent.analytics,
-      marketing: finalConsent.marketing,
-    });
-
-    // Debug: evento test tracciamento
-    if (window.gtag && finalConsent.analytics) {
-      console.log("✅ gtag definito, invio evento test");
-      window.gtag("event", "debug_event", {
-        event_category: "debug",
-        event_label: "Consent accepted",
-      });
     }
 
     setShowBanner(false);
