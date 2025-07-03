@@ -1,3 +1,4 @@
+// ✅ Estensione sicura del tipo Window
 declare global {
   interface Window {
     dataLayer: any[];
@@ -13,23 +14,23 @@ export const injectGoogleAnalytics = (consent: {
 
   if (typeof window === "undefined" || !measurementId) return;
 
+  // ✅ Inizializza dataLayer e gtag
   window.dataLayer = window.dataLayer || [];
-
   if (!window.gtag) {
-    window.gtag = function (...args: any[]) {
+    window.gtag = (...args: any[]) => {
       window.dataLayer.push(args);
     };
     console.log("🔧 gtag inizializzato");
   }
 
-  // Consenso iniziale (negato)
-  console.log("🔒 Consenso iniziale: denied");
+  // ✅ Consenso bloccato di default
+  console.log("🔒 Imposto consenso iniziale: denied");
   window.gtag("consent", "default", {
     ad_storage: "denied",
     analytics_storage: "denied",
   });
 
-  // Consenso effettivo
+  // ✅ Applica il consenso dell’utente
   console.log("🔄 Aggiorno consenso effettivo:", consent);
   window.gtag("consent", "update", {
     ad_storage: consent.marketing ? "granted" : "denied",
@@ -48,28 +49,24 @@ export const injectGoogleAnalytics = (consent: {
 
     window.gtag("config", measurementId, {
       anonymize_ip: true,
-      send_page_view: false // disabilitiamo automatico
+      send_page_view: false, // ✅ Disattivo auto page_view per GDPR
     });
 
-    // ✅ page_view manuale
+    // ✅ Invia manualmente una page_view
     window.gtag("event", "page_view", {
       page_title: document.title,
       page_location: window.location.href,
       page_path: window.location.pathname,
     });
+    console.log("📡 Page_view inviata manualmente");
 
-    // ✅ evento debug test
+    // ✅ Evento test facoltativo per debug
     if (consent.analytics) {
-      window.gtag("event", "test_realtime_event", {
+      window.gtag("event", "debug_event", {
         event_category: "debug",
-        event_label: "test_click"
+        event_label: "Consent accepted",
       });
     }
-
-    console.log("✅ GA configurato. Controllo se collect è bloccato...");
-    fetch("https://www.google-analytics.com/g/collect", { mode: "no-cors" })
-      .then(() => console.log("✅ GA collect raggiungibile"))
-      .catch(() => console.warn("❌ GA collect BLOCCATO (rete o browser)"));
   };
 
   if (!alreadyLoaded) {

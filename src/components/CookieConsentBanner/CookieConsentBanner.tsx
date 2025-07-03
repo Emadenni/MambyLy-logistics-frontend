@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Terms from "../Terms/Terms";
 import "./cookieConsentBanner.scss";
-import React from "react";
 import clarity from "@microsoft/clarity";
-import { injectGoogleAnalytics } from "../../utils/injectGoogleAnalytics";
+import { injectPlausible } from "../../utils/injectPlausible";
 
 const clarityId = import.meta.env.VITE_CLARITY_ID;
 
@@ -14,10 +13,8 @@ const CookieConsentBanner: React.FC = () => {
     marketing: false,
   });
 
-  // Mostra il banner se il consenso è assente o non valido
   useEffect(() => {
     const consent = localStorage.getItem("cookieConsent");
-
     try {
       const parsed = consent ? JSON.parse(consent) : null;
       if (!parsed || typeof parsed !== "object") throw new Error("Invalid consent");
@@ -27,14 +24,12 @@ const CookieConsentBanner: React.FC = () => {
     }
   }, []);
 
-  // Riapertura forzata del banner
   useEffect(() => {
     const reopen = () => setShowBanner(true);
     window.addEventListener("invalidCookieConsent", reopen);
     return () => window.removeEventListener("invalidCookieConsent", reopen);
   }, []);
 
-  // Blocca lo scroll quando il banner è visibile
   useEffect(() => {
     document.body.style.overflow = showBanner ? "hidden" : "";
   }, [showBanner]);
@@ -56,23 +51,13 @@ const CookieConsentBanner: React.FC = () => {
     localStorage.setItem("cookieConsent", JSON.stringify(finalConsent));
     console.log("📢 Consenso salvato:", finalConsent);
 
-    if (finalConsent.analytics && clarityId) {
-      console.log("🟢 Clarity attivato");
-      clarity.init(clarityId);
-    }
-
-    injectGoogleAnalytics({
-      analytics: finalConsent.analytics,
-      marketing: finalConsent.marketing,
-    });
-
-    // Debug: evento test tracciamento
-    if (window.gtag && finalConsent.analytics) {
-      console.log("✅ gtag definito, invio evento test");
-      window.gtag("event", "debug_event", {
-        event_category: "debug",
-        event_label: "Consent accepted",
-      });
+    if (finalConsent.analytics) {
+      if (clarityId) {
+        console.log("🟢 Clarity attivato");
+        clarity.init(clarityId);
+      }
+      console.log("📈 Plausible iniettato");
+      injectPlausible();
     }
 
     setShowBanner(false);
@@ -86,17 +71,11 @@ const CookieConsentBanner: React.FC = () => {
   };
 
   return showBanner ? (
-    <div
-      className="cookie-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="cookie-title"
-    >
+    <div className="cookie-overlay" role="dialog" aria-modal="true" aria-labelledby="cookie-title">
       <div className="cookie-modal">
         <h2 id="cookie-title">Integritet & cookies</h2>
         <p>
-          Vi använder cookies för att förbättra din upplevelse. Du kan välja
-          vilka kategorier du vill tillåta.
+          Vi använder cookies för att förbättra din upplevelse. Du kan välja vilka kategorier du vill tillåta.
         </p>
 
         <div className="cookie-switches">
