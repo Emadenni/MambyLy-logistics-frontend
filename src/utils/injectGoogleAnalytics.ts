@@ -49,9 +49,18 @@ export const injectGoogleAnalytics = (consent: {
 
     window.gtag("config", measurementId, {
       anonymize_ip: true,
-      send_page_view: false, // ✅ Disattivo auto page_view per SPA
+      send_page_view: false, // ✅ Disattivo auto page_view per GDPR
     });
 
+    // ✅ Invia manualmente una page_view
+    window.gtag("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: window.location.pathname,
+    });
+    console.log("📡 Page_view inviata manualmente");
+
+    // ✅ Evento test facoltativo per debug
     if (consent.analytics) {
       window.gtag("event", "debug_event", {
         event_category: "debug",
