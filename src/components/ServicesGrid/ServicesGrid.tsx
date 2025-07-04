@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { slides } from "../data/slides";
 
 const yellowBorder = "#FFD700";
+const blueBorder = "#1976d2";
 const blueTitle = "#1976d2";
 
 const ServicesGrid: React.FC = () => {
@@ -30,7 +31,7 @@ const ServicesGrid: React.FC = () => {
             minHeight: 300, // Altezza un po' più bassa
             padding:5, // Padding ridotto da 4 a 3
             borderRadius: 3,
-            border: `2px solid ${yellowBorder}`,
+            border: `2px solid ${blueBorder}`,
             backgroundColor: "#fff",
             boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
             transition: "background-color 0.3s ease, box-shadow 0.3s ease",
@@ -53,7 +54,7 @@ const ServicesGrid: React.FC = () => {
               width: 60,
               height: 60,
               marginBottom: 3,
-              filter: `drop-shadow(0 0 3px ${yellowBorder})`,
+         
             }}
           />
           <Typography variant="h5" sx={{ color: blueTitle, fontWeight: 700, mb: 2, minHeight: 48 }}>

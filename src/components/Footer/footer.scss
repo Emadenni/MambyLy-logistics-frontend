@@ -8,13 +8,17 @@
   margin: auto;
   width: 100vw;
   gap: 0.6rem;
-  border-top: solid 1px green;
+  border-top: solid 1px rgb(89, 160, 184);
   background-color: rgb(244, 240, 240);
+  background-color: rgba(2, 2, 2, 0.96);
+      background-color: #111827;
   z-index: 1000;
 
 
   @media (max-width: 1300px) {
     background-color: rgb(244, 240, 240);
+    background-color: #111827;
+ 
   }
 
   &__logo_container {

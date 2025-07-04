@@ -5,7 +5,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./carousel.scss";
 
 const yellowBorder = "#FFD700";
+const blueBorder = "#1976d2";
 const blueTitle = "#1976d2";
+const blackTitle = "#000000";
 
 const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
   const navigate = useNavigate();
@@ -14,16 +16,26 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
   const isInServices = location.pathname === "/tjänster";
 
   return (
-    <Box sx={{ maxWidth: 2000, margin: "auto", px: 2, py: 4, backgroundColor:"rgba(255, 255, 255, 0.85)", padding:"2rem", borderRadius:"20px" }}>
+    <Box
+      sx={{
+        maxWidth: 1300,
+        margin: "auto",
+        px: 2,
+        py: 4,
+       /*  backgroundColor: "rgba(255, 255, 255, 0.85)", */
+        padding: "0rem",
+        borderRadius: "20px",
+      }}
+    >
       {/* Titolo */}
       <Typography
-      className="carousel-title"
+        className="carousel-title"
         variant="h4"
         component="h2"
         sx={{
           textAlign: "center",
           fontWeight: 700,
-          color: blueTitle,
+          color: blackTitle,
           mb: 4,
         }}
       >
@@ -37,7 +49,8 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
             xs: "flex",
             md: "grid",
           },
-          gap: 3,
+          gap: 2,
+
           flexWrap: "nowrap",
           overflowX: {
             xs: "auto",
@@ -82,7 +95,7 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
               minWidth: 260,
               padding: 3,
               borderRadius: 2,
-              border: `2px solid ${yellowBorder}`,
+              border: `2px solid ${blueBorder}`,
               backgroundColor: "#fff",
               cursor: "default",
               transition: "background-color 0.3s ease",
@@ -104,7 +117,7 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
                 width: 60,
                 height: 60,
                 marginBottom: 12,
-                filter: `drop-shadow(0 0 2px ${yellowBorder})`,
+                
               }}
             />
             <Typography variant="h6" sx={{ color: blueTitle, fontWeight: 600, mb: 1 }}>
@@ -125,7 +138,7 @@ const CardsCarousel: React.FC<{ showCount?: number }> = ({ showCount = 4 }) => {
               },
               minWidth: 260,
               maxWidth: 300,
-              height:280,
+              height: 280,
               padding: 3,
               borderRadius: 2,
               backgroundColor: blueTitle,

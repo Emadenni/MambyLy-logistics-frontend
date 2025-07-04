@@ -12,11 +12,18 @@
 
     &__item {
       @include primary-font(700);
-      color: $text-green;
+      color: white;
       font-size: 0.7rem;
       padding: 0 9px;
       text-align: center;
-      text-shadow: 1px 1px 4px rgba(247, 241, 241, 0.2);
+      letter-spacing: 0.2rem;
+
+       @media (max-width: 700px) {
+         letter-spacing: 0.1rem;
+      }
+
+
+
 
       @media (min-width: 2500px) {
         font-size: 1.3rem;

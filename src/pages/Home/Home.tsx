@@ -9,6 +9,7 @@ import SectionIntro from "../../components/SectionIntro/SectionIntro";
 import CardsCarousel from "../../components/Carousel/Carousel";
 import SidoButikBanner from "../../components/SidoButikBanner/SidoButikBanner";
 import BivioSection from "../../components/BivioSection/BivioSection";
+import WhatIsReactSection from "../../components/WhatIsReactSection/WhatIsReactSection";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./home.scss";
 import ScrollIndicator from "../../components/ScrollIndicator/ScrollIndicator";
@@ -96,6 +97,8 @@ const Home: React.FC = () => {
       <div className="after-hero">
         {" "}
         <SectionIntro />
+        <WhatIsReactSection />
+        
       </div>
 
       <div className="carousel-container ">

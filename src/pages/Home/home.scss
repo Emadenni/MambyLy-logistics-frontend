@@ -50,8 +50,15 @@
 }
 
 .carousel-container {
-  max-width: 1350px;
+
   margin: auto;
+ background-image: url(/src/assets/images/SidoButik/backgroundSidoHome.webp);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 2rem 2rem;
+    margin-top: 9rem;
+    width: 100%;
 }
 
 .scroll-down-indicator {
