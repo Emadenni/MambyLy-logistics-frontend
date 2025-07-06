@@ -38,9 +38,10 @@ const Terms: React.FC = () => {
               <li><strong>Hur används uppgifterna?</strong> Uppgifterna används för att leverera våra tjänster, förbättra användarupplevelsen och, om du samtycker, för att skicka relevant information via e-post eller på annat sätt.</li>
               <li><strong>Hur skyddas dina uppgifter?</strong> Vi vidtar lämpliga tekniska och organisatoriska åtgärder för att skydda dina uppgifter mot obehörig åtkomst, förlust eller manipulation.</li>
               <li><strong>Tredje part</strong> Vi delar inte dina personuppgifter med tredje part utan ditt uttryckliga samtycke, utom när det krävs enligt lag.</li>
-              <li><strong>Din rätt att återkalla samtycke och andra rättigheter</strong> Du har rätt att när som helst återkalla ditt samtycke, begära åtkomst till, rätta, radera eller få överförda dina personuppgifter. För att göra det kan du kontakta oss via e-post eller via den kontaktinformation som finns på vår webbplats eller maila direkt till <a href="mailto:intern@mambylysolutions.se">intern@mambylysolutions.se</a>.</li>
+              <li><strong>Din rätt att återkalla samtycke och andra rättigheter</strong> Du har rätt att när som helst återkalla ditt samtycke, begära åtkomst till, rätta, radera eller få överförda dina personuppgifter. För att göra det kan du kontakta oss via e-post eller via den kontaktinformation som finns på vår webbplats eller maila direkt till <a href="mailto:info@mambylysolutions.se">info@mambylysolutions.se</a>.</li>
             </ul>
             <p className='green'>Kontakta oss gärna om du har frågor kring vår integritetspolicy. Du kan nå oss på <a href="mailto:intern@mambylysolutions.se">intern@mambylysolutions.se</a>.</p>
+            <p className="meta">Senast uppdaterad: juli 2025</p>         
           </>
         )}
         {showModal === 'terms' && (
@@ -56,6 +57,7 @@ const Terms: React.FC = () => {
             </ul>
             <p>Om du inte godkänner dessa villkor ber vi dig att inte använda tjänsten.</p>
             <p className='green'>Kontakta oss gärna om du har frågor kring vår Användarvillkor. Du kan nå oss på <a href="mailto:intern@mambylysolutions.se">intern@mambylysolutions.se</a>.</p>
+             <p className="meta">Senast uppdaterad: juli 2025</p>      
           </>
         )}
       </div>

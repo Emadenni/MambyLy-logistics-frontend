@@ -17,7 +17,7 @@ const FloatingAnnouncement = () => {
 
   return (
    <div className="floating-announcement">
-  🚀 Snart tillgänglig: <strong>Piazza Grande</strong>!
+  🚀 Snart tillgänglig: <strong>Luméa</strong>!
   <button className="close-btn" onClick={() => setVisible(false)}>x</button>
 </div>
   );

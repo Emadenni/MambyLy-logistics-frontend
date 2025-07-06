@@ -265,10 +265,14 @@
   color: #d1d5db;
   width: 100%;
   animation: fadeIn 1.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
 
   span {
     color: #a78bfa;
     font-weight: 600;
+   
+    
   }
 
   a {
@@ -393,3 +397,6 @@
 }
 
 
+.terms-container {
+  padding-bottom: 0.8rem;
+}

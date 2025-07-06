@@ -15,15 +15,7 @@ const SidoNavbar = () => {
         Hem
       </NavLink>
 
-      <NavLink
-        to="/policy"
-        end
-        className={({ isActive }) =>
-          `sido-navbar-link ${isActive ? "active" : ""}`
-        }
-      >
-        Policy
-      </NavLink>
+  
 
       <NavLink
         to="/sidoButik/mallar"

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import "./sidoButik.scss";
+import Terms from "../../components/Terms/Terms";
 
 import SidoHeader from "../../components/SidoHeader/SidoHeader";
 import CTA from "../../components/Cta/Cta";
@@ -84,10 +85,7 @@ const SidoButik = () => {
     <>
       <Helmet>
         <title>Sido Butik | Mallgalleri av React-templates | Mambyly Solutions</title>
-        <meta
-          name="description"
-          content="Sido Butik är ett galleri med utvalda React-mallar för småföretag."
-        />
+        <meta name="description" content="Sido Butik är ett galleri med utvalda React-mallar för småföretag." />
         <link rel="canonical" href="https://mambylysolutions.se/sidoButik" />
       </Helmet>
 
@@ -246,6 +244,9 @@ const SidoButik = () => {
         <BivioSection />
 
         <footer className="sido-footer">
+          <div className="terms-container">
+            <Terms />
+          </div>
           <p>
             © {new Date().getFullYear()} <span>Sido Butik</span> — En del av{" "}
             <a href="https://mambylysolutions.se">Mambyly Solutions</a>
