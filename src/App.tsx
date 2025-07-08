@@ -9,6 +9,7 @@ import PublicLayout from "./components/PublicLayout";
 import IntroSplash from "./components/IntroSplash/IntroSplash";
 import { CartProvider } from "./Context/CartContext";
 import { useClarity } from "./hooks/useClarity";
+import { useUmami } from "./hooks/useUmami"; // 👈 AGGIUNTO
 
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
@@ -25,6 +26,7 @@ import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
 const App = () => {
   useClarity();
+  useUmami(); 
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [splashDone, setSplashDone] = useState<boolean>(false);
@@ -48,7 +50,7 @@ const App = () => {
   return (
     <HelmetProvider>
       <CartProvider>
-        <CookieConsentBanner /> {/* ✅ ORA VIENE ESEGUITO PRIMA DI TUTTO IL RESTO */}
+        <CookieConsentBanner />
         <Router>
           <ScrollToTop />
           <PromoBanner />
