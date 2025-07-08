@@ -10,7 +10,7 @@ const Templates = () => {
   return (
     <div className="template-page">
       <SidoHeader />
-      <InfoBanner />
+      {/* <InfoBanner /> */}
       <section className="template-grid">
         
         {templatesData.map((tpl, i) => (
