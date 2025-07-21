@@ -1,3 +1,36 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import "./hero.scss";
+import hero_img from "../../assets/images/hero-pic.webp";
+import ScrollIndicator from "../ScrollIndicator/ScrollIndicator";
+
+const Hero: React.FC = () => {
+  return (
+    <div className="hero">
+      <div className="hero-image">
+        <img src={hero_img} alt="Hero Illustration" />
+      </div>
+      <div className="hero_content">
+        <h1>Webbplatser och digitala lösningarför småföretag</h1>
+        <p>Moderna, skräddarsydda lösningar som hjälper ditt företag att växa online.</p>
+        <div className="hero-buttons">
+          <Link to="/tjänster">
+            <button className="primary">Våra tjänster</button>
+          </Link>
+          <Link to="/kontaktaOss">
+            <button className="secondary">Kontakta oss</button>
+          </Link>
+        </div>
+        <ScrollIndicator/>
+      </div>
+    </div>
+  );
+};
+
+export default Hero;
+
+/*
+// Versione precedente con video
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import "./hero.scss";
 import hero_img from "../../assets/video-placeholder.webp";
@@ -46,7 +79,6 @@ const Hero: React.FC<HeroProps> = ({ children }) => {
         </video>
       )}
 
-      {/* QUI ORA FUNZIONA */}
       <div className="hero_content">
         {children}
       </div>
@@ -55,3 +87,4 @@ const Hero: React.FC<HeroProps> = ({ children }) => {
 };
 
 export default Hero;
+*/

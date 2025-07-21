@@ -7,7 +7,7 @@ useEffect(() => {
   const timer = setTimeout(() => {
     sessionStorage.setItem("introSeen", "true");
     onFinish();
-  }, 3500);
+  }, 2000);
 
   return () => clearTimeout(timer);
 }, [onFinish]);
@@ -22,9 +22,7 @@ useEffect(() => {
       <div className="bar"></div>
     </div>
 
-    <button className="intro-cta" onClick={onFinish}>
-      Starta
-    </button>
+
   </div>
 );
 }

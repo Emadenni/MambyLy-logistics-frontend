@@ -53,7 +53,7 @@ const App = () => {
         <CookieConsentBanner />
         <Router>
           <ScrollToTop />
-          <PromoBanner />
+        {/*   <PromoBanner /> */}
           <Routes>
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />

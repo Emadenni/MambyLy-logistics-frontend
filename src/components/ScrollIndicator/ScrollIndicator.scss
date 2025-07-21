@@ -1,21 +1,28 @@
 .scroll-indicator {
+  position: absolute;    
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2rem;
   gap: 0.2rem;
   animation: bounce 2s infinite;
   cursor: pointer;
+  z-index: 10;      
+
+ 
 }
 
 .chevron {
   width: 20px;
   height: 20px;
-  border-right: 4px solid #f9fbfc;
-  border-bottom: 4px solid #e9ecf0;
+  border-right: 4px solid #062d41;
+  border-bottom: 4px solid #1f4270;
   transform: rotate(45deg);
   opacity: 0.3;
   animation: fadeInOut 2s infinite;
+  color: black;
 }
 
 .chevron1 {

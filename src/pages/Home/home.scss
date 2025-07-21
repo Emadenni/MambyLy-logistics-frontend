@@ -52,12 +52,13 @@
 .carousel-container {
 
   margin: auto;
- background-image: url(/src/assets/images/SidoButik/backgroundSidoHome.webp);
+/*  background-image: url(/src/assets/images/SidoButik/backgroundSidoHome.webp);
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat; */
+      background: linear-gradient(135deg, #f9f9f9 0%, #e6f0fa 50%, #f9f9f9 100%);
     padding: 2rem 2rem;
-    margin-top: 9rem;
+    margin-top: 2rem;
     width: 100%;
 }
 
