@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
         <img src={hero_img} alt="Hero Illustration" />
       </div>
       <div className="hero_content">
-        <h1>Webbplatser och digitala lösningarför småföretag</h1>
+        <h1>Webbplatser och digitala lösningar för småföretag</h1>
         <p>Moderna, skräddarsydda lösningar som hjälper ditt företag att växa online.</p>
         <div className="hero-buttons">
           <Link to="/tjänster">
