@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
@@ -6,10 +6,9 @@ import ScrollToTop from "./components/ScrollToTop";
 import PromoBanner from "./components/PromoBanner/PromoBanner";
 import CookieConsentBanner from "./components/CookieConsentBanner/CookieConsentBanner";
 import PublicLayout from "./components/PublicLayout";
-import IntroSplash from "./components/IntroSplash/IntroSplash";
 import { CartProvider } from "./Context/CartContext";
 import { useClarity } from "./hooks/useClarity";
-import { useUmami } from "./hooks/useUmami"; // 👈 AGGIUNTO
+import { useUmami } from "./hooks/useUmami";
 
 import Home from "./pages/Home/Home";
 import Services from "./pages/Services/Services";
@@ -22,13 +21,17 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import SidoButik from "./pages/SidoButik/SidoButik";
 import Templates from "./pages/Templates/Templates";
 import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
+
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
 const App = () => {
   useClarity();
-  useUmami(); 
+  useUmami();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  // Commentato per testare LCP senza blocchi
+  /*
   const [splashDone, setSplashDone] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,6 +49,7 @@ const App = () => {
   if (!splashDone) {
     return <IntroSplash onFinish={handleSplashFinish} />;
   }
+  */
 
   return (
     <HelmetProvider>
@@ -53,7 +57,7 @@ const App = () => {
         <CookieConsentBanner />
         <Router>
           <ScrollToTop />
-        {/*   <PromoBanner /> */}
+          {/* <PromoBanner /> */}
           <Routes>
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Home />} />
