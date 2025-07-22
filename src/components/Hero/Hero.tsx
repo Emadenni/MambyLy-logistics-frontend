@@ -8,7 +8,13 @@ const Hero: React.FC = () => {
   return (
     <div className="hero">
       <div className="hero-image">
-        <img src={hero_img} alt="Hero Illustration" />
+        <img
+          src={hero_img}
+          alt="Hero Illustration"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
       </div>
       <div className="hero_content">
         <h1>Webbplatser och digitala lösningarför småföretag</h1>
@@ -21,7 +27,7 @@ const Hero: React.FC = () => {
             <button className="secondary">Kontakta oss</button>
           </Link>
         </div>
-        <ScrollIndicator/>
+        <ScrollIndicator />
       </div>
     </div>
   );
