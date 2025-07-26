@@ -1,5 +1,6 @@
 import EmanuelePic from "../../assets/images/profileEmanuele.webp"
 import MarijaPic from "../../assets/images/marijaPic.webp"
+import MohannadPic from "../../assets/images/mohannad_qrh_bateq.webp"
 
 export const teamMembersData = [
     {
@@ -13,5 +14,11 @@ export const teamMembersData = [
       role: "Fullstack-utvecklare",
       email: "it-digital@mambylysolutions.se",
       imageUrl:  EmanuelePic,
+    },
+    {
+      name: "Mohannad Qrh Bateq",
+      role: "Growth Assistant",
+      email: "leads@mambylysolutions.se",
+      imageUrl:  MohannadPic,
     },
   ];
