@@ -2,7 +2,7 @@ import piazzaImg from "../../assets/images/SidoButik/piazza-grande-temp-img.webp
 import lumeaImg from "../../assets/images/SidoButik/lumea-temp-img.webp";
 import nexoraImg from "../../assets/images/SidoButik/nexora-temp-img.webp";
 /* import bistroImg from "@/assets/templates/urban-bistro-preview.jpg";
-import greenLeafImg from "@/assets/templates/green-leaf-preview.jpg"; */
+import greenLeafImg from "@/assets/templates/green-leaf-preview.jpg"; deploy */
 
 import piazzaLogo from "../../assets/images/SidoButik/logotemplatePiazaGrande.webp";
 import lumeaLogo from "../../assets/images/SidoButik/logolumea.webp";
