@@ -1,0 +1,72 @@
+.signform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url("/assets/images/bg-login.webp") center/cover no-repeat;
+
+  &__card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    input {
+      padding: 0.6rem 0.8rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      &:focus {
+        border-color: #0077ff;
+        outline: none;
+      }
+    }
+  }
+
+  &__error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.2rem;
+  }
+
+  &__button {
+    padding: 0.8rem;
+    border: none;
+    background: #0077ff;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    &:hover {
+      background: #005dcc;
+    }
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}

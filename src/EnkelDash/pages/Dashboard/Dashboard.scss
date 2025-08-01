@@ -1,0 +1,44 @@
+.signdash {
+  display: flex;
+  height: 100vh;
+
+  &__hero,
+  &__form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__hero {
+    background-color: #f0f4f8;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__form {
+    background-color: #fff;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+
+    &__hero {
+      height: 40vh;
+    }
+
+    &__form {
+      height: 60vh;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &__hero {
+      height: 35vh;
+    }
+
+    &__form {
+      height: 65vh;
+    }
+  }
+}
