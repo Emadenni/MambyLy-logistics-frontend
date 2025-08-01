@@ -1,23 +1,29 @@
 import React from "react";
 import "./SignHero.scss";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import logo120 from "../../assets/logoDash-120.webp.webp";
-import logo240 from "../../assets/logoDash-240.webp.webp";
+import logo240 from "../../assets/logoDash-240.webp";
 
-const SignHero: React.FC = () => {
+interface Props {
+  onToggleForm: () => void;
+  isFormVisible: boolean;
+}
+
+const SignHero: React.FC<Props> = ({ onToggleForm, isFormVisible }) => {
   return (
     <div className="sign-hero">
-      <div className="sign-hero__logo">
-        <picture>
-          <source srcSet={logo240} media="(min-width: 1024px)" />
-          <source srcSet={logo120} media="(min-width: 600px)" />
-          <img src={logo120} alt="EnkelDash Logo" />
-        </picture>
-      </div>
+      <img src={logo240} alt="EnkelDash logo" className="sign-hero__logo" />
+
       <div className="sign-hero__content">
         <h1>Välkommen till EnkelDash</h1>
-        <p>Din smarta kontrollpanel för att gestire allting med stil.</p>
+        <p>Din smarta kontrollpanel. Logga in för att komma åt dina tjänster.</p>
       </div>
+
+      <button className="sign-hero__toggle" onClick={onToggleForm}>
+        <ExpandMoreIcon
+          className={`sign-hero__icon ${isFormVisible ? "rotated" : ""}`}
+        />
+      </button>
     </div>
   );
 };

@@ -1,74 +1,97 @@
 .sign-hero {
-  flex: 1;
-  padding: 3rem 1rem;
+  width: 60%;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  text-align: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: url("../../assets/bg-sign-hero-mobile.webp");
-  color: #0b0b0b;
-
-  @media (min-width: 600px) {
-    background-image: url("../../assets/bg-sign-hero-tablet.webp");
-    padding: 4rem 2rem;
-  }
-
-  @media (min-width: 1024px) {
-    background-image: url("../../assets/bg-sign-hero-desktop.webp");
-    padding: 5rem 3rem;
-  }
+  gap: 2rem;
 
   &__logo {
-    margin-bottom: 1.5rem;
+    max-width: 60%;
+    height: auto;
+    margin-bottom: 2rem;
 
-    img {
-      display: block;
-      width: 120px;
-      height: 120px;
-      border-radius: 1000px;
-      border: 2px solid #b4b3b3;
+    @media (min-width: 600px) {
+      max-width: 200px;
+    }
 
-      @media (min-width: 600px) {
-        width: 120px;
-        height: 120px;
-      }
-
-      @media (min-width: 1024px) {
-        width: 160px;
-        height: 160px;
-      }
+    @media (min-width: 1024px) {
+      max-width: 240px;
     }
   }
 
   &__content {
     h1 {
-      font-size: 1.3rem;
-      font-weight: 700;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: black;
 
-      @media (min-width: 600px) {
-        font-size: 1.7rem;
-      }
-
-      @media (min-width: 1024px) {
-        font-size: 2.2rem;
+      @media (min-width: 768px) {
+        font-size: 2.5rem;
       }
     }
 
     p {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      opacity: 0.9;
+      font-size: 1rem;
+      color: black;
 
-      @media (min-width: 600px) {
-        font-size: 1rem;
-      }
-
-      @media (min-width: 1024px) {
-        font-size: 1.1rem;
+      @media (min-width: 768px) {
+        font-size: 1.2rem;
       }
     }
   }
+&__toggle {
+     margin-top: auto;
+    margin-bottom: 2rem;
+    background-color: rgba(255, 255, 255, 0.35);
+    border: none;
+    border-radius: 50%;
+    padding: 1rem;
+    cursor: pointer;
+    animation: bounceDown 2s infinite ease-in-out,  pulseGlow 3s infinite ease-in-out;
+
+    opacity: 0.9;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(5px);
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.05);
+    background-color: rgb(202, 232, 225);
+  }
+
+  .sign-hero__icon {
+    font-size: 2.5rem;
+    color: rgb(11, 57, 83);
+    transition: transform 0.3s ease;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
 }
+
+
+}
+
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+ @keyframes pulseGlow {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    }

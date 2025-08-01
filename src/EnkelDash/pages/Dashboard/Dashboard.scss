@@ -1,44 +1,66 @@
 .signdash {
-  display: flex;
-  height: 100vh;
-
-  &__hero,
-  &__form {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  width: 100%;
+  height: 100dvh; // migliora supporto su mobile
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+     
 
   &__hero {
-    background-color: #f0f4f8;
-    position: relative;
-    overflow: hidden;
-  }
-
-  &__form {
-    background-color: #fff;
-  }
-
-  @media (max-width: 1024px) {
+    width: 100%;
+    height: 100%;
+    display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/src/EnkelDash/assets/bg-login-side-mobile.webp");
+    background-size: cover;
+    background-position: center;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    flex-shrink: 0;
+    
 
-    &__hero {
-      height: 40vh;
+    @media (min-width: 600px) {
+      background-image: url("/src/EnkelDash/assets/bg-login-side-tablet.webp");
     }
 
-    &__form {
-      height: 60vh;
+    @media (min-width: 1024px) {
+      background-image: url("/src/EnkelDash/assets/bg-login-side-desktop.webp");
     }
   }
 
-  @media (max-width: 600px) {
-    &__hero {
-      height: 35vh;
-    }
+  &__overlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background-color: #f9f9f9;
+    z-index: 100;
+    padding: 2rem 1.5rem;
+    transform: translateY(100%);
+    transition: transform 0.6s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
 
-    &__form {
-      height: 65vh;
+    &.visible {
+      transform: translateY(0);
     }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    color: #67a4c3;
+    cursor: pointer;
+    margin-top: 2rem;
   }
 }
+
