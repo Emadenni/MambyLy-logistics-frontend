@@ -1,107 +1,200 @@
-.signform {
+.signform__wrapper {
+  height: 90vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  width: 100%;
-  padding: 2rem;
-  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 5rem;
+  overflow: hidden;
 
-  &__card {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e0e0e0;
-    max-width: 400px;
-    width: 100%;
-    position: relative;
-  }
 
-  &__title {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+}
+
+.signform__header {
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  h1 {
+    font-size: 1.5rem;
     font-weight: 600;
     color: #333;
   }
+}
 
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+.signform__container {
+  z-index: 2;
+  max-width: 400px;
+  width: 100%;
+}
+
+.signform__card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.8s ease;
+}
+
+.signform__card h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.8rem;
+  color: #1a1a1a;
+}
+
+.signform__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.signform__group {
+  label {
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    display: block;
+    color: #333;
   }
 
-  &__group {
-    display: flex;
-    flex-direction: column;
-
-    label {
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    input {
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-      transition: border 0.3s;
-
-      &:focus {
-        border-color: #0077ff;
-        outline: none;
-      }
-    }
-  }
-
-  &__password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    input {
-      width: 100%;
-      padding-right: 2.5rem;
-    }
-
-    .signform__toggle-password {
-      position: absolute;
-      right: 0.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: #555;
-
-      svg {
-        font-size: 1.3rem;
-      }
-    }
-  }
-
-  &__error {
-    color: #e53935;
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-  }
-
-  &__button {
-    padding: 0.9rem;
-    border: none;
-    background: #0077ff;
-    color: white;
-    font-weight: 600;
+  input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
     border-radius: 0.5rem;
-    cursor: pointer;
+    border: 1px solid #ccc;
     font-size: 1rem;
-    transition: background 0.3s ease;
+    transition: border-color 0.3s;
 
-    &:hover {
-      background: #005fcc;
-    }
-
-    &:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    &:focus {
+      border-color: #0077ff;
+      outline: none;
     }
   }
 }
+
+.signform__password-wrapper {
+  position: relative;
+
+  input {
+    padding-right: 2.5rem;
+  }
+
+  .signform__toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #666;
+  }
+}
+
+.signform__error {
+  font-size: 0.875rem;
+  color: #d40000;
+  margin-top: 0.2rem;
+}
+
+.signform__button {
+  padding: 0.9rem;
+  border: none;
+  background: #0077ff;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #005dcc;
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.signform__background-accent {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(#0077ff81, transparent 98%);
+  border-radius: 50%;
+  bottom: -300px;
+  right: -300px;
+  z-index: 0;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .signform__container {
+    max-width: 90%; // invece di 400px
+  }
+
+  .signform__card {
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .signform__wrapper {
+    padding: 1rem 1rem;
+  }
+
+    .signform__background-accent {
+    width: 600px;
+    height: 700px;
+    bottom: -200px;
+    right: -200px;
+  }
+}
+
+.signform__close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  z-index: 999;
+
+  &:hover {
+    color: #333;
+  }
+}
+
+.enkelDash-logo-login {
+  width: 70px;
+  height: 70px;
+}
+

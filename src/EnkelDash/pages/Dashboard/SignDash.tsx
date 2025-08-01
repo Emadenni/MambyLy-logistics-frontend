@@ -10,16 +10,20 @@ const SignDash: React.FC = () => {
     setShowForm((prev) => !prev);
   };
 
-  // Blocca lo scroll del body solo mentre SignDash è montato
-  useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
+useEffect(() => {
+  if (showForm) {
     document.body.style.overflow = "hidden";
+    document.body.style.height = "100vh";
+  } else {
+    document.body.style.overflow = "";
+    document.body.style.height = "";
+  }
 
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
+  return () => {
+    document.body.style.overflow = "";
+    document.body.style.height = "";
+  };
+}, [showForm]);
   return (
     <div className="signdash">
       <div className="signdash__hero">
@@ -27,10 +31,7 @@ const SignDash: React.FC = () => {
       </div>
 
       <div className={`signdash__overlay ${showForm ? "visible" : ""}`}>
-        <button className="signdash__close" onClick={handleToggleForm}>
-          stäng
-        </button>
-        <SignForm />
+       <SignForm onClose={handleToggleForm} />
       </div>
     </div>
   );

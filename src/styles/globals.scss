@@ -18,6 +18,15 @@
   }
 }
 
+body.no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
+  position: fixed;
+  width: 100%;
+}
+
+
+
  /* .popup-overlay {
   position: fixed; 
   top: 0;
