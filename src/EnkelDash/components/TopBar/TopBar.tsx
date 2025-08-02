@@ -1,5 +1,5 @@
 import React from "react";
-import './topbar.scss';
+import './TopBar.scss';
 import logoIcon from '../../assets/logo-icon-64.webp';
 import userImg from '../../../assets/images/profileEmanuele.webp';
 import companyLogo from "../../../assets/images/mambylyLogoRestyled.webp"
