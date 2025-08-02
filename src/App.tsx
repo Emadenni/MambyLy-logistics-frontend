@@ -58,7 +58,9 @@ const AppWrapper = () => {
 
         {/* 🔐 PAGINE PROTETTE */}
         <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
-        <Route path="/dash" element={isAuthenticated ? <Dashboard /> : <Navigate to="/sign" />} />
+       {/*  <Route path="/dash" element={isAuthenticated ? <Dashboard /> : <Navigate to="/sign" />} /> */}
+
+       <Route path="/dash" element={<Dashboard />} />
 
         {/* 🔓 PAGINE PUBBLICHE ESTERNE */}
         <Route path="/login" element={<LoginForm />} />

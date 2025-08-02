@@ -1,0 +1,165 @@
+.topbar-wrapper {
+  position: relative;
+}
+
+.topbar-header-line {
+  height: 20px;
+  background-color: #5574c3;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__icon {
+    position: absolute;
+    top: 100%;
+    transform: translateY(-40%);
+    background-color: white;
+    border-radius: 50%;
+    padding: 4px;
+    height: 50px;
+    width: 50px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+
+    @media (max-width: 768px) {
+        height: 40px;
+    width: 40px;
+    }
+  }
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  background: #fcfafa;
+  border-bottom: 1px solid #ddd;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding-top: 2rem;
+  }
+
+  &__left,
+  &__right {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  &__left {
+    background-color: #e7fef93e;
+    padding: 0.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    border: solid 1px #5574c346;
+  }
+
+  &__circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #ddd;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #ccc;
+    }
+  }
+
+  &__center {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  &__avatar {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+
+    @media (max-width: 768px) {
+      width: 55px;
+      height: 55px;
+    }
+  }
+
+  &__company-logo {
+    width: 100px;
+    height: auto;
+
+    @media (max-width: 768px) {
+      width: 70px;
+    }
+  }
+
+  &__logo-container {
+    border: solid 1px rgb(226, 229, 240);
+    border-left: solid 3px rgb(123, 144, 228);
+    padding: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    height: 90px;
+
+    @media (max-width: 768px) {
+      height: 70px;
+     
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__name {
+    font-weight: 700;
+    font-size: 1.1rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  &__company {
+    font-size: 0.9rem;
+    color: #888;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  &__role {
+    font-size: 0.9rem;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  &__logo {
+    width: 60px;
+    height: auto;
+
+    @media (max-width: 768px) {
+      width: 50px;
+    }
+  }
+}

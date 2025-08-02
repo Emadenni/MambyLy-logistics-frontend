@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
+import TopBar from "../../components/TopBar/TopBar";
 
-type Props = {}
-
-const Dashboard = (props: Props) => {
+const Dashboard = () => {
   return (
-    <div>dashboard</div>
-  )
-}
+    <>
+      <TopBar />
+      <div className="dashboard-content">
+        {/* Contenuto del pannello principale */}
+      </div>
+    </>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
