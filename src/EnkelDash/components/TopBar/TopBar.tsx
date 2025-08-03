@@ -2,7 +2,31 @@ import React from "react";
 import './TopBar.scss';
 import logoIcon from '../../assets/logo-icon-64.webp';
 import userImg from '../../../assets/images/profileEmanuele.webp';
-import companyLogo from "../../../assets/images/mambylyLogoRestyled.webp"
+import companyLogo from "../../../assets/images/mambylyLogoRestyled.webp";
+
+import offerKitIcon from "../../assets/offerKit.webp";
+import clientSideIcon from "../../assets/clienSide.webp";
+import catchyIcon from "../../assets/catchy.webp";
+import chillBookingIcon from "../../assets/chillBooking.webp";
+import doolioIcon from "../../assets/doolio.webp";
+import shiftDealerIcon from "../../assets/ShiftDealer.webp";
+import brandOnIcon from "../../assets/BrandOn.webp";
+import fullStockIcon from "../../assets/fullStock.webp";
+import mailManagerIcon from "../../assets/mailManager.webp";
+import pingMeIcon from "../../assets/pingMe.webp";
+
+const toolIcons = [
+  { name: "OfferKit", icon: offerKitIcon },
+  { name: "ClientSide", icon: clientSideIcon },
+  // { name: "Catchy", icon: catchyIcon },
+  { name: "ChillBooking", icon: chillBookingIcon },
+  // { name: "Doolio", icon: doolioIcon },
+  { name: "ShiftDealer", icon: shiftDealerIcon },
+  { name: "BrandOn", icon: brandOnIcon },
+  { name: "FullStock", icon: fullStockIcon },
+  // { name: "MailManager", icon: mailManagerIcon },
+  { name: "PingMe", icon: pingMeIcon },
+];
 
 const Topbar = () => {
   return (
@@ -27,11 +51,13 @@ const Topbar = () => {
         <div className="topbar__center"></div>
 
         <div className="topbar__right">
-          <button className="topbar__circle">B</button>
-          <button className="topbar__circle">S</button>
-          <button className="topbar__circle">G</button>
-          <button className="topbar__circle">V</button>
-          <button className="topbar__circle">D</button>
+          <div className="topbar__right-scroll">
+            {toolIcons.map((tool, index) => (
+              <button className="topbar__icon-button" key={index}>
+                <img src={tool.icon} alt={tool.name} className="topbar__tool-icon" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
