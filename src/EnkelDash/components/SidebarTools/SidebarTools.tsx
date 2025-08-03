@@ -5,13 +5,21 @@ import catchyIcon from "../../assets/catchy.webp";
 import doolioIcon from "../../assets/doolio.webp";
 import mailManagerIcon from "../../assets/mailManager.webp";
 
-type ToolId = "catchy" | "doolio" | "mailmanager";
+import PsychologyIcon from "@mui/icons-material/Psychology"; // icona MUI per AI Support
+
+type ToolId = "catchy" | "doolio" | "mailmanager" | "aisupport";
 
 const SidebarTools: React.FC = () => {
   const [openMobileTool, setOpenMobileTool] = useState<ToolId | null>(null);
+  const [aiPrompt, setAiPrompt] = useState("");
 
   const toggleMobileTool = (id: ToolId) => {
     setOpenMobileTool((curr) => (curr === id ? null : id));
+  };
+
+  const handleAiSubmit = () => {
+    console.log("AI Prompt inviato:", aiPrompt);
+    setAiPrompt("");
   };
 
   return (
@@ -48,6 +56,23 @@ const SidebarTools: React.FC = () => {
             <button className="tool-button">Öppna Mail Manager</button>
           </div>
         </div>
+
+        {/* AI Support */}
+        <div className="tool-block ai-support">
+          <div className="tool-header">
+            <PsychologyIcon style={{ fontSize: 48, color: "white" }} />
+          </div>
+          <div className="tool-preview ai-support-preview">
+            <textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              placeholder="Skriv din fråga..."
+            />
+            <button className="tool-button" onClick={handleAiSubmit}>
+              Skicka
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="sidebar-mobile">
@@ -78,56 +103,38 @@ const SidebarTools: React.FC = () => {
           >
             <img src={mailManagerIcon} alt="" />
           </button>
+
+          {/* Tab AI Support */}
+          <button
+            type="button"
+            className={`mobile-tab ${openMobileTool === "aisupport" ? "active" : ""}`}
+            aria-label="AI Support"
+            onClick={() => toggleMobileTool("aisupport")}
+          >
+            <PsychologyIcon style={{ fontSize: 30, color: "#25335e" }} />
+          </button>
         </div>
 
-        <div className={`mobile-panel ${openMobileTool ? "open" : ""}`} role="region" aria-live="polite">
+        <div className={`mobile-panel ${openMobileTool ? "open" : ""}`}>
           <div className="mobile-panel__inner">
-            {openMobileTool === "catchy" && (
+            {openMobileTool === "aisupport" && (
               <div className="panel-content">
                 <div className="panel-header">
-                  <img src={catchyIcon} alt="Catchy" />
-                  <h3>Catchy</h3>
-                  <button className="panel-close" aria-label="Close" onClick={() => setOpenMobileTool(null)}>
+                  <PsychologyIcon style={{ fontSize: 28, color: "#25335e" }} />
+                  <h3>AI Support</h3>
+                  <button className="panel-close" onClick={() => setOpenMobileTool(null)}>
                     ×
                   </button>
                 </div>
-                <div className="panel-body">
-                  <p className="quote">“Din perfekta fras – ett klick bort.”</p>
-                  <button className="tool-button">Öppna Catchy</button>
-                </div>
-              </div>
-            )}
-
-            {openMobileTool === "doolio" && (
-              <div className="panel-content">
-                <div className="panel-header">
-                  <img src={doolioIcon} alt="Doolio" />
-                  <h3>Doolio</h3>
-                  <button className="panel-close" aria-label="Close" onClick={() => setOpenMobileTool(null)}>
-                    ×
+                <div className="panel-body ai-support-preview">
+                  <textarea
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    placeholder="Skriv din fråga..."
+                  />
+                  <button className="tool-button" onClick={handleAiSubmit}>
+                    Skicka
                   </button>
-                </div>
-                <div className="panel-body">
-                  <div className="doolio-card">
-                    <p className="title">Brief: Sommarkampanj</p>
-                    <p className="desc">Genererad copy · CTA: ”Upptäck nu”</p>
-                  </div>
-                  <button className="tool-button">Öppna Doolio</button>
-                </div>
-              </div>
-            )}
-
-            {openMobileTool === "mailmanager" && (
-              <div className="panel-content">
-                <div className="panel-header">
-                  <img src={mailManagerIcon} alt="Mail Manager" />
-                  <h3>Mail Manager</h3>
-                  <button className="panel-close" aria-label="Close" onClick={() => setOpenMobileTool(null)}>
-                    ×
-                  </button>
-                </div>
-                <div className="panel-body">
-                  <button className="tool-button">Öppna Mail Manager</button>
                 </div>
               </div>
             )}

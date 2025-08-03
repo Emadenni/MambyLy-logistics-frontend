@@ -7,7 +7,6 @@
   border-left: 1px solid #e6e8f0;
 }
 
-/* nascondi componenti mobile su desktop */
 .sidebar-mobile,
 .mobile-tabs,
 .mobile-panel {
@@ -41,6 +40,11 @@
   width: 82px;
   height: 82px;
   object-fit: contain;
+}
+
+.tool-header svg {
+  width: 48px;
+  height: 48px;
 }
 
 .tool-preview {
@@ -263,5 +267,112 @@
   }
   .panel-body .tool-button {
     align-self: flex-start;
+  }
+}
+
+.ai-support {
+  background: linear-gradient(145deg, #25335e, #3e4b80);
+  color: white;
+}
+.ai-support .tool-header img {
+  width: 64px;
+  height: 64px;
+}
+.ai-support .tool-header svg {
+  width: 48px;
+  height: 48px;
+}
+.ai-support-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ai-support-preview textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: none;
+  resize: vertical;
+  font-size: 0.9rem;
+}
+.ai-support-preview .tool-button {
+  background: #00b894;
+  color: white;
+}
+
+@media (min-width: 769px) {
+  .sidebar-tools {
+    width: 300px;
+    padding: 0.5rem;
+  }
+
+  .sidebar-desktop {
+    gap: 0.5rem;
+  }
+
+  .tool-block {
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.05);
+  }
+
+  .tool-header {
+    padding: 0.4rem 0.6rem 0.3rem;
+  }
+  .tool-header img,
+  .tool-header svg {
+    width: 68px;
+    height: 68px;
+  }
+  .tool-block.mailmanager .tool-header img {
+    width: 62px;
+    height: 62px;
+  }
+
+  .tool-preview {
+    gap: 0.45rem;
+    padding: 0.45rem 0.6rem 0.6rem;
+  }
+
+  .quote {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .doolio-card {
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+  .doolio-card .title {
+    font-size: 0.9rem;
+    margin-bottom: 0.15rem;
+  }
+  .doolio-card .desc {
+    font-size: 0.86rem;
+  }
+
+  .tool-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  .ai-support .tool-header {
+    padding: 0.35rem 0.6rem 0.25rem;
+  }
+  .ai-support .tool-header svg {
+    width: 44px;
+    height: 44px;
+  }
+  .ai-support-preview textarea {
+    min-height: 52px;
+    padding: 0.45rem;
+    font-size: 0.88rem;
+    border-radius: 8px;
+  }
+  .ai-support-preview .tool-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
   }
 }
