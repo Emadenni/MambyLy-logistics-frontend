@@ -10,13 +10,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import offerKitIcon from "../../assets/offerKit.webp";
 import clientSideIcon from "../../assets/clienSide.webp";
-import catchyIcon from "../../assets/catchy.webp";
 import chillBookingIcon from "../../assets/chillBooking.webp";
-import doolioIcon from "../../assets/doolio.webp";
 import shiftDealerIcon from "../../assets/ShiftDealer.webp";
 import brandOnIcon from "../../assets/BrandOn.webp";
 import fullStockIcon from "../../assets/fullStock.webp";
-import mailManagerIcon from "../../assets/mailManager.webp";
+
 import pingMeIcon from "../../assets/pingMe.webp";
 
 type ToolIcon = {
@@ -31,7 +29,7 @@ const toolIcons: ToolIcon[] = [
   { name: "ShiftDealer", icon: shiftDealerIcon },
   { name: "BrandOn", icon: brandOnIcon },
   { name: "FullStock", icon: fullStockIcon },
-  { name: "PingMe", icon: pingMeIcon }
+  { name: "PingMe", icon: pingMeIcon },
 ];
 
 const Topbar: React.FC = () => {
@@ -79,12 +77,7 @@ const Topbar: React.FC = () => {
           >
             <SettingsIcon />
           </button>
-          <button
-            type="button"
-            className="topbar-icon topbar-icon--logout"
-            aria-label="Logout"
-            onClick={handleLogout}
-          >
+          <button type="button" className="topbar-icon topbar-icon--logout" aria-label="Logout" onClick={handleLogout}>
             <LogoutIcon />
           </button>
         </div>
