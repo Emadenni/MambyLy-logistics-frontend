@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TopBar.scss";
 import logoIcon from "../../assets/logo-icon-64.webp";
 import userImg from "../../../assets/images/profileEmanuele.webp";
@@ -14,8 +14,11 @@ import chillBookingIcon from "../../assets/chillBooking.webp";
 import shiftDealerIcon from "../../assets/shiftDealer.webp";
 import brandOnIcon from "../../assets/brandOn.webp";
 import fullStockIcon from "../../assets/fullStock.webp";
-
 import pingMeIcon from "../../assets/pingMe.webp";
+
+import { useNavigate } from "react-router-dom";
+import { signOut, getCurrentUser } from "aws-amplify/auth";
+import { useAuthStore } from "../../../store/useAuthStore"; 
 
 type ToolIcon = {
   name: string;
@@ -33,14 +36,29 @@ const toolIcons: ToolIcon[] = [
 ];
 
 const Topbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+
+  const navigate = useNavigate();
+  const logoutStore = useAuthStore((s) => s.logout);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((u) => setUserEmail((u?.signInDetails?.loginId as string) ?? ""))
+      .catch(() => setUserEmail(""));
+  }, []);
 
   const handleSettings = () => {
     console.log("Open settings");
   };
 
-  const handleLogout = () => {
-    console.log("Logout");
+  const handleLogout = async () => {
+    try {
+      await signOut(); // invalida sessione Cognito
+    } finally {
+      logoutStore(); // pulisce lo store e sessionStorage
+      navigate("/enkel-dash/sign", { replace: true });
+    }
   };
 
   return (
@@ -77,7 +95,12 @@ const Topbar: React.FC = () => {
           >
             <SettingsIcon />
           </button>
-          <button type="button" className="topbar-icon topbar-icon--logout" aria-label="Logout" onClick={handleLogout}>
+          <button
+            type="button"
+            className="topbar-icon topbar-icon--logout"
+            aria-label="Logout"
+            onClick={handleLogout}
+          >
             <LogoutIcon />
           </button>
         </div>
@@ -87,7 +110,7 @@ const Topbar: React.FC = () => {
         <div className="topbar__left">
           <img src={userImg} alt="user" className="topbar__avatar" />
           <div className="topbar__info">
-            <div className="topbar__name">Mario Rossi</div>
+            <div className="topbar__name">{userEmail || "Användare"}</div>
             <div className="topbar__role">Admin</div>
             <div className="topbar__company">MambyLy Solutions</div>
           </div>

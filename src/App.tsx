@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
@@ -24,19 +24,56 @@ import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 import SignDash from "./EnkelDash/pages/Dashboard/SignDash";
 import Dashboard from "./EnkelDash/pages/Dashboard/Dashboard";
 
+import "../src/EnkelDash/lib/amplify"; // ✅ configura Amplify una volta
+
+import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
+
+/** 🔒 Semplice guard inline */
+function PrivateRoute({ children }: { children: JSX.Element }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  return isAuthenticated ? children : <Navigate to="/enkel-dash/sign" replace />;
+}
 
 // ✅ Wrapper per accedere a useLocation dentro Router
 const AppWrapper = () => {
   useClarity();
   useUmami();
+
   const location = useLocation();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+  const setIsAuthenticated = useAuthStore((s) => s.setIsAuthenticated);
+  const setAdminId = useAuthStore((s) => s.setAdminId);
+  const handleUnauthorized = useAuthStore((s) => s.handleUnauthorized);
+
+  // 🔐 Bootstrap sessione Cognito all’avvio dell’app
+  useEffect(() => {
+    (async () => {
+      try {
+        const { tokens } = await fetchAuthSession();
+        const at = tokens?.accessToken?.toString();
+        if (!at) throw new Error("no session");
+
+        // opzionale: ID utente (sub) come adminId
+        const me = await getCurrentUser().catch(() => null);
+        const sub = (me as any)?.userId ?? null;
+
+        // mantieni compat con store esistente
+        sessionStorage.setItem("token", at);
+        if (sub) sessionStorage.setItem("adminId", sub);
+
+        setIsAuthenticated(true);
+        setAdminId(sub ?? null);
+      } catch {
+        handleUnauthorized();
+      }
+    })();
+  }, [setIsAuthenticated, setAdminId, handleUnauthorized]);
+
   const hideWhatsAppIcon =
-    location.pathname.startsWith("/dash") ||
-    location.pathname.startsWith("/sign") ||
-    location.pathname.startsWith("/admin");
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/enkel-dash/");
 
   return (
     <>
@@ -58,13 +95,19 @@ const AppWrapper = () => {
 
         {/* 🔐 PAGINE PROTETTE */}
         <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
-       {/*  <Route path="/dash" element={isAuthenticated ? <Dashboard /> : <Navigate to="/sign" />} /> */}
 
-       <Route path="/dash" element={<Dashboard />} />
+        <Route
+          path="/enkel-dash/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
 
         {/* 🔓 PAGINE PUBBLICHE ESTERNE */}
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/sign" element={<SignDash />} />
+        <Route path="/enkel-dash/sign" element={<SignDash />} />
       </Routes>
 
       {/* ✅ WHATSAPP ICON SOLO SU PAGINE PUBBLICHE */}

@@ -21,6 +21,7 @@
     "@mui/material": "^6.4.11",
     "@mui/system": "^6.4.11",
     "@mui/types": "^7.4.2",
+    "aws-amplify": "^6.15.4",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.18.1",
     "joi": "^17.13.3",
