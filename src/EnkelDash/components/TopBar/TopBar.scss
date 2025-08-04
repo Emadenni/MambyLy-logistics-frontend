@@ -1,5 +1,6 @@
 .topbar-wrapper {
   position: relative;
+  
 }
 
 .topbar-header-line {
@@ -52,8 +53,9 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.4rem 1.2rem 1rem;
-  background: #fcfafa;
+ /*  background: #fcfafa; */
   border-bottom: 1px solid #ddd;
+  background-color:rgb(232, 240, 245);
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -92,11 +94,12 @@
   }
 
   &__left {
-    background-color: #e7fef93e;
+    background-color: #f7f6fa;
     padding: 0.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     border: 1px solid #5574c346;
+   
   }
 
   &__center {
