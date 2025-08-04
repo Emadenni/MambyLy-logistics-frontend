@@ -3,7 +3,7 @@
   height: 100dvh;
   overflow: hidden;
   position: relative;
-  background-color: #fff;
+  background-color: #ffffff;
 
   &__hero {
     width: 100%;
@@ -23,7 +23,6 @@
     @media (min-width: 600px) {
       background-image: url("/src/EnkelDash/assets/bg-login-side-tablet.webp");
     }
-
     @media (min-width: 1024px) {
       background-image: url("/src/EnkelDash/assets/bg-login-side-desktop.webp");
     }
@@ -31,10 +30,7 @@
 
   &__overlay {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100dvh;
+    inset: 0;
     background-color: #f9f9f9;
     z-index: 100;
     padding: 2rem 1.5rem;
@@ -47,17 +43,15 @@
     align-items: center;
 
     background: linear-gradient(135deg, #a6cee9, #f5f8f8);
-      background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url("/src/EnkelDash/assets/desktop-login-dash-bkg.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("/src/EnkelDash/assets/desktop-login-dash-bkg.webp");
 
-  @media (max-width: 768px) {
-    background-image: url("/src/EnkelDash/assets/mobile-login-dash-bkg.webp");
-  }
-    &.visible {
-      transform: translateY(0);
+    @media (max-width: 768px) {
+      background-image: url("/src/EnkelDash/assets/mobile-login-dash-bkg.webp");
     }
+    &.visible { transform: translateY(0); }
   }
 
   &__close {
@@ -70,7 +64,7 @@
   }
 }
 
-
+/* ===== Layout principale ===== */
 .dashboard-layout {
   display: grid;
   grid-template-columns: minmax(0, 2.2fr) 260px;
@@ -78,6 +72,13 @@
   max-width: 1680px;
   margin: 0 auto;
   padding: 0.9rem 0.9rem 1.2rem;
+  overflow-x: hidden;
+  background-color:#25335e;
+    background-image: url("/src/EnkelDash/assets/bg-login-side-desktop.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  
 }
 
 .dashboard-content { min-width: 0; }
@@ -87,18 +88,14 @@
 @media (min-width: 1025px) {
   .dashboard-sidebar {
     position: sticky;
-    top: 72px; /* alinea con l’altezza della topbar, regola a tuo gusto */
+    top: 72px; /* altezza topbar */
     height: calc(100vh - 72px);
     overflow-y: auto;
   }
-
-  /* Evita che i figli aggiungano margini che “spingono” */
-  .dashboard-sidebar > * {
-    min-height: 0;
-   
-  }
+  .dashboard-sidebar > * { min-height: 0; }
 }
 
+/* Breakpoint tablet */
 @media (max-width: 1200px) {
   .dashboard-layout {
     grid-template-columns: 1fr 250px;
@@ -106,6 +103,7 @@
   }
 }
 
+/* Mobile / small tablet */
 @media (max-width: 1024px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
@@ -115,5 +113,67 @@
   .dashboard-sidebar { position: static; height: auto; overflow: visible; }
 }
 
-.dashboard-layout { display: flex; overflow-x: hidden; }
-.dashboard-content { flex: 1 1 auto; min-width: 0; overflow-x: hidden; }
+.dash-switch {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: linear-gradient(180deg, rgba(238, 235, 235, 0.95), #fff);
+  
+  backdrop-filter: saturate(120%) blur(4px);
+  border-bottom: 1px solid #eef2f7;
+}
+
+.dash-tabs {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dash-tab {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  appearance: none;
+  border: 1px solid #e6e8f0;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, transform .06s ease;
+}
+.dash-tab:hover { border-color: #d5d9e6; }
+.dash-tab:active { transform: translateY(1px); }
+
+/* SOLO questo evidenzia l’attivo */
+.dash-tab.active {
+  background: #25335e;
+  color: #fff;
+  border-color: #25335e;
+  box-shadow: 0 4px 10px rgba(37,51,94,.18);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dash-tabs {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .dash-tab { width: 100%; }
+}
+
+.dashboard-layout {
+  --sidebarW: 260px;
+  --gridGap: 0.9rem;
+  --pagePadX: 0.9rem; /* padding orizzontale di .dashboard-layout */
+}
+@media (max-width: 1200px) { .dashboard-layout { --sidebarW: 250px; } }

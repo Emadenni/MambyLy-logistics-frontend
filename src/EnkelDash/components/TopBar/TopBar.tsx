@@ -11,7 +11,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import offerKitIcon from "../../assets/offerKit.webp";
 import clientSideIcon from "../../assets/clienSide.webp";
 import chillBookingIcon from "../../assets/chillBooking.webp";
-import shiftDealerIcon from "../../assets/ShiftDealer.webp";
+import shiftDealerIcon from "../../assets/shiftDealer.webp";
 import brandOnIcon from "../../assets/BrandOn.webp";
 import fullStockIcon from "../../assets/fullStock.webp";
 
