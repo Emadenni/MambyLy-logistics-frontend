@@ -1,16 +1,20 @@
 import React from "react";
 import TopBar from "../../components/TopBar/TopBar";
 import SidebarTools from "../../components/SidebarTools/SidebarTools";
+import TeamWall from "../../components/TeamWall/TeamWall";
+import "./Dashboard.scss";
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   return (
     <>
       <TopBar />
       <div className="dashboard-layout">
-        <div className="dashboard-content">
-          {/* Contenuto del pannello principale */}
-        </div>
-        <SidebarTools />
+        <main className="dashboard-content">
+          <TeamWall />
+        </main>
+        <aside className="dashboard-sidebar">
+          <SidebarTools />
+        </aside>
       </div>
     </>
   );

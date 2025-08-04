@@ -1,143 +1,229 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SidebarTools.scss";
-
 import catchyIcon from "../../assets/catchy.webp";
 import doolioIcon from "../../assets/doolio.webp";
 import mailManagerIcon from "../../assets/mailManager.webp";
+import { AiOutlineRobot } from "react-icons/ai";
 
-import PsychologyIcon from "@mui/icons-material/Psychology"; // icona MUI per AI Support
+const CatchyPreview: React.FC = () => (
+  <>
+    <div className="tool-header">
+      <img src={catchyIcon} alt="Catchy" />
+    </div>
+    <div className="tool-preview">
+      <p className="quote">“Din perfekta fras – ett klick bort.”</p>
+      <button className="tool-button">Öppna Catchy</button>
+    </div>
+  </>
+);
 
-type ToolId = "catchy" | "doolio" | "mailmanager" | "aisupport";
+const DoolioPreview: React.FC = () => (
+  <>
+    <div className="tool-header">
+      <img src={doolioIcon} alt="Doolio" />
+    </div>
+    <div className="tool-preview doolio-preview">
+      <div className="doolio-card">
+        <p className="title">Brief: Sommarkampanj</p>
+        <p className="desc">Genererad copy · CTA: ”Upptäck nu”</p>
+      </div>
+      <button className="tool-button">Öppna Doolio</button>
+    </div>
+  </>
+);
+
+const MailManagerPreview: React.FC = () => (
+  <>
+    <div className="tool-header">
+      <img src={mailManagerIcon} alt="Mail Manager" />
+    </div>
+    <div className="tool-preview">
+      <button className="tool-button">Öppna Mail Manager</button>
+    </div>
+  </>
+);
+
+const AISupportPreview: React.FC = () => (
+  <div className="tool-block ai-support">
+    <div className="tool-header">
+      <AiOutlineRobot />
+    </div>
+    <div className="tool-preview ai-support-preview">
+      <textarea placeholder="Chiedi all’AI di aiutarti…" />
+      <button className="tool-button">Invia</button>
+    </div>
+  </div>
+);
+
+type ToolKey = "catchy" | "doolio" | "mail" | "ai";
+const renderTool = (tool: ToolKey | null) => {
+  if (!tool) return null;
+  switch (tool) {
+    case "catchy":
+      return <CatchyPreview />;
+    case "doolio":
+      return <DoolioPreview />;
+    case "mail":
+      return <MailManagerPreview />;
+    case "ai":
+      return <AISupportPreview />;
+    default:
+      return null;
+  }
+};
 
 const SidebarTools: React.FC = () => {
-  const [openMobileTool, setOpenMobileTool] = useState<ToolId | null>(null);
-  const [aiPrompt, setAiPrompt] = useState("");
+  const [desktopOpen, setDesktopOpen] = useState(false);
+  const [desktopActive, setDesktopActive] = useState<ToolKey | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileActive, setMobileActive] = useState<ToolKey | null>(null);
 
-  const toggleMobileTool = (id: ToolId) => {
-    setOpenMobileTool((curr) => (curr === id ? null : id));
+  useEffect(() => {
+    const setVH = () => {
+      const vh = (window.visualViewport?.height ?? window.innerHeight) / 100;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    setVH();
+    const onResize = () => setVH();
+    window.addEventListener("resize", onResize);
+    window.visualViewport?.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [mobileOpen]);
+
+  const openDesktop = (tool: ToolKey) => {
+    setDesktopActive(tool);
+    setDesktopOpen(true);
+  };
+  const closeDesktop = () => {
+    setDesktopOpen(false);
+    setDesktopActive(null);
   };
 
-  const handleAiSubmit = () => {
-    console.log("AI Prompt inviato:", aiPrompt);
-    setAiPrompt("");
+  const openMobile = (tool: ToolKey) => {
+    setMobileActive(tool);
+    setMobileOpen(true);
+  };
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setMobileActive(null);
   };
 
   return (
     <aside className="sidebar-tools">
-      <div className="sidebar-desktop">
+      <div className="sidebar-desktop is-tabs-enabled">
         <div className="tool-block catchy">
-          <div className="tool-header">
-            <img src={catchyIcon} alt="Catchy" />
-          </div>
-          <div className="tool-preview">
-            <p className="quote">“Din perfekta fras – ett klick bort.”</p>
-            <button className="tool-button">Öppna Catchy</button>
-          </div>
+          <CatchyPreview />
         </div>
-
         <div className="tool-block doolio">
-          <div className="tool-header">
-            <img src={doolioIcon} alt="Doolio" />
-          </div>
-          <div className="tool-preview doolio-preview">
-            <div className="doolio-card">
-              <p className="title">Brief: Sommarkampanj</p>
-              <p className="desc">Genererad copy · CTA: ”Upptäck nu”</p>
-            </div>
-            <button className="tool-button">Öppna Doolio</button>
-          </div>
+          <DoolioPreview />
         </div>
-
         <div className="tool-block mailmanager">
-          <div className="tool-header">
-            <img src={mailManagerIcon} alt="Mail Manager" />
-          </div>
-          <div className="tool-preview">
-            <button className="tool-button">Öppna Mail Manager</button>
-          </div>
+          <MailManagerPreview />
         </div>
+        <AISupportPreview />
+      </div>
 
-        {/* AI Support */}
-        <div className="tool-block ai-support">
-          <div className="tool-header">
-            <PsychologyIcon style={{ fontSize: 48, color: "white" }} />
+      <div className="desktop-tabs desktop-only">
+        <button
+          className={`desktop-tab ${desktopActive === "catchy" && desktopOpen ? "active" : ""}`}
+          onClick={() => openDesktop("catchy")}
+          aria-label="Apri Catchy"
+        >
+          <img src={catchyIcon} alt="Catchy" />
+        </button>
+        <button
+          className={`desktop-tab ${desktopActive === "doolio" && desktopOpen ? "active" : ""}`}
+          onClick={() => openDesktop("doolio")}
+          aria-label="Apri Doolio"
+        >
+          <img src={doolioIcon} alt="Doolio" />
+        </button>
+        <button
+          className={`desktop-tab ${desktopActive === "mail" && desktopOpen ? "active" : ""}`}
+          onClick={() => openDesktop("mail")}
+          aria-label="Apri Mail Manager"
+        >
+          <img src={mailManagerIcon} alt="Mail Manager" />
+        </button>
+        <button
+          className={`desktop-tab ${desktopActive === "ai" && desktopOpen ? "active" : ""}`}
+          onClick={() => openDesktop("ai")}
+          aria-label="Apri AI Support"
+        >
+          <AiOutlineRobot />
+        </button>
+      </div>
+
+      <div className={`desktop-panel ${desktopOpen ? "open" : ""} desktop-only`} role="dialog" aria-modal="true">
+        <div className="desktop-panel__inner">
+          <div className="panel-header">
+            {desktopActive === "catchy" && <h3>Catchy</h3>}
+            {desktopActive === "doolio" && <h3>Doolio</h3>}
+            {desktopActive === "mail" && <h3>Mail Manager</h3>}
+            {desktopActive === "ai" && <h3>AI Support</h3>}
+            <button className="panel-close" onClick={closeDesktop} aria-label="Chiudi">×</button>
           </div>
-          <div className="tool-preview ai-support-preview">
-            <textarea
-              value={aiPrompt}
-              onChange={(e) => setAiPrompt(e.target.value)}
-              placeholder="Skriv din fråga..."
-            />
-            <button className="tool-button" onClick={handleAiSubmit}>
-              Skicka
-            </button>
-          </div>
+          <div className="panel-body">{renderTool(desktopActive)}</div>
         </div>
       </div>
 
       <div className="sidebar-mobile">
-        <div className="mobile-tabs" aria-label="Tool tabs">
-          <button
-            type="button"
-            className={`mobile-tab ${openMobileTool === "catchy" ? "active" : ""}`}
-            aria-label="Catchy"
-            onClick={() => toggleMobileTool("catchy")}
-          >
-            <img src={catchyIcon} alt="" />
-          </button>
-
-          <button
-            type="button"
-            className={`mobile-tab ${openMobileTool === "doolio" ? "active" : ""}`}
-            aria-label="Doolio"
-            onClick={() => toggleMobileTool("doolio")}
-          >
-            <img src={doolioIcon} alt="" />
-          </button>
-
-          <button
-            type="button"
-            className={`mobile-tab ${openMobileTool === "mailmanager" ? "active" : ""}`}
-            aria-label="Mail Manager"
-            onClick={() => toggleMobileTool("mailmanager")}
-          >
-            <img src={mailManagerIcon} alt="" />
-          </button>
-
-          {/* Tab AI Support */}
-          <button
-            type="button"
-            className={`mobile-tab ${openMobileTool === "aisupport" ? "active" : ""}`}
-            aria-label="AI Support"
-            onClick={() => toggleMobileTool("aisupport")}
-          >
-            <PsychologyIcon style={{ fontSize: 30, color: "#25335e" }} />
-          </button>
+        <div className="mobile-tabs-wrap">
+          <div className="mobile-tabs">
+            <button
+              className={`mobile-tab ${mobileActive === "catchy" && mobileOpen ? "active" : ""}`}
+              onClick={() => openMobile("catchy")}
+              aria-label="Apri Catchy"
+            >
+              <img src={catchyIcon} alt="Catchy" />
+            </button>
+            <button
+              className={`mobile-tab ${mobileActive === "doolio" && mobileOpen ? "active" : ""}`}
+              onClick={() => openMobile("doolio")}
+              aria-label="Apri Doolio"
+            >
+              <img src={doolioIcon} alt="Doolio" />
+            </button>
+            <button
+              className={`mobile-tab ${mobileActive === "mail" && mobileOpen ? "active" : ""}`}
+              onClick={() => openMobile("mail")}
+              aria-label="Apri Mail Manager"
+            >
+              <img src={mailManagerIcon} alt="Mail Manager" />
+            </button>
+            <button
+              className={`mobile-tab ${mobileActive === "ai" && mobileOpen ? "active" : ""}`}
+              onClick={() => openMobile("ai")}
+              aria-label="Apri AI Support"
+            >
+              <AiOutlineRobot />
+            </button>
+          </div>
         </div>
 
-        <div className={`mobile-panel ${openMobileTool ? "open" : ""}`}>
+        <div className={`mobile-panel ${mobileOpen ? "open" : ""}`} role="dialog" aria-modal="true">
           <div className="mobile-panel__inner">
-            {openMobileTool === "aisupport" && (
-              <div className="panel-content">
-                <div className="panel-header">
-                  <PsychologyIcon style={{ fontSize: 28, color: "#25335e" }} />
-                  <h3>AI Support</h3>
-                  <button className="panel-close" onClick={() => setOpenMobileTool(null)}>
-                    ×
-                  </button>
-                </div>
-                <div className="panel-body ai-support-preview">
-                  <textarea
-                    value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
-                    placeholder="Skriv din fråga..."
-                  />
-                  <button className="tool-button" onClick={handleAiSubmit}>
-                    Skicka
-                  </button>
-                </div>
-              </div>
-            )}
+            <div className="panel-header">
+              {mobileActive === "catchy" && <h3>Catchy</h3>}
+              {mobileActive === "doolio" && <h3>Doolio</h3>}
+              {mobileActive === "mail" && <h3>Mail Manager</h3>}
+              {mobileActive === "ai" && <h3>AI Support</h3>}
+              <button className="panel-close" onClick={closeMobile} aria-label="Chiudi">×</button>
+            </div>
+            <div className="panel-body">{renderTool(mobileActive)}</div>
           </div>
         </div>
       </div>
