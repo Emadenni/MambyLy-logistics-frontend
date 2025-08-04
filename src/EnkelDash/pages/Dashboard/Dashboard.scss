@@ -41,7 +41,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     background: linear-gradient(135deg, #a6cee9, #f5f8f8);
     background-size: cover;
     background-repeat: no-repeat;
@@ -64,52 +63,65 @@
   }
 }
 
-/* ===== Layout principale ===== */
 .dashboard-layout {
+  --sidebarW: 260px;
+  --gridGap: 0.9rem;
+  --pagePadX: 0.9rem;
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 2.2fr) 260px;
-  gap: 0.9rem;
-  max-width: 1680px;
+  gap: var(--gridGap);
+  max-width: 100vw;
   margin: 0 auto;
   padding: 0.9rem 0.9rem 1.2rem;
   overflow-x: hidden;
-  background-color:#25335e;
-    background-image: url("/src/EnkelDash/assets/bg-login-side-desktop.webp");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-  
+  background: #f7f8fb;
 }
+
+.dashboard-layout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 60% at 20% 10%, rgba(231, 228, 228, 0.794), transparent 55%), linear-gradient(180deg, rgba(255, 255, 255, 0.401), rgba(255,255,255,0.12));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-content,
+.dashboard-sidebar,
+.dash-switch { position: relative; z-index: 1; }
 
 .dashboard-content { min-width: 0; }
 .dashboard-sidebar  { min-width: 0; }
 
-/* Sidebar STICKY su desktop */
 @media (min-width: 1025px) {
   .dashboard-sidebar {
     position: sticky;
-    top: 72px; /* altezza topbar */
+    top: 72px;
     height: calc(100vh - 72px);
     overflow-y: auto;
   }
   .dashboard-sidebar > * { min-height: 0; }
 }
 
-/* Breakpoint tablet */
 @media (max-width: 1200px) {
   .dashboard-layout {
     grid-template-columns: 1fr 250px;
+    --sidebarW: 250px;
     gap: 0.8rem;
   }
 }
 
-/* Mobile / small tablet */
 @media (max-width: 1024px) {
   .dashboard-layout {
     grid-template-columns: 1fr;
     gap: 0.75rem;
     padding: 0.75rem 0.75rem 1rem;
+      background: #f7f8fb;
+    
   }
+  .dashboard-layout::before{ background: none; }
+
   .dashboard-sidebar { position: static; height: auto; overflow: visible; }
 }
 
@@ -117,10 +129,9 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  background: linear-gradient(180deg, rgba(238, 235, 235, 0.95), #fff);
-  
-  backdrop-filter: saturate(120%) blur(4px);
-  border-bottom: 1px solid #eef2f7;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: saturate(120%) blur(6px);
+  border-bottom: 1px solid rgba(230,232,240,0.85);
 }
 
 .dash-tabs {
@@ -152,16 +163,8 @@
 }
 .dash-tab:hover { border-color: #d5d9e6; }
 .dash-tab:active { transform: translateY(1px); }
+.dash-tab.active { background: #25335e; color: #fff; border-color: #25335e; box-shadow: 0 4px 10px rgba(37,51,94,.18); }
 
-/* SOLO questo evidenzia l’attivo */
-.dash-tab.active {
-  background: #25335e;
-  color: #fff;
-  border-color: #25335e;
-  box-shadow: 0 4px 10px rgba(37,51,94,.18);
-}
-
-/* Mobile */
 @media (max-width: 768px) {
   .dash-tabs {
     grid-auto-flow: row;
@@ -170,10 +173,3 @@
   }
   .dash-tab { width: 100%; }
 }
-
-.dashboard-layout {
-  --sidebarW: 260px;
-  --gridGap: 0.9rem;
-  --pagePadX: 0.9rem; /* padding orizzontale di .dashboard-layout */
-}
-@media (max-width: 1200px) { .dashboard-layout { --sidebarW: 250px; } }

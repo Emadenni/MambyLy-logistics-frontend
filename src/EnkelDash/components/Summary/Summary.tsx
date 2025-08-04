@@ -47,7 +47,7 @@ export default function Summary() {
   return (
     <section className="summary">
       <div className="summary-head">
-        <h3>Senaste uppdateringar (senaste per verktyg)</h3>
+        <h3>Senaste uppdateringar</h3>
 
         <div className="summary-filters">
           <div className="tools">
