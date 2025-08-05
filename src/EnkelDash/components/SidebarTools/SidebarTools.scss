@@ -268,7 +268,7 @@
   .desktop-tabs {
     position: fixed;
     right: 0.5rem;
-    top: 70%;
+    top: 66%;
     transform: translateY(-50%) translateZ(0);
     display: flex;
     flex-direction: column;
@@ -285,9 +285,9 @@
     border: 1px solid #e6e8f0;
     border-right: none;
     border-radius: 16px 0 0 16px;
-    width: 102px;
-    height: 102px;
-    padding: 10px;
+    width: 90px;
+    height: 90px;
+    padding: 1px ;
     display: flex;
     align-items: center;
     justify-content: center;
