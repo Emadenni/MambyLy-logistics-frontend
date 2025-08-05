@@ -28,6 +28,7 @@
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
   overflow: hidden;
   width: 250px;
+  
 }
 
 .tool-header {
@@ -42,17 +43,20 @@
 .tool-preview {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.6rem;
   padding: 0.6rem 0.8rem 0.8rem;
 }
 
 .tool-button {
+  width: 200px;
+  height: 50px;
   appearance: none;
   border: none;
   border-radius: 10px;
-  padding: 0.6rem 0.9rem;
+  padding: 1rem 1rem;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 1rem;
   background: #25335e;
   color: #ffffff;
   cursor: pointer;
@@ -185,7 +189,7 @@
     border-left: 1px solid #e6e8f0;
     box-shadow: -12px 0 24px rgba(15, 23, 42, 0.18);
     transition: right 0.25s ease;
-    z-index: 70 !important;
+    z-index: 570 !important;
     display: flex;
     flex-direction: column;
     pointer-events: auto !important;
@@ -225,21 +229,22 @@
     flex-direction: column;
     gap: 0.75rem;
   }
-  .panel-body .tool-button { align-self: flex-start; }
+ 
 }
 
-.ai-support { background: linear-gradient(145deg, #25335e, #3e4b80); color: white; }
+.ai-support { background: linear-gradient(145deg, #25335e, #3e4b80); color: white; width: 90%; padding: 0.5rem !important; align-self: center;  }
 .ai-support .tool-header img { width: 64px; height: 64px; }
 .ai-support .tool-header svg { width: 48px; height: 48px; }
 .ai-support-preview { display: flex; flex-direction: column; gap: 0.5rem; }
 .ai-support-preview textarea {
-  width: 100%;
-  min-height: 60px;
-  padding: 0.5rem;
+  width: 98%;
+  min-height: 80px;
+  padding: 0.5rem !important;
   border-radius: 8px;
   border: none;
   resize: vertical;
   font-size: 0.9rem;
+  
 }
 .ai-support-preview .tool-button { background: #00b894; color: white; }
 
@@ -280,8 +285,8 @@
     border: 1px solid #e6e8f0;
     border-right: none;
     border-radius: 16px 0 0 16px;
-    width: 82px;
-    height: 82px;
+    width: 102px;
+    height: 102px;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -350,7 +355,7 @@
     flex-direction: column;
     gap: 0.8rem;
   }
-  .desktop-panel .panel-body .tool-button { align-self: flex-start; }
+/*   .desktop-panel .panel-body .tool-button { align-self: flex-start; } */
 
   .desktop-panel__inner::-webkit-scrollbar { width: 10px; }
   .desktop-panel__inner::-webkit-scrollbar-track { background: #f5f7fb; }

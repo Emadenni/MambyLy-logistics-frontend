@@ -16,7 +16,21 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+ 
 }
+
+.dashboard-sidebar {
+  padding: 0;       /* <-- togli qualsiasi padding */
+  margin: 0;        /* <-- togli qualsiasi margine */
+  box-sizing: border-box;
+
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+}
+
 
 /* Immagini e media responsive */
 .dashboard-content img,
@@ -251,5 +265,53 @@
     color: #67a4c3;
     cursor: pointer;
     margin-top: 2rem;
+  }
+}
+
+/* === PATCH PER SIDEBAR MOBILE CON TOGGLE === */
+@media (max-width: 1024px) {
+  .dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100px; // 👈 Sidebar stretta = OK
+    height: 100vh;
+    background: #fff;
+    z-index: 100;
+    transform: translateX(100%); // 👈 Inizialmente fuori
+    transition: transform 0.3s ease-in-out;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+    margin-top: 0 !important;
+  }
+
+
+  .dashboard-layout .dashboard-sidebar.closed {
+    transform: translateX(100%);
+  }
+
+  .dashboard-layout .dashboard-sidebar.open {
+    transform: translateX(0%);
+  }
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+  z-index: 200;
+
+  &:hover {
+    color: #000;
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+  }
+
+  @media (min-width: 1025px) {
+    display: none; // visibile solo su mobile
   }
 }

@@ -49,8 +49,8 @@ const AISupportPreview: React.FC = () => (
       <AiOutlineRobot />
     </div>
     <div className="tool-preview ai-support-preview">
-      <textarea placeholder="Chiedi all’AI di aiutarti…" />
-      <button className="tool-button">Invia</button>
+      <textarea placeholder="Ställ en fråga..." />
+      <button className="tool-button">Skicka</button>
     </div>
   </div>
 );
@@ -133,7 +133,9 @@ const SidebarTools: React.FC = () => {
         <div className="tool-block mailmanager">
           <MailManagerPreview />
         </div>
-        <AISupportPreview />
+        <div className="tool-block ai-support">
+          <AISupportPreview />
+        </div>
       </div>
 
       <div className="desktop-tabs desktop-only">
@@ -174,7 +176,9 @@ const SidebarTools: React.FC = () => {
             {desktopActive === "doolio" && <h3>Doolio</h3>}
             {desktopActive === "mail" && <h3>Mail Manager</h3>}
             {desktopActive === "ai" && <h3>AI Support</h3>}
-            <button className="panel-close" onClick={closeDesktop} aria-label="Chiudi">×</button>
+            <button className="panel-close" onClick={closeDesktop} aria-label="Chiudi">
+              ×
+            </button>
           </div>
           <div className="panel-body">{renderTool(desktopActive)}</div>
         </div>
@@ -221,7 +225,9 @@ const SidebarTools: React.FC = () => {
               {mobileActive === "doolio" && <h3>Doolio</h3>}
               {mobileActive === "mail" && <h3>Mail Manager</h3>}
               {mobileActive === "ai" && <h3>AI Support</h3>}
-              <button className="panel-close" onClick={closeMobile} aria-label="Chiudi">×</button>
+              <button className="panel-close" onClick={closeMobile} aria-label="Chiudi">
+                ×
+              </button>
             </div>
             <div className="panel-body">{renderTool(mobileActive)}</div>
           </div>

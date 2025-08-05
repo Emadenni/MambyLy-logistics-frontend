@@ -3,10 +3,10 @@ import TopBar from "../../components/TopBar/TopBar";
 import SidebarTools from "../../components/SidebarTools/SidebarTools";
 import TeamWall from "../../components/TeamWall/TeamWall";
 import Summary from "../../components/Summary/Summary";
+import { useSidebarStore } from "../../store/SidebarStore";
 import "./Dashboard.scss";
 
 type ViewKey = "summary" | "bacheca";
-
 const VIEW_KEY = "dash:view";
 
 const Dashboard: React.FC = () => {
@@ -14,6 +14,8 @@ const Dashboard: React.FC = () => {
     const saved = (localStorage.getItem(VIEW_KEY) as ViewKey) || "summary";
     return saved || "summary";
   });
+
+  const { isOpen: isSidebarOpen, toggleSidebar } = useSidebarStore();
 
   useEffect(() => {
     localStorage.setItem(VIEW_KEY, view);
@@ -58,16 +60,16 @@ const Dashboard: React.FC = () => {
           >
             TeamWall
           </button>
-          
         </div>
       </div>
 
-      <div className="dashboard-layout">
-        <main className={`dashboard-content view-${view}`}>
-          {ActiveMain}
-        </main>
+      <div className={`dashboard-layout ${isSidebarOpen ? "sidebar-open" : ""}`}>
+        <main className={`dashboard-content view-${view}`}>{ActiveMain}</main>
 
-        <aside className="dashboard-sidebar">
+        <aside className={`dashboard-sidebar ${isSidebarOpen ? "open" : ""}`}>
+          <button className="sidebar-close-btn" onClick={toggleSidebar}>
+            ×
+          </button>
           <SidebarTools />
         </aside>
       </div>

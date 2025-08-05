@@ -2,10 +2,9 @@
   position: relative;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* anti overflow orizzontale */
+  overflow-x: hidden;
 }
 
-/* ================== HEADER (striscia blu) ================== */
 .topbar-header-line {
   position: sticky;
   top: 0;
@@ -72,6 +71,9 @@
     display: flex;
     align-items: center;
     z-index: 30;
+    display: flex;
+    gap: 10px;
+    
   }
 
   .topbar-header-line__icon {
@@ -79,10 +81,10 @@
     left: 50%;
     top: 80%;
     transform: translate(-50%, -50%);
+  
   }
 }
 
-/* ================== BARRA PRINCIPALE ================== */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -109,16 +111,19 @@
     gap: 0.6rem;
   }
 
-  /* 🔒 impedisce che il blocco sinistro allarghi la riga */
   &__left {
     background-color: #f7f6fa;
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0 0.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     border: 1px solid #5574c346;
-
-    min-width: 0;  /* <--- chiave: consenti shrink */
+    min-width: 0;
     max-width: 100%;
+
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10px;
+    align-items: start;
   }
 
   &__center {
@@ -136,58 +141,32 @@
     height: 90px;
     object-fit: cover;
     border-radius: 50%;
+    grid-column: 1;
+    grid-row: 1 / span 2;
 
     @media (max-width: 768px) {
-      width: 55px;
-      height: 55px;
+      width: 52px;
+      height: 52px;
     }
-  }
-
-  &__logo-container {
-    height: 90px;
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid rgb(226, 229, 240);
-    border-left: 3px solid rgb(123, 144, 228);
-    border-radius: 10px;
-    flex: 0 0 auto;
-    max-width: 28vw; /* <--- limita in mobile */
-
-    @media (min-width: 769px) {
-      max-width: 160px;
-    }
-
-    @media (max-width: 768px) {
-      height: 70px;
-      margin: 0;
-    }
-  }
-
-  &__company-logo {
-    width: 100%;
-    height: auto;
-    display: block;
   }
 
   &__info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    min-width: 0;       /* <--- consenti ellissi */
-    max-width: 50vw;    /* <--- non superare metà schermo in mobile */
-
-    @media (min-width: 769px) {
-      max-width: none;
-    }
+    min-width: 0;
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    max-width: 100%;
   }
 
   &__name {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.05rem;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 
     @media (max-width: 768px) {
-      font-size: 0.8rem;
+      font-size: 0.95rem;
     }
   }
 
@@ -197,7 +176,31 @@
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 
     @media (max-width: 768px) {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
+    }
+  }
+
+  &__logo-container {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    justify-self: end;
+    background-color: transparent;
+  
+    border-radius: 100px;
+    padding: 3px 6px;
+    height: auto;
+    align-self: center; margin-top: 28px;
+  }
+
+  &__company-logo {
+    display: block;
+    width: 90px;
+    height: auto;
+    
+
+    @media (max-width: 768px) {
+      width: 60px;
     }
   }
 
@@ -207,7 +210,7 @@
     @media (max-width: 768px) {
       margin-top: .2rem;
       width: 100%;
-      overflow-x: auto;         /* <--- scroll orizzontale se molte icone */
+      overflow-x: auto;
       padding-bottom: .5rem;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -253,7 +256,6 @@
   }
 }
 
-/* ================== BOTTONI / AZIONI ================== */
 .mobile-menu-toggle {
   display: none;
   background: none;
@@ -271,6 +273,7 @@
     margin: 0;
     padding: 0;
     color: #f2f2f2;
+    
   }
 }
 
@@ -315,11 +318,9 @@
   }
 }
 
-/* visibilità helper */
 .desktop-only { display: block; @media (max-width: 768px) { display: none !important; } }
 .mobile-only  { display: none;  @media (max-width: 768px) { display: flex; } }
 
-/* Icone azioni in alto a destra */
 .topbar-actions {
   position: absolute;
   top: 3px;
@@ -352,19 +353,57 @@
   }
 }
 
-/* vecchi helper conservati */
-.topbar-settings { position: absolute; top: 3px; right: 12px; z-index: 20; width: 50px; height: 50px; background-color: #25335e; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,.1); cursor: pointer;
+.topbar-settings {
+  position: absolute;
+  top: 3px;
+  right: 12px;
+  z-index: 20;
+  width: 50px;
+  height: 50px;
+  background-color: #25335e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
   svg { font-size: 42px; color: white; }
+
   &:hover svg { color: rgb(202, 228, 228); }
-  @media (max-width: 768px) { position: static; width: 30px; height: 30px; background-color: white; svg { font-size: 22px; color: #25335e; } }
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+
+    svg { font-size: 22px; color: #25335e; }
+  }
 }
 
 .topbar-icon--settings {}
 .topbar-icon--logout {}
 
 .topbar-actions .topbar-settings {
-  position: static; width: 50px; height: 50px; background-color: #25335e; border-radius: 50%; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,.1); cursor:pointer;
+  position: static;
+  width: 50px;
+  height: 50px;
+  background-color: #25335e;
+  border-radius: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  cursor:pointer;
+
   svg { font-size: 42px; color: white; }
+
   &:hover svg { color: rgb(202, 228, 228); }
-  @media (max-width:768px){ width:30px; height:30px; background:white; svg{ font-size:22px; color:#25335e; } }
+
+  @media (max-width:768px){
+    width:30px; height:30px; background:white;
+    svg{ font-size:22px; color:#25335e; }
+  }
 }
+
