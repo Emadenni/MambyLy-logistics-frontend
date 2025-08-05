@@ -4,7 +4,7 @@
 
 /* Evita che elementi interni allarghino la pagina */
 :root {
-  --sidebarW: 260px;
+  --sidebarW: 100px !important;
   --gridGap: 0.9rem;
   --pagePadX: 0.9rem;
 }
@@ -170,6 +170,7 @@
     height: calc(100vh - 72px);
     overflow-y: auto;
     margin-top: 0;
+
   }
 
   .dashboard-sidebar > * {
@@ -180,7 +181,7 @@
 /* Desktop largo */
 @media (min-width: 1201px) {
   :root {
-    --sidebarW: 260px;
+    --sidebarW: 60px;
     --gridGap: 0.9rem;
   }
 

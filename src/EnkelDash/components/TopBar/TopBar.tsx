@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./TopBar.scss";
 import logoIcon from "../../assets/logo-icon-64.webp";
 import userImg from "../../../assets/images/profileEmanuele.webp";
@@ -17,9 +17,10 @@ import brandOnIcon from "../../assets/brandOn.webp";
 import fullStockIcon from "../../assets/fullStock.webp";
 import pingMeIcon from "../../assets/pingMe.webp";
 
-
 import { useSidebarStore } from "../../store/SidebarStore";
-
+import { useAuthStore } from "../../../store/useAuthStore";
+import { getCurrentUser, signOut } from "aws-amplify/auth";
+import { useNavigate } from "react-router-dom";
 
 type ToolIcon = {
   name: string;
@@ -37,18 +38,30 @@ const toolIcons: ToolIcon[] = [
 ];
 
 const Topbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
+  const navigate = useNavigate();
 
-  // ✅ prendi toggleSidebar dallo store Zustand
+  const logoutStore = useAuthStore((s) => s.logout);
   const toggleSidebar = useSidebarStore((state) => state.toggleSidebar);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((u) => setUserEmail((u?.signInDetails?.loginId as string) ?? ""))
+      .catch(() => setUserEmail(""));
+  }, []);
 
   const handleSettings = () => {
     console.log("Open settings");
   };
 
-  const handleLogout = () => {
-    console.log("Logout");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } finally {
+      logoutStore();
+      navigate("/enkel-dash/sign", { replace: true });
+    }
   };
 
   return (
@@ -81,7 +94,6 @@ const Topbar: React.FC = () => {
             className="mobile-menu-toggle"
             aria-label="Open tools menu"
             onClick={() => {
-              setIsRightSidebarOpen(false);
               setIsMobileMenuOpen((v) => !v);
             }}
           >
@@ -93,7 +105,7 @@ const Topbar: React.FC = () => {
             className="mobile-menu-toggle"
             aria-label="Open productivity menu"
             onClick={() => {
-              toggleSidebar(); // ✅ chiama lo store Zustand
+              toggleSidebar();
               setIsMobileMenuOpen(false);
             }}
           >
@@ -125,7 +137,7 @@ const Topbar: React.FC = () => {
         <div className="topbar__left">
           <img src={userImg} alt="user" className="topbar__avatar" />
           <div className="topbar__info">
-            <div className="topbar__name">Mario Rossi</div>
+            <div className="topbar__name">{userEmail || "Användare"}</div>
             <div className="topbar__role">Admin</div>
             <div className="topbar__company">MambyLy Solutions</div>
           </div>

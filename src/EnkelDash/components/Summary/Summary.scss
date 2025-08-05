@@ -69,7 +69,7 @@
 @media (min-width: 1025px) {
   .dashboard-content .summary {
     box-sizing: border-box;
-    width: min(99vw, calc(100vw - var(--sidebarW) - var(--gridGap) - (var(--pagePadX) * 2)));
+    width: 90vw;
     margin-left: 0;
     margin-right: 0;
     max-width: none;
