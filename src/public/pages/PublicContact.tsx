@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Dialog } from "@mui/material";
-import { FiArrowDown, FiX } from "react-icons/fi";
+import { FiArrowDown, FiMessageCircle, FiPhone, FiX } from "react-icons/fi";
 import PublicShell from "../components/PublicShell";
 import ContactForm from "../../components/ContactForm/ContactForm";
 import logoDark from "../assets/logo-dark.svg";
+import { publicContact } from "../contact";
 
 const steps = [
   "Du kontaktar oss och förklarar dina behov i detalj.",
@@ -81,6 +82,22 @@ const PublicContact: React.FC = () => {
             <button type="button" onClick={openModal} className="mp-btn mp-btn--outline" aria-haspopup="dialog">
               Läs mer om vårt arbetssätt
             </button>
+
+            <div className="mp-card mp-card--soft mp-direct">
+              <h3>Hellre ett samtal?</h3>
+              <ul className="mp-contact-list">
+                <li>
+                  <FiPhone aria-hidden="true" />
+                  <a href={publicContact.phoneHref}>{publicContact.phoneNational}</a>
+                </li>
+                <li>
+                  <FiMessageCircle aria-hidden="true" />
+                  <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer">
+                    Skriv på WhatsApp<span className="mp-sr"> (öppnas i ny flik)</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div id="contact_form" className="mp-card mp-form-card mp-anchor">

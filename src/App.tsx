@@ -34,8 +34,11 @@ import ContactUs from "./public/pages/PublicContact";
 import WorkWithUs from "./public/pages/PublicJobs";
 import AboutUs from "./public/pages/PublicAbout";
 import NotFoundPage from "./public/pages/PublicNotFound";
+import DigitalCardService from "./public/pages/PublicDigitalCard";
+import PublicCard from "./public/pages/PublicCard";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
+import { publicContact } from "./public/contact";
 
 const App = () => {
   useClarity();
@@ -78,6 +81,8 @@ const App = () => {
               <Route path="/kontaktaOss" element={<ContactUs />} />
               <Route path="/jobbaMedOss" element={<WorkWithUs />} />
               <Route path="/omOss" element={<AboutUs />} />
+              <Route path="/digital-card" element={<DigitalCardService />} />
+              <Route path="/card/:slug" element={<PublicCard />} />
               <Route path="/sidoButik" element={<SidoButik />} />
               <Route path="/sidoButik/mallar" element={<Templates />} />
               <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
@@ -88,7 +93,7 @@ const App = () => {
           </Routes>
 
           <a
-            href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
+            href={publicContact.whatsappGreetingUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"

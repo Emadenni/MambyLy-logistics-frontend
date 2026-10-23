@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "react-router-dom";
 import {
+  FiArrowRight,
   FiArrowUpRight,
   FiBookOpen,
   FiCalendar,
@@ -162,6 +163,27 @@ const PublicServices: React.FC = () => {
           <div className="mp-center">
             <Link to="/kontaktaOss" className="mp-btn mp-btn--primary mp-btn--lg">
               Boka en kostnadsfri konsultation idag <FiArrowUpRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="mp-section mp-section--flush-top" aria-labelledby="mp-dcs-services">
+        <div className="mp-container">
+          <div className="mp-card mp-dcs-teaser">
+            <span className="mp-dcs-teaser__mini" aria-hidden="true">
+              <span />
+            </span>
+            <div>
+              <p className="mp-eyebrow">Ny tjänst</p>
+              <h2 id="mp-dcs-services" className="mp-h3">Digitala visitkort</h2>
+              <p>
+                Ett interaktivt visitkort med egen länk och QR-kod. Mottagaren öppnar det i webbläsaren, utan app, och
+                kan spara kontakten direkt.
+              </p>
+            </div>
+            <Link to="/digital-card" className="mp-btn mp-btn--outline">
+              Se demot <FiArrowRight aria-hidden="true" />
             </Link>
           </div>
         </div>

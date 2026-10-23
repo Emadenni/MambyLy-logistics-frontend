@@ -5,6 +5,7 @@ import instagram_icon from "../../assets/images/socials/instagram_icon.webp";
 import linkedin_icon from "../../assets/images/socials/linkedin_icon.webp";
 import tiktok_icon from "../../assets/images/socials/tiktok_icon.webp";
 import whatsapp_icon from "../../assets/images/socials/whatsapp_icon.webp";
+import { publicContact } from "../../public/contact";
 
 const SocialBox: React.FC = () => {
   return (
@@ -19,7 +20,7 @@ const SocialBox: React.FC = () => {
         <img src={linkedin_icon} alt="linkedin_icon" className="social_icon" loading="lazy" />
       </a>
       <a
-        href="https://wa.me/46764510582?text=Hej!%20Jag%20besökte%20din%20webbplats%20och%20vill%20veta%20mer!"
+        href={publicContact.whatsappGreetingUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="WhatsApp"

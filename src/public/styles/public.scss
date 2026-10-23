@@ -8,6 +8,7 @@
 // Admin, login and Sido Butik never contain .mambyly-public, so they keep their current styles.
 
 @use "./hero-scene" as scene;
+@use "./digital-card" as dc;
 
 $bp-mobile: 720px;
 $bp-tablet: 920px;
@@ -1476,6 +1477,14 @@ body:has(.mambyly-public) {
     }
   }
 
+  .mp-direct {
+    margin-top: 32px;
+
+    .mp-contact-list {
+      margin-top: 10px;
+    }
+  }
+
   .mp-form-card {
     padding: clamp(22px, 3vw, 40px);
 
@@ -1898,6 +1907,22 @@ body:has(.mambyly-public) {
       }
     }
 
+    &__contact {
+      display: grid;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: var(--mp-on-dark);
+        text-decoration: underline;
+        text-underline-offset: 5px;
+      }
+    }
+
     &__heading {
       margin-bottom: 14px;
       color: var(--mp-on-dark);
@@ -2064,6 +2089,7 @@ body:has(.mambyly-public) {
   }
 
   @include scene.styles;
+  @include dc.styles;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -2072,6 +2098,7 @@ body:has(.mambyly-public) {
 
 .mp-dialog {
   @include tokens;
+  @include dc.dialog-styles;
 
   .MuiBackdrop-root {
     background-color: rgba(16, 59, 53, 0.55);
@@ -2446,6 +2473,11 @@ body:has(.mambyly-public) {
         box-shadow: none;
       }
     }
+  }
+
+  // A client card page is about the client: no MambyLy WhatsApp bubble there.
+  &:has(.mp-cardpage) .whatsapp-icon {
+    display: none;
   }
 
   // Floating WhatsApp link (App.tsx): calmer, no infinite bounce on public pages.

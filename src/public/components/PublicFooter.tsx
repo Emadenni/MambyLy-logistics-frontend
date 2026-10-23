@@ -4,6 +4,7 @@ import logoLight from "../assets/logo-light.svg";
 import Terms from "../../components/Terms/Terms";
 import SocialBox from "../../components/SocialBox/SocialBox";
 import AdminLink from "../../components/AdminLink/AdminLink";
+import { publicContact } from "../contact";
 
 const PublicFooter: React.FC = () => {
   // Same mechanism as the previous footer: CookieConsentBanner listens for this event.
@@ -19,6 +20,19 @@ const PublicFooter: React.FC = () => {
             <img src={logoLight} alt="MambyLy Solutions – till startsidan" width={150} height={43} />
           </Link>
           <p>För dig som driver eget.</p>
+          <ul className="mp-footer__contact">
+            <li>
+              <a href={publicContact.phoneHref}>
+                <span className="mp-sr">Ring MambyLy: </span>
+                {publicContact.phoneNational}
+              </a>
+            </li>
+            <li>
+              <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer">
+                WhatsApp<span className="mp-sr"> (öppnas i ny flik)</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
         <nav className="mp-footer__nav" aria-label="Sidfot">
@@ -29,6 +43,7 @@ const PublicFooter: React.FC = () => {
             <li><Link to="/omOss">Om oss</Link></li>
             <li><Link to="/jobbaMedOss">Jobb</Link></li>
             <li><Link to="/kontaktaOss">Kontakta oss</Link></li>
+            <li><Link to="/digital-card">Digitala visitkort</Link></li>
           </ul>
         </nav>
 

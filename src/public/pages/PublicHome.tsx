@@ -168,6 +168,27 @@ const PublicHome: React.FC = () => {
         </div>
       </section>
 
+      <section className="mp-section mp-section--tight" aria-labelledby="mp-dcs-home">
+        <div className="mp-container">
+          <div className="mp-card mp-dcs-teaser">
+            <span className="mp-dcs-teaser__mini" aria-hidden="true">
+              <span />
+            </span>
+            <div>
+              <p className="mp-eyebrow">Ny tjänst</p>
+              <h2 id="mp-dcs-home" className="mp-h3">Digitala visitkort</h2>
+              <p>
+                Ett interaktivt visitkort med egen länk och QR-kod. Mottagaren öppnar det i webbläsaren, utan app, och
+                kan spara kontakten direkt.
+              </p>
+            </div>
+            <Link to="/digital-card" className="mp-btn mp-btn--outline">
+              Se demot <FiArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="mp-section mp-section--tight" aria-labelledby="mp-why-title">
         <div className="mp-container mp-split">
           <div>

@@ -5,6 +5,7 @@ import { FiArrowUpRight, FiCompass, FiFeather, FiMail, FiMapPin, FiPhone, FiUser
 import PublicShell from "../components/PublicShell";
 import SocialBox from "../../components/SocialBox/SocialBox";
 import { publicTeam } from "../content/team";
+import { publicContact } from "../contact";
 
 const values = [
   { icon: <FiUsers />, title: "Närhet", text: "En direkt dialog och en partner som lyssnar." },
@@ -121,7 +122,7 @@ const PublicAbout: React.FC = () => {
         <div className="mp-container mp-split">
           <div>
             <h2 id="mp-contacts-title">Våra kontakter</h2>
-            {/* Contact details reproduced exactly as in ContactsListBox, including their links. */}
+            {/* E-mail kept exactly as in ContactsListBox (owner still to confirm the address); phone from public/contact.ts. */}
             <ul className="mp-contact-list">
               <li>
                 <FiMail aria-hidden="true" />
@@ -129,7 +130,7 @@ const PublicAbout: React.FC = () => {
               </li>
               <li>
                 <FiPhone aria-hidden="true" />
-                <a href="tel:+46764510582">+46 72 211 64 22</a>
+                <a href={publicContact.phoneHref}>{publicContact.phoneInternational}</a>
               </li>
               <li>
                 <FiMapPin aria-hidden="true" />

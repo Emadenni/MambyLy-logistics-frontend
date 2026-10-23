@@ -1,12 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteMockServe } from "vite-plugin-mock";
+import staticRouteMeta from "./build/static-route-meta";
 
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
 
   return {
-    plugins: [react(), viteMockServe()],
+    plugins: [react(), viteMockServe(), staticRouteMeta()],
     define: {
       // eventuali definizioni globali
     },

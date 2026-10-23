@@ -1,0 +1,30 @@
+{
+  "slug": "exempelbageriet",
+  "lang": "sv",
+  "demo": true,
+  "name": "Alva Exempel",
+  "role": "Bagare & grundare",
+  "company": "Exempelbageriet",
+  "tagline": "Surdeg, bullar och kaffe – bakat varje morgon.",
+  "logo": "logo.svg",
+  "theme": {
+    "front": "#f7efe2",
+    "frontInk": "#3b2414",
+    "accent": "#9a5421",
+    "back": "#3b2414",
+    "backInk": "#f7efe2",
+    "backAccent": "#e7b77c",
+    "style": "paper"
+  },
+  "phoneDisplay": "070-XXX XX XX",
+  "email": "alva@example.com",
+  "website": "https://example.com",
+  "details": [
+    { "label": "Öppet", "value": "Tis–lör 07–15" },
+    { "label": "Specialitet", "value": "Surdeg & kardemumma" }
+  ],
+  "meta": {
+    "title": "Alva Exempel – Exempelbageriet (demo)",
+    "description": "Demo av ett digitalt visitkort från MambyLy Solutions. Företaget och personen är påhittade."
+  }
+}
