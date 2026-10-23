@@ -10,17 +10,30 @@ import { CartProvider } from "./Context/CartContext";
 import { useClarity } from "./hooks/useClarity";
 import { useUmami } from "./hooks/useUmami";
 
-import Home from "./pages/Home/Home";
-import Services from "./pages/Services/Services";
-import ContactUs from "./pages/ContactUs/ContactUs";
-import WorkWithUs from "./pages/WorkWithUs/WorkWithUs";
-import AboutUs from "./pages/AboutUs/AboutUs";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+// Pre-restyle public pages: no longer routed, but still imported so that their stylesheets
+// stay in the bundle in the same order and admin/login/Sido Butik keep the exact same CSS.
+import "./pages/Home/Home";
+import "./pages/Services/Services";
+import "./pages/ContactUs/ContactUs";
+import "./pages/WorkWithUs/WorkWithUs";
+// AboutUs only contributes these two stylesheets; importing them directly (same order) keeps the
+// former team data – and the photo of the person no longer presented – out of the build.
+import "./pages/AboutUs/aboutUs.scss";
+import "./components/ContactsListBox/contactsListBox.scss";
+import "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import LoginForm from "./components/LoginForm/LoginForm";
 import SidoButik from "./pages/SidoButik/SidoButik";
 import Templates from "./pages/Templates/Templates";
 import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
+
+// Restyled public pages ("Mindre krångel. Mer företag."), see src/public/.
+import Home from "./public/pages/PublicHome";
+import Services from "./public/pages/PublicServices";
+import ContactUs from "./public/pages/PublicContact";
+import WorkWithUs from "./public/pages/PublicJobs";
+import AboutUs from "./public/pages/PublicAbout";
+import NotFoundPage from "./public/pages/PublicNotFound";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 
