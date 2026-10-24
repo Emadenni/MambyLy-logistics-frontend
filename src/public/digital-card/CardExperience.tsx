@@ -7,11 +7,12 @@ import { cardStrings } from "./strings";
 import { canNativeShare, copyText, shareLink, type ShareResult } from "./share";
 import { downloadVCard } from "./vcard";
 import { qrSvg } from "./qr";
+import { cardPath } from "./registry";
 
 type Status = { tone: "ok" | "info" | "warn"; text: string } | null;
 
 /** Card URL in the current environment: local stays local, preview stays preview. */
-export const cardUrlFor = (slug: string) => `${window.location.origin}/card/${slug}`;
+export const cardUrlFor = (slug: string) => `${window.location.origin}${cardPath(slug)}`;
 
 const isLocalhost = () => ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname);
 
@@ -44,7 +45,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }>
   /** Must be called directly from the user's click / pointerup (no await before navigator.share). */
   const share = (): Promise<void> => {
     setStatus(null);
-    return shareLink({ title: card.company ? `${card.name} – ${card.company}` : card.name, text: t.shareText(card.name), url }).then(onShareResult);
+    return shareLink({ title: card.company ? `${card.name} – ${card.company}` : card.name, text: card.kind === "organization" ? t.shareTextOrg(card.name) : t.shareText(card.name), url }).then(onShareResult);
   };
 
   const copy = () => {

@@ -1,18 +1,24 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import PublicShell from "../components/PublicShell";
 import CardExperience, { cardUrlFor } from "../digital-card/CardExperience";
-import { getCard } from "../digital-card/registry";
+import { COMPANY_CARD_SLUG, getCard } from "../digital-card/registry";
 import { cardStrings } from "../digital-card/strings";
 import logoDark from "../assets/logo-dark.svg";
 import "../styles/public.scss";
 
-/** /card/:slug – the shareable page of one card. Unknown slugs never fall back to another card. */
+/**
+ * /card – MambyLy's own card; /card/:slug – the shareable page of one client card.
+ * Unknown slugs never fall back to another card.
+ */
 const PublicCard: React.FC = () => {
   const { slug } = useParams();
-  const card = getCard(slug);
+  const card = getCard(slug ?? COMPANY_CARD_SLUG);
+
+  if (slug === COMPANY_CARD_SLUG) return <Navigate to="/card" replace />;
+  const isCompanyCard = card?.slug === COMPANY_CARD_SLUG;
 
   if (!card) {
     return (
@@ -73,10 +79,17 @@ const PublicCard: React.FC = () => {
       </main>
 
       <footer className="mp-cardpage__footer">
-        <Link to="/digital-card" className="mp-cardpage__brand">
-          <span>{t.createdBy}</span>
-          <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
-        </Link>
+        {isCompanyCard ? (
+          <Link to="/" className="mp-cardpage__brand">
+            <span>Till webbplatsen</span>
+            <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
+          </Link>
+        ) : (
+          <Link to="/digital-card" className="mp-cardpage__brand">
+            <span>{t.createdBy}</span>
+            <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
+          </Link>
+        )}
       </footer>
     </div>
   );

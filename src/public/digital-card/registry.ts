@@ -20,7 +20,7 @@ const cards = new Map<string, CardConfig>();
 for (const [path, raw] of Object.entries(configs)) {
   const folder = folderOf(path);
   const file = (name?: string) => (name && !name.includes("/") ? assets[`./cards/${folder}/${name}`] : undefined);
-  const card = raw.slug === folder ? validateCard(raw, { logo: file(raw.logo), photo: file(raw.photo) }) : null;
+  const card = raw.slug === folder ? validateCard(raw, { logo: file(raw.logo), logoBack: file(raw.logoBack), photo: file(raw.photo) }) : null;
   if (card) cards.set(card.slug, card);
   else if (import.meta.env.DEV) console.warn(`[digital-card] Ignored invalid card configuration: ${path}`);
 }
@@ -31,3 +31,8 @@ export function getCard(slug: string | undefined): CardConfig | undefined {
 }
 
 export const DEMO_CARD_SLUG = "exempelbageriet";
+
+/** MambyLy's own card, published at /card (not under /card/<slug>). */
+export const COMPANY_CARD_SLUG = "mambyly-solutions";
+
+export const cardPath = (slug: string) => (slug === COMPANY_CARD_SLUG ? "/card" : `/card/${slug}`);

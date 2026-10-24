@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useId, useRef } from "react";
-import { FiGlobe, FiMail, FiPhone, FiInstagram, FiFacebook, FiLinkedin, FiYoutube, FiLink } from "react-icons/fi";
+import { FiGlobe, FiMail, FiPhone, FiInstagram, FiFacebook, FiLinkedin, FiYoutube, FiLink, FiMessageCircle } from "react-icons/fi";
+import { FaTiktok } from "react-icons/fa";
 import type { CardConfig } from "./types";
 import type { CardStrings } from "./strings";
 
@@ -33,7 +34,7 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isBack = (ry: number) => Math.abs(Math.round(ry / 180)) % 2 === 1;
 
-const socialIcon = { instagram: FiInstagram, facebook: FiFacebook, linkedin: FiLinkedin, youtube: FiYoutube, tiktok: FiLink, x: FiLink };
+const socialIcon = { whatsapp: FiMessageCircle, instagram: FiInstagram, facebook: FiFacebook, linkedin: FiLinkedin, youtube: FiYoutube, tiktok: FaTiktok, x: FiLink };
 
 const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwipeUp, onDemoAction, sent }) => {
   const keysId = useId();
@@ -269,12 +270,21 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
         <div ref={body} className="dc__body" data-motion="settle">
           <div ref={front} className="dc__face dc__face--front" aria-hidden={flipped}>
             <div className="dc__top">
-              {card.logoUrl && <img className="dc__logo" src={card.logoUrl} alt="" width={96} height={96} draggable={false} />}
+              {card.logoUrl && (
+                <img
+                  className={`dc__logo${card.logoShape === "wide" ? " dc__logo--wide" : ""}`}
+                  src={card.logoUrl}
+                  alt={card.showNameOnFront ? "" : card.name}
+                  width={card.logoShape === "wide" ? 220 : 96}
+                  height={card.logoShape === "wide" ? 62 : 96}
+                  draggable={false}
+                />
+              )}
               {card.demo && <span className="dc__badge">{t.demoBadge}</span>}
             </div>
             <div className="dc__identity">
               {card.company && <p className="dc__company">{card.company}</p>}
-              <p className="dc__name">{card.name}</p>
+              {card.showNameOnFront && <p className="dc__name">{card.name}</p>}
               {card.role && <p className="dc__role">{card.role}</p>}
               {card.tagline && <p className="dc__tagline">{card.tagline}</p>}
             </div>
@@ -284,14 +294,33 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
           <div ref={back} className="dc__face dc__face--back" aria-hidden={!flipped}>
             <div className="dc__back-head">
               <p className="dc__back-name">{card.name}</p>
-              {card.company && <p className="dc__back-company">{card.company}</p>}
+              {(card.company || card.role) && <p className="dc__back-company">{card.company || card.role}</p>}
             </div>
             <ul className="dc__contacts">
               {phoneValue && contact("phone", FiPhone, t.phone, phoneValue, card.phone ? `tel:${card.phone.e164}` : undefined)}
               {card.email && contact("email", FiMail, t.email, card.email, `mailto:${card.email}`)}
               {card.website && contact("web", FiGlobe, t.website, card.website.label, card.website.href, true)}
-              {card.socials.map((s) => contact(s.type, socialIcon[s.type], s.label, s.label, s.href, true))}
             </ul>
+            {card.socials.length > 0 && (
+              <ul className="dc__social">
+                {card.socials.map((s) => {
+                  const Icon = socialIcon[s.type];
+                  return (
+                    <li key={s.type}>
+                      {card.demo ? (
+                        <button type="button" className="dc__social-link" onClick={onDemoAction} aria-label={`${s.label} (demo)`}>
+                          <Icon aria-hidden={true} />
+                        </button>
+                      ) : (
+                        <a className="dc__social-link" href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} ${t.opensNewTab}`}>
+                          <Icon aria-hidden={true} />
+                        </a>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
             {card.details && card.details.length > 0 && (
               <dl className="dc__details">
                 {card.details.map((d) => (
@@ -302,7 +331,7 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
                 ))}
               </dl>
             )}
-            {card.logoUrl && <img className="dc__logo dc__logo--back" src={card.logoUrl} alt="" width={96} height={96} draggable={false} />}
+            {card.logoBackUrl && <img className="dc__logo dc__logo--back" src={card.logoBackUrl} alt="" width={96} height={96} draggable={false} />}
           </div>
         </div>
       </div>

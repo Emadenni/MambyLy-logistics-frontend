@@ -113,6 +113,16 @@
     background-color: var(--dc-front);
   }
 
+  // Solid (dark) fronts: a softer light sweep and the site's subtle diagonal texture.
+  .dc:not(.dc--paper) .dc__face--front {
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 14px);
+    background-color: var(--dc-front);
+
+    &::after {
+      background: radial-gradient(circle at var(--dc-sheen-x) var(--dc-sheen-y), rgba(255, 255, 255, 0.07), transparent 55%);
+    }
+  }
+
   .dc__top {
     position: relative;
     z-index: 1;
@@ -126,6 +136,11 @@
     width: 17cqi;
     height: 17cqi;
     pointer-events: none;
+
+    &--wide {
+      width: 46cqi;
+      height: auto;
+    }
 
     &--back {
       position: absolute;
@@ -258,6 +273,45 @@
     }
   }
 
+  .dc__social {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6cqi;
+    margin: auto 0 0;
+    padding: 0 14cqi 0 0;
+    list-style: none;
+  }
+
+  .dc__social-link {
+    display: inline-grid;
+    place-items: center;
+    width: max(32px, 8.6cqi);
+    height: max(32px, 8.6cqi);
+    padding: 0;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: none;
+    color: var(--dc-back-accent);
+    cursor: pointer;
+
+    svg {
+      width: max(15px, 4.2cqi);
+      height: max(15px, 4.2cqi);
+    }
+
+    &:hover {
+      background: var(--dc-back-accent);
+      color: var(--dc-back);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--dc-back-accent);
+      outline-offset: 2px;
+    }
+  }
+
   .dc__details {
     position: relative;
     z-index: 1;
@@ -323,6 +377,10 @@
     .dc__details {
       padding-right: 0;
       font-size: 10.5px;
+    }
+
+    .dc__social {
+      padding-right: 0;
     }
   }
 

@@ -82,6 +82,7 @@ const App = () => {
               <Route path="/jobbaMedOss" element={<WorkWithUs />} />
               <Route path="/omOss" element={<AboutUs />} />
               <Route path="/digital-card" element={<DigitalCardService />} />
+              <Route path="/card" element={<PublicCard />} />
               <Route path="/card/:slug" element={<PublicCard />} />
               <Route path="/sidoButik" element={<SidoButik />} />
               <Route path="/sidoButik/mallar" element={<Templates />} />

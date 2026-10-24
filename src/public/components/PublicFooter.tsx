@@ -32,6 +32,9 @@ const PublicFooter: React.FC = () => {
                 WhatsApp<span className="mp-sr"> (öppnas i ny flik)</span>
               </a>
             </li>
+            <li>
+              <Link to="/card">Vårt visitkort</Link>
+            </li>
           </ul>
         </div>
 

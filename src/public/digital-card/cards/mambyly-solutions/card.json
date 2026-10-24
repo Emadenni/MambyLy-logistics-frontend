@@ -1,0 +1,36 @@
+{
+  "slug": "mambyly-solutions",
+  "lang": "sv",
+  "kind": "organization",
+  "name": "MambyLy Solutions",
+  "showNameOnFront": false,
+  "role": "Digital hjälp för småföretag",
+  "tagline": "Mindre krångel. Mer företag.",
+  "logo": "logo.svg",
+  "logoShape": "wide",
+  "logoBack": "mark.svg",
+  "theme": {
+    "front": "#103b35",
+    "frontInk": "#f6f4ee",
+    "accent": "#f2cc58",
+    "back": "#f6f4ee",
+    "backInk": "#103b35",
+    "backAccent": "#247b67",
+    "style": "solid"
+  },
+  "phone": "+46722116422",
+  "phoneDisplay": "072 211 64 22",
+  "email": "info@mambylysolutions.se",
+  "website": "https://www.mambylysolutions.se",
+  "socials": [
+    { "type": "whatsapp", "url": "https://wa.me/46722116422" },
+    { "type": "instagram", "url": "https://www.instagram.com/mambyly_solutions/" },
+    { "type": "facebook", "url": "https://www.facebook.com/profile.php?id=61565139296744" },
+    { "type": "linkedin", "url": "https://www.linkedin.com/company/104626842/" },
+    { "type": "tiktok", "url": "https://www.tiktok.com/@mambylysolutions" }
+  ],
+  "meta": {
+    "title": "MambyLy Solutions – digitalt visitkort",
+    "description": "Spara MambyLy Solutions i dina kontakter: telefon, e-post, WhatsApp och webbplats. Digital hjälp för småföretag."
+  }
+}

@@ -34,8 +34,10 @@ function nameParts(name: string) {
 }
 
 export function buildVCard(card: CardConfig, cardUrl: string): string {
-  const lines: string[] = ["BEGIN:VCARD", "VERSION:3.0", `N:${nameParts(card.name)}`, `FN:${esc(card.name)}`];
-  if (card.company) lines.push(`ORG:${esc(card.company)}`);
+  const org = card.kind === "organization";
+  const lines: string[] = ["BEGIN:VCARD", "VERSION:3.0", `N:${org ? ";;;;" : nameParts(card.name)}`, `FN:${esc(card.name)}`];
+  if (card.company || org) lines.push(`ORG:${esc(card.company || card.name)}`);
+  if (org) lines.push("X-ABShowAs:COMPANY");
   if (card.role) lines.push(`TITLE:${esc(card.role)}`);
   // Demo cards never carry a phone number (phoneDisplay is only a placeholder).
   if (card.phone && !card.demo) lines.push(`TEL;TYPE=CELL,VOICE:${card.phone.e164}`);

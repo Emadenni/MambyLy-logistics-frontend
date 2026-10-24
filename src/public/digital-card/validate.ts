@@ -7,6 +7,7 @@ const E164_PATTERN = /^\+[1-9]\d{6,14}$/;
 const COLOR_PATTERN = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 
 const SOCIAL_HOSTS: Record<CardSocialType, string[]> = {
+  whatsapp: ["wa.me"],
   instagram: ["instagram.com"],
   facebook: ["facebook.com"],
   linkedin: ["linkedin.com"],
@@ -16,6 +17,7 @@ const SOCIAL_HOSTS: Record<CardSocialType, string[]> = {
 };
 
 const SOCIAL_LABELS: Record<CardSocialType, string> = {
+  whatsapp: "WhatsApp",
   instagram: "Instagram",
   facebook: "Facebook",
   linkedin: "LinkedIn",
@@ -49,7 +51,7 @@ const hostMatches = (url: URL, hosts: string[]) =>
  * Validates a raw card configuration. Invalid or missing optional fields are dropped (and the
  * related element is not rendered); an invalid slug, name or theme makes the whole card invalid.
  */
-export function validateCard(raw: CardConfigRaw, assets: { logo?: string; photo?: string }): CardConfig | null {
+export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBack?: string; photo?: string }): CardConfig | null {
   if (!raw || !isValidSlug(raw.slug) || !text(raw.name)) return null;
   const theme = raw.theme;
   if (!theme || !["front", "frontInk", "accent", "back", "backInk"].every((k) => COLOR_PATTERN.test(String(theme[k as keyof typeof theme])))) {
@@ -57,7 +59,7 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; photo?
   }
 
   const phone = typeof raw.phone === "string" && E164_PATTERN.test(raw.phone.replace(/[\s-]/g, ""))
-    ? { e164: raw.phone.replace(/[\s-]/g, ""), display: raw.phone.trim() }
+    ? { e164: raw.phone.replace(/[\s-]/g, ""), display: text(raw.phoneDisplay, 30) || raw.phone.trim() }
     : undefined;
   const email = typeof raw.email === "string" && EMAIL_PATTERN.test(raw.email) ? raw.email : undefined;
   const site = safeHttpsUrl(raw.website);
@@ -76,7 +78,11 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; photo?
     slug: raw.slug,
     lang: raw.lang === "en" ? "en" : "sv",
     demo: raw.demo === true,
+    kind: raw.kind === "organization" ? "organization" : "person",
     name: text(raw.name)!,
+    showNameOnFront: raw.showNameOnFront !== false,
+    logoShape: raw.logoShape === "wide" ? "wide" : "square",
+    logoBackUrl: assets.logoBack ?? (raw.logoShape === "wide" ? undefined : assets.logo),
     role: text(raw.role),
     company: text(raw.company),
     tagline: text(raw.tagline, 90),

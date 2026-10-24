@@ -60,7 +60,8 @@ function collectPages(root: string): PageMeta[] {
     if (card.slug !== slug) continue;
     const title = card.meta?.title || [card.name, card.company].filter(Boolean).join(" – ");
     pages.push({
-      route: `/card/${slug}`,
+      // MambyLy's own card lives at /card (see COMPANY_CARD_SLUG in src/public/digital-card/registry.ts)
+      route: slug === "mambyly-solutions" ? "/card" : `/card/${slug}`,
       title,
       description: card.meta?.description || `Digitalt visitkort: ${card.name}`,
       image: fs.existsSync(path.join(root, "public/cards", slug, "og.png")) ? `/cards/${slug}/og.png` : "/brand/digital-card-og.png",

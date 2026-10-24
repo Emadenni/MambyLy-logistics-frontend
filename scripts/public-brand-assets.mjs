@@ -53,13 +53,16 @@ const cardFront = (card, logoSvg, width) => {
   const t = card.theme;
   return `<div style="position:relative;width:${width}px;aspect-ratio:85/55;box-sizing:border-box;border-radius:${width * 0.045}px;padding:${width * 0.065}px ${width * 0.07}px;display:flex;flex-direction:column;justify-content:space-between;background:${t.front};color:${t.frontInk};font-family:P,sans-serif;box-shadow:0 40px 70px -30px rgba(16,59,53,.55),0 14px 24px -14px rgba(16,59,53,.4)">
     <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div style="width:${width * 0.17}px;height:${width * 0.17}px">${logoSvg.replace("<svg ", '<svg width="100%" height="100%" ')}</div>
+      ${card.logoShape === "wide"
+        ? `<div style="width:${width * 0.46}px">${logoSvg.replace("<svg ", '<svg width="100%" ')}</div>`
+        : `<div style="width:${width * 0.17}px;height:${width * 0.17}px">${logoSvg.replace("<svg ", '<svg width="100%" height="100%" ')}</div>`}
       ${card.demo ? `<span style="padding:${width * 0.01}px ${width * 0.024}px;border:1px dashed ${t.accent};border-radius:99px;color:${t.accent};font-size:${width * 0.03}px;font-weight:700;letter-spacing:.12em">DEMO</span>` : ""}
     </div>
     <div>
       ${card.company ? `<div style="color:${t.accent};font-size:${width * 0.034}px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">${card.company}</div>` : ""}
-      <div style="margin-top:${width * 0.012}px;font-size:${width * 0.076}px;font-weight:700;letter-spacing:-.03em;line-height:1.05">${card.name}</div>
+      ${card.showNameOnFront === false ? "" : `<div style="margin-top:${width * 0.012}px;font-size:${width * 0.076}px;font-weight:700;letter-spacing:-.03em;line-height:1.05">${card.name}</div>`}
       ${card.role ? `<div style="margin-top:${width * 0.01}px;font-size:${width * 0.04}px;font-weight:600;opacity:.85">${card.role}</div>` : ""}
+      ${card.showNameOnFront === false && card.tagline ? `<div style="margin-top:${width * 0.026}px;font-size:${width * 0.034}px;font-style:italic;opacity:.8">${card.tagline}</div>` : ""}
     </div>
   </div>`;
 };

@@ -103,3 +103,11 @@ messaggio neutro, nessuna copia automatica; senza Web Share → "Kopiera länk";
 link selezionabile. Su HTTP da IP locale (es. telefono → `http://192.168.x.x:5173`) Web Share e Clipboard
 non sono disponibili (richiedono HTTPS): restano i fallback. URL condivisi, vCard e QR usano sempre
 `window.location.origin`.
+
+### Biglietto aziendale MambyLy (`/card`)
+
+`cards/mambyly-solutions/card.json` (`"kind": "organization"`, logo orizzontale `logo.svg`, `mark.svg` sul retro).
+È pubblicato su `/card` (`COMPANY_CARD_SLUG` in `registry.ts`; `/card/mambyly-solutions` reindirizza a `/card`).
+Contatti: telefono da `src/public/contact.ts`, e-mail `info@mambylysolutions.se` (il dominio con MX attivi;
+`mambyly.se` non risolve), social come nel `SocialBox` del sito. Link discreto "Vårt visitkort" nel footer.
+La pagina commerciale `/digital-card` resta separata e usa solo il biglietto demo.
