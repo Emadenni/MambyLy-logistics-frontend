@@ -8,9 +8,9 @@ type NavItem = { to: string; label: string; end?: boolean };
 
 const navItems: NavItem[] = [
   { to: "/", label: "Hem", end: true },
+  { to: "/exempel", label: "Exempel" },
   { to: "/tjänster", label: "Tjänster" },
   { to: "/omOss", label: "Om oss" },
-  { to: "/jobbaMedOss", label: "Jobb" },
   ...(publicSiteConfig.showSidoButik ? [{ to: "/sidoButik", label: "Sido Butik" }] : []),
 ];
 
@@ -102,8 +102,8 @@ const PublicHeader: React.FC = () => {
             </li>
           </ul>
         </nav>
-        <Link to="/kontaktaOss" className="mp-btn mp-btn--primary mp-btn--block">
-          Vad vill du förenkla? <FiArrowUpRight aria-hidden="true" />
+        <Link to="/kontaktaOss" state={{ service: "card" }} className="mp-btn mp-btn--primary mp-btn--block">
+          Begär ditt visitkort <FiArrowUpRight aria-hidden="true" />
         </Link>
       </div>
     </header>

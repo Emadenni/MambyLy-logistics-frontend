@@ -1,54 +1,64 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Dialog } from "@mui/material";
-import { FiArrowDown, FiMessageCircle, FiPhone, FiX } from "react-icons/fi";
+import { FiArrowDown, FiMessageCircle, FiPhone } from "react-icons/fi";
 import PublicShell from "../components/PublicShell";
 import ContactForm from "../../components/ContactForm/ContactForm";
-import logoDark from "../assets/logo-dark.svg";
+import { CardPreview } from "../digital-card/DigitalCard";
+import { examplePath, getCard } from "../digital-card/registry";
+import { cardStrings } from "../digital-card/strings";
+import { SERVICE_SUBJECTS, subjectFor, type ContactState, type ServiceKey } from "../digital-card/service";
 import { publicContact } from "../contact";
 
 const steps = [
-  "Du kontaktar oss och förklarar dina behov i detalj.",
-  "Vi skickar ett frågeformulär med några specifika och riktade frågor för att bättre förstå dina behov.",
-  "Efter att ha fått dina svar, ger vi ett erbjudande via video, VR, mail eller chat.",
-  "Om du accepterar erbjudandet, presenterar vi en road map och börjar arbeta tillsammans.",
+  { title: "Vi hör av oss", text: "Vi läser din förfrågan och svarar med e-post eller telefon." },
+  { title: "Vi pratar om kortet", text: "Innehåll, utseende och vad du vill ha med. Du får en offert." },
+  { title: "Du provar", text: "Vi tar fram kortet – och webbplatsen om du vill ha en – och du testar." },
+  { title: "Klart att dela", text: "Du får den färdiga länken och QR-koden." },
+];
+
+const serviceOptions: { key: ServiceKey; label: string; hint: string }[] = [
+  { key: "card", label: "Digitalt visitkort", hint: "Jag har redan en webbplats, eller behöver ingen." },
+  { key: "both", label: "Visitkort + webbplats", hint: "Jag börjar från noll." },
+  { key: "site", label: "Webbplats", hint: "Främst en ny webbplats." },
 ];
 
 const PublicContact: React.FC = () => {
   const location = useLocation();
-  const subjectFromCard = location.state?.subject || "";
+  const state = (location.state ?? {}) as ContactState;
+  const example = state.example ? getCard(state.example) : undefined;
+  const model = example?.demo && example.example ? example : undefined;
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const openModal = () => setIsModalVisible(true);
-  const closeModal = () => setIsModalVisible(false);
+  const [service, setService] = useState<ServiceKey | undefined>(
+    state.service && state.service in SERVICE_SUBJECTS ? state.service : model ? "card" : undefined
+  );
+  // A subject sent by another page (older links) is kept as it is until a service is chosen.
+  const subject = service ? subjectFor(service, model) : state.subject || "";
 
   return (
     <PublicShell>
       <Helmet>
-        <title>Kontakta oss – Få hjälp och support | Mambyly Solutions</title>
+        <title>Kontakta oss – digitala visitkort och webbplatser | MambyLy Solutions</title>
         <meta
           name="description"
-          content="Kontakta oss idag för att diskutera dina behov. Vi erbjuder personlig support och skräddarsydda lösningar för ditt företag."
+          content="Berätta vad du behöver: ett digitalt visitkort, en webbplats eller båda. Vi hör av oss och tar fram en offert."
         />
-        <meta
-          name="keywords"
-          content="kontakt, support, hjälp, frågor, företagslösningar, skräddarsydda tjänster"
-        />
-        <link rel="canonical" href="https://mambylysolutions.se/kontaktaOss" />
+        <link rel="canonical" href="https://www.mambylysolutions.se/kontaktaOss" />
       </Helmet>
 
       <section className="mp-intro mp-intro--paper">
         <div className="mp-container mp-intro__grid">
           <div>
-            <p className="mp-eyebrow">Låt oss prata</p>
+            <p className="mp-eyebrow">Kontakt</p>
             <h1 className="mp-display mp-display--page">
-              Vad vill du
+              Berätta vad
               <br />
-              förenkla?
+              du behöver.
             </h1>
-            <p className="mp-lead">Berätta om din verksamhet och vad som tar tid i vardagen. Vi börjar där.</p>
+            <p className="mp-lead">
+              Välj vad det gäller och skriv några rader om din verksamhet. Logotyp och material kan du skicka när vi har
+              pratat.
+            </p>
           </div>
           <p className="mp-note-card" aria-hidden="true">
             Vi hör
@@ -61,15 +71,14 @@ const PublicContact: React.FC = () => {
       <section className="mp-section mp-section--flush-top">
         <div className="mp-container mp-contact">
           <div className="mp-contact__process">
-            <h2>Skicka ett meddelande till oss</h2>
-            <p>Ta ett ögonblick för att läsa vårt workflow och förstå hur vi hanterar din förfrågan.</p>
+            <h2>Så går det till</h2>
             <ol className="mp-process">
-              {steps.map((text, index) => (
-                <li key={index}>
+              {steps.map((s, index) => (
+                <li key={s.title}>
                   <span className="mp-process__num" aria-hidden="true">{index + 1}</span>
                   <div>
-                    <h3>Steg {index + 1}</h3>
-                    <p>{text}</p>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
                     {index === 0 && (
                       <a href="#contact_form" className="mp-textlink mp-textlink--small">
                         Gå till formuläret <FiArrowDown aria-hidden="true" />
@@ -79,9 +88,6 @@ const PublicContact: React.FC = () => {
                 </li>
               ))}
             </ol>
-            <button type="button" onClick={openModal} className="mp-btn mp-btn--outline" aria-haspopup="dialog">
-              Läs mer om vårt arbetssätt
-            </button>
 
             <div className="mp-card mp-card--soft mp-direct">
               <h3>Hellre ett samtal?</h3>
@@ -101,40 +107,43 @@ const PublicContact: React.FC = () => {
           </div>
 
           <div id="contact_form" className="mp-card mp-form-card mp-anchor">
-            <h2>Berätta för oss hur vi kan hjälpa dig</h2>
-            <p className="mp-muted">Vi ser verkligen fram emot att få stötta dig med våra tjänster!</p>
+            <h2>Vad gäller det?</h2>
+
+            <fieldset className="mp-service-pick">
+              <legend className="mp-sr">Välj tjänst</legend>
+              {serviceOptions.map((o) => (
+                <label key={o.key} className={`mp-service-pick__option${service === o.key ? " is-checked" : ""}`}>
+                  <input type="radio" name="mp-service" value={o.key} checked={service === o.key} onChange={() => setService(o.key)} />
+                  <span>
+                    <strong>{o.label}</strong>
+                    <small>{o.hint}</small>
+                  </span>
+                </label>
+              ))}
+            </fieldset>
+
+            {model && service !== "site" && (
+              <div className="mp-model">
+                <div className="mp-model__card">
+                  <CardPreview card={model} t={cardStrings[model.lang]} />
+                </div>
+                <p>
+                  <span>Vald stil</span>
+                  <strong>{model.company || model.name}</strong> – exemplet för {model.example?.sector.toLowerCase()}.{" "}
+                  <Link to={examplePath(model.slug)}>Visa exemplet</Link>
+                </p>
+              </div>
+            )}
+
+            <p className="mp-muted mp-form-card__hint">
+              Valet fylls i som ämne i formuläret nedan – du kan ändra det fritt.
+            </p>
             <div className="mp-form">
-              <ContactForm subjectFromCard={subjectFromCard} />
+              <ContactForm subjectFromCard={subject} />
             </div>
           </div>
         </div>
       </section>
-
-      <Dialog
-        open={isModalVisible}
-        onClose={closeModal}
-        className="mp-dialog"
-        aria-labelledby="mp-workflow-title"
-        PaperProps={{ className: "mp-dialog__paper mp-dialog__paper--narrow" }}
-      >
-        <button type="button" className="mp-dialog__close" onClick={closeModal} aria-label="Stäng">
-          <FiX aria-hidden="true" />
-        </button>
-        <div className="mp-dialog__body">
-          <img src={logoDark} alt="MambyLy Solutions" width={150} height={43} className="mp-dialog__logo" />
-          <h2 id="mp-workflow-title" className="mp-sr">
-            Vårt arbetssätt
-          </h2>
-          <p>
-            Vi anser att denna metod garanterar en hög grad av personalisering och ett agilt arbetssätt för att bäst
-            möta dina behov. Vi tror också att på detta sätt förblir det som skrivs klart och tydligt, vilket minskar
-            risken för missförstånd och garanterar en bättre förståelse.
-          </p>
-          <button type="button" onClick={closeModal} className="mp-btn mp-btn--primary">
-            Stäng
-          </button>
-        </div>
-      </Dialog>
     </PublicShell>
   );
 };

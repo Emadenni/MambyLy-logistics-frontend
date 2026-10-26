@@ -1,34 +1,61 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiCopy, FiDownload, FiGrid, FiRefreshCw, FiShare2, FiUserPlus, FiX } from "react-icons/fi";
+import { FiDownload, FiLink, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
 import { cardStrings } from "./strings";
 import { canNativeShare, copyText, shareLink, type ShareResult } from "./share";
-import { downloadVCard } from "./vcard";
+import { downloadVCard, staticVCardPath, vcardFileName } from "./vcard";
 import { qrSvg } from "./qr";
 import { cardPath } from "./registry";
+import FlipIcon from "./FlipIcon";
 
 type Status = { tone: "ok" | "info" | "warn"; text: string } | null;
+
+export type CardMenuItem = { to: string; label: string; icon: React.ReactNode };
 
 /** Card URL in the current environment: local stays local, preview stays preview. */
 export const cardUrlFor = (slug: string) => `${window.location.origin}${cardPath(slug)}`;
 
 const isLocalhost = () => ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname);
 
-const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }> = ({ card, headingLevel = "h2" }) => {
+/** iPhone / iPad (iPadOS reports itself as a Mac with touch). */
+const isIOS = () =>
+  /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+/** Icon-only button: translated accessible name + the same text as tooltip on hover and focus. */
+export const IconButton: React.FC<{ label: string; onClick: () => void; children: React.ReactNode; haspopup?: boolean }> = ({
+  label,
+  onClick,
+  children,
+  haspopup,
+}) => (
+  <button type="button" className="dc-iconbtn" aria-label={label} data-tip={label} onClick={onClick} aria-haspopup={haspopup ? "dialog" : undefined}>
+    {children}
+  </button>
+);
+
+const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; menu?: CardMenuItem[]; intro?: boolean }> = ({
+  card,
+  headingLevel = "h2",
+  menu,
+  intro = false,
+}) => {
   const t = cardStrings[card.lang];
   const url = useMemo(() => cardUrlFor(card.slug), [card.slug]);
   const [flipped, setFlipped] = useState(false);
-  const [sent, setSent] = useState(false);
   const [status, setStatus] = useState<Status>(null);
   const [manualCopy, setManualCopy] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
+  const [savedOnce, setSavedOnce] = useState(false);
   const [nativeShare] = useState(canNativeShare);
   const qrMarkup = useMemo(() => qrSvg(url), [url]);
   const qrSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qrMarkup)}`;
   const Heading = headingLevel;
-  const sentTimer = useRef<number>();
+  // Real cards in a production build have a static .vcf next to the page (see vcard.ts).
+  const staticVCard = import.meta.env.PROD && !card.demo;
 
   const showManual = (text: string) => {
     setStatus({ tone: "warn", text });
@@ -42,10 +69,10 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }>
     else showManual(t.shareFailed);
   };
 
-  /** Must be called directly from the user's click / pointerup (no await before navigator.share). */
-  const share = (): Promise<void> => {
+  /** Called directly from the click (no await before navigator.share). */
+  const share = () => {
     setStatus(null);
-    return shareLink({ title: card.company ? `${card.name} – ${card.company}` : card.name, text: card.kind === "organization" ? t.shareTextOrg(card.name) : t.shareText(card.name), url }).then(onShareResult);
+    void shareLink({ title: card.company ? `${card.name} – ${card.company}` : card.name, text: card.kind === "organization" ? t.shareTextOrg(card.name) : t.shareText(card.name), url }).then(onShareResult);
   };
 
   const copy = () => {
@@ -59,21 +86,19 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }>
     });
   };
 
-  const onSwipeUp = () => {
-    if (sent) return;
-    const started = performance.now();
-    setSent(true);
-    const pending = share(); // called now, inside the gesture; the animation only accompanies it
-    const minimum = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 150 : 650;
-    void pending.finally(() => {
-      window.clearTimeout(sentTimer.current);
-      sentTimer.current = window.setTimeout(() => setSent(false), Math.max(0, minimum - (performance.now() - started)));
-    });
+  // Never claims the contact was saved: only the phone can do that, after the user confirms.
+  const onSaveContact = (e: React.MouseEvent) => {
+    if (!staticVCard) {
+      e.preventDefault();
+      downloadVCard(card, url);
+    }
+    setSavedOnce(true);
+    setStatus({ tone: "info", text: card.demo ? t.demoVCard : t.vcardOpened });
   };
 
-  const saveContact = () => {
+  const downloadFallback = () => {
     downloadVCard(card, url);
-    setStatus({ tone: "ok", text: t.vcardSaved });
+    setStatus({ tone: "info", text: t.vcardDownloaded });
   };
 
   const demoAction = () => setStatus({ tone: "info", text: t.demoAction });
@@ -107,38 +132,45 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }>
       <Heading className="mp-sr">
         {t.cardLabel}: {card.name}
       </Heading>
-      <DigitalCard
-        card={card}
-        t={t}
-        flipped={flipped}
-        onFlippedChange={setFlipped}
-        onSwipeUp={onSwipeUp}
-        onDemoAction={demoAction}
-        sent={sent}
-      />
+      <DigitalCard card={card} t={t} flipped={flipped} onFlippedChange={setFlipped} onDemoAction={demoAction} intro={intro} />
       <p className="dc-hint" aria-hidden="true">{t.hint}</p>
       <p className="mp-sr" aria-live="polite">{flipped ? t.showingBack : t.showingFront}</p>
 
       <div className="dc-actions">
-        <button type="button" className="mp-btn mp-btn--outline mp-btn--sm" onClick={() => setFlipped((v) => !v)}>
-          <FiRefreshCw aria-hidden="true" /> {flipped ? t.flipToFront : t.flipToBack}
-        </button>
-        {nativeShare && (
-          <button type="button" className="mp-btn mp-btn--primary mp-btn--sm" onClick={() => void share()}>
-            <FiShare2 aria-hidden="true" /> {t.share}
-          </button>
-        )}
-        <button type="button" className={`mp-btn mp-btn--sm ${nativeShare ? "mp-btn--outline" : "mp-btn--primary"}`} onClick={copy}>
-          <FiCopy aria-hidden="true" /> {t.copy}
-        </button>
-        <button type="button" className="mp-btn mp-btn--outline mp-btn--sm" onClick={saveContact}>
+        <a
+          className="mp-btn mp-btn--primary dc-save"
+          href={staticVCard ? staticVCardPath(card) : "#"}
+          // iOS opens a served .vcf in its own contact sheet; `download` would only file it away.
+          download={staticVCard && isIOS() ? undefined : vcardFileName(card)}
+          type="text/vcard"
+          onClick={onSaveContact}
+        >
           <FiUserPlus aria-hidden="true" /> {t.save}
-        </button>
-        <button type="button" className="mp-btn mp-btn--outline mp-btn--sm" onClick={() => setQrOpen(true)} aria-haspopup="dialog">
-          <FiGrid aria-hidden="true" /> {t.qr}
-        </button>
+        </a>
+        {nativeShare ? (
+          <IconButton label={t.share} onClick={share}>
+            <FiShare aria-hidden="true" />
+          </IconButton>
+        ) : (
+          <IconButton label={t.copy} onClick={copy}>
+            <FiLink aria-hidden="true" />
+          </IconButton>
+        )}
+        <IconButton label={flipped ? t.flipToFront : t.flipToBack} onClick={() => setFlipped((v) => !v)}>
+          <FlipIcon />
+        </IconButton>
+        <IconButton label={t.qr} onClick={() => setQrOpen(true)} haspopup>
+          <TbQrcode aria-hidden="true" />
+        </IconButton>
       </div>
-      {card.demo && <p className="dc-note">{t.demoVCard}</p>}
+      {savedOnce && !card.demo && (
+        <p className="dc-note">
+          {t.vcardFallback}{" "}
+          <button type="button" className="dc-note__link" onClick={downloadFallback}>
+            {t.vcardDownload}
+          </button>
+        </p>
+      )}
       {isLocalhost() && <p className="dc-note">{t.localhostNote}</p>}
 
       <div className="dc-status" role="status" aria-live="polite">
@@ -149,6 +181,21 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2" }>
           <label htmlFor={`dc-url-${card.slug}`}>{t.manualLabel}</label>
           <input id={`dc-url-${card.slug}`} type="text" readOnly value={url} onFocus={(e) => e.currentTarget.select()} />
         </div>
+      )}
+
+      {menu && menu.length > 0 && (
+        <nav className="dc-menu" aria-label={t.menuLabel}>
+          <ul>
+            {menu.map((item) => (
+              <li key={item.to}>
+                <Link to={item.to} className="dc-menu__link">
+                  <span className="dc-menu__icon" aria-hidden="true">{item.icon}</span>
+                  <span>{item.label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       )}
 
       <Dialog

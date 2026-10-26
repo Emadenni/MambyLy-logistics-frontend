@@ -14,9 +14,8 @@ const PublicJobs: React.FC = () => {
         <title>Jobba med oss – Mambyly Solutions</title>
         <meta
           name="description"
-          content="Vill du jobba med oss? Se våra lediga tjänster eller skicka in en spontanansökan för att bli konsult inom IT."
+          content="Vill du jobba med oss? Se om det finns lediga tjänster eller skicka in en spontanansökan."
         />
-        <meta name="keywords" content="jobb, IT-konsult, UX/UI, SEO, blockchain, utvecklare, molnarkitekt" />
         <meta name="author" content="Mambyly Solutions" />
       </Helmet>
 

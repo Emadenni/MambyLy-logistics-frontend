@@ -1,19 +1,18 @@
-import React, { useCallback, useEffect, useId, useRef } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { FiGlobe, FiMail, FiPhone, FiInstagram, FiFacebook, FiLinkedin, FiYoutube, FiLink, FiMessageCircle } from "react-icons/fi";
 import { FaTiktok } from "react-icons/fa";
 import type { CardConfig } from "./types";
 import type { CardStrings } from "./strings";
 
 /**
- * Two-sided 3D business card.
+ * Two-sided 3D business card. One engine for every card: the look comes from the card's
+ * configuration (colours, layout, font, logo), never from a separate implementation.
  *  - Decorative tilt: follows a mouse pointer (never needed to use the card).
- *  - Drag / rotate: a press becomes a drag after DRAG_START px; on release the card settles
- *    on the nearest side (one turn per gesture).
- *  - Hand over: a decisive upward swipe calls onSwipeUp synchronously in pointerup, so the
- *    parent can call navigator.share() while the user activation is still valid.
+ *  - Drag / rotate: a horizontal drag turns the card; on release it settles on the nearest side.
+ *    Vertical swipes stay with the browser (touch-action: pan-y), so the page always scrolls.
  *  - Tap, Enter or Space flips; arrow keys tilt. Links/buttons on the visible side keep working.
- * Only the card itself captures touch gestures (touch-action: none on the card); the page
- * around it scrolls normally.
+ *  - intro: a short sideways tilt once per tab session, on a wrapper of its own (never on the
+ *    element that carries the drag / flip transform). Stops as soon as the user interacts.
  */
 
 type Motion = "settle" | "follow" | "hover";
@@ -23,10 +22,9 @@ type Props = {
   t: CardStrings;
   flipped: boolean;
   onFlippedChange: (flipped: boolean) => void;
-  onSwipeUp: () => void;
   /** Demo cards: contact actions only show a notice. */
   onDemoAction: () => void;
-  sent: boolean;
+  intro?: boolean;
 };
 
 const DRAG_START = 8;
@@ -36,16 +34,184 @@ const isBack = (ry: number) => Math.abs(Math.round(ry / 180)) % 2 === 1;
 
 const socialIcon = { whatsapp: FiMessageCircle, instagram: FiInstagram, facebook: FiFacebook, linkedin: FiLinkedin, youtube: FiYoutube, tiktok: FaTiktok, x: FiLink };
 
-const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwipeUp, onDemoAction, sent }) => {
+/** Theme → CSS custom properties + modifier classes shared by the live card and the previews. */
+export const cardThemeProps = (card: CardConfig) => ({
+  className: [
+    "dc",
+    `dc--layout-${card.theme.layout}`,
+    card.theme.style === "paper" ? "dc--paper" : "dc--solid",
+    card.theme.font === "serif" ? "dc--serif" : "",
+  ]
+    .filter(Boolean)
+    .join(" "),
+  style: {
+    "--dc-front": card.theme.front,
+    "--dc-front-ink": card.theme.frontInk,
+    "--dc-accent": card.theme.accent,
+    "--dc-back": card.theme.back,
+    "--dc-back-ink": card.theme.backInk,
+    "--dc-back-accent": card.theme.backAccent,
+  } as React.CSSProperties,
+});
+
+export const CardFront: React.FC<{ card: CardConfig; t: CardStrings; lazy?: boolean }> = ({ card, t, lazy }) => (
+  <>
+    <div className="dc__top">
+      {card.logoUrl && (
+        <img
+          className={`dc__logo${card.logoShape === "wide" ? " dc__logo--wide" : ""}`}
+          src={card.logoUrl}
+          alt={card.showNameOnFront ? "" : card.name}
+          width={card.logoShape === "wide" ? 220 : 96}
+          height={card.logoShape === "wide" ? 62 : 96}
+          loading={lazy ? "lazy" : undefined}
+          draggable={false}
+        />
+      )}
+    </div>
+    {card.demo && <span className="dc__badge">{t.demoBadge}</span>}
+    <div className="dc__identity">
+      {card.company && <p className="dc__company">{card.company}</p>}
+      {card.showNameOnFront && <p className="dc__name">{card.name}</p>}
+      {card.role && <p className="dc__role">{card.role}</p>}
+      {card.tagline && <p className="dc__tagline">{card.tagline}</p>}
+    </div>
+    {card.photoUrl && <img className="dc__photo" src={card.photoUrl} alt="" width={120} height={120} loading={lazy ? "lazy" : undefined} draggable={false} />}
+  </>
+);
+
+type ContactIcon = React.ComponentType<{ "aria-hidden"?: boolean }>;
+
+/** live = false: a picture of the back (previews), with no links or buttons. */
+export const CardBack: React.FC<{ card: CardConfig; t: CardStrings; live?: boolean; onDemoAction?: () => void; lazy?: boolean }> = ({
+  card,
+  t,
+  live = false,
+  onDemoAction,
+  lazy,
+}) => {
+  // Contact rows: real links for client cards, notice-only buttons for demo cards.
+  const contact = (key: string, Icon: ContactIcon, label: string, value: string, href?: string, external = false) => {
+    let action: React.ReactNode;
+    if (!live) {
+      action = <span className="dc-contact dc-contact--static">{value}</span>;
+    } else if (card.demo) {
+      action = (
+        <button type="button" className="dc-contact" onClick={onDemoAction}>
+          <span className="mp-sr">{label}: </span>
+          {value}
+          <span className="mp-sr"> ({t.demoBadge})</span>
+        </button>
+      );
+    } else if (href) {
+      action = (
+        <a className="dc-contact" href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+          <span className="mp-sr">{label}: </span>
+          {value}
+          {external && <span className="mp-sr"> {t.opensNewTab}</span>}
+        </a>
+      );
+    } else {
+      action = <span>{value}</span>;
+    }
+    return (
+      <li key={key}>
+        <Icon aria-hidden={true} />
+        {action}
+      </li>
+    );
+  };
+
+  const phoneValue = card.demo ? card.phoneDisplay : card.phone?.display;
+
+  return (
+    <>
+      <div className="dc__back-head">
+        <p className="dc__back-name">{card.name}</p>
+        {(card.company || card.role) && <p className="dc__back-company">{card.company || card.role}</p>}
+      </div>
+      <ul className="dc__contacts">
+        {phoneValue && contact("phone", FiPhone, t.phone, phoneValue, card.phone ? `tel:${card.phone.e164}` : undefined)}
+        {card.email && contact("email", FiMail, t.email, card.email, `mailto:${card.email}`)}
+        {card.website && contact("web", FiGlobe, t.website, card.website.label, card.website.href, true)}
+      </ul>
+      {card.socials.length > 0 && (
+        <ul className="dc__social">
+          {card.socials.map((s) => {
+            const Icon = socialIcon[s.type];
+            let item: React.ReactNode;
+            if (!live) {
+              item = (
+                <span className="dc__social-link">
+                  <Icon aria-hidden={true} />
+                </span>
+              );
+            } else if (card.demo) {
+              item = (
+                <button type="button" className="dc__social-link" onClick={onDemoAction} aria-label={`${s.label} (${t.demoBadge})`}>
+                  <Icon aria-hidden={true} />
+                </button>
+              );
+            } else {
+              item = (
+                <a className="dc__social-link" href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} ${t.opensNewTab}`}>
+                  <Icon aria-hidden={true} />
+                </a>
+              );
+            }
+            return <li key={s.type}>{item}</li>;
+          })}
+        </ul>
+      )}
+      {card.details && card.details.length > 0 && (
+        <dl className="dc__details">
+          {card.details.map((d) => (
+            <div key={d.label}>
+              <dt>{d.label}</dt>
+              <dd>{d.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {card.logoBackUrl && (
+        <img className="dc__logo dc__logo--back" src={card.logoBackUrl} alt="" width={96} height={96} loading={lazy ? "lazy" : undefined} draggable={false} />
+      )}
+    </>
+  );
+};
+
+/** Static, non-interactive picture of a card (gallery and home previews). */
+export const CardPreview: React.FC<{ card: CardConfig; t: CardStrings; withBack?: boolean }> = ({ card, t, withBack = false }) => {
+  const theme = cardThemeProps(card);
+  return (
+    <div className={`${theme.className} dc--preview`} style={theme.style} lang={card.lang} aria-hidden="true" {...({ inert: "" } as object)}>
+      <div className="dc__stage dc__stage--static">
+        <div className="dc__body">
+          <div className="dc__face dc__face--front">
+            <CardFront card={card} t={t} lazy />
+          </div>
+          {withBack && (
+            <div className="dc__face dc__face--back">
+              <CardBack card={card} t={t} lazy />
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDemoAction, intro = false }) => {
   const keysId = useId();
   const stage = useRef<HTMLDivElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const front = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLDivElement>(null);
   const pose = useRef({ ry: 0, rx: 0, hx: 0, hy: 0 });
-  const drag = useRef<{ id: number; x0: number; y0: number; x: number; y: number; t: number; vx: number; vy: number; ry0: number; moving: boolean } | null>(null);
+  const drag = useRef<{ id: number; x0: number; y0: number; x: number; y: number; t: number; vx: number; ry0: number; moving: boolean } | null>(null);
   const swallowClickUntil = useRef(0);
   const frame = useRef(0);
+  const [nudging, setNudging] = useState(false);
 
   const render = useCallback((motion: Motion) => {
     cancelAnimationFrame(frame.current);
@@ -61,6 +227,21 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
   }, []);
 
   useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  // Intro hint: at most once per tab session and card, never with reduced motion.
+  useEffect(() => {
+    if (!intro || reducedMotion()) return;
+    const key = `mp-dc-intro:${card.slug}`;
+    try {
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+    } catch {
+      /* storage unavailable: the hint simply plays for this visit */
+    }
+    setNudging(true);
+  }, [intro, card.slug]);
+
+  const stopNudge = () => setNudging(false);
 
   // Keep the 3D pose in step with `flipped` (button, tap, keyboard) and hide the other side.
   useEffect(() => {
@@ -89,15 +270,16 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0 || sent) return;
-    drag.current = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, t: e.timeStamp, vx: 0, vy: 0, ry0: Math.round(pose.current.ry / 180) * 180, moving: false };
+    stopNudge();
+    if (e.button !== 0) return;
+    drag.current = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, t: e.timeStamp, vx: 0, ry0: Math.round(pose.current.ry / 180) * 180, moving: false };
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     const p = pose.current;
     if (!d || d.id !== e.pointerId) {
-      if (e.pointerType !== "mouse" || sent || reducedMotion() || !stage.current) return;
+      if (e.pointerType !== "mouse" || reducedMotion() || !stage.current) return;
       const r = stage.current.getBoundingClientRect();
       p.hx = ((e.clientX - r.left) / r.width - 0.5) * 12;
       p.hy = -((e.clientY - r.top) / r.height - 0.5) * 10;
@@ -115,7 +297,6 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     }
     const dt = Math.max(1, e.timeStamp - d.t);
     d.vx = 0.7 * ((e.clientX - d.x) / dt) + 0.3 * d.vx;
-    d.vy = 0.7 * ((e.clientY - d.y) / dt) + 0.3 * d.vy;
     d.x = e.clientX;
     d.y = e.clientY;
     d.t = e.timeStamp;
@@ -132,14 +313,6 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     if (!d.moving) return; // a tap: handled by onClick
     swallowClickUntil.current = performance.now() + 400;
     const dx = e.clientX - d.x0;
-    const dy = e.clientY - d.y0;
-
-    const swipeUp = dy < -60 && Math.abs(dy) > Math.abs(dx) * 1.2 && (d.vy < -0.45 || dy < -150);
-    if (swipeUp) {
-      settle(d.ry0);
-      onSwipeUp(); // synchronous: navigator.share() runs inside this pointerup
-      return;
-    }
 
     let target = d.ry0;
     if (reducedMotion()) {
@@ -151,6 +324,7 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     settle(target);
   };
 
+  // The browser took the gesture over (vertical scroll): back to the side that was showing.
   const onPointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
@@ -178,6 +352,7 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    stopNudge();
     if (e.target !== e.currentTarget) return;
     const p = pose.current;
     const step = reducedMotion() ? 0 : 6;
@@ -205,49 +380,10 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     render("settle");
   };
 
-  const style = {
-    "--dc-front": card.theme.front,
-    "--dc-front-ink": card.theme.frontInk,
-    "--dc-accent": card.theme.accent,
-    "--dc-back": card.theme.back,
-    "--dc-back-ink": card.theme.backInk,
-    "--dc-back-accent": card.theme.backAccent,
-  } as React.CSSProperties;
-
-  // Contact rows: real links for client cards, notice-only buttons for demo cards.
-  const contact = (key: string, Icon: React.ComponentType<{ "aria-hidden"?: boolean }>, label: string, value: string, href?: string, external = false) => {
-    let action: React.ReactNode;
-    if (card.demo) {
-      action = (
-        <button type="button" className="dc-contact" onClick={onDemoAction}>
-          <span className="mp-sr">{label}: </span>
-          {value}
-          <span className="mp-sr"> (demo)</span>
-        </button>
-      );
-    } else if (href) {
-      action = (
-        <a className="dc-contact" href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
-          <span className="mp-sr">{label}: </span>
-          {value}
-          {external && <span className="mp-sr"> {t.opensNewTab}</span>}
-        </a>
-      );
-    } else {
-      action = <span>{value}</span>;
-    }
-    return (
-      <li key={key}>
-        <Icon aria-hidden={true} />
-        {action}
-      </li>
-    );
-  };
-
-  const phoneValue = card.demo ? card.phoneDisplay : card.phone?.display;
+  const theme = cardThemeProps(card);
 
   return (
-    <div className={`dc${sent ? " dc--sent" : ""}${card.theme.style === "paper" ? " dc--paper" : ""}`} style={style} lang={card.lang}>
+    <div className={theme.className} style={theme.style} lang={card.lang}>
       <div
         ref={stage}
         className="dc__stage"
@@ -263,75 +399,19 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
         onClickCapture={onClickCapture}
         onClick={onClick}
         onKeyDown={onKeyDown}
+        onFocus={stopNudge}
         onBlur={onBlur}
         onDragStart={(e) => e.preventDefault()}
       >
         <span id={keysId} className="mp-sr">{t.keys}</span>
-        <div ref={body} className="dc__body" data-motion="settle">
-          <div ref={front} className="dc__face dc__face--front" aria-hidden={flipped}>
-            <div className="dc__top">
-              {card.logoUrl && (
-                <img
-                  className={`dc__logo${card.logoShape === "wide" ? " dc__logo--wide" : ""}`}
-                  src={card.logoUrl}
-                  alt={card.showNameOnFront ? "" : card.name}
-                  width={card.logoShape === "wide" ? 220 : 96}
-                  height={card.logoShape === "wide" ? 62 : 96}
-                  draggable={false}
-                />
-              )}
-              {card.demo && <span className="dc__badge">{t.demoBadge}</span>}
+        <div className={`dc__tilt${nudging ? " is-nudging" : ""}`} onAnimationEnd={stopNudge}>
+          <div ref={body} className="dc__body" data-motion="settle">
+            <div ref={front} className="dc__face dc__face--front" aria-hidden={flipped}>
+              <CardFront card={card} t={t} />
             </div>
-            <div className="dc__identity">
-              {card.company && <p className="dc__company">{card.company}</p>}
-              {card.showNameOnFront && <p className="dc__name">{card.name}</p>}
-              {card.role && <p className="dc__role">{card.role}</p>}
-              {card.tagline && <p className="dc__tagline">{card.tagline}</p>}
+            <div ref={back} className="dc__face dc__face--back" aria-hidden={!flipped}>
+              <CardBack card={card} t={t} live onDemoAction={onDemoAction} />
             </div>
-            {card.photoUrl && <img className="dc__photo" src={card.photoUrl} alt="" width={120} height={120} draggable={false} />}
-          </div>
-
-          <div ref={back} className="dc__face dc__face--back" aria-hidden={!flipped}>
-            <div className="dc__back-head">
-              <p className="dc__back-name">{card.name}</p>
-              {(card.company || card.role) && <p className="dc__back-company">{card.company || card.role}</p>}
-            </div>
-            <ul className="dc__contacts">
-              {phoneValue && contact("phone", FiPhone, t.phone, phoneValue, card.phone ? `tel:${card.phone.e164}` : undefined)}
-              {card.email && contact("email", FiMail, t.email, card.email, `mailto:${card.email}`)}
-              {card.website && contact("web", FiGlobe, t.website, card.website.label, card.website.href, true)}
-            </ul>
-            {card.socials.length > 0 && (
-              <ul className="dc__social">
-                {card.socials.map((s) => {
-                  const Icon = socialIcon[s.type];
-                  return (
-                    <li key={s.type}>
-                      {card.demo ? (
-                        <button type="button" className="dc__social-link" onClick={onDemoAction} aria-label={`${s.label} (demo)`}>
-                          <Icon aria-hidden={true} />
-                        </button>
-                      ) : (
-                        <a className="dc__social-link" href={s.href} target="_blank" rel="noopener noreferrer" aria-label={`${s.label} ${t.opensNewTab}`}>
-                          <Icon aria-hidden={true} />
-                        </a>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {card.details && card.details.length > 0 && (
-              <dl className="dc__details">
-                {card.details.map((d) => (
-                  <div key={d.label}>
-                    <dt>{d.label}</dt>
-                    <dd>{d.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-            {card.logoBackUrl && <img className="dc__logo dc__logo--back" src={card.logoBackUrl} alt="" width={96} height={96} draggable={false} />}
           </div>
         </div>
       </div>

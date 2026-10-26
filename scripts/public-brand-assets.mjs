@@ -1,8 +1,10 @@
 // Generates static brand assets for the public site into public/ (outputs are committed, so the
 // production build does not need Chrome):
 //   public/brand/favicon.svg, favicon-32.png, apple-touch-icon.png   restyle icons (admin keeps the old ones)
-//   public/brand/digital-card-og.png                                 1200×630 preview for /digital-card
-//   public/cards/<slug>/og.png                                       1200×630 preview for each /card/<slug>
+//   public/cards/<slug>/og.png                                       1200×630 fallback preview for a new card
+// Existing previews are kept: the current ones (and public/brand/og-home.png, og-exempel.png) are
+// screenshots of the real card component, see docs/RESTYLE-PUBLIC.md. FORCE=1 redraws them anyway
+// with the simplified renderer below.
 // Run: node scripts/public-brand-assets.mjs   (uses a local Chrome/Edge, set CHROME=... if needed)
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, copyFileSync, writeFileSync, mkdtempSync, rmSync } from "node:fs";
@@ -46,7 +48,6 @@ for (const [size, file] of [[32, "favicon-32.png"], [180, "apple-touch-icon.png"
   shot(`<div style="width:${size}px;height:${size}px">${icon.replace("<svg ", `<svg width="${size}" height="${size}" `)}</div>`, `public/brand/${file}`, size, size, true);
 }
 
-const logo = readFileSync("src/public/assets/logo-dark.svg", "utf8").replace("<svg ", '<svg width="230" ');
 
 // Card front, same proportions (85 × 55) and colours as the live component.
 const cardFront = (card, logoSvg, width) => {
@@ -56,7 +57,7 @@ const cardFront = (card, logoSvg, width) => {
       ${card.logoShape === "wide"
         ? `<div style="width:${width * 0.46}px">${logoSvg.replace("<svg ", '<svg width="100%" ')}</div>`
         : `<div style="width:${width * 0.17}px;height:${width * 0.17}px">${logoSvg.replace("<svg ", '<svg width="100%" height="100%" ')}</div>`}
-      ${card.demo ? `<span style="padding:${width * 0.01}px ${width * 0.024}px;border:1px dashed ${t.accent};border-radius:99px;color:${t.accent};font-size:${width * 0.03}px;font-weight:700;letter-spacing:.12em">DEMO</span>` : ""}
+      ${card.demo ? `<span style="padding:${width * 0.01}px ${width * 0.024}px;border:1px dashed ${t.accent};border-radius:99px;color:${t.accent};font-size:${width * 0.03}px;font-weight:700;letter-spacing:.12em">EXEMPEL</span>` : ""}
     </div>
     <div>
       ${card.company ? `<div style="color:${t.accent};font-size:${width * 0.034}px;font-weight:700;letter-spacing:.14em;text-transform:uppercase">${card.company}</div>` : ""}
@@ -77,21 +78,11 @@ const cards = readdirSync(cardsDir).map((slug) => {
 const background = "background:radial-gradient(circle at 70% 20%,#fffefa 0,#f6f4ee 55%,#ece8dd 100%)";
 
 for (const { slug, card, logoSvg } of cards) {
+  if (existsSync(`public/cards/${slug}/og.png`) && !process.env.FORCE) continue;
   mkdirSync(`public/cards/${slug}`, { recursive: true });
   shot(`<div style="width:1200px;height:630px;display:grid;place-items:center;perspective:1600px;${background}">
     <div style="transform:rotateY(-10deg) rotateX(6deg) rotateZ(-1.5deg)">${cardFront(card, logoSvg, 620)}</div>
   </div>`, `public/cards/${slug}/og.png`, 1200, 630);
 }
-
-const demo = cards.find((c) => c.card.demo) ?? cards[0];
-shot(`<div style="width:1200px;height:630px;box-sizing:border-box;padding:70px 80px;display:grid;grid-template-columns:1fr 520px;align-items:center;gap:40px;font-family:P,sans-serif;color:#103b35;${background}">
-  <div>
-    ${logo}
-    <div style="margin-top:56px;font-size:20px;font-weight:700;letter-spacing:.18em;color:#247b67">DIGITALA VISITKORT</div>
-    <div style="margin-top:14px;font-size:60px;font-weight:700;letter-spacing:-.045em;line-height:1.04">Ditt visitkort,<br>alltid med dig.</div>
-    <div style="margin-top:22px;font-size:24px;color:#52645e;line-height:1.4">Egen länk och QR-kod. Öppnas i webbläsaren – utan app.</div>
-  </div>
-  <div style="perspective:1400px"><div style="transform:rotateY(-14deg) rotateX(6deg) rotateZ(2deg)">${cardFront(demo.card, demo.logoSvg, 500)}</div></div>
-</div>`, "public/brand/digital-card-og.png", 1200, 630);
 
 rmSync(tmp, { recursive: true, force: true });

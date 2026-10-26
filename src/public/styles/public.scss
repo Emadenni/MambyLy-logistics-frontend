@@ -7,8 +7,8 @@
 //                                        button) only while a restyled page is mounted
 // Admin, login and Sido Butik never contain .mambyly-public, so they keep their current styles.
 
-@use "./hero-scene" as scene;
 @use "./digital-card" as dc;
+@use "./offer" as offer;
 
 $bp-mobile: 720px;
 $bp-tablet: 920px;
@@ -705,10 +705,17 @@ body:has(.mambyly-public) {
 
       li {
         font-size: 13px;
-        gap: 16px;
+        gap: 10px;
 
         &:first-child {
           width: 100%;
+        }
+
+        // wrapped rows: a small dot before each item instead of a divider line
+        & + li::before {
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
         }
 
         &:nth-child(2)::before {
@@ -2088,8 +2095,8 @@ body:has(.mambyly-public) {
     }
   }
 
-  @include scene.styles;
   @include dc.styles;
+  @include offer.styles;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -2475,8 +2482,8 @@ body:has(.mambyly-public) {
     }
   }
 
-  // A client card page is about the client: no MambyLy WhatsApp bubble there.
-  &:has(.mp-cardpage) .whatsapp-icon {
+  // Card and example pages are about the card: no floating WhatsApp bubble over them.
+  &:has(.mp-cardpage, .mp-xpage) .whatsapp-icon {
     display: none;
   }
 

@@ -1,4 +1,6 @@
-import type { CardConfig, CardConfigRaw, CardSocialType } from "./types";
+import type { CardConfig, CardConfigRaw, CardLayout, CardSocialType } from "./types";
+
+const LAYOUTS: CardLayout[] = ["classic", "craft", "split", "frame", "bold"];
 
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -88,8 +90,10 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBa
     tagline: text(raw.tagline, 90),
     theme: {
       ...theme,
-      backAccent: COLOR_PATTERN.test(String(theme.backAccent)) ? theme.backAccent : theme.accent,
+      backAccent: COLOR_PATTERN.test(String(theme.backAccent)) ? theme.backAccent! : theme.accent,
       style: theme.style === "solid" ? "solid" : "paper",
+      layout: LAYOUTS.includes(theme.layout as CardLayout) ? (theme.layout as CardLayout) : "classic",
+      font: theme.font === "serif" ? "serif" : "sans",
     },
     phone,
     phoneDisplay: text(raw.phoneDisplay, 30),
@@ -100,5 +104,9 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBa
     logoUrl: assets.logo,
     photoUrl: assets.photo,
     meta: { title: text(raw.meta?.title, 70), description: text(raw.meta?.description, 200) },
+    example:
+      raw.demo === true && text(raw.example?.sector, 40) && text(raw.example?.summary, 220)
+        ? { sector: text(raw.example?.sector, 40)!, summary: text(raw.example?.summary, 220)!, order: Number(raw.example?.order) || 99 }
+        : undefined,
   };
 }

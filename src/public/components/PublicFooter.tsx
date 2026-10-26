@@ -19,7 +19,7 @@ const PublicFooter: React.FC = () => {
           <Link to="/" className="mp-footer__logo">
             <img src={logoLight} alt="MambyLy Solutions – till startsidan" width={150} height={43} />
           </Link>
-          <p>För dig som driver eget.</p>
+          <p>Digitala visitkort och webbplatser för dig som driver eget.</p>
           <ul className="mp-footer__contact">
             <li>
               <a href={publicContact.phoneHref}>
@@ -42,11 +42,11 @@ const PublicFooter: React.FC = () => {
           <h2 className="mp-footer__heading">Sidor</h2>
           <ul>
             <li><Link to="/">Hem</Link></li>
+            <li><Link to="/exempel">Exempel</Link></li>
             <li><Link to="/tjänster">Tjänster</Link></li>
             <li><Link to="/omOss">Om oss</Link></li>
-            <li><Link to="/jobbaMedOss">Jobb</Link></li>
             <li><Link to="/kontaktaOss">Kontakta oss</Link></li>
-            <li><Link to="/digital-card">Digitala visitkort</Link></li>
+            <li><Link to="/jobbaMedOss">Jobba med oss</Link></li>
           </ul>
         </nav>
 

@@ -58,10 +58,10 @@ Le e-mail non sono state cambiate (discordanza ancora da confermare dal propriet
 
 ## Digitala visitkort
 
-- Pagina commerciale: `/digital-card` · biglietto: `/card/<slug>` · demo: `/card/exempelbageriet` (fittizia).
-- Codice: `src/public/digital-card/` (componente 3D, condivisione, vCard 3.0, QR locale, validazione).
-- La CTA "Begär offert" apre `/kontaktaOss` con `state.subject = "Digitalt visitkort"` (meccanismo già
-  esistente del form, campo visibile e modificabile). Nessun nuovo form, endpoint o upload.
+- Biglietto di un cliente: `/card/<slug>` · biglietto MambyLy: `/card` · esempi: `/exempel`, `/exempel/<slug>`.
+- Codice: `src/public/digital-card/` (un solo motore 3D configurabile, condivisione, vCard 3.0, QR locale, validazione).
+- Le CTA aprono `/kontaktaOss` con `state = { service, example? }` (`service.ts`): la pagina pre-compila il campo
+  "subject" già esistente del form (visibile e modificabile). Stesso form, endpoint e payload; nessun upload.
 
 ### Aggiungere un cliente
 
@@ -77,7 +77,8 @@ Le e-mail non sono state cambiate (discordanza ancora da confermare dal propriet
   "company": "Salong Lind",
   "logo": "logo.svg",
   "theme": { "front": "#ffffff", "frontInk": "#1d1d1f", "accent": "#7a3e65",
-             "back": "#1d1d1f", "backInk": "#ffffff", "backAccent": "#e7b7d6", "style": "solid" },
+             "back": "#1d1d1f", "backInk": "#ffffff", "backAccent": "#e7b7d6", "style": "solid",
+             "layout": "classic", "font": "sans" },
   "phone": "<numero in formato E.164, es. +467…>",
   "email": "sara@example.com",
   "website": "https://example.com",
@@ -87,9 +88,15 @@ Le e-mail non sono state cambiate (discordanza ancora da confermare dal propriet
 }
 ```
 
-3. `node scripts/public-brand-assets.mjs` genera `public/cards/<slug>/og.png` (anteprima social).
+3. `node scripts/public-brand-assets.mjs` genera `public/cards/<slug>/og.png` (anteprima social semplificata;
+   le anteprime esistenti non vengono sovrascritte, `FORCE=1` per rigenerarle).
 4. `npm run build`: il plugin `build/static-route-meta.ts` scrive `dist/card/<slug>/index.html` con title,
-   description, canonical e tag Open Graph/Twitter già nel HTML (per i crawler che non eseguono JS).
+   description, canonical e tag Open Graph/Twitter già nel HTML (per i crawler che non eseguono JS) e
+   `dist/card/<slug>.vcf`, la vCard statica aperta da "Spara kontakt".
+
+`layout`: `classic` · `craft` (legno, monogramma a timbro) · `split` (fascia colorata col marchio) · `frame`
+(scuro, angoli da mirino, nome centrato) · `bold` (logotipo grande, forme). `font`: `sans` (Poppins) o `serif`
+(serif di sistema, nessun font scaricato). Gli esempi hanno `"demo": true` e `"example": { "sector", "summary", "order" }`.
 
 Regole: campi assenti o non validi → elemento non mostrato; solo `https:` per sito e social (e solo i domini
 del social indicato); telefono in formato E.164; slug sconosciuto → pagina "Visitkortet hittades inte",
@@ -98,7 +105,7 @@ dalla vCard.
 
 ### Condivisione e limiti dei browser
 
-`navigator.share` viene chiamato direttamente nel click o nel `pointerup` dello swipe; annullamento =
+`navigator.share` viene chiamato direttamente nel click; annullamento =
 messaggio neutro, nessuna copia automatica; senza Web Share → "Kopiera länk"; senza Clipboard API →
 link selezionabile. Su HTTP da IP locale (es. telefono → `http://192.168.x.x:5173`) Web Share e Clipboard
 non sono disponibili (richiedono HTTPS): restano i fallback. URL condivisi, vCard e QR usano sempre
@@ -110,4 +117,39 @@ non sono disponibili (richiedono HTTPS): restano i fallback. URL condivisi, vCar
 È pubblicato su `/card` (`COMPANY_CARD_SLUG` in `registry.ts`; `/card/mambyly-solutions` reindirizza a `/card`).
 Contatti: telefono da `src/public/contact.ts`, e-mail `info@mambylysolutions.se` (il dominio con MX attivi;
 `mambyly.se` non risolve), social come nel `SocialBox` del sito. Link discreto "Vårt visitkort" nel footer.
-La pagina commerciale `/digital-card` resta separata e usa solo il biglietto demo.
+
+Sotto il biglietto: "Spara kontakt" (icona + testo), poi pulsanti solo icona con etichetta accessibile e tooltip
+(Dela kortet / Kopiera länken secondo la disponibilità di Web Share, Visa baksidan / Visa framsidan, Visa QR-kod)
+e un menu compatto verso il sito (Exempel, Så funkar det → `/#sa-funkar-det`, Webbplatser → `/#webbplats`,
+Kontakt). Le ancore sono gestite da `src/public/components/useHashScroll.ts`.
+
+Accenno iniziale: breve inclinazione (≈1,25 s) su un wrapper `.dc__tilt` separato dalle trasformazioni di
+trascinamento e rotazione; una volta per scheda (`sessionStorage`), si interrompe al primo tocco/tasto/focus,
+disattivato con `prefers-reduced-motion`. Il biglietto usa `touch-action: pan-y`: il trascinamento orizzontale
+gira il biglietto, quello verticale fa scorrere la pagina (lo "swipe in su per condividere" è stato tolto).
+
+### Salva contatto (vCard)
+
+- Produzione: link a `/card/<slug>.vcf` (file statico generato in build, stessi dati del generatore in pagina).
+  Su iPhone/iPad il link si apre senza `download`: Safari mostra la scheda contatto da confermare.
+  Altrove ha `download`: Android e desktop scaricano il file, che si apre nella rubrica.
+- Dopo il clic: solo un'istruzione neutra ("Bekräfta där för att spara den") e il link di riserva
+  "Ladda ner kontaktfilen", che genera la stessa vCard nel browser. Nessuna conferma di salvataggio.
+- In sviluppo (`npm run dev`) il file statico non esiste: si usa il download generato nel browser.
+
+## Riposizionamento: visitkort + webbplatser (fase 4)
+
+- Home (`PublicHome.tsx`): apertura con biglietto interattivo, benefici (`#fordelar`), come funziona
+  (`#sa-funkar-det`), esempi (`#exempel`), sito coordinato (`#webbplats`), domande (`#fragor`), contatto con
+  servizio preselezionato (`#kontakt`). NFC solo come nota nelle FAQ, non offerto.
+- Galleria `/exempel` e schermate `/exempel/<slug>` (pulite, "Exempel · påhittade uppgifter", ritorno alla
+  galleria, "Jag vill ha ett kort som det här" → contatto con il modello). Esempi: `kvist-och-hyvel`
+  (hantverkare), `fjardvik-agentur` (säljare/konsult), `studio-halvljus` (fotograf), `rutglans`
+  (serviceföretag), `exempelbageriet`. Dati e loghi inventati, domini `.example`, telefono segnaposto.
+- `/tjänster`: due servizi (visitkort principale, webbplats complementare), nessun prezzo (offerta).
+- Percorsi vecchi: `/digital-card` → `/tjänster#visitkort`; `/card/<demo>` → `/exempel/<demo>`.
+- Anteprime social `public/brand/og-home.png`, `og-exempel.png`, `public/cards/<slug>/og.png`: screenshot del
+  componente reale, composti dal sito in anteprima locale con Chrome headless.
+- Il build scrive `dist/<pagina>/index.html` per tutte le pagine pubbliche: Amplify aggiunge lo slash finale e
+  senza un file reale rispondeva 404 (con la SPA comunque visibile).
+- Punto di ripristino: tag git `restore/pre-reposition-20261026` (= commit 4862544, job Amplify 158).

@@ -16,7 +16,13 @@ export type CardTheme = {
   backAccent?: string;
   /** Visual style of the card */
   style?: "paper" | "solid";
+  /** Composition of the faces (see _digital-card.scss); default "classic" */
+  layout?: CardLayout;
+  /** Type family of the card: the site's sans (default) or a system serif */
+  font?: "sans" | "serif";
 };
+
+export type CardLayout = "classic" | "craft" | "split" | "frame" | "bold";
 
 export type CardConfigRaw = {
   slug: string;
@@ -49,6 +55,8 @@ export type CardConfigRaw = {
   /** Extra lines for the back, e.g. opening hours */
   details?: { label: string; value: string }[];
   meta?: { title?: string; description?: string };
+  /** Demo cards shown in the gallery (/exempel): sector label, short description and order. */
+  example?: { sector: string; summary: string; order?: number };
 };
 
 /** Validated card, only with safe and present fields. */
@@ -66,4 +74,6 @@ export type CardConfig = Omit<CardConfigRaw, "phone" | "email" | "website" | "so
   socials: { type: CardSocialType; href: string; label: string }[];
   logoUrl?: string;
   photoUrl?: string;
+  theme: CardTheme & { backAccent: string; style: "paper" | "solid"; layout: CardLayout; font: "sans" | "serif" };
+  example?: { sector: string; summary: string; order: number };
 };

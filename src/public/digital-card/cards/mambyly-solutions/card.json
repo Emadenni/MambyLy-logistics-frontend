@@ -4,7 +4,7 @@
   "kind": "organization",
   "name": "MambyLy Solutions",
   "showNameOnFront": false,
-  "role": "Digital hjälp för småföretag",
+  "role": "Digitala visitkort & webbplatser",
   "tagline": "Mindre krångel. Mer företag.",
   "logo": "logo.svg",
   "logoShape": "wide",
@@ -31,6 +31,6 @@
   ],
   "meta": {
     "title": "MambyLy Solutions – digitalt visitkort",
-    "description": "Spara MambyLy Solutions i dina kontakter: telefon, e-post, WhatsApp och webbplats. Digital hjälp för småföretag."
+    "description": "MambyLy Solutions gör digitala visitkort och webbplatser för småföretag. Spara våra kontaktuppgifter eller dela kortet vidare."
   }
 }

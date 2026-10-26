@@ -1,30 +1,39 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiGrid, FiList, FiMonitor, FiSend } from "react-icons/fi";
 import PublicShell from "../components/PublicShell";
-import CardExperience, { cardUrlFor } from "../digital-card/CardExperience";
-import { COMPANY_CARD_SLUG, getCard } from "../digital-card/registry";
+import CardExperience, { cardUrlFor, type CardMenuItem } from "../digital-card/CardExperience";
+import { COMPANY_CARD_SLUG, examplePath, getCard } from "../digital-card/registry";
 import { cardStrings } from "../digital-card/strings";
 import logoDark from "../assets/logo-dark.svg";
 import "../styles/public.scss";
 
+/** Under MambyLy's own card: the main destinations of the site (same tab). */
+const companyMenu: CardMenuItem[] = [
+  { to: "/exempel", label: "Exempel", icon: <FiGrid /> },
+  { to: "/#sa-funkar-det", label: "Så funkar det", icon: <FiList /> },
+  { to: "/#webbplats", label: "Webbplatser", icon: <FiMonitor /> },
+  { to: "/kontaktaOss", label: "Kontakt", icon: <FiSend /> },
+];
+
 /**
  * /card – MambyLy's own card; /card/:slug – the shareable page of one client card.
- * Unknown slugs never fall back to another card.
+ * Unknown slugs never fall back to another card; demo cards live under /exempel/:slug.
  */
 const PublicCard: React.FC = () => {
   const { slug } = useParams();
   const card = getCard(slug ?? COMPANY_CARD_SLUG);
 
   if (slug === COMPANY_CARD_SLUG) return <Navigate to="/card" replace />;
+  if (card?.demo) return <Navigate to={examplePath(card.slug)} replace />;
   const isCompanyCard = card?.slug === COMPANY_CARD_SLUG;
 
   if (!card) {
     return (
       <PublicShell>
         <Helmet>
-          <title>Visitkortet hittades inte | Mambyly Solutions</title>
+          <title>Visitkortet hittades inte | MambyLy Solutions</title>
           <meta name="robots" content="noindex" />
         </Helmet>
         <section className="mp-section mp-notfound">
@@ -33,8 +42,8 @@ const PublicCard: React.FC = () => {
               <h1>Visitkortet hittades inte</h1>
               <p className="mp-muted">Länken kan vara felskriven, eller så finns kortet inte längre.</p>
               <div className="mp-actions mp-actions--center">
-                <Link to="/digital-card" className="mp-btn mp-btn--primary">
-                  Om digitala visitkort <FiArrowRight aria-hidden="true" />
+                <Link to="/exempel" className="mp-btn mp-btn--primary">
+                  Se exempel på visitkort <FiArrowRight aria-hidden="true" />
                 </Link>
                 <Link to="/" className="mp-textlink">
                   Till startsidan
@@ -64,32 +73,17 @@ const PublicCard: React.FC = () => {
         <meta property="og:url" content={url} />
         <meta property="og:image" content={`${window.location.origin}/cards/${card.slug}/og.png`} />
         <meta name="twitter:card" content="summary_large_image" />
-        {card.demo && <meta name="robots" content="noindex" />}
       </Helmet>
 
-      {card.demo && (
-        <p className="mp-cardpage__demo">
-          <strong>Demo</strong> – företaget och personen är påhittade.{" "}
-          <Link to="/digital-card">Läs om tjänsten</Link>
-        </p>
-      )}
-
       <main id="mp-main" className="mp-cardpage__main">
-        <CardExperience card={card} headingLevel="h1" />
+        <CardExperience card={card} headingLevel="h1" intro menu={isCompanyCard ? companyMenu : undefined} />
       </main>
 
       <footer className="mp-cardpage__footer">
-        {isCompanyCard ? (
-          <Link to="/" className="mp-cardpage__brand">
-            <span>Till webbplatsen</span>
-            <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
-          </Link>
-        ) : (
-          <Link to="/digital-card" className="mp-cardpage__brand">
-            <span>{t.createdBy}</span>
-            <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
-          </Link>
-        )}
+        <Link to="/" className="mp-cardpage__brand">
+          <span>{isCompanyCard ? "Till webbplatsen" : t.createdBy}</span>
+          <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
+        </Link>
       </footer>
     </div>
   );

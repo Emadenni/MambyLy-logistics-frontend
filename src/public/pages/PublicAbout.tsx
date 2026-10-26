@@ -10,23 +10,19 @@ import { publicContact } from "../contact";
 const values = [
   { icon: <FiUsers />, title: "Närhet", text: "En direkt dialog och en partner som lyssnar." },
   { icon: <FiCompass />, title: "Tydlighet", text: "Begripliga beslut, från första samtal till lansering." },
-  { icon: <FiFeather />, title: "Nytta", text: "Teknik som hjälper dig i verkligheten." },
+  { icon: <FiFeather />, title: "Enkelhet", text: "Lösningar som är lätta att använda – för dig och för dina kunder." },
 ];
 
 const PublicAbout: React.FC = () => {
   return (
     <PublicShell>
       <Helmet>
-        <title>Om oss – Mambyly Solutions | Din digitala partner</title>
+        <title>Om oss | MambyLy Solutions</title>
         <meta
           name="description"
-          content="Mambyly Solutions är en ung, engagerad digital studio som hjälper företag att växa med smarta, anpassade lösningar."
+          content="MambyLy Solutions är en liten studio i Linköping som gör digitala visitkort och webbplatser för småföretag."
         />
-        <meta
-          name="keywords"
-          content="digital studio, digitala lösningar, e-handel, webbappar, interna verktyg, digital utveckling"
-        />
-        <link rel="canonical" href="https://mambylysolutions.se/omOss" />
+        <link rel="canonical" href="https://www.mambylysolutions.se/omOss" />
       </Helmet>
 
       <section className="mp-intro mp-intro--paper">
@@ -54,23 +50,18 @@ const PublicAbout: React.FC = () => {
         <div className="mp-container mp-split mp-split--about">
           <div className="mp-prose">
             <p className="mp-prose__lead">
-              <strong>Mambyly Solutions</strong> är ett ungt initiativ inom den digitala världen – en liten studio med
-              stor drivkraft.
+              <strong>MambyLy Solutions</strong> är en liten studio som gör digitala visitkort – och webbplatser när
+              det behövs.
             </p>
             <p>
-              Vi hjälper företag att ta sina första (eller nästa) digitala steg genom smarta lösningar som förenklar,
-              förbättrar och automatiserar vardagliga arbetsflöden. Från lättanvända e-handelslösningar till
-              skräddarsydda interna verktyg och moderna digitala produkter (som webbplatser, webbsidor, webbappar,
-              dashboards) – vi är nyfikna, flexibla och alltid engagerade.
+              Vi arbetar med småföretagare, hantverkare, säljare och andra som träffar många människor och vill vara
+              lätta att nå. Ett visitkort som delas med en länk, ser ut som ditt företag och går att spara i telefonen.
             </p>
             <p>
-              Vår styrka ligger i närheten till kunden och möjligheten att snabbt anpassa oss efter behov. Vi tror på
-              tydlig kommunikation, enkel design och teknik som gör skillnad – oavsett om det gäller ett litet projekt
-              eller en större idé.
+              Behöver du också en webbplats gör vi den i samma stil, så att kort och webbplats hänger ihop. Vi håller
+              det enkelt: tydliga steg, ett nära samarbete och inga tekniska omvägar.
             </p>
-            <p className="mp-prose__closing">
-              Vi bygger inte bara kod – vi bygger relationer, förtroende och framtidens digitala möjligheter.
-            </p>
+            <p className="mp-prose__closing">Mindre krångel. Mer företag.</p>
           </div>
 
           <div className="mp-card mp-values">
@@ -147,11 +138,11 @@ const PublicAbout: React.FC = () => {
 
       <section className="mp-container mp-cta" aria-labelledby="mp-cta-title">
         <div>
-          <h2 id="mp-cta-title">Vad vill du förenkla?</h2>
-          <p>Berätta om din verksamhet. Vi hittar en väg framåt tillsammans.</p>
+          <h2 id="mp-cta-title">Vill du ha ett eget visitkort?</h2>
+          <p>Berätta om din verksamhet, så tar vi det därifrån.</p>
         </div>
-        <Link to="/kontaktaOss" className="mp-btn mp-btn--light mp-btn--lg">
-          Berätta om din idé <FiArrowUpRight aria-hidden="true" />
+        <Link to="/kontaktaOss" state={{ service: "card" }} className="mp-btn mp-btn--light mp-btn--lg">
+          Begär ditt visitkort <FiArrowUpRight aria-hidden="true" />
         </Link>
       </section>
     </PublicShell>

@@ -4,254 +4,370 @@ import { Link } from "react-router-dom";
 import {
   FiArrowRight,
   FiArrowUpRight,
-  FiCalendar,
   FiCheck,
   FiEdit3,
-  FiHeadphones,
-  FiMonitor,
-  FiSend,
-  FiSettings,
+  FiFeather,
+  FiLayers,
+  FiLink,
+  FiMessageCircle,
+  FiPhone,
+  FiSmartphone,
+  FiUserPlus,
 } from "react-icons/fi";
 import PublicShell from "../components/PublicShell";
-import HeroScene from "../components/HeroScene";
+import CardShowcase from "../components/CardShowcase";
+import ExampleTile from "../components/ExampleTile";
 import SidoButikPromo from "../components/SidoButikPromo";
+import { useHashScroll } from "../components/useHashScroll";
+import { CardPreview } from "../digital-card/DigitalCard";
+import { getCard, getExamples } from "../digital-card/registry";
+import { cardStrings } from "../digital-card/strings";
+import type { ContactState } from "../digital-card/service";
+import type { CardConfig } from "../digital-card/types";
 import { publicSiteConfig } from "../config";
-import { slides } from "../../components/data/slides";
+import { publicContact } from "../contact";
 
-const needs = [
-  {
-    icon: <FiMonitor />,
-    title: "Synas online",
-    text: "En professionell hemsida som presenterar ditt företag och gör det enkelt att ta kontakt.",
-  },
-  {
-    icon: <FiCalendar />,
-    title: "Ta emot bokningar",
-    text: "Låt dina kunder boka och beställa direkt – så att du kan fokusera på det du gör bäst.",
-  },
-  {
-    icon: <FiSettings />,
-    title: "Förenkla vardagen",
-    text: "Skräddarsydda verktyg och integrationer som samlar allt på ett ställe och minskar dubbelarbete.",
-  },
-];
+const HERO_EXAMPLE = "kvist-och-hyvel";
+const SITE_EXAMPLE = "kvist-och-hyvel";
 
 const benefits = [
-  { title: "Mindre tid på det administrativa", text: "Automatisera och samla det som upprepas varje dag." },
-  { title: "Bättre kundupplevelse", text: "Gör det enkelt att boka, beställa eller ta kontakt." },
-  { title: "Mer tid till det som räknas", text: "Fokusera på dina kunder och din verksamhet." },
+  { icon: <FiLink />, title: "Delas med en länk", text: "Skicka kortet i sms, WhatsApp eller mejl – eller låt någon skanna QR-koden." },
+  { icon: <FiSmartphone />, title: "Ingen app behövs", text: "Mottagaren öppnar kortet direkt i webbläsaren, i mobilen eller på datorn." },
+  { icon: <FiLayers />, title: "Allt på ett ställe", text: "Telefon, e-post, webbplats och sociala medier – samlade och klickbara." },
+  { icon: <FiFeather />, title: "Ser ut som ditt företag", text: "Logotyp, färger och ton formas efter din identitet. Inte en mall med ditt namn på." },
+  { icon: <FiUserPlus />, title: "Lätt att spara", text: "Med ”Spara kontakt” öppnar telefonen dina uppgifter, och mottagaren bekräftar." },
+  {
+    icon: <FiEdit3 />,
+    title: "Samma länk, nytt innehåll",
+    text: "När vi publicerar och sköter kortet åt dig kan innehållet uppdateras utan att länken ändras. Uppgifter som någon redan sparat i sin telefon ändras inte av sig själva.",
+  },
 ];
 
 const steps = [
-  { icon: <FiHeadphones />, title: "Vi lyssnar", text: "Vi lär känna din verksamhet och förstår dina behov." },
-  { icon: <FiEdit3 />, title: "Vi skapar", text: "Vi tar fram en lösning som passar dig och ditt företag." },
-  { icon: <FiSend />, title: "Vi lanserar", text: "Vi ser till att allt fungerar – och finns med även efter lansering." },
+  { title: "Berätta om din verksamhet", text: "Skicka logotyp, kontaktuppgifter och de länkar du vill ha med." },
+  { title: "Vi formger ditt kort", text: "Ett visitkort med fram- och baksida, i dina färger och med din logotyp." },
+  { title: "Du provar och tycker till", text: "Du testar kortet i telefonen och vi justerar de sista detaljerna tillsammans." },
+  { title: "Du får din länk", text: "Den färdiga länken och QR-koden – redo att delas." },
 ];
 
+export const faq = [
+  {
+    q: "Behöver mottagaren installera en app?",
+    a: "Nej. Kortet är en webbsida: det öppnas i webbläsaren som redan finns i mobilen eller datorn.",
+  },
+  {
+    q: "Hur delar jag kortet?",
+    a: "Du skickar länken – i sms, WhatsApp, mejl, sociala medier eller din e-postsignatur – eller visar QR-koden. På kortsidan finns en knapp för telefonens delningsmeny, eller för att kopiera länken.",
+  },
+  {
+    q: "Kan mottagaren spara mina uppgifter i telefonen?",
+    a: "Ja. ”Spara kontakt” ger telefonen en kontaktfil (vCard) med dina uppgifter. Telefonen visar kontakten eller filen, och mottagaren bekräftar själv. Exakt hur det ser ut beror på telefon och webbläsare.",
+  },
+  {
+    q: "Kan kortet uppdateras efteråt?",
+    a: "Ja, när vi publicerar och sköter kortet åt dig: vi ändrar innehållet och länken förblir densamma. Den som redan har sparat dina uppgifter i sina kontakter behåller dock den gamla versionen tills hen sparar igen.",
+  },
+  {
+    q: "Fungerar det på alla telefoner?",
+    a: "Kortet fungerar i moderna webbläsare på iPhone, Android och dator. Vissa funktioner, som delningsmenyn, beror på enheten – finns den inte visas Kopiera länk i stället. Vi experimenterar också med delning via NFC på kompatibla enheter, men det ingår inte i tjänsten i dag.",
+  },
+  {
+    q: "Vad är skillnaden mellan visitkort och webbplats?",
+    a: "Visitkortet är kort och personligt: vem du är och hur man når dig. En webbplats berättar mer – om verksamheten, tjänsterna och tidigare arbeten. Har du redan en webbplats länkar kortet dit.",
+  },
+  {
+    q: "Vem står för publicering och drift?",
+    a: "Vi kan publicera och sköta kortet åt dig, så att länken fungerar och innehållet kan uppdateras. Vad som ingår och hur ändringar hanteras kommer vi överens om i offerten.",
+  },
+  {
+    q: "Vad kostar det?",
+    a: "Det beror på vad du behöver. Berätta om din verksamhet så återkommer vi med en offert.",
+  },
+];
+
+/** A browser window drawn with CSS, in the colours of an example card: site and card belong together. */
+const SiteMock: React.FC<{ card: CardConfig }> = ({ card }) => (
+  <div
+    className="mp-sitemock"
+    aria-hidden="true"
+    style={{ "--sm-bg": card.theme.front, "--sm-ink": card.theme.frontInk, "--sm-accent": card.theme.accent, "--sm-dark": card.theme.back } as React.CSSProperties}
+  >
+    <div className="mp-sitemock__chrome">
+      <span />
+      <span />
+      <span />
+      <p>{card.website?.label}</p>
+    </div>
+    <div className="mp-sitemock__page">
+      <div className="mp-sitemock__nav">
+        {card.logoUrl && <img src={card.logoUrl} alt="" width={28} height={28} loading="lazy" />}
+        <b>{card.company}</b>
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="mp-sitemock__hero">
+        <p>{card.tagline}</p>
+        <i />
+        <i />
+        <em>{card.website ? "Kontakta oss" : ""}</em>
+      </div>
+      <div className="mp-sitemock__grid">
+        <span />
+        <span />
+        <span />
+      </div>
+    </div>
+    <div className="mp-sitemock__card">
+      <CardPreview card={card} t={cardStrings[card.lang]} />
+    </div>
+  </div>
+);
+
 const PublicHome: React.FC = () => {
+  useHashScroll();
+  const hero = getCard(HERO_EXAMPLE);
+  const siteCard = getCard(SITE_EXAMPLE);
+  const examples = getExamples();
+  const fan = examples.filter((c) => c.slug !== HERO_EXAMPLE).slice(0, 2);
+  const contact = (service: ContactState["service"]): ContactState => ({ service });
+
   return (
     <PublicShell>
       <Helmet>
-        <title>Din tekniska partner i Linköping och Sverige | Mambyly Solutions</title>
+        <title>Digitala visitkort för företag | MambyLy Solutions</title>
         <meta
           name="description"
-          content="Vi erbjuder skräddarsydda webbappar, hemsidor, integrationer och SEO-optimering för företag i Linköping, Sverige och var som helst."
+          content="Digitala visitkort med din logotyp, dina färger och dina kontaktuppgifter. Delas med en länk och öppnas utan app. Webbplats i samma stil när du behöver."
         />
-        <meta
-          name="keywords"
-          content="webbappar, hemsidor, integrationer, dashboards, automatiseringar, affärssystem, bokningssystem, API, SEO"
-        />
-        <link rel="canonical" href="https://mambylysolutions.se/" />
+        <link rel="canonical" href="https://www.mambylysolutions.se/" />
       </Helmet>
 
-      <section className="mp-hero" aria-labelledby="mp-hero-title">
-        <div className="mp-container mp-hero__grid">
-          <div className="mp-hero__copy">
-            <p className="mp-eyebrow">Digital hjälp för småföretag</p>
+      {/* A. Opening */}
+      <section className="mp-hero2" aria-labelledby="mp-hero-title">
+        <div className="mp-container mp-hero2__grid">
+          <div className="mp-hero2__copy">
+            <p className="mp-eyebrow">Visitkort &amp; webbplatser</p>
             <h1 id="mp-hero-title" className="mp-display">
-              <span>Mindre krångel.</span>
-              <br />
-              <span>Mer företag.</span>
+              Digitala visitkort <span className="mp-hero2__accent">för ditt företag.</span>
             </h1>
-            <p className="mp-lead">Vi förvandlar vardagens små problem till smarta digitala lösningar.</p>
-            <div className="mp-actions">
-              <Link to="/kontaktaOss" className="mp-btn mp-btn--primary mp-btn--lg">
-                Vad vill du förenkla? <FiArrowUpRight aria-hidden="true" />
+            <p className="mp-lead">
+              Med din logotyp, dina färger och alla dina kontaktvägar. Du delar kortet med en länk – mottagaren öppnar
+              det direkt i webbläsaren och kan spara dina uppgifter.
+            </p>
+            <div className="mp-actions mp-hero2__actions">
+              <Link to="/exempel" className="mp-btn mp-btn--primary mp-btn--lg">
+                Se exemplen <FiArrowRight aria-hidden="true" />
               </Link>
-              <Link to="/tjänster" className="mp-textlink">
-                Upptäck våra tjänster
+              <Link to="/kontaktaOss" state={contact("card")} className="mp-btn mp-btn--outline mp-btn--lg">
+                Begär ditt visitkort
               </Link>
             </div>
           </div>
-          <HeroScene />
+
+          {hero && (
+            <div className="mp-hero2__stage">
+              <div className="mp-hero2__fan" aria-hidden="true">
+                {fan.map((c) => (
+                  <div key={c.slug} className="mp-hero2__fan-card">
+                    <CardPreview card={c} t={cardStrings[c.lang]} />
+                  </div>
+                ))}
+              </div>
+              <CardShowcase card={hero} className="mp-hero2__card" />
+              <p className="mp-hero2__caption">
+                Exempel: {hero.company} – {hero.example?.sector.toLowerCase()}.{" "}
+                <Link to={`/exempel/${hero.slug}`}>Öppna exemplet</Link>
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
       <div className="mp-strip">
         <ul className="mp-container">
-          <li>För dig som driver eget.</li>
-          <li>Hemsidor</li>
-          <li>Bokningssystem</li>
-          <li>Digitala verktyg</li>
+          <li>Mindre krångel. Mer företag.</li>
+          <li>Delas med en länk</li>
+          <li>Öppnas utan app</li>
+          <li>Din logotyp, dina färger</li>
         </ul>
       </div>
 
-      <section className="mp-section" aria-labelledby="mp-needs-title">
-        <div className="mp-container">
-          <header className="mp-section__head mp-section__head--center">
-            <h2 id="mp-needs-title">Vad behöver din verksamhet?</h2>
-            <p>Enklare verktyg som gör skillnad i vardagen – oavsett var du är idag.</p>
-          </header>
-          <div className="mp-grid mp-grid--3">
-            {needs.map((need) => (
-              <article key={need.title} className="mp-card mp-card--feature">
-                <span className="mp-icon-badge" aria-hidden="true">{need.icon}</span>
-                <div>
-                  <h3>{need.title}</h3>
-                  <p>{need.text}</p>
-                  <Link to="/tjänster#servicesGrid" className="mp-textlink mp-textlink--small">
-                    Läs mer <span className="mp-sr">om {need.title.toLowerCase()}</span>
-                    <FiArrowRight aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mp-band" aria-labelledby="mp-band-title">
-        <div className="mp-container mp-band__grid">
-          <div>
-            <h2 id="mp-band-title">
-              Små förändringar.
-              <br />
-              En enklare vardag.
-            </h2>
+      {/* B. Benefits */}
+      <section id="fordelar" className="mp-section mp-anchor" aria-labelledby="mp-benefits-title">
+        <div className="mp-container mp-benefits">
+          <div className="mp-benefits__intro">
+            <p className="mp-eyebrow">Varför digitalt</p>
+            <h2 id="mp-benefits-title">Ett visitkort som alltid finns till hands.</h2>
             <p>
-              Vi hjälper dig att spara tid, få bättre överblick och skapa en smidigare vardag med verktyg som passar
-              just ditt företag.
+              Pappersvisitkort tar slut, blir liggande eller hamnar i fel ficka. Ett digitalt kort skickar du när du
+              behöver – och det ser lika bra ut varje gång.
             </p>
+            <div className="mp-chat" aria-hidden="true">
+              <p className="mp-chat__bubble mp-chat__bubble--out">Trevligt att ses idag! Här är mitt visitkort:</p>
+              <div className="mp-chat__link">
+                {hero && (
+                  <div className="mp-chat__preview">
+                    <CardPreview card={hero} t={cardStrings[hero.lang]} />
+                  </div>
+                )}
+                <p>
+                  <b>{hero?.company ?? "Ditt företag"} – digitalt visitkort</b>
+                  <span>mambylysolutions.se/card/…</span>
+                </p>
+              </div>
+              <p className="mp-chat__bubble mp-chat__bubble--in">Tack! Nu har jag dina uppgifter.</p>
+            </div>
           </div>
-          <ul className="mp-checklist">
-            {benefits.map((benefit) => (
-              <li key={benefit.title}>
-                <span className="mp-checklist__icon" aria-hidden="true"><FiCheck /></span>
-                <span>
-                  <strong>{benefit.title}</strong>
-                  {benefit.text}
-                </span>
+          <ul className="mp-benefits__list">
+            {benefits.map((b) => (
+              <li key={b.title}>
+                <span className="mp-icon-badge mp-icon-badge--sm" aria-hidden="true">{b.icon}</span>
+                <div>
+                  <h3>{b.title}</h3>
+                  <p>{b.text}</p>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="mp-section" aria-labelledby="mp-steps-title">
+      {/* C. How it works */}
+      <section id="sa-funkar-det" className="mp-band mp-anchor" aria-labelledby="mp-how-title">
         <div className="mp-container">
-          <header className="mp-section__head mp-section__head--center">
-            <h2 id="mp-steps-title">Så arbetar vi.</h2>
-            <p>Från idé till färdig lösning – vi guidar dig hela vägen.</p>
+          <header className="mp-band__head">
+            <p className="mp-eyebrow mp-eyebrow--light">Så funkar det</p>
+            <h2 id="mp-how-title">Från logotyp till färdig länk.</h2>
           </header>
-          <ol className="mp-steps">
-            {steps.map((step, index) => (
-              <li key={step.title}>
-                <span className="mp-steps__num" aria-hidden="true">{index + 1}</span>
-                <span className="mp-steps__icon" aria-hidden="true">{step.icon}</span>
-                <div>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                </div>
+          <ol className="mp-flow">
+            {steps.map((s, i) => (
+              <li key={s.title}>
+                <span className="mp-flow__num" aria-hidden="true">{i + 1}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-
-      <section className="mp-section mp-section--tight" aria-labelledby="mp-dcs-home">
-        <div className="mp-container">
-          <div className="mp-card mp-dcs-teaser">
-            <span className="mp-dcs-teaser__mini" aria-hidden="true">
-              <span />
-            </span>
-            <div>
-              <p className="mp-eyebrow">Ny tjänst</p>
-              <h2 id="mp-dcs-home" className="mp-h3">Digitala visitkort</h2>
-              <p>
-                Ett interaktivt visitkort med egen länk och QR-kod. Mottagaren öppnar det i webbläsaren, utan app, och
-                kan spara kontakten direkt.
-              </p>
-            </div>
-            <Link to="/digital-card" className="mp-btn mp-btn--outline">
-              Se demot <FiArrowRight aria-hidden="true" />
+          <div className="mp-band__actions">
+            <Link to="/kontaktaOss" state={contact("card")} className="mp-btn mp-btn--light">
+              Börja med en förfrågan <FiArrowUpRight aria-hidden="true" />
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="mp-section mp-section--tight" aria-labelledby="mp-why-title">
-        <div className="mp-container mp-split">
-          <div>
-            <p className="mp-eyebrow">Synlighet</p>
-            <h2 id="mp-why-title">Varför synlighet online är avgörande</h2>
-            <p>
-              I en digital värld där konkurrensen aldrig sover, är <strong>online-närvaro</strong> nyckeln till att
-              sticka ut. Genom att synas digitalt kan du inte bara förbättra din produktivitet, utan också bygga
-              förtroende, attrahera rätt målgrupp och öppna upp för helt nya affärsmöjligheter.
-            </p>
-            <ul className="mp-tags" aria-label="Våra tjänster">
-              {slides.map((slide) => (
-                <li key={slide.id}>
-                  <Link to="/tjänster#servicesGrid">{slide.title}</Link>
-                </li>
-              ))}
-            </ul>
+      {/* D. Examples */}
+      <section id="exempel" className="mp-section mp-anchor" aria-labelledby="mp-examples-title">
+        <div className="mp-container">
+          <header className="mp-section__head mp-section__head--row">
+            <div>
+              <p className="mp-eyebrow">Exempel</p>
+              <h2 id="mp-examples-title">Ett kort för varje verksamhet.</h2>
+              <p>Påhittade företag, riktiga lösningar: varje kort har sin egen identitet. Öppna ett och vänd på det.</p>
+            </div>
+            <Link to="/exempel" className="mp-btn mp-btn--outline">
+              Alla exempel <FiArrowRight aria-hidden="true" />
+            </Link>
+          </header>
+          <div className="mp-xrow">
+            {examples.slice(0, 4).map((c) => (
+              <ExampleTile key={c.slug} card={c} />
+            ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mp-card mp-tech">
-            <h3>Teknik som passar ditt företag</h3>
+      {/* E. Website */}
+      <section id="webbplats" className="mp-section mp-section--alt mp-anchor" aria-labelledby="mp-site-title">
+        <div className="mp-container mp-siteoffer">
+          {siteCard && <SiteMock card={siteCard} />}
+          <div className="mp-siteoffer__copy">
+            <p className="mp-eyebrow">Webbplats</p>
+            <h2 id="mp-site-title">Behöver du också en webbplats?</h2>
             <p>
-              Moderna webbgränssnitt, återanvändbara komponenter och integrationer som växer med verksamheten. Tekniken
-              väljs utifrån dina behov.
+              Har du redan en webbplats räcker det med visitkortet – vi länkar till den. Börjar du från noll kan vi göra
+              båda, med samma logotyp, färger och känsla.
             </p>
-            <details className="mp-disclosure">
-              <summary>Vad är React?</summary>
-              <p>
-                React är ett bibliotek för att skapa användargränssnitt som är snabbt, interaktivt och lätt att
-                underhålla. Det gör det möjligt att återanvända komponenter, vilket minskar utvecklingstiden och gör din
-                webbplats mer flexibel.
-              </p>
-            </details>
-            <details className="mp-disclosure">
-              <summary>Vad är en SPA?</summary>
-              <p>
-                En Single Page Application (SPA) laddar bara en gång – därefter sker navigationen utan att ladda om hela
-                sidan.
-              </p>
-            </details>
-            <details className="mp-disclosure">
-              <summary>Vad bygger vi egentligen?</summary>
-              <p>
-                Vi skapar inte bara snygga sidor – vi bygger kompletta webbaserade applikationer med modern teknik. Från
-                gränssnitt i React till skalbara backend-lösningar i molnet. Det betyder att du får en lösning som kan
-                växa med ditt företag.
-              </p>
-            </details>
+            <ul className="mp-ticks">
+              <li><FiCheck aria-hidden="true" /> Presentera verksamheten, tjänsterna och tidigare arbeten</li>
+              <li><FiCheck aria-hidden="true" /> Byggd för mobilen först, lika tydlig på datorn</li>
+              <li><FiCheck aria-hidden="true" /> Kortet leder till webbplatsen – och webbplatsen till kortet</li>
+            </ul>
+            <div className="mp-actions">
+              <Link to="/kontaktaOss" state={contact("both")} className="mp-btn mp-btn--primary">
+                Visitkort + webbplats <FiArrowUpRight aria-hidden="true" />
+              </Link>
+              <Link to="/tjänster#webbplats" className="mp-textlink">
+                Läs mer om webbplatser
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* F. FAQ */}
+      <section id="fragor" className="mp-section mp-anchor" aria-labelledby="mp-faq-title">
+        <div className="mp-container mp-faq">
+          <header className="mp-faq__head">
+            <p className="mp-eyebrow">Vanliga frågor</p>
+            <h2 id="mp-faq-title">Bra att veta.</h2>
+            <p>
+              Hittar du inte svaret? <Link to="/kontaktaOss">Skriv till oss</Link> eller ring{" "}
+              <a href={publicContact.phoneHref}>{publicContact.phoneNational}</a>.
+            </p>
+          </header>
+          <div className="mp-faq__list">
+            {faq.map((f) => (
+              <details key={f.q} className="mp-disclosure">
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
       {publicSiteConfig.showSidoButik && <SidoButikPromo />}
 
-      <section className="mp-container mp-cta" aria-labelledby="mp-cta-title">
+      {/* G. Contact */}
+      <section id="kontakt" className="mp-container mp-cta mp-cta--choices mp-anchor" aria-labelledby="mp-cta-title">
         <div>
-          <p className="mp-eyebrow mp-eyebrow--light">Redo att förenkla?</p>
-          <h2 id="mp-cta-title">Vad vill du förenkla?</h2>
-          <p>Berätta om din verksamhet. Vi hittar en väg framåt tillsammans.</p>
+          <p className="mp-eyebrow mp-eyebrow--light">Kontakt</p>
+          <h2 id="mp-cta-title">Vad vill du ha hjälp med?</h2>
+          <p>Välj ett alternativ – det följer med till formuläret, där du berättar resten.</p>
+          <p className="mp-cta__direct">
+            <a href={publicContact.phoneHref}>
+              <FiPhone aria-hidden="true" /> {publicContact.phoneNational}
+            </a>
+            <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer">
+              <FiMessageCircle aria-hidden="true" /> WhatsApp<span className="mp-sr"> (öppnas i ny flik)</span>
+            </a>
+          </p>
         </div>
-        <Link to="/kontaktaOss" className="mp-btn mp-btn--light mp-btn--lg">
-          Kontakta oss <FiArrowUpRight aria-hidden="true" />
-        </Link>
+        <ul className="mp-choices">
+          <li>
+            <Link to="/kontaktaOss" state={contact("card")} className="mp-choice">
+              <strong>Ett digitalt visitkort</strong>
+              <span>Jag har redan en webbplats, eller behöver ingen.</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+          </li>
+          <li>
+            <Link to="/kontaktaOss" state={contact("both")} className="mp-choice">
+              <strong>Visitkort och webbplats</strong>
+              <span>Jag börjar från noll och vill ha båda.</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+          </li>
+          <li>
+            <Link to="/kontaktaOss" state={contact("site")} className="mp-choice">
+              <strong>En webbplats</strong>
+              <span>Jag vill främst ha en ny webbplats.</span>
+              <FiArrowUpRight aria-hidden="true" />
+            </Link>
+          </li>
+        </ul>
       </section>
     </PublicShell>
   );

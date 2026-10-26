@@ -34,7 +34,8 @@ import ContactUs from "./public/pages/PublicContact";
 import WorkWithUs from "./public/pages/PublicJobs";
 import AboutUs from "./public/pages/PublicAbout";
 import NotFoundPage from "./public/pages/PublicNotFound";
-import DigitalCardService from "./public/pages/PublicDigitalCard";
+import PublicExamples from "./public/pages/PublicExamples";
+import PublicExample from "./public/pages/PublicExample";
 import PublicCard from "./public/pages/PublicCard";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
@@ -81,7 +82,10 @@ const App = () => {
               <Route path="/kontaktaOss" element={<ContactUs />} />
               <Route path="/jobbaMedOss" element={<WorkWithUs />} />
               <Route path="/omOss" element={<AboutUs />} />
-              <Route path="/digital-card" element={<DigitalCardService />} />
+              <Route path="/exempel" element={<PublicExamples />} />
+              <Route path="/exempel/:slug" element={<PublicExample />} />
+              {/* Former card service page: its content now lives on the home page and in Tjänster. */}
+              <Route path="/digital-card" element={<Navigate to="/tjänster#visitkort" replace />} />
               <Route path="/card" element={<PublicCard />} />
               <Route path="/card/:slug" element={<PublicCard />} />
               <Route path="/sidoButik" element={<SidoButik />} />

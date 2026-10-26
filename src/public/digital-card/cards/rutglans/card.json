@@ -1,0 +1,42 @@
+{
+  "slug": "rutglans",
+  "lang": "sv",
+  "demo": true,
+  "name": "Sara Exempel",
+  "role": "Fönsterputs & städ",
+  "company": "Rutglans",
+  "tagline": "Skinande rena rutor – hemma och på kontoret.",
+  "logo": "logo.svg",
+  "logoBack": "logo-blue.svg",
+  "theme": {
+    "front": "#1f4fd1",
+    "frontInk": "#ffffff",
+    "accent": "#ffd84d",
+    "back": "#ffffff",
+    "backInk": "#0f2a66",
+    "backAccent": "#1f4fd1",
+    "style": "solid",
+    "layout": "bold",
+    "font": "sans"
+  },
+  "phoneDisplay": "070-000 00 00",
+  "email": "boka@rutglans.example",
+  "website": "https://rutglans.example",
+  "socials": [
+    { "type": "facebook", "url": "https://www.facebook.com/" },
+    { "type": "instagram", "url": "https://www.instagram.com/" }
+  ],
+  "details": [
+    { "label": "Öppet", "value": "Mån–lör 07–18" },
+    { "label": "RUT", "value": "Avdraget direkt på fakturan" }
+  ],
+  "example": {
+    "sector": "Serviceföretag",
+    "summary": "Klara färger, en stor logotyp och öppettider på baksidan – lätt att känna igen, lätt att boka.",
+    "order": 4
+  },
+  "meta": {
+    "title": "Exempel: Rutglans – visitkort för serviceföretag",
+    "description": "Exempel på ett digitalt visitkort för ett lokalt serviceföretag, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  }
+}

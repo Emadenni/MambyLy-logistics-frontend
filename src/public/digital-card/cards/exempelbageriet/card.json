@@ -14,17 +14,23 @@
     "back": "#3b2414",
     "backInk": "#f7efe2",
     "backAccent": "#e7b77c",
-    "style": "paper"
+    "style": "paper",
+    "layout": "classic"
   },
-  "phoneDisplay": "070-XXX XX XX",
-  "email": "alva@example.com",
-  "website": "https://example.com",
+  "phoneDisplay": "070-000 00 00",
+  "email": "alva@exempelbageriet.example",
+  "website": "https://exempelbageriet.example",
   "details": [
     { "label": "Öppet", "value": "Tis–lör 07–15" },
     { "label": "Specialitet", "value": "Surdeg & kardemumma" }
   ],
+  "example": {
+    "sector": "Café & bageri",
+    "summary": "Krämigt papper och varma bruna toner – som en påse nybakat.",
+    "order": 5
+  },
   "meta": {
-    "title": "Alva Exempel – Exempelbageriet (demo)",
-    "description": "Demo av ett digitalt visitkort från MambyLy Solutions. Företaget och personen är påhittade."
+    "title": "Exempel: Exempelbageriet – visitkort för café och bageri",
+    "description": "Exempel på ett digitalt visitkort för ett bageri, gjort av MambyLy Solutions. Företaget och personen är påhittade."
   }
 }

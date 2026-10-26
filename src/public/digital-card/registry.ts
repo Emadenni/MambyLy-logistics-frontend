@@ -30,9 +30,17 @@ export function getCard(slug: string | undefined): CardConfig | undefined {
   return isValidSlug(slug) ? cards.get(slug) : undefined;
 }
 
-export const DEMO_CARD_SLUG = "exempelbageriet";
-
 /** MambyLy's own card, published at /card (not under /card/<slug>). */
 export const COMPANY_CARD_SLUG = "mambyly-solutions";
 
-export const cardPath = (slug: string) => (slug === COMPANY_CARD_SLUG ? "/card" : `/card/${slug}`);
+export const cardPath = (slug: string) => {
+  if (slug === COMPANY_CARD_SLUG) return "/card";
+  return cards.get(slug)?.demo ? examplePath(slug) : `/card/${slug}`;
+};
+
+/** Demo cards presented in the gallery, in their configured order. */
+export const getExamples = (): CardConfig[] =>
+  [...cards.values()].filter((c) => c.demo && c.example).sort((a, b) => a.example!.order - b.example!.order);
+
+/** Demo cards are shown at /exempel/<slug>; /card/<slug> is only for real cards. */
+export const examplePath = (slug: string) => `/exempel/${slug}`;

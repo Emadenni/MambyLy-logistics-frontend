@@ -1,0 +1,39 @@
+{
+  "slug": "fjardvik-agentur",
+  "lang": "sv",
+  "demo": true,
+  "name": "Linnea Exempel",
+  "role": "Key account manager",
+  "company": "Fjärdvik Agentur",
+  "tagline": "Livsmedel och dryck till butiker i Mellansverige.",
+  "logo": "logo.svg",
+  "logoBack": "mark.svg",
+  "theme": {
+    "front": "#f7f6f2",
+    "frontInk": "#16233f",
+    "accent": "#7d5f24",
+    "back": "#16233f",
+    "backInk": "#f4f1ea",
+    "backAccent": "#d8b56a",
+    "style": "solid",
+    "layout": "split",
+    "font": "sans"
+  },
+  "phoneDisplay": "070-000 00 00",
+  "email": "linnea@fjardvik.example",
+  "website": "https://fjardvik.example",
+  "socials": [{ "type": "linkedin", "url": "https://www.linkedin.com/" }],
+  "details": [
+    { "label": "Distrikt", "value": "Mälardalen & Östergötland" },
+    { "label": "Språk", "value": "Svenska · Engelska" }
+  ],
+  "example": {
+    "sector": "Säljare & konsult",
+    "summary": "Stramt och förtroendeingivande: marinblått, ett tunt guldstreck och tydliga kontaktvägar för den som träffar många kunder.",
+    "order": 2
+  },
+  "meta": {
+    "title": "Exempel: Fjärdvik Agentur – visitkort för säljare",
+    "description": "Exempel på ett digitalt visitkort för en säljare eller konsult, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  }
+}

@@ -38,21 +38,29 @@ export function buildVCard(card: CardConfig, cardUrl: string): string {
   const lines: string[] = ["BEGIN:VCARD", "VERSION:3.0", `N:${org ? ";;;;" : nameParts(card.name)}`, `FN:${esc(card.name)}`];
   if (card.company || org) lines.push(`ORG:${esc(card.company || card.name)}`);
   if (org) lines.push("X-ABShowAs:COMPANY");
-  if (card.role) lines.push(`TITLE:${esc(card.role)}`);
+  // A company has no job title: its description goes in NOTE instead.
+  if (card.role && !org) lines.push(`TITLE:${esc(card.role)}`);
   // Demo cards never carry a phone number (phoneDisplay is only a placeholder).
-  if (card.phone && !card.demo) lines.push(`TEL;TYPE=CELL,VOICE:${card.phone.e164}`);
-  if (card.email) lines.push(`EMAIL;TYPE=INTERNET:${card.email}`);
+  if (card.phone && !card.demo) lines.push(`TEL;TYPE=${org ? "WORK" : "CELL"},VOICE:${card.phone.e164}`);
+  if (card.email) lines.push(`EMAIL;TYPE=INTERNET${org ? ",WORK" : ""}:${card.email}`);
   if (card.website) lines.push(`URL:${card.website.href}`);
   card.socials.forEach((s, i) => {
     lines.push(`item${i + 1}.URL:${s.href}`, `item${i + 1}.X-ABLabel:${esc(s.label)}`);
   });
   lines.push(`item${card.socials.length + 1}.URL:${cardUrl}`, `item${card.socials.length + 1}.X-ABLabel:${card.lang === "en" ? "Digital card" : "Digitalt visitkort"}`);
+  if (org && card.role) lines.push(`NOTE:${esc(card.role)}`);
   if (card.demo) lines.push(`NOTE:${esc("Demo – fiktiva uppgifter. Skapat av MambyLy Solutions.")}`);
   lines.push("END:VCARD");
   return lines.map(fold).join("\r\n") + "\r\n";
 }
 
 export const vcardFileName = (card: CardConfig) => `${card.slug}.vcf`;
+
+/**
+ * Static copy written at build time next to the card page (build/static-route-meta.ts), served as
+ * text/vcard: opening it lets the phone show its own "add contact" screen. Real cards only.
+ */
+export const staticVCardPath = (card: CardConfig) => `/card/${vcardFileName(card)}`;
 
 /** Triggers a local download of the vCard (no server involved). */
 export function downloadVCard(card: CardConfig, cardUrl: string) {
