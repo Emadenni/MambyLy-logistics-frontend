@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { useLocation, useNavigate, useNavigationType, useOutlet } from "react-router-dom";
+import { Navigate, useLocation, useNavigationType, useOutlet } from "react-router-dom";
 import { AnimatePresence, motion, useIsPresent, useReducedMotion, type Variants } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { enterFrom, type Enter } from "./nav";
@@ -96,7 +96,6 @@ const scrolls = new Map<string, number>();
 const Stage: React.FC = () => {
   const location = useLocation();
   const navType = useNavigationType();
-  const navigate = useNavigate();
   const outlet = useOutlet();
   const reduce = useReducedMotion() ?? false;
   const resolved = resolvePath(location.pathname);
@@ -156,26 +155,28 @@ const Stage: React.FC = () => {
   }, [key]);
 
   // Saved language: applied on arrival on an unprefixed (Swedish) URL and on Back / Forward to an
-  // entry in the other language. An explicit /en/… link always opens in English.
-  useLayoutEffect(() => {
-    const pref = savedLang();
-    if (!pref || pref === resolved.lang || resolved.screen === "card") return;
-    if (first ? resolved.lang === "sv" : navType === "POP") {
-      navigate(translatePath(location.pathname, pref) + location.search + location.hash, { replace: true, state: location.state });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.key]);
+  // entry in the other language. An explicit /en/… link always opens in English. Rendered as a
+  // <Navigate>, so the router is already listening when the address changes.
+  const pref = savedLang();
+  const langRedirect =
+    pref && pref !== resolved.lang && resolved.screen !== "card" && (first ? resolved.lang === "sv" : navType === "POP")
+      ? translatePath(location.pathname, pref) + location.search + location.hash
+      : null;
 
   return (
     <div className="mambyly-public mp-x">
       <Helmet htmlAttributes={{ lang: resolved.lang }} />
-      <div className="mp-stage">
-        <AnimatePresence initial={false} custom={move}>
-          <Layer key={key} id={key} move={move}>
-            {outlet}
-          </Layer>
-        </AnimatePresence>
-      </div>
+      {langRedirect ? (
+        <Navigate to={langRedirect} replace state={location.state} />
+      ) : (
+        <div className="mp-stage">
+          <AnimatePresence initial={false} custom={move}>
+            <Layer key={key} id={key} move={move}>
+              {outlet}
+            </Layer>
+          </AnimatePresence>
+        </div>
+      )}
       <ConsentBanner />
     </div>
   );

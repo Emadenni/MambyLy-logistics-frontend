@@ -37,10 +37,13 @@ type PageMeta = {
 
 const escapeAttr = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const abs = (route: string) => `${SITE}${encodeURI(route)}`;
+// Marks the tags as managed by react-helmet-async, which replaces them once the app runs (no duplicates
+// after a change of screen or language).
+const RH = `data-rh="true"`;
 
 function setMeta(html: string, attr: "name" | "property", key: string, value: string) {
   const re = new RegExp(`<meta\\s+${attr}="${key}"\\s+content="[^"]*"\\s*/?>`);
-  const tag = `<meta ${attr}="${key}" content="${escapeAttr(value)}" />`;
+  const tag = `<meta ${attr}="${key}" content="${escapeAttr(value)}" ${RH} />`;
   return re.test(html) ? html.replace(re, tag) : html.replace("</head>", `    ${tag}\n  </head>`);
 }
 
@@ -60,11 +63,11 @@ export function renderRouteHtml(html: string, page: PageMeta): string {
   out = setMeta(out, "name", "twitter:image", image);
   const alt = page.alternates;
   const extra = [
-    `<link rel="canonical" href="${escapeAttr(url)}" />`,
-    alt ? `<link rel="alternate" hreflang="sv" href="${escapeAttr(abs(alt.sv))}" />` : "",
-    alt ? `<link rel="alternate" hreflang="en" href="${escapeAttr(abs(alt.en))}" />` : "",
-    alt ? `<link rel="alternate" hreflang="x-default" href="${escapeAttr(abs(alt.sv))}" />` : "",
-    page.noindex ? `<meta name="robots" content="noindex" />` : "",
+    `<link rel="canonical" href="${escapeAttr(url)}" ${RH} />`,
+    alt ? `<link rel="alternate" hreflang="sv" href="${escapeAttr(abs(alt.sv))}" ${RH} />` : "",
+    alt ? `<link rel="alternate" hreflang="en" href="${escapeAttr(abs(alt.en))}" ${RH} />` : "",
+    alt ? `<link rel="alternate" hreflang="x-default" href="${escapeAttr(abs(alt.sv))}" ${RH} />` : "",
+    page.noindex ? `<meta name="robots" content="noindex" ${RH} />` : "",
   ]
     .filter(Boolean)
     .map((t) => `    ${t}\n`)
