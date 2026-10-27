@@ -17,6 +17,7 @@ export type ScreenId =
   | "services"
   | "examples"
   | "example"
+  | "concept"
   | "about"
   | "contact"
   | "jobs"
@@ -25,7 +26,7 @@ export type ScreenId =
   | "notFound";
 
 /** Screens with a fixed path (no parameters). */
-export type StaticScreen = Exclude<ScreenId, "example" | "card" | "notFound">;
+export type StaticScreen = Exclude<ScreenId, "example" | "concept" | "card" | "notFound">;
 
 export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   home: { sv: "/", en: "/en" },
@@ -43,6 +44,19 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
 
 export const EXAMPLE_BASE: Record<Lang, string> = { sv: "/exempel", en: "/en/examples" };
 export const CARD_PATH: Record<Lang, string> = { sv: "/card", en: "/en/card" };
+
+/** The five website design concepts (fullscreen demos), with their slug in each language. */
+export type ConceptId = "editorial" | "typographic" | "minimal" | "visual" | "interactive";
+export const CONCEPTS: { id: ConceptId; slug: Record<Lang, string> }[] = [
+  { id: "editorial", slug: { sv: "redaktionell", en: "editorial" } },
+  { id: "typographic", slug: { sv: "typografisk", en: "typographic" } },
+  { id: "minimal", slug: { sv: "minimal", en: "minimal" } },
+  { id: "visual", slug: { sv: "visuell", en: "visual" } },
+  { id: "interactive", slug: { sv: "interaktiv", en: "interactive" } },
+];
+export const CONCEPT_BASE: Record<Lang, string> = { sv: "/webbplatser/koncept", en: "/en/websites/concepts" };
+export const conceptPath = (id: ConceptId, lang: Lang) => `${CONCEPT_BASE[lang]}/${CONCEPTS.find((c) => c.id === id)!.slug[lang]}`;
+export const conceptOfSlug = (slug: string | undefined, lang: Lang) => CONCEPTS.find((c) => c.slug[lang] === slug?.toLowerCase())?.id;
 
 export const pathFor = (screen: StaticScreen, lang: Lang) => PATHS[screen][lang];
 
@@ -72,6 +86,8 @@ export function resolvePath(pathname: string): Resolved {
   }
   const ex = p.match(lang === "en" ? /^\/en\/examples\/([^/]+)$/ : /^\/exempel\/([^/]+)$/);
   if (ex) return { screen: "example", lang, slug: ex[1] };
+  const concept = p.match(lang === "en" ? /^\/en\/websites\/concepts\/([^/]+)$/i : /^\/webbplatser\/koncept\/([^/]+)$/i);
+  if (concept && conceptOfSlug(concept[1], lang)) return { screen: "concept", lang, slug: concept[1].toLowerCase() };
   if (p === CARD_PATH[lang]) return { screen: "card", lang };
   const card = lang === "sv" ? p.match(/^\/card\/([^/]+)$/) : null;
   if (card) return { screen: "card", lang, slug: card[1] };
@@ -82,6 +98,7 @@ export function resolvePath(pathname: string): Resolved {
 export function translatePath(pathname: string, to: Lang): string {
   const r = resolvePath(pathname);
   if (r.screen === "example" && r.slug) return `${EXAMPLE_BASE[to]}/${r.slug}`;
+  if (r.screen === "concept" && r.slug) return conceptPath(conceptOfSlug(r.slug, r.lang)!, to);
   if (r.screen === "card") return r.slug ? pathname : CARD_PATH[to];
   if (r.screen === "notFound") return PATHS.explore[to];
   return PATHS[r.screen as StaticScreen][to];

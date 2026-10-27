@@ -11,6 +11,7 @@ import { destinations } from "../experience/nav";
 import { CARD_PATH, PATHS, langOfPath, type Lang } from "../experience/routes";
 import LangSwitch from "../experience/LangSwitch";
 import logoDark from "../assets/logo-dark.svg";
+import { LinkMark } from "../experience/icons";
 
 /**
  * /card – MambyLy's own card (also the NFC destination, so it never redirects); /en/card – the
@@ -65,7 +66,7 @@ const PublicCard: React.FC = () => {
     : undefined;
 
   return (
-    <div className="mp-cardpage" lang={card.lang} data-focus-root>
+    <div className={`mp-cardpage${isCompany ? " mp-cardpage--own" : ""}`} lang={card.lang} data-focus-root>
       <Helmet>
         <html lang={card.lang} />
         <title>{title}</title>
@@ -82,6 +83,9 @@ const PublicCard: React.FC = () => {
 
       {isCompany && (
         <div className="mp-cardpage__top">
+          <Link to={PATHS.explore[lang]} className="mp-cardpage__logo" aria-label={t.common.logoLabel}>
+            <img src={logoDark} alt="" width={132} height={38} />
+          </Link>
           <LangSwitch
             current={lang}
             onSelect={(next) => {
@@ -94,13 +98,19 @@ const PublicCard: React.FC = () => {
       )}
 
       <main id="mp-main" className="mp-cardpage__main">
+        {isCompany && (
+          <p className="mp-cardpage__eyebrow" aria-hidden="true">
+            <LinkMark className="mp-cardpage__mark" />
+            {t.cardPage.eyebrow}
+          </p>
+        )}
         <CardExperience card={card} headingLevel="h1" intro menu={menu} />
       </main>
 
       <footer className="mp-cardpage__footer">
         <Link to={PATHS.explore[lang]} className="mp-cardpage__brand">
           <span>{isCompany ? t.cardPage.toSite : cs.createdBy}</span>
-          <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
+          {isCompany ? <FiArrowRight aria-hidden="true" /> : <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />}
         </Link>
       </footer>
     </div>

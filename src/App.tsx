@@ -30,7 +30,7 @@ import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 // Public site: one screen at a time, Swedish and English (see src/public/experience and
 // docs/RESTYLE-PUBLIC.md). Swedish keeps the existing URLs; English lives under /en.
 import Stage from "./public/experience/Stage";
-import { LANGS, PATHS } from "./public/experience/routes";
+import { CONCEPT_BASE, LANGS, PATHS } from "./public/experience/routes";
 import Hub from "./public/experience/screens/Hub";
 import Websites from "./public/experience/screens/Websites";
 import Method from "./public/experience/screens/Method";
@@ -42,6 +42,7 @@ import Contact from "./public/experience/screens/Contact";
 import Jobs from "./public/experience/screens/Jobs";
 import { NotFound, Privacy } from "./public/experience/screens/Privacy";
 import PublicCard from "./public/pages/PublicCard";
+import Concept from "./public/experience/concepts/Concept";
 import LegacyConsent from "./public/experience/LegacyConsent";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
@@ -90,6 +91,7 @@ const App = () => {
                   <Route path={PATHS.explore[lang]} element={<Hub />} />
                   <Route path={PATHS.websites[lang]} element={<Websites />} />
                   <Route path={PATHS.method[lang]} element={<Method />} />
+                  <Route path={`${CONCEPT_BASE[lang]}/:slug`} element={<Concept />} />
                   <Route path={PATHS.cards[lang]} element={<Cards />} />
                   <Route path={PATHS.services[lang]} element={<Services />} />
                   <Route path={PATHS.examples[lang]} element={<Examples />} />

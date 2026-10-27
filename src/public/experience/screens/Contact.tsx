@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
-import { FiArrowRight, FiEdit2, FiMessageCircle, FiMonitor, FiPhone, FiUser, FiX } from "react-icons/fi";
+import { FiArrowRight, FiEdit2, FiMessageCircle, FiMonitor, FiMail, FiUser, FiX } from "react-icons/fi";
 import { LuIdCard, LuLayers, LuSparkles } from "react-icons/lu";
 import useSubmitMessages from "../../../hooks/useSubmitMessage";
 import { getCard } from "../../digital-card/registry";
@@ -257,7 +257,7 @@ const Contact: React.FC = () => {
 
                   {showModel && model && (
                     <p className="mp-model-chip">
-                      <span>{fill(c.model, { name: model.company || model.name })}</span>
+                      <span>{fill(c.model, { name: model.example?.sector ?? model.name })}</span>
                       <button type="button" onClick={() => w.set({ example: undefined })} aria-label={c.removeModel}>
                         <FiX aria-hidden="true" />
                       </button>
@@ -374,8 +374,8 @@ const Contact: React.FC = () => {
 
         <aside className="mp-wizard__call" aria-label={c.call}>
           <span>{c.call}</span>
-          <a href={publicContact.phoneHref}>
-            <FiPhone aria-hidden="true" /> {t.lang === "en" ? publicContact.phoneInternational : publicContact.phoneNational}
+          <a href={`mailto:${publicContact.email}`}>
+            <FiMail aria-hidden="true" /> {publicContact.email}
           </a>
           <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer">
             <FiMessageCircle aria-hidden="true" /> {c.whatsapp}

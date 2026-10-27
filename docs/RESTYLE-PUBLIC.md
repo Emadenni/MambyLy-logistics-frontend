@@ -195,3 +195,56 @@ Punto di ripristino: tag git `restore/pre-reposition-20261026` (= commit 4862544
 `public/media/mambyly/`: WebP ricavati da `MambyLy_Claude_Pack/assets` (hero, tre copertine della galleria,
 persone, anteprima siti, tre foto di Om oss). Font titoli: Newsreader (OFL, `src/public/assets/fonts`).
 Il pacchetto `MambyLy_Claude_Pack/` non è nel repository.
+
+## Fase 6: demo reali, tre biglietti, navigazione rapida
+
+Asset: `MambyLy_Demo_Assets_v2/` (non pubblicato, in `.gitignore`); in `public/media/mambyly/` solo i WebP usati:
+`site-<stile>-{900,1600}`, `card-<stile>-1300`, `preview-<stile>-{desktop-640,desktop-1280,mobile-390}`.
+
+### Cinque demo web (`src/public/experience/concepts/`)
+
+- Rotte: `/webbplatser/koncept/<slug>` · `/en/websites/concepts/<slug>` (`routes.ts` → `CONCEPTS`):
+  redaktionell/editorial, typografisk/typographic, minimal, visuell/visual, interaktiv/interactive.
+  Schermo intero, `noindex`, file statici generati dal build, contenuti fittizi dichiarati.
+- Ogni stile ha layout e comportamento propri: editoriale (reportage, planimetria con stanze che aprono i
+  dettagli, materiali, richiesta di visita), tipografico (programma culturale, filtri per tipo e giorno, voci che si
+  aprono, "Min kväll"), minimale (prodotto: taglia, luce del mattino/sera, lampada che si accende, borsa), visivo
+  (foto immersiva, momenti, calendario con disponibilità simulata in tre passi), interattivo (tre scelte che
+  cambiano scultura, colore, forme e testo).
+- I moduli delle demo non fanno richieste di rete: rispondono nel browser ("demo – inget skickades").
+- Testi in `concepts/content.ts` (sv/en). Unico elemento MambyLy: la barra di uscita (`ExitBar`).
+- Anteprime della galleria = screenshot reali delle demo finite (desktop 1440×900 e telefono 390×844, motion
+  ridotto, barra di uscita nascosta), generati con Chrome headless e convertiti in WebP. Se una demo cambia,
+  rigenerare le anteprime.
+
+### Tre biglietti di esempio
+
+- `cards/professionell`, `cards/redaktionell`, `cards/expressiv` (persone fittizie, nessun numero di telefono,
+  e-mail `@example.com`). I cinque esempi precedenti sono stati rimossi; i loro link portano a `/exempel`.
+- `theme.background` (nuovo, facoltativo): nome di un'immagine `card-<nome>-1300.webp` come superficie del fronte;
+  i testi restano HTML sopra l'immagine.
+- `/exempel/<slug>`: il biglietto a schermo intero sulla superficie del suo stile, con tutte le azioni
+  (girare, salva contatto con i dati fittizi, condividi, QR) e la barra di uscita verso `/exempel`.
+
+### Navigazione rapida (`QuickNav.tsx`)
+
+- Barra sospesa in basso: Utforska · Webbplatser · Visitkort · Om oss (EN: Explore · Websites · Digital cards ·
+  About). Link diretti, sezione attiva con punto verde e `aria-current` (`page` sulla schermata stessa, `true`
+  nelle sottopagine). Kontakt resta in alto.
+- Nascosta sulla copertina, nelle demo e nei biglietti a schermo intero (lì c'è la barra di uscita) e su `/card`
+  (ha il suo menu). Su telefono si sposta quando la tastiera è aperta (campo di testo con il focus).
+- Spazio riservato: `.has-qnav .mp-screen { padding-bottom: var(--qnav-space) }` (safe-area inclusa).
+- Utforska sta in una schermata a 390×844 e a 1440×900 (servizi, Om oss e piè di pagina).
+
+### Copertina
+
+- Simbolo: due maglie intrecciate (`icons.tsx` → `LinkMark`).
+- Apertura: Utforska resta ferma dietro; la copertina si apre con una maschera dal centro verso i lati che segue il
+  dito (`mask-image` legato al progresso del gesto). Un anello sottile si espande dall'impronta durante il
+  gesto, al tocco e, ogni tanto, da fermo (mai con motion ridotto).
+
+### Contatto
+
+- Nel wizard e nel messaggio di errore l'alternativa è l'e-mail `info@mambylysolutions.se` (stesso dominio del
+  sito, già usata in policy e su `/card`) al posto del telefono. WhatsApp resta. Il biglietto `/card` mantiene i
+  suoi dati reali.

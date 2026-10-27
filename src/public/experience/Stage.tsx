@@ -3,16 +3,20 @@ import { Navigate, useLocation, useNavigationType, useOutlet } from "react-route
 import { AnimatePresence, motion, useIsPresent, useReducedMotion, type Variants } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import { enterFrom, type Enter } from "./nav";
-import { resolvePath, translatePath, type Resolved } from "./routes";
+import { conceptOfSlug, resolvePath, translatePath, type Resolved } from "./routes";
 import { savedLang } from "./i18n";
 import { recordVisit } from "./visits";
 import ConsentBanner from "./ConsentBanner";
+import QuickNav, { hasQuickNav } from "./QuickNav";
+import { useUi } from "./ui";
 import "../styles/public.scss";
 
 /** Screens that share one mounted component (the home cover lies on top of Utforska). */
 const layerKey = (r: Resolved) => {
   if (r.screen === "home" || r.screen === "explore") return "hub";
   if (r.screen === "example" || r.screen === "card") return `${r.screen}:${r.slug ?? ""}`;
+  // Same concept in both languages: switching language is not a move to another place.
+  if (r.screen === "concept") return `concept:${conceptOfSlug(r.slug, r.lang)}`;
   return r.screen;
 };
 
@@ -100,6 +104,8 @@ const Stage: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
   const resolved = resolvePath(location.pathname);
   const key = layerKey(resolved);
+  const coverShown = useUi((s) => s.coverShown);
+  const withNav = hasQuickNav(resolved.screen);
 
   const last = useRef<{ key: string; locKey: string; screen: Resolved["screen"] } | null>(null);
   const first = last.current === null;
@@ -164,7 +170,7 @@ const Stage: React.FC = () => {
       : null;
 
   return (
-    <div className="mambyly-public mp-x">
+    <div className={`mambyly-public mp-x${withNav ? " has-qnav" : ""}`}>
       <Helmet htmlAttributes={{ lang: resolved.lang }} />
       {langRedirect ? (
         <Navigate to={langRedirect} replace state={location.state} />
@@ -177,6 +183,7 @@ const Stage: React.FC = () => {
           </AnimatePresence>
         </div>
       )}
+      {!langRedirect && <QuickNav screen={resolved.screen} shown={withNav && !coverShown} />}
       <ConsentBanner />
     </div>
   );

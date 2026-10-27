@@ -1,0 +1,58 @@
+{
+  "slug": "expressiv",
+  "lang": "sv",
+  "demo": true,
+  "name": "Sam Exempel",
+  "role": "Musikproducent & dj",
+  "tagline": "Ljud som syns.",
+  "logo": "mark.svg",
+  "theme": {
+    "front": "#0b2fa8",
+    "frontInk": "#ffffff",
+    "accent": "#ff9473",
+    "back": "#0a1d66",
+    "backInk": "#ffffff",
+    "backAccent": "#ff9473",
+    "style": "solid",
+    "layout": "bold",
+    "font": "sans",
+    "background": "expressive"
+  },
+  "email": "sam@example.com",
+  "website": "https://example.com",
+  "socials": [
+    { "type": "instagram", "url": "https://www.instagram.com/" },
+    { "type": "tiktok", "url": "https://www.tiktok.com/" }
+  ],
+  "details": [
+    { "label": "Bokning", "value": "Klubb · event · studio" },
+    { "label": "Stil", "value": "Elektroniskt · house" }
+  ],
+  "example": {
+    "sector": "Expressiv",
+    "summary": "Djupblått, ett korallfärgat ljus och stor text: ett kort som märks direkt.",
+    "order": 3
+  },
+  "meta": {
+    "title": "Exempel: expressivt digitalt visitkort | MambyLy Solutions",
+    "description": "Ett expressivt digitalt visitkort som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Music producer & DJ",
+      "tagline": "Sound you can see.",
+      "details": [
+        { "label": "Bookings", "value": "Club · events · studio" },
+        { "label": "Style", "value": "Electronic · house" }
+      ],
+      "example": {
+        "sector": "Expressive",
+        "summary": "Deep blue, a coral glow and large type: a card that stands out at once."
+      },
+      "meta": {
+        "title": "Example: expressive digital business card | MambyLy Solutions",
+        "description": "An expressive digital business card as an example. The person and the details are made up."
+      }
+    }
+  }
+}

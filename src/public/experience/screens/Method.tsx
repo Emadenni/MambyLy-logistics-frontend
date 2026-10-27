@@ -76,7 +76,7 @@ const Method: React.FC = () => {
               <i />
               <i />
             </span>
-            <img src={media("gallery-norden", 560)} alt="" width={560} height={747} loading="lazy" decoding="async" draggable={false} />
+            <img src={media("preview-editorial-mobile", 390)} alt="" width={390} height={844} loading="lazy" decoding="async" draggable={false} />
           </div>
           <AnimatePresence initial={false}>
             {mode === "book" && (

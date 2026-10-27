@@ -17,7 +17,7 @@ export const SERVICE_SUBJECTS: Record<ServiceKey, string> = {
 
 export type ContactState = { service?: ServiceKey; example?: string; subject?: string };
 
-export const exampleLabel = (card: CardConfig) => `${card.company || card.name} (${card.example?.sector ?? "exempel"})`;
+export const exampleLabel = (card: CardConfig) => card.example?.sector ?? card.company ?? card.name;
 
 export const subjectFor = (service: ServiceKey, example?: CardConfig) =>
   example && (service === "card" || service === "both") ? `${SERVICE_SUBJECTS[service]} – som exemplet ${exampleLabel(example)}` : SERVICE_SUBJECTS[service];

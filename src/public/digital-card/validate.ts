@@ -94,6 +94,7 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBa
       style: theme.style === "solid" ? "solid" : "paper",
       layout: LAYOUTS.includes(theme.layout as CardLayout) ? (theme.layout as CardLayout) : "classic",
       font: theme.font === "serif" ? "serif" : "sans",
+      background: typeof theme.background === "string" && SLUG_PATTERN.test(theme.background) ? theme.background : undefined,
     },
     phone,
     phoneDisplay: text(raw.phoneDisplay, 30),

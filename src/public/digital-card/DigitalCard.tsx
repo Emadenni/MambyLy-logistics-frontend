@@ -41,6 +41,7 @@ export const cardThemeProps = (card: CardConfig) => ({
     `dc--layout-${card.theme.layout}`,
     card.theme.style === "paper" ? "dc--paper" : "dc--solid",
     card.theme.font === "serif" ? "dc--serif" : "",
+    card.theme.background ? "dc--image" : "",
   ]
     .filter(Boolean)
     .join(" "),
@@ -51,6 +52,11 @@ export const cardThemeProps = (card: CardConfig) => ({
     "--dc-back": card.theme.back,
     "--dc-back-ink": card.theme.backInk,
     "--dc-back-accent": card.theme.backAccent,
+    ...(card.theme.background
+      ? {
+          "--dc-image": `url("/media/mambyly/card-${card.theme.background}-1300.webp")`,
+        }
+      : {}),
   } as React.CSSProperties,
 });
 

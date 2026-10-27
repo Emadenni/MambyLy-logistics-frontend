@@ -20,6 +20,11 @@ export type CardTheme = {
   layout?: CardLayout;
   /** Type family of the card: the site's sans (default) or a system serif */
   font?: "sans" | "serif";
+  /**
+   * Optional picture behind the front: the name of a published image
+   * (public/media/mambyly/card-<name>-1300.webp). Text stays real HTML on top of it.
+   */
+  background?: string;
 };
 
 export type CardLayout = "classic" | "craft" | "split" | "frame" | "bold";

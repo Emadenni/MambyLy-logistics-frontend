@@ -3,13 +3,31 @@ import React from "react";
 /** Original line icons of the design package (MambyLy_Claude_Pack/design), drawn as inline SVG. */
 type IconProps = { className?: string };
 
-export const LinkMark: React.FC<IconProps> = ({ className }) => (
-  <svg className={className} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-    <path d="m20 28-3 3a7 7 0 0 1-10-10l9-9a7 7 0 0 1 10 0" />
-    <path d="m28 20 3-3a7 7 0 0 1 10 10l-9 9a7 7 0 0 1-10 0" />
-    <path d="m17 31 14-14" />
-  </svg>
-);
+/**
+ * Two interlocking chain links. Each link is a capsule on the diagonal; at one crossing the first
+ * link lies on top, at the other the second one does (the gaps are cut with masks).
+ */
+export const LinkMark: React.FC<IconProps> = ({ className }) => {
+  const id = React.useId().replace(/:/g, "");
+  return (
+    <svg className={className} viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true" focusable="false">
+      <defs>
+        <mask id={`${id}a`} maskUnits="userSpaceOnUse" x="-30" y="-30" width="60" height="60">
+          <rect x="-30" y="-30" width="60" height="60" fill="#fff" />
+          <circle cx="-6.3" cy="4" r="3.1" fill="#000" />
+        </mask>
+        <mask id={`${id}b`} maskUnits="userSpaceOnUse" x="-30" y="-30" width="60" height="60">
+          <rect x="-30" y="-30" width="60" height="60" fill="#fff" />
+          <circle cx="6.3" cy="-4" r="3.1" fill="#000" />
+        </mask>
+      </defs>
+      <g transform="translate(24 24) rotate(-45)">
+        <rect x="-19.5" y="-9" width="26" height="13" rx="6.5" mask={`url(#${id}a)`} />
+        <rect x="-6.5" y="-4" width="26" height="13" rx="6.5" mask={`url(#${id}b)`} />
+      </g>
+    </svg>
+  );
+};
 
 /** Graphic symbol of the gesture only: nothing biometric is read. */
 export const Fingerprint: React.FC<IconProps> = ({ className }) => (
@@ -24,7 +42,7 @@ export const ChevronUp: React.FC<IconProps> = ({ className }) => (
   </svg>
 );
 
-/** Wireframe sketch behind the NORDEN preview on the method screen. */
+/** Wireframe sketch behind the website preview on the method screen. */
 export const Wireframe: React.FC<IconProps> = ({ className }) => (
   <svg className={className} viewBox="0 0 360 460" fill="none" stroke="currentColor" strokeOpacity=".28" aria-hidden="true" focusable="false">
     <rect x="1" y="1" width="358" height="458" rx="12" fill="#f6f4ee" />

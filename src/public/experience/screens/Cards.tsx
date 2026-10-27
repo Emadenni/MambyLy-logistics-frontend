@@ -11,8 +11,8 @@ import Screen, { ScreenHead, TopBar } from "../Screen";
 import { CARD_PATH, PATHS } from "../routes";
 import { media } from "../media";
 
-/** The example shown on this screen (fictitious person and company, see cards/fjardvik-agentur). */
-const DEMO_SLUG = "fjardvik-agentur";
+/** The example shown on this screen (fictitious person, see cards/professionell). */
+const DEMO_SLUG = "professionell";
 
 type Tab = "card" | "share";
 

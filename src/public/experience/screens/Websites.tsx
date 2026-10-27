@@ -1,45 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
-import { FiArrowLeft, FiArrowRight, FiArrowUpRight } from "react-icons/fi";
-import { fill, useCopy } from "../i18n";
+import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
+import { useCopy } from "../i18n";
 import Screen, { ScreenHead, TopBar } from "../Screen";
-import { PATHS } from "../routes";
-import { useSwipe } from "../useSwipe";
+import { PATHS, conceptPath } from "../routes";
 import { media } from "../media";
+import { CONCEPT_ORDER } from "../concepts/content";
 
-const COVERS = ["gallery-norden", "gallery-atelje", "gallery-volt"];
-const EASE = [0.22, 0.75, 0.18, 1] as const;
-
-// Kept while the tab is open, so Back from "Se vad vi erbjuder" returns to the same concept.
-let remembered = 0;
-
-/** /webbplatser – one editorial composition: the question, a gallery of design concepts, the way on. */
+/**
+ * /webbplatser – the question, then the five design concepts by style. Each preview is a real
+ * screenshot of the finished demo (desktop and phone), and each opens the demo fullscreen.
+ * The page scrolls: the gallery is meant to be browsed.
+ */
 const Websites: React.FC = () => {
   const t = useCopy();
-  const reduce = useReducedMotion() ?? false;
-  const slides = t.websites.slides;
-  const n = slides.length;
-  const [index, setIndexState] = useState(remembered);
-  const setIndex = (i: number) => {
-    remembered = (i + n) % n;
-    setIndexState(remembered);
-  };
-  const prev = () => setIndex(index - 1);
-  const next = () => setIndex(index + 1);
-  const { offset, handlers } = useSwipe({ onPrev: prev, onNext: next });
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      prev();
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      next();
-    }
-  };
-
-  const pad = (i: number) => String(i).padStart(2, "0");
+  const w = t.websites;
 
   return (
     <Screen
@@ -49,93 +24,73 @@ const Websites: React.FC = () => {
     >
       <div className="mp-col mp-web">
         <h1 className="mp-display mp-web__title" data-focus>
-          {t.websites.title}
+          {w.title}
         </h1>
-        <p className="mp-web__lead">{t.websites.lead}</p>
+        <p className="mp-web__lead">{w.lead}</p>
+        <p className="mp-web__note">
+          <span className="mp-pill2">{w.galleryLabel}</span> {w.conceptNote}
+        </p>
       </div>
 
-      <section
-        className="mp-carousel"
-        aria-roledescription="carousel"
-        aria-label={t.websites.galleryLabel}
-        tabIndex={0}
-        onKeyDown={onKeyDown}
-      >
-        <motion.div className="mp-carousel__track" style={{ x: offset }} {...handlers}>
-          {slides.map((s, i) => {
-            // Circular position relative to the current slide: -1, 0 or 1.
-            const rel = ((i - index + n + 1) % n) - 1;
-            const current = rel === 0;
-            return (
-              <motion.figure
-                key={s.name}
-                className={`mp-carousel__slide${current ? " is-current" : ""}`}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${fill(t.websites.position, { i: i + 1, n })}: ${s.name}`}
-                aria-hidden={current ? undefined : true}
-                initial={false}
-                animate={{
-                  x: `${rel * 74}%`,
-                  scale: current ? 1 : 0.84,
-                  opacity: current ? 1 : 0.7,
-                  zIndex: current ? 2 : 1,
-                }}
-                transition={reduce ? { duration: 0 } : { duration: 0.5, ease: EASE }}
-                onClick={current ? undefined : () => setIndex(i)}
-                {...(current ? {} : { inert: "" })}
-              >
-                <div className="mp-browser">
+      <ul className="mp-gal" aria-label={w.galleryLabel}>
+        {CONCEPT_ORDER.map((id, i) => {
+          const c = w.concepts[id];
+          return (
+            <li key={id} className={`mp-gal__item mp-gal__item--${id}`}>
+              <figure className="mp-gal__shots">
+                <div className="mp-browser mp-gal__desk">
                   <span className="mp-browser__dots" aria-hidden="true">
                     <i />
                     <i />
                     <i />
                   </span>
                   <img
-                    src={media(COVERS[i], 560)}
-                    srcSet={`${media(COVERS[i], 560)} 560w, ${media(COVERS[i], 1086)} 1086w`}
-                    sizes="(min-width: 960px) 400px, 66vw"
-                    alt={s.alt}
-                    width={560}
-                    height={747}
-                    loading={i === index ? "eager" : "lazy"}
+                    src={media(`preview-${id}-desktop`, 640)}
+                    srcSet={`${media(`preview-${id}-desktop`, 640)} 640w, ${media(`preview-${id}-desktop`, 1280)} 1280w`}
+                    sizes="(min-width: 960px) 520px, 88vw"
+                    alt={c.alt}
+                    width={640}
+                    height={400}
+                    loading={i === 0 ? "eager" : "lazy"}
                     decoding="async"
-                    draggable={false}
                   />
                 </div>
-                <figcaption className="mp-carousel__caption">
-                  <strong>{s.name}</strong> {s.caption}
-                </figcaption>
-              </motion.figure>
-            );
-          })}
-        </motion.div>
-
-        <div className="mp-carousel__controls">
-          <button type="button" className="mp-round" aria-label={t.websites.prev} onClick={prev}>
-            <FiArrowLeft aria-hidden="true" />
-          </button>
-          <p className="mp-carousel__count" aria-live="polite" aria-atomic="true">
-            <span className="mp-sr">{slides[index].name}, </span>
-            <span aria-hidden="true">
-              {pad(index + 1)} <span className="mp-carousel__of">/ {pad(n)}</span>
-            </span>
-            <span className="mp-sr">{fill(t.websites.position, { i: index + 1, n })}</span>
-          </p>
-          <button type="button" className="mp-round" aria-label={t.websites.next} onClick={next}>
-            <FiArrowRight aria-hidden="true" />
-          </button>
-        </div>
-        <p className="mp-carousel__note">{t.websites.conceptNote}</p>
-      </section>
+                <img
+                  className="mp-gal__phone"
+                  src={media(`preview-${id}-mobile`, 390)}
+                  alt=""
+                  width={390}
+                  height={844}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </figure>
+              <div className="mp-gal__text">
+                <p className="mp-gal__no" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h2 className="mp-gal__name">
+                  <Link to={conceptPath(id, t.lang)} className="mp-stretch">
+                    {c.label}
+                  </Link>
+                </h2>
+                <p className="mp-gal__caption">{c.caption}</p>
+                <span className="mp-gal__open" aria-hidden="true">
+                  {w.open} <FiArrowRight />
+                </span>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
       <div className="mp-col mp-web__end">
-        <p className="mp-web__tagline">{t.websites.tagline}</p>
+        <p className="mp-web__tagline">{w.tagline}</p>
         <Link to={PATHS.method[t.lang]} className="mp-underline">
-          {t.websites.cta} <FiArrowUpRight aria-hidden="true" />
+          {w.cta} <FiArrowUpRight aria-hidden="true" />
         </Link>
         <p className="mp-web__foot" aria-hidden="true">
-          {t.websites.foot}
+          {w.foot}
         </p>
       </div>
     </Screen>

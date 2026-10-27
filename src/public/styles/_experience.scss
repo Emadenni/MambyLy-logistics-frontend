@@ -609,6 +609,136 @@ $x-wide: 1180px;
 
   }
 
+  // Utforska is one screen: its footer line is a little tighter.
+  .mp-screen--explore .mp-sfoot {
+    padding-top: 12px;
+    padding-bottom: 4px;
+
+    ul {
+      gap: 0 16px;
+    }
+
+    a,
+    button,
+    .mp-sfoot__copy {
+      min-height: 32px;
+    }
+
+    .admin_link_container {
+      margin-top: 0;
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Quick navigation along the bottom edge (QuickNav.tsx)
+  // ---------------------------------------------------------------------------------------------
+
+  &.mp-x {
+    --qnav-h: 56px;
+    --qnav-gap: 10px;
+    --qnav-space: calc(var(--qnav-h) + var(--qnav-gap) * 2 + env(safe-area-inset-bottom));
+
+    // Low screens (phone on its side, large zoom): a slimmer bar, labels kept.
+    @media (max-height: 480px) {
+      --qnav-h: 44px;
+      --qnav-gap: 6px;
+    }
+  }
+
+  // Real room for the bar: it never covers the end of a screen.
+  &.has-qnav .mp-screen {
+    padding-bottom: var(--qnav-space);
+  }
+
+  &.has-qnav .mp-consent {
+    bottom: calc(var(--qnav-space) - var(--qnav-gap));
+  }
+
+  .mp-qnav {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--qnav-gap) + env(safe-area-inset-bottom));
+    z-index: 30;
+    width: min(100% - 2 * 12px, 520px);
+    translate: -50% 0;
+
+    ul {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      height: var(--qnav-h);
+      margin: 0;
+      padding: 4px;
+      list-style: none;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--x-paper) 92%, transparent);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow:
+        0 0 0 1px rgba(16, 59, 53, 0.1),
+        0 10px 28px rgba(16, 59, 53, 0.12);
+    }
+
+    &__link {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 100%;
+      padding: 0 4px;
+      border-radius: 999px;
+      color: var(--x-muted);
+      font: 500 13.5px/1.1 var(--mp-font);
+      text-align: center;
+      text-decoration: none;
+      transition: color 0.2s ease, background-color 0.2s ease;
+
+      @include small {
+        font-size: 12.5px;
+      }
+
+      &:hover {
+        color: var(--x-ink);
+        background: rgba(16, 59, 53, 0.05);
+      }
+
+      &:focus-visible {
+        outline: 3px solid var(--mp-teal);
+        outline-offset: -3px;
+      }
+
+      &.is-on {
+        color: var(--x-ink);
+        font-weight: 600;
+        background: rgba(36, 123, 103, 0.1);
+      }
+    }
+
+    &__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: transparent;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    &__dot {
+      order: 2;
+    }
+
+    .mp-qnav__link.is-on .mp-qnav__dot {
+      background: #247b67;
+    }
+
+    @include reduce {
+      &__link,
+      &__dot {
+        transition: none;
+      }
+    }
+  }
+
   // ---------------------------------------------------------------------------------------------
   // Home cover
   // ---------------------------------------------------------------------------------------------
@@ -630,7 +760,6 @@ $x-wide: 1180px;
     user-select: none;
     -webkit-user-select: none;
     cursor: grab;
-    will-change: transform;
 
     &.is-dragging {
       cursor: grabbing;
@@ -707,14 +836,15 @@ $x-wide: 1180px;
       cursor: pointer;
       touch-action: none;
 
+      // A delicate ring that leaves the fingerprint now and then (and at once on touch).
       &::before {
         content: "";
         position: absolute;
-        inset: -16px;
+        inset: 22px;
         border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
-        animation: mp-halo 2.8s ease-in-out infinite;
+        border: 1px solid rgba(16, 59, 53, 0.4);
+        opacity: 0;
+        animation: mp-halo 3.2s var(--x-ease) 0.8s infinite;
         pointer-events: none;
       }
 
@@ -724,8 +854,22 @@ $x-wide: 1180px;
       }
     }
 
+    &.is-pressed .mp-cover__handle::before {
+      animation: mp-halo-press 0.7s var(--x-ease) both;
+    }
+
     &.is-dragging .mp-cover__handle::before {
-      animation-play-state: paused;
+      animation: none;
+      opacity: 0;
+    }
+
+    &__ring {
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      border: 1px solid rgba(16, 59, 53, 0.45);
+      opacity: 0;
+      pointer-events: none;
     }
 
     &__chevron {
@@ -869,14 +1013,28 @@ $x-wide: 1180px;
   }
 
   @keyframes mp-halo {
-    0%,
-    100% {
-      transform: scale(0.92);
-      opacity: 0.35;
+    0% {
+      transform: scale(0.7);
+      opacity: 0;
     }
-    50% {
-      transform: scale(1.04);
-      opacity: 1;
+    18% {
+      opacity: 0.85;
+    }
+    55%,
+    100% {
+      transform: scale(1.75);
+      opacity: 0;
+    }
+  }
+
+  @keyframes mp-halo-press {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
     }
   }
 
@@ -901,9 +1059,9 @@ $x-wide: 1180px;
 
   .mp-hub {
     display: grid;
-    gap: 14px;
+    gap: 12px;
     width: min(100% - 2 * var(--x-gutter), 1120px);
-    margin: 6px auto 0;
+    margin: 2px auto 0;
 
     @include desk {
       grid-template-columns: 1fr 1fr;
@@ -920,8 +1078,8 @@ $x-wide: 1180px;
         "copy visual";
       align-items: center;
       column-gap: 8px;
-      padding: 22px 18px 22px 22px;
-      border-radius: 28px;
+      padding: 16px 14px 16px 20px;
+      border-radius: 26px;
       transition: transform 0.3s var(--x-ease), box-shadow 0.3s var(--x-ease);
 
       &:hover {
@@ -948,18 +1106,18 @@ $x-wide: 1180px;
           "visual"
           "copy";
         align-content: start;
-        min-height: min(58dvh, 560px);
-        padding: 30px 34px 30px;
+        padding: 26px 32px 28px;
       }
     }
 
     &__title {
       grid-area: title;
-      margin: 0 0 12px;
-      font-size: clamp(44px, 12.5vw, 66px);
+      margin: 0 0 8px;
+      font-size: clamp(34px, 9.6vw, 50px);
 
       @include desk {
-        font-size: clamp(40px, 3.9vw, 58px);
+        margin-bottom: 12px;
+        font-size: clamp(38px, 3.1vw, 50px);
       }
       line-height: 1;
       color: var(--x-ink);
@@ -989,21 +1147,28 @@ $x-wide: 1180px;
     }
 
     &__lead {
-      margin: 0 0 10px !important;
+      margin: 0 0 8px !important;
       color: var(--x-ink) !important;
-      font: 500 clamp(22px, 6.2vw, 28px) / 1.08 var(--x-serif);
+      font: 500 clamp(19px, 5.2vw, 26px) / 1.1 var(--x-serif);
       letter-spacing: -0.015em;
     }
 
     &__text {
       font-size: 14.5px;
-      line-height: 1.5;
+      line-height: 1.45;
       color: var(--x-muted);
+
+      // Phones: the websites panel says it with its lead line only, so both panels fit.
+      &--wide {
+        @media (max-width: $x-desk - 1px) {
+          display: none;
+        }
+      }
     }
 
     &__more {
       white-space: nowrap;
-      margin-top: 16px;
+      margin-top: 12px;
       min-height: 44px;
       padding: 0 18px;
       font-size: 14px;
@@ -1015,33 +1180,53 @@ $x-wide: 1180px;
       pointer-events: none;
 
       &--web {
-        width: 118%;
-        max-width: none;
-        height: auto;
-        margin-right: -18px;
+        position: relative;
+        width: 100%;
+        padding: 0 14% 8% 0;
       }
 
       &--cards {
         position: relative;
         width: 100%;
-        aspect-ratio: 1.15;
+        aspect-ratio: 1.3;
         perspective: 900px;
       }
 
       @include desk {
         justify-self: center;
-        margin: 8px 0 18px;
+        margin: 4px 0 14px;
 
         &--web {
-          width: 100%;
-          margin-right: 0;
+          width: min(100%, calc(min(23dvh, 210px) * 1.6));
         }
 
         &--cards {
-          width: 82%;
+          width: auto;
+          height: min(25dvh, 230px);
           aspect-ratio: 1.6;
+          margin-bottom: 28px;
         }
       }
+    }
+
+    &__desk img {
+      aspect-ratio: 16 / 10 !important;
+      object-position: top;
+    }
+
+    &__phone {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 26%;
+      height: auto;
+      aspect-ratio: 390 / 844;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 10px;
+      box-shadow:
+        0 0 0 3px var(--x-paper),
+        0 10px 22px rgba(16, 59, 53, 0.22);
     }
 
     &__card {
@@ -1084,14 +1269,14 @@ $x-wide: 1180px;
 
     &__people {
       display: block;
-      width: min(62vw, 330px);
+      width: min(40vw, 190px);
 
       @include desk {
-        width: 250px;
+        width: 200px;
       }
 
       height: auto;
-      margin-bottom: -28px; // sits on the footer line, no frame
+      margin-bottom: -18px; // sits on the footer line, no frame
       -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
       mask-image: linear-gradient(to bottom, #000 78%, transparent);
     }
@@ -1103,7 +1288,7 @@ $x-wide: 1180px;
       min-height: 48px;
       margin: 0 0 6px;
       color: var(--x-ink);
-      font: 500 clamp(26px, 7vw, 34px) / 1 var(--x-serif);
+      font: 500 clamp(26px, 6.6vw, 34px) / 1 var(--x-serif);
       text-decoration: none;
       white-space: nowrap;
 
@@ -1172,100 +1357,130 @@ $x-wide: 1180px;
     }
   }
 
-  .mp-carousel {
-    --slide-w: clamp(210px, min(64vw, calc((100dvh - 440px) * 0.7)), 380px);
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    padding: 12px 0 4px;
-    outline: none;
+  .mp-web__note {
+    margin-top: 14px !important;
+    color: var(--x-muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
 
-    &:focus-visible {
-      box-shadow: inset 0 0 0 3px var(--mp-teal);
-    }
+  // Gallery of the five design concepts: real screenshots, one style per row; the page scrolls.
+  .mp-gal {
+    display: grid;
+    gap: 28px;
+    width: min(100% - 2 * var(--x-gutter), 1120px);
+    margin: 10px auto 18px;
+    padding: 0;
+    list-style: none;
 
     @include desk {
-      --slide-w: clamp(260px, calc((100dvh - 400px) * 0.72), 400px);
-      width: min(100%, 1120px);
-      margin-inline: auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 44px 40px;
     }
 
-    &__track {
+    @media (min-width: $x-wide) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &__item {
       position: relative;
-      height: calc(var(--slide-w) * 1.334 + 22px + 40px);
-      touch-action: pan-y;
-      cursor: grab;
+      display: grid;
+      gap: 16px;
+      padding: 14px 14px 20px;
+      border-radius: 26px;
+      background: var(--x-paper);
+      box-shadow: inset 0 0 0 1px rgba(16, 59, 53, 0.07);
+      transition: box-shadow 0.3s var(--x-ease), transform 0.3s var(--x-ease);
 
-      &:active {
-        cursor: grabbing;
+      &:hover {
+        box-shadow:
+          inset 0 0 0 1px rgba(16, 59, 53, 0.1),
+          0 18px 44px rgba(16, 59, 53, 0.12);
+      }
+
+      &:has(.mp-stretch:focus-visible) {
+        outline: 3px solid var(--mp-teal);
+        outline-offset: 3px;
       }
     }
 
-    &__slide {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: var(--slide-w);
-      margin: 0 0 0 calc(var(--slide-w) / -2);
+    &__shots {
+      position: relative;
+      margin: 0 22px 0 0;
+    }
 
-      &:not(.is-current) {
-        cursor: pointer;
+    &__desk.mp-browser img {
+      aspect-ratio: 16 / 10;
+      object-position: top;
+    }
+
+    &__phone {
+      position: absolute;
+      right: -22px;
+      bottom: -14px;
+      width: 27%;
+      height: auto;
+      aspect-ratio: 390 / 844;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 14px;
+      box-shadow:
+        0 0 0 4px var(--x-paper),
+        0 14px 30px rgba(16, 59, 53, 0.22);
+    }
+
+    &__text {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      column-gap: 12px;
+      padding: 6px 8px 0;
+    }
+
+    &__no {
+      color: var(--x-muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+    }
+
+    &__name {
+      font: 500 clamp(28px, 7.4vw, 36px) / 1.05 var(--x-serif) !important;
+      letter-spacing: -0.015em !important;
+
+      .mp-stretch {
+        color: var(--x-ink);
+        text-decoration: none;
       }
+    }
+
+    &__caption,
+    &__open {
+      grid-column: 2;
     }
 
     &__caption {
+      margin-top: 6px !important;
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+
+    &__open {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       margin-top: 10px;
-      color: var(--x-muted);
-      font-size: 12.5px;
-      text-align: center;
+      color: var(--x-ink);
+      font-size: 14px;
+      font-weight: 600;
 
-      strong {
-        margin-right: 6px;
-        color: var(--x-ink);
-        font: 500 14px/1 var(--x-serif);
-        letter-spacing: 0.18em;
+      svg {
+        transition: transform 0.3s var(--x-ease);
       }
     }
 
-    &__slide:not(.is-current) .mp-carousel__caption {
-      visibility: hidden;
-    }
-
-    &__controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      margin-top: 6px;
-    }
-
-    &__count {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 0 !important;
-      color: var(--x-ink) !important;
-      font: 400 17px/1 var(--x-serif);
-      letter-spacing: 0.08em;
-
-      &::before,
-      &::after {
-        content: "";
-        width: clamp(28px, 10vw, 70px);
-        height: 1px;
-        background: var(--x-line);
-      }
-    }
-
-    &__of {
-      color: var(--x-muted);
-    }
-
-    &__note {
-      margin-top: 10px !important;
-      font-size: 12.5px;
-      text-align: center;
-      color: var(--x-muted);
+    &__item:hover &__open svg {
+      transform: translateX(4px);
     }
   }
 
@@ -1307,7 +1522,6 @@ $x-wide: 1180px;
 
   // Desktop: the same pieces, side by side, so the screen still fits in one view.
   @media (min-width: $x-wide) {
-    .mp-screen--websites .mp-screen__main,
     .mp-screen--method .mp-screen__main,
     .mp-screen--cards .mp-screen__main {
       display: grid;
@@ -1324,29 +1538,6 @@ $x-wide: 1180px;
       > .mp-col {
         width: 100%;
         margin: 0;
-      }
-    }
-
-    .mp-screen--websites {
-      .mp-web {
-        grid-area: head;
-        align-self: end;
-      }
-
-      .mp-carousel {
-        grid-area: side;
-        --slide-w: clamp(250px, calc((100dvh - 280px) * 0.7), 380px);
-      }
-
-      .mp-web__end {
-        grid-area: end;
-        align-self: start;
-        justify-items: start;
-        text-align: left;
-      }
-
-      .mp-web__foot::before {
-        left: 0;
       }
     }
 
@@ -1635,6 +1826,7 @@ $x-wide: 1180px;
 
       img {
         aspect-ratio: 560 / 640;
+        object-position: top;
       }
     }
 
@@ -2989,8 +3181,199 @@ $x-wide: 1180px;
 
   .mp-cardpage__top {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
-    padding: 14px var(--x-gutter) 0;
+    gap: 12px;
+    padding: max(14px, env(safe-area-inset-top)) var(--x-gutter) 0;
+  }
+
+  // MambyLy's own card, in the look of the site: ivory glass, the link mark, the logo on top.
+  .mp-cardpage--own {
+    background:
+      radial-gradient(120% 55% at 70% 108%, rgba(36, 123, 103, 0.26), transparent 60%),
+      url("/media/mambyly/hero-glass-1024.webp") center / cover no-repeat,
+      var(--x-ivory);
+
+    .mp-cardpage__top {
+      justify-content: space-between;
+    }
+
+    .mp-cardpage__main {
+      flex-direction: column;
+      gap: 18px;
+      padding-top: clamp(20px, 5vh, 64px);
+    }
+
+    .mp-cardpage__brand {
+      color: var(--x-ink);
+      font-weight: 600;
+    }
+  }
+
+  .mp-cardpage__logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+
+    img {
+      width: 120px;
+      height: auto;
+    }
+  }
+
+  .mp-cardpage__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: var(--x-ink) !important;
+    font: 500 clamp(20px, 5.4vw, 26px) / 1.2 var(--x-serif);
+    letter-spacing: -0.01em;
+  }
+
+  .mp-cardpage__mark {
+    width: 30px;
+    height: 30px;
+  }
+
+  // /exempel/:slug – an example card fullscreen, on the surface of its own style.
+  .mp-cardx {
+    display: flex;
+    flex-direction: column;
+    background:
+      linear-gradient(180deg, rgba(246, 244, 238, 0.72), rgba(246, 244, 238, 0.9)),
+      var(--cardx-image, none) center / cover no-repeat,
+      var(--x-ivory);
+    color: var(--x-ink);
+
+    &--dark {
+      background:
+        linear-gradient(180deg, rgba(6, 18, 64, 0.55), rgba(6, 18, 64, 0.82)),
+        var(--cardx-image, none) center / cover no-repeat,
+        #0a1d66;
+      color: #fff;
+
+      .mp-cardx__pill {
+        border-color: rgba(255, 255, 255, 0.5);
+        color: #fff;
+      }
+
+      .mp-cardx__summary {
+        color: rgba(255, 255, 255, 0.86) !important;
+      }
+
+      .dc-hint,
+      .dc-status__msg,
+      .dc-note {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .dc-iconbtn {
+        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.08);
+        color: #fff;
+      }
+
+      .dc-save {
+        background: #fff;
+        color: #0a1d66;
+        border-color: #fff;
+      }
+
+      .mp-cardx__cta {
+        background: #ff9473;
+        color: #0a1d66;
+        border-color: #ff9473;
+      }
+
+      .mp-cardx__next {
+        color: #fff;
+      }
+    }
+
+    &__main {
+      flex: 1 0 auto;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 22px;
+      width: min(100% - 2 * var(--x-gutter), 1120px);
+      margin: 0 auto;
+      padding: clamp(28px, 6vh, 72px) 0 24px;
+
+      @media (min-width: $x-desk) {
+        grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+        grid-template-areas:
+          "text card"
+          "end card";
+        justify-items: start;
+        align-items: center;
+        column-gap: 64px;
+        row-gap: 18px;
+      }
+    }
+
+    &__text {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      text-align: center;
+
+      @media (min-width: $x-desk) {
+        grid-area: text;
+        align-self: end;
+        justify-items: start;
+        text-align: left;
+      }
+    }
+
+    &__pill {
+      display: inline-flex;
+      padding: 6px 14px;
+      border: 1px dashed currentColor;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    &__title {
+      color: inherit !important;
+      font: 500 clamp(44px, 12vw, 76px) / 1 var(--x-serif) !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    &__summary {
+      max-width: 30em;
+      color: var(--x-muted) !important;
+      font-size: 15.5px;
+      line-height: 1.55;
+    }
+
+    &__card {
+      width: 100%;
+
+      @media (min-width: $x-desk) {
+        grid-area: card;
+      }
+
+      .dc-experience {
+        margin-inline: auto;
+      }
+    }
+
+    &__end {
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+
+      @media (min-width: $x-desk) {
+        grid-area: end;
+        align-self: start;
+        justify-items: start;
+      }
+    }
   }
 
   .mp-cardpage--missing .mp-nf {
@@ -3025,7 +3408,8 @@ $x-wide: 1180px;
   // phone/WhatsApp links) and the cards.
   body:has(.mp-cover:not([aria-hidden="true"])) .whatsapp-icon,
   body:has(.mp-screen--contact) .whatsapp-icon,
-  body:has(.mp-x .mp-cardpage) .whatsapp-icon {
+  body:has(.mp-x .mp-cardpage) .whatsapp-icon,
+  body:has(.mp-x .mp-concept) .whatsapp-icon {
     display: none;
   }
 

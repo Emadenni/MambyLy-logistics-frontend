@@ -36,6 +36,7 @@ const Hub: React.FC = () => {
   const progress = useMotionValue(isHome ? 0 : 1);
   const [gone, setGone] = useState(!isHome);
   const [dragging, setDragging] = useState(false);
+  const [pressed, setPressed] = useState(false);
   const cover = useRef<HTMLDivElement>(null);
   const handle = useRef<HTMLButtonElement>(null);
   const exploreTitle = useRef<HTMLHeadingElement>(null);
@@ -45,10 +46,17 @@ const Hub: React.FC = () => {
   const swallowClick = useRef(false);
   const firstRun = useRef(true);
 
-  const coverY = useTransform(progress, (v) => `${-v * 100}%`);
-  const shadow = useTransform(progress, (v) => `0 ${Math.round(24 * (1 - v))}px 60px rgba(16, 59, 53, ${(0.22 * (1 - v)).toFixed(3)})`);
-  const underScale = useTransform(progress, (v) => (v >= 1 ? 1 : 0.98 + 0.02 * v));
-  const underY = useTransform(progress, (v) => (v >= 1 ? 0 : 12 * (1 - v)));
+  // The page behind stays still: the cover opens from the centre towards both sides, as far as
+  // the finger has travelled. A soft edge keeps the opening from looking like a cut.
+  const mask = useTransform(progress, (v) => {
+    if (v <= 0) return "none";
+    const half = Math.min(50, v * 50);
+    const soft = Math.min(6, 2 + v * 8);
+    return `linear-gradient(90deg, #000 calc(${(50 - half).toFixed(2)}% - ${soft}%), transparent ${(50 - half).toFixed(2)}%, transparent ${(50 + half).toFixed(2)}%, #000 calc(${(50 + half).toFixed(2)}% + ${soft}%))`;
+  });
+  // A thin ring grows out of the fingerprint with the gesture.
+  const ringScale = useTransform(progress, (v) => 1 + v * 2.4);
+  const ringOpacity = useTransform(progress, (v) => (v <= 0 ? 0 : Math.max(0, 0.9 - v * 1.1)));
   useMotionValueEvent(progress, "change", (v) => setGone(v >= 0.999));
 
   const explorePath = pathFor("explore", t.lang);
@@ -133,6 +141,7 @@ const Hub: React.FC = () => {
     if (tall && !(e.target as HTMLElement).closest(".mp-cover__handle")) return;
     if ((e.target as HTMLElement).closest(".mp-lang")) return;
     swallowClick.current = false;
+    setPressed(true);
     drag.current = { id: e.pointerId, y0: e.clientY, y: e.clientY, t: e.timeStamp, v: 0, h: el.clientHeight || window.innerHeight, active: false };
   };
 
@@ -157,6 +166,7 @@ const Hub: React.FC = () => {
     const d = drag.current;
     if (!d || d.id !== e.pointerId) return;
     drag.current = null;
+    setPressed(false);
     if (!d.active) return;
     // The click that may follow this pointerup is the end of the drag, not a tap; later ones are.
     window.setTimeout(() => (swallowClick.current = false), 0);
@@ -178,8 +188,8 @@ const Hub: React.FC = () => {
     <>
       <motion.div
         ref={cover}
-        className={`mp-cover${dragging ? " is-dragging" : ""}`}
-        style={{ y: coverY, boxShadow: shadow, visibility: gone ? "hidden" : "visible" }}
+        className={`mp-cover${dragging ? " is-dragging" : ""}${pressed ? " is-pressed" : ""}`}
+        style={{ WebkitMaskImage: mask, maskImage: mask, visibility: gone ? "hidden" : "visible" }}
         aria-hidden={isHome ? undefined : true}
         {...(isHome ? {} : { inert: "" })}
         onPointerDown={onPointerDown}
@@ -213,6 +223,7 @@ const Hub: React.FC = () => {
               open();
             }}
           >
+            <motion.span className="mp-cover__ring" style={{ scale: ringScale, opacity: ringOpacity }} aria-hidden="true" />
             <ChevronUp className="mp-cover__chevron" />
             <Fingerprint className="mp-cover__print" />
           </button>
@@ -224,9 +235,8 @@ const Hub: React.FC = () => {
         </div>
       </motion.div>
 
-      <motion.div
+      <div
         className="mp-under"
-        style={{ scale: underScale, y: underY }}
         aria-hidden={isHome ? true : undefined}
         {...(isHome ? { inert: "" } : {})}
       >
@@ -248,22 +258,32 @@ const Hub: React.FC = () => {
               </h2>
               <div className="mp-hub__copy">
                 <p className="mp-hub__lead">{t.explore.websitesLead}</p>
-                <p className="mp-hub__text">{t.explore.websitesText}</p>
+                <p className="mp-hub__text mp-hub__text--wide">{t.explore.websitesText}</p>
                 <span className="mp-xbtn mp-xbtn--solid mp-hub__more" aria-hidden="true">
                   {t.explore.more} <FiArrowRight />
                 </span>
               </div>
-              <img
-                className="mp-hub__visual mp-hub__visual--web"
-                src={media("service-websites", 560)}
-                srcSet={`${media("service-websites", 560)} 560w, ${media("service-websites", 1000)} 1000w`}
-                sizes="(min-width: 960px) 420px, 60vw"
-                alt=""
-                width={560}
-                height={373}
-                loading={isHome ? "eager" : "lazy"}
-                decoding="async"
-              />
+              {/* Real screenshots of the editorial design concept (desktop and phone). */}
+              <div className="mp-hub__visual mp-hub__visual--web" aria-hidden="true">
+                <div className="mp-browser mp-hub__desk">
+                  <span className="mp-browser__dots">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                  <img
+                    src={media("preview-editorial-desktop", 640)}
+                    srcSet={`${media("preview-editorial-desktop", 640)} 640w, ${media("preview-editorial-desktop", 1280)} 1280w`}
+                    sizes="(min-width: 960px) 400px, 45vw"
+                    alt=""
+                    width={640}
+                    height={400}
+                    loading={isHome ? "eager" : "lazy"}
+                    decoding="async"
+                  />
+                </div>
+                <img className="mp-hub__phone" src={media("preview-editorial-mobile", 390)} alt="" width={390} height={844} loading={isHome ? "eager" : "lazy"} decoding="async" />
+              </div>
             </article>
 
             <article className="mp-hub__panel mp-hub__panel--cards">
@@ -306,7 +326,7 @@ const Hub: React.FC = () => {
             </Link>
           </div>
         </Screen>
-      </motion.div>
+      </div>
     </>
   );
 };

@@ -150,6 +150,31 @@
     }
   }
 
+  // Picture fronts (theme.background): the picture is the surface, the texts stay on top.
+  .dc.dc--image .dc__face--front {
+    background-color: var(--dc-front);
+    background-image: var(--dc-image);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  // The badge stays readable over any part of the picture.
+  .dc--image .dc__badge {
+    background: color-mix(in srgb, var(--dc-front) 82%, transparent);
+  }
+
+  .dc--image.dc--layout-bold .dc__face--front::before {
+    display: none;
+  }
+
+  // Bold cards without a company: the person's name is the wordmark.
+  .dc--layout-bold .dc__identity:not(:has(.dc__company)) .dc__name {
+    font-size: max(calc(26px * var(--dc-m)), 10.5cqi);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
   .dc__top {
     position: relative;
     z-index: 1;

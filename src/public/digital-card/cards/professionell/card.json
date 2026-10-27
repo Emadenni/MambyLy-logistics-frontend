@@ -1,0 +1,56 @@
+{
+  "slug": "professionell",
+  "lang": "sv",
+  "demo": true,
+  "name": "Alex Exempel",
+  "role": "Redovisningskonsult",
+  "tagline": "Ordning i siffrorna, tid för verksamheten.",
+  "logo": "mark.svg",
+  "logoBack": "mark-light.svg",
+  "theme": {
+    "front": "#f3f0e6",
+    "frontInk": "#173f33",
+    "accent": "#2d6a52",
+    "back": "#173f33",
+    "backInk": "#f3f0e6",
+    "backAccent": "#c6dab4",
+    "style": "paper",
+    "layout": "classic",
+    "font": "sans",
+    "background": "professional"
+  },
+  "email": "alex@example.com",
+  "website": "https://example.com",
+  "socials": [{ "type": "linkedin", "url": "https://www.linkedin.com/" }],
+  "details": [
+    { "label": "Arbetar med", "value": "Bokslut · rådgivning" },
+    { "label": "Språk", "value": "Svenska · Engelska" }
+  ],
+  "example": {
+    "sector": "Professionell",
+    "summary": "Elfenbensvitt, grönt och tydliga kontaktvägar: lugnt och förtroendeingivande för den som möter kunder i möten.",
+    "order": 1
+  },
+  "meta": {
+    "title": "Exempel: professionellt digitalt visitkort | MambyLy Solutions",
+    "description": "Ett professionellt digitalt visitkort som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Accounting consultant",
+      "tagline": "Order in the numbers, time for the business.",
+      "details": [
+        { "label": "Works with", "value": "Annual accounts · advice" },
+        { "label": "Languages", "value": "Swedish · English" }
+      ],
+      "example": {
+        "sector": "Professional",
+        "summary": "Ivory, green and clear contact options: calm and trustworthy for someone who meets clients in meetings."
+      },
+      "meta": {
+        "title": "Example: professional digital business card | MambyLy Solutions",
+        "description": "A professional digital business card as an example. The person and the details are made up."
+      }
+    }
+  }
+}

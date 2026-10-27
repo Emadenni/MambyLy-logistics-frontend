@@ -1,7 +1,6 @@
 /**
- * Public MambyLy phone / WhatsApp details – single source for the site.
- * (E-mail addresses are intentionally not centralised here yet: the owner has still to
- * confirm which address is correct, see docs/RESTYLE-PUBLIC.md.)
+ * Public MambyLy contact details – single source for the site. The e-mail is the address already
+ * used on the site and on MambyLy's card (domain mambylysolutions.se, like the website).
  */
 const WHATSAPP_GREETING = "Hej! Jag besökte din webbplats och vill veta mer!";
 
@@ -11,5 +10,6 @@ export const publicContact = {
   phoneHref: "tel:+46722116422",
   phoneE164: "+46722116422",
   whatsappUrl: "https://wa.me/46722116422",
+  email: "info@mambylysolutions.se",
   whatsappGreetingUrl: `https://wa.me/46722116422?text=${encodeURIComponent(WHATSAPP_GREETING)}`,
 } as const;

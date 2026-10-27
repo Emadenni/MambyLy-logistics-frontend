@@ -5,7 +5,8 @@ import { validateCard } from "../src/public/digital-card/validate";
 import { buildVCard, vcardFileName } from "../src/public/digital-card/vcard";
 import type { CardConfigRaw } from "../src/public/digital-card/types";
 import { copy } from "../src/public/experience/copy";
-import { CARD_PATH, EXAMPLE_BASE, LANGS, PATHS, type Lang, type StaticScreen } from "../src/public/experience/routes";
+import { CARD_PATH, CONCEPTS, EXAMPLE_BASE, LANGS, PATHS, conceptPath, type Lang, type StaticScreen } from "../src/public/experience/routes";
+import { conceptCopy } from "../src/public/experience/concepts/content";
 
 /**
  * Build-only: writes dist/<route>/index.html copies of dist/index.html whose <head> already holds
@@ -96,6 +97,25 @@ function sitePages(): PageMeta[] {
   return pages;
 }
 
+/** The five website design concepts (fullscreen demos with fictitious content: not indexed). */
+function conceptPages(): PageMeta[] {
+  return CONCEPTS.flatMap(({ id }) => {
+    const alternates = { sv: conceptPath(id, "sv"), en: conceptPath(id, "en") };
+    return LANGS.map((lang) => {
+      const s = conceptCopy[lang].shared;
+      return {
+        route: alternates[lang],
+        lang,
+        title: conceptCopy[lang][id].meta,
+        description: `${s.concept} · ${s.fictitious}. ${s.footer}`,
+        image: DEFAULT_IMAGE,
+        noindex: true,
+        alternates,
+      };
+    });
+  });
+}
+
 type CardEntry = { slug: string; raw: CardConfigRaw };
 
 function readCards(root: string): CardEntry[] {
@@ -146,7 +166,7 @@ export default function staticRouteMeta(): Plugin {
       if (!fs.existsSync(indexFile)) return;
       const html = fs.readFileSync(indexFile, "utf8");
       const cards = readCards(root);
-      for (const page of [...sitePages(), ...cardPages(root, cards)]) {
+      for (const page of [...sitePages(), ...conceptPages(), ...cardPages(root, cards)]) {
         // "/" is dist/index.html itself, which also serves admin, login and Sido Butik: left as it is.
         if (page.route === "/") continue;
         const target = path.join(outDir, page.route.slice(1), "index.html");
