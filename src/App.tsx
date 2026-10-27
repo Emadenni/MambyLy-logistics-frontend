@@ -27,16 +27,22 @@ import SidoButik from "./pages/SidoButik/SidoButik";
 import Templates from "./pages/Templates/Templates";
 import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 
-// Restyled public pages ("Mindre krångel. Mer företag."), see src/public/.
-import Home from "./public/pages/PublicHome";
-import Services from "./public/pages/PublicServices";
-import ContactUs from "./public/pages/PublicContact";
-import WorkWithUs from "./public/pages/PublicJobs";
-import AboutUs from "./public/pages/PublicAbout";
-import NotFoundPage from "./public/pages/PublicNotFound";
-import PublicExamples from "./public/pages/PublicExamples";
-import PublicExample from "./public/pages/PublicExample";
+// Public site: one screen at a time, Swedish and English (see src/public/experience and
+// docs/RESTYLE-PUBLIC.md). Swedish keeps the existing URLs; English lives under /en.
+import Stage from "./public/experience/Stage";
+import { LANGS, PATHS } from "./public/experience/routes";
+import Hub from "./public/experience/screens/Hub";
+import Websites from "./public/experience/screens/Websites";
+import Method from "./public/experience/screens/Method";
+import Cards from "./public/experience/screens/Cards";
+import Services from "./public/experience/screens/Services";
+import { Example, Examples } from "./public/experience/screens/Examples";
+import About from "./public/experience/screens/About";
+import Contact from "./public/experience/screens/Contact";
+import Jobs from "./public/experience/screens/Jobs";
+import { NotFound, Privacy } from "./public/experience/screens/Privacy";
 import PublicCard from "./public/pages/PublicCard";
+import LegacyConsent from "./public/experience/LegacyConsent";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 import { publicContact } from "./public/contact";
@@ -71,27 +77,38 @@ const App = () => {
   return (
     <HelmetProvider>
       <CartProvider>
-        <CookieConsentBanner />
         <Router>
+          {/* Previous banner, unchanged, for admin, login and Sido Butik; the public site has its own. */}
+          <LegacyConsent banner={<CookieConsentBanner />} />
           <ScrollToTop />
           {/* <PromoBanner /> */}
           <Routes>
-            <Route element={<PublicLayout />}>
-              <Route path="/" element={<Home />} />
-              <Route path="/tjänster" element={<Services />} />
-              <Route path="/kontaktaOss" element={<ContactUs />} />
-              <Route path="/jobbaMedOss" element={<WorkWithUs />} />
-              <Route path="/omOss" element={<AboutUs />} />
-              <Route path="/exempel" element={<PublicExamples />} />
-              <Route path="/exempel/:slug" element={<PublicExample />} />
-              {/* Former card service page: its content now lives on the home page and in Tjänster. */}
-              <Route path="/digital-card" element={<Navigate to="/tjänster#visitkort" replace />} />
+            <Route element={<Stage />}>
+              {LANGS.map((lang) => (
+                <React.Fragment key={lang}>
+                  <Route path={PATHS.home[lang]} element={<Hub />} />
+                  <Route path={PATHS.explore[lang]} element={<Hub />} />
+                  <Route path={PATHS.websites[lang]} element={<Websites />} />
+                  <Route path={PATHS.method[lang]} element={<Method />} />
+                  <Route path={PATHS.cards[lang]} element={<Cards />} />
+                  <Route path={PATHS.services[lang]} element={<Services />} />
+                  <Route path={PATHS.examples[lang]} element={<Examples />} />
+                  <Route path={`${PATHS.examples[lang]}/:slug`} element={<Example />} />
+                  <Route path={PATHS.about[lang]} element={<About />} />
+                  <Route path={PATHS.contact[lang]} element={<Contact />} />
+                  <Route path={PATHS.jobs[lang]} element={<Jobs />} />
+                  <Route path={PATHS.privacy[lang]} element={<Privacy />} />
+                </React.Fragment>
+              ))}
               <Route path="/card" element={<PublicCard />} />
+              <Route path="/en/card" element={<PublicCard />} />
               <Route path="/card/:slug" element={<PublicCard />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route element={<PublicLayout />}>
               <Route path="/sidoButik" element={<SidoButik />} />
               <Route path="/sidoButik/mallar" element={<Templates />} />
               <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
-              <Route path="*" element={<NotFoundPage />} />
             </Route>
             <Route path="/login" element={<LoginForm />} />
             <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />

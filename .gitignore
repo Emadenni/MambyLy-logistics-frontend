@@ -25,3 +25,6 @@ dist-ssr
 
 .env
 .env.production
+
+# Design hand-off package (reference only; the used media are in public/media/mambyly)
+MambyLy_Claude_Pack/

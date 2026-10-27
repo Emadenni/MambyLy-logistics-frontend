@@ -4,30 +4,22 @@ Branch: `restyle/mambyly-public` (creato da `origin/dev`, che corrisponde alla b
 
 ## Dove sta il codice
 
-- `src/public/` – nuove pagine pubbliche (Home, Tjänster, Kontakta oss, Om oss, Jobba med oss, 404),
-  header/footer/menu mobile, scena animata della hero, dialog, stili.
-- `src/App.tsx` – stesse rotte, cambiano solo i componenti importati. Le vecchie pagine restano nel
-  repository e sono ancora importate solo per i loro fogli di stile, così admin, login e Sido Butik
-  ricevono esattamente lo stesso CSS di prima (verificato: il CSS precedente è un prefisso identico
-  del nuovo bundle; screenshot di /login, /admin e Sido Butik identici al pixel).
-- Tutti i nuovi stili sono confinati in `.mambyly-public`, `.mp-dialog` o `body:has(.mambyly-public)`.
-- Hook, API, store, form (`components/ContactForm`), admin, login, `vite.config.ts` e CI: invariati.
+- `src/public/experience/` – il sito pubblico "una schermata alla volta" (fase 5, vedi sotto): rotte e
+  lingue (`routes.ts`, `i18n.tsx`, `copy.ts`), palcoscenico con le transizioni (`Stage.tsx`), geografia
+  delle schermate (`nav.tsx`), barra, footer compatto e testa SEO (`Screen.tsx`), switch SV/EN, banner cookie,
+  schermate in `screens/`.
+- `src/public/digital-card/` – motore dei biglietti (invariato nella sostanza; testi tradotti in `card.json`).
+- `src/public/pages/PublicCard.tsx` – `/card`, `/en/card`, `/card/<slug>`.
+- `src/App.tsx` – le vecchie pagine restano nel repository e sono ancora importate solo per i loro fogli di
+  stile, così admin, login e Sido Butik ricevono lo stesso CSS di prima.
+- Tutti i nuovi stili sono confinati in `.mambyly-public` (`.mp-x`, `.mp-cardpage`), `.mp-dialog` o
+  `body:has(...)`; fuori resta solo `@font-face` di MP Poppins e MP Newsreader.
+- Hook, API, store, admin, login, `vite.config.ts` e CI: invariati.
 
 ## Sido Butik (nascosto, non eliminato)
 
-Flag: `src/public/config.ts` → `publicSiteConfig.showSidoButik`.
-
-- `false` (attuale): nasconde la voce "Sido Butik" nell'header (desktop e menu mobile) e il blocco
-  promozionale della home (banner + scelta "Startklar och budgetvänlig" con il link a `/sidoButik/mallar`).
-- `true`: ripristina tutti questi punti di ingresso.
-
-Le rotte `/sidoButik`, `/sidoButik/mallar`, `/sidoButik/mallar/:templateId`, i componenti, i dati, le
-immagini e il carrello non dipendono dal flag e restano raggiungibili da URL diretto.
-
-## Team pubblico
-
-`src/public/content/team.ts` presenta solo Emanuele De Negri e Marija Markova (dati e foto presi da
-`components/data/teamMembers.tsx`, che resta invariato ma non è più incluso nella build).
+Flag: `src/public/config.ts` → `publicSiteConfig.showSidoButik` (`false`: nessun ingresso dal sito pubblico;
+`true`: link "Sido Butik" nel footer compatto). Le rotte `/sidoButik…` funzionano comunque da URL diretto.
 
 ## Demo locale sicura
 
@@ -120,8 +112,9 @@ Contatti: telefono da `src/public/contact.ts`, e-mail `info@mambylysolutions.se`
 
 Sotto il biglietto: "Spara kontakt" (icona + testo), poi pulsanti solo icona con etichetta accessibile e tooltip
 (Dela kortet / Kopiera länken secondo la disponibilità di Web Share, Visa baksidan / Visa framsidan, Visa QR-kod)
-e un menu compatto verso il sito (Exempel, Så funkar det → `/#sa-funkar-det`, Webbplatser → `/#webbplats`,
-Kontakt). Le ancore sono gestite da `src/public/components/useHashScroll.ts`.
+e il menu espandibile "Mer från MambyLy" (chiuso all'inizio, `aria-expanded`, Escape lo chiude): Webbplatser,
+Digitala visitkort, Exempel, Om oss, Kontakt, dalla lista condivisa `destinations` in `experience/nav.tsx`, nella
+lingua dell'interfaccia. In alto a destra lo switch SV/EN.
 
 Accenno iniziale: breve inclinazione (≈1,25 s) su un wrapper `.dc__tilt` separato dalle trasformazioni di
 trascinamento e rotazione; una volta per scheda (`sessionStorage`), si interrompe al primo tocco/tasto/focus,
@@ -137,19 +130,68 @@ gira il biglietto, quello verticale fa scorrere la pagina (lo "swipe in su per c
   "Ladda ner kontaktfilen", che genera la stessa vCard nel browser. Nessuna conferma di salvataggio.
 - In sviluppo (`npm run dev`) il file statico non esiste: si usa il download generato nel browser.
 
-## Riposizionamento: visitkort + webbplatser (fase 4)
+## Fase 4 (archiviata): visitkort + webbplatser
 
-- Home (`PublicHome.tsx`): apertura con biglietto interattivo, benefici (`#fordelar`), come funziona
-  (`#sa-funkar-det`), esempi (`#exempel`), sito coordinato (`#webbplats`), domande (`#fragor`), contatto con
-  servizio preselezionato (`#kontakt`). NFC solo come nota nelle FAQ, non offerto.
-- Galleria `/exempel` e schermate `/exempel/<slug>` (pulite, "Exempel · påhittade uppgifter", ritorno alla
-  galleria, "Jag vill ha ett kort som det här" → contatto con il modello). Esempi: `kvist-och-hyvel`
-  (hantverkare), `fjardvik-agentur` (säljare/konsult), `studio-halvljus` (fotograf), `rutglans`
-  (serviceföretag), `exempelbageriet`. Dati e loghi inventati, domini `.example`, telefono segnaposto.
-- `/tjänster`: due servizi (visitkort principale, webbplats complementare), nessun prezzo (offerta).
-- Percorsi vecchi: `/digital-card` → `/tjänster#visitkort`; `/card/<demo>` → `/exempel/<demo>`.
-- Anteprime social `public/brand/og-home.png`, `og-exempel.png`, `public/cards/<slug>/og.png`: screenshot del
-  componente reale, composti dal sito in anteprima locale con Chrome headless.
-- Il build scrive `dist/<pagina>/index.html` per tutte le pagine pubbliche: Amplify aggiunge lo slash finale e
-  senza un file reale rispondeva 404 (con la SPA comunque visibile).
-- Punto di ripristino: tag git `restore/pre-reposition-20261026` (= commit 4862544, job Amplify 158).
+Home con biglietto, galleria `/exempel`, `/tjänster`. Sostituita dalla fase 5; restano galleria ed esempi.
+Punto di ripristino: tag git `restore/pre-reposition-20261026` (= commit 4862544, job Amplify 158).
+
+## Fase 5: "una schermata alla volta", svedese e inglese
+
+### Lingue e URL
+
+- Svedese = URL esistenti senza prefisso; inglese sotto `/en` (`routes.ts`, una URL per schermata e lingua):
+  `/` · `/en`, `/utforska` · `/en/explore`, `/webbplatser` · `/en/websites`, `/webbplatser/vart-satt` ·
+  `/en/websites/our-approach`, `/digital-card` · `/en/digital-card`, `/tjänster` · `/en/services`, `/exempel` ·
+  `/en/examples`, `/omOss` · `/en/about`, `/kontaktaOss` · `/en/contact`, `/jobbaMedOss` · `/en/careers`,
+  `/integritet` · `/en/privacy`, `/card` · `/en/card`.
+- Tutti i testi in `copy.ts` (sv è la fonte, en ha lo stesso tipo: una chiave mancante non compila). I testi dei
+  biglietti in inglese stanno in `card.json` → `translations.en` (ruolo, tagline, dettagli, esempio, meta).
+- Switch SV/EN (`LangSwitch.tsx`): sostituisce l'URL con quella equivalente mantenendo hash e `state`; salva
+  la scelta in `localStorage` `mp-lang`. All'arrivo su un URL svedese con scelta "en" salvata si passa a
+  `/en/…`; un link `/en/…` esplicito apre sempre in inglese. `/card` non cambia mai URL (destinazione NFC):
+  l'interfaccia segue la scelta salvata.
+- `<html lang>`, canonical, `hreflang` (sv, en, x-default) e Open Graph per schermata (`ScreenHead`); il build
+  scrive `dist/<route>/index.html` per ogni schermata in entrambe le lingue (`build/static-route-meta.ts`).
+
+### Schermate e movimento
+
+- `/` è la copertina sopra Utforska (`screens/Hub.tsx`): trascinando verso l'alto la copertina segue il dito e
+  Utforska (già montata, `inert`) passa da scala 0,98 e 12 px a 1 e 0; oltre il 26% dell'altezza (o con un
+  colpo rapido) si apre, altrimenti torna giù. Anche tap/click sul comando, Enter, Spazio, PagGiù, rotella o
+  trackpad. Aperta, l'URL diventa `/utforska`; Back o il logo la riabbassano. `pointercancel` = ritorno.
+- Geografia (`nav.tsx`): Utforska al centro, Webbplatser → Vårt sätt a destra, Digitala visitkort → Vad som ingår
+  a sinistra, Exempel in basso a sinistra, Om oss in basso, Kontakt in alto. La nuova schermata entra dal lato
+  in cui si trova; tornando indietro il movimento è esattamente l'opposto. 460 ms, nessun rimbalzo.
+- `Stage.tsx`: scroll a inizio schermata, ripristino con Back/Forward, focus sul titolo della nuova schermata,
+  schermata uscente `inert`; con `prefers-reduced-motion` i cambi sono istantanei.
+- Galleria e slide di Om oss (`useSwipe.ts`): solo movimenti chiaramente orizzontali, `touch-action: pan-y`;
+  frecce, tastiera e contatore; nessun autoplay. Gli eventi non arrivano alla schermata.
+- Desktop ≥ 1180 px: Webbplatser, Vårt sätt e Digitala visitkort affiancano testo e immagine per restare in una
+  schermata; nessuna cornice di telefono.
+
+### Moduli (API esistente)
+
+- Wizard `/kontaktaOss` (`screens/Contact.tsx`): nome → servizio + descrizione (min 10, max 1900) → e-mail +
+  consenso. Invio con `useSubmitMessage(false)` (POST `/clientsMessages`, `{ name, email, subject, textMessage }`).
+  `subject` in svedese (`service.ts`); a `textMessage` si aggiungono righe di contesto (sito esistente sì/no,
+  "Språk: engelska" dalla pagina inglese). Risposte in memoria (`wizardStore.ts`), mai in URL o storage;
+  cancellate solo dopo una risposta positiva. Doppio invio bloccato; in caso di errore i dati restano.
+- `/jobbaMedOss` (`screens/Jobs.tsx`): `useSubmitMessage(true)` → `/jobMessages` con CV, stesse regole di
+  `formValidation.ts`.
+- `components/ContactForm` non è più usato dal sito pubblico ma resta invariato.
+
+### Cookie
+
+- Banner pubblico (`ConsentBanner.tsx`): stessa chiave `cookieConsent` e stessa forma; "Bara nödvändiga" e
+  "Tillåt statistik" con lo stesso peso, "Välj själv" con l'interruttore. Non blocca la pagina e non compare
+  sopra la copertina. Clarity parte solo con `analytics: true` (anche `useClarity` invariato); revocando, i
+  cookie `_clck`/`_clsk` vengono cancellati e la pagina ricaricata. Riaperto da "Cookieinställningar".
+- Admin, login e Sido Butik mostrano ancora il banner precedente (`LegacyConsent.tsx`).
+- Umami (`useUmami`, invariato) si carica sempre: lo script non scrive cookie né storage (legge solo
+  `localStorage["umami.disabled"]`).
+
+### Asset
+
+`public/media/mambyly/`: WebP ricavati da `MambyLy_Claude_Pack/assets` (hero, tre copertine della galleria,
+persone, anteprima siti, tre foto di Om oss). Font titoli: Newsreader (OFL, `src/public/assets/fonts`).
+Il pacchetto `MambyLy_Claude_Pack/` non è nel repository.

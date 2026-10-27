@@ -21,8 +21,14 @@
   "email": "alva@exempelbageriet.example",
   "website": "https://exempelbageriet.example",
   "details": [
-    { "label": "Öppet", "value": "Tis–lör 07–15" },
-    { "label": "Specialitet", "value": "Surdeg & kardemumma" }
+    {
+      "label": "Öppet",
+      "value": "Tis–lör 07–15"
+    },
+    {
+      "label": "Specialitet",
+      "value": "Surdeg & kardemumma"
+    }
   ],
   "example": {
     "sector": "Café & bageri",
@@ -32,5 +38,29 @@
   "meta": {
     "title": "Exempel: Exempelbageriet – visitkort för café och bageri",
     "description": "Exempel på ett digitalt visitkort för ett bageri, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Baker & founder",
+      "tagline": "Sourdough, buns and coffee – baked every morning.",
+      "details": [
+        {
+          "label": "Open",
+          "value": "Tue–Sat 07–15"
+        },
+        {
+          "label": "Speciality",
+          "value": "Sourdough & cardamom"
+        }
+      ],
+      "example": {
+        "sector": "Café & bakery",
+        "summary": "Creamy paper and warm brown tones – like a bag of fresh bread."
+      },
+      "meta": {
+        "title": "Example: Exempelbageriet – card for cafés and bakeries",
+        "description": "Example of a digital business card for a bakery, made by MambyLy Solutions. The company and the person are fictitious."
+      }
+    }
   }
 }

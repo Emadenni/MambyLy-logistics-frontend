@@ -57,10 +57,17 @@ export type CardConfigRaw = {
   meta?: { title?: string; description?: string };
   /** Demo cards shown in the gallery (/exempel): sector label, short description and order. */
   example?: { sector: string; summary: string; order?: number };
+  /** Texts in another language, merged over the card when the site is shown in that language. */
+  translations?: Partial<Record<"sv" | "en", CardTranslation>>;
+};
+
+/** Translatable texts of a card (contact details, names and logos never change with the language). */
+export type CardTranslation = Partial<Pick<CardConfigRaw, "role" | "tagline" | "details" | "meta">> & {
+  example?: { sector?: string; summary?: string };
 };
 
 /** Validated card, only with safe and present fields. */
-export type CardConfig = Omit<CardConfigRaw, "phone" | "email" | "website" | "socials" | "logo" | "logoBack" | "photo"> & {
+export type CardConfig = Omit<CardConfigRaw, "phone" | "email" | "website" | "socials" | "logo" | "logoBack" | "photo" | "translations"> & {
   lang: "sv" | "en";
   demo: boolean;
   kind: "person" | "organization";

@@ -22,10 +22,21 @@
   "phoneDisplay": "070-000 00 00",
   "email": "linnea@fjardvik.example",
   "website": "https://fjardvik.example",
-  "socials": [{ "type": "linkedin", "url": "https://www.linkedin.com/" }],
+  "socials": [
+    {
+      "type": "linkedin",
+      "url": "https://www.linkedin.com/"
+    }
+  ],
   "details": [
-    { "label": "Distrikt", "value": "Mälardalen & Östergötland" },
-    { "label": "Språk", "value": "Svenska · Engelska" }
+    {
+      "label": "Distrikt",
+      "value": "Mälardalen & Östergötland"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
   ],
   "example": {
     "sector": "Säljare & konsult",
@@ -35,5 +46,28 @@
   "meta": {
     "title": "Exempel: Fjärdvik Agentur – visitkort för säljare",
     "description": "Exempel på ett digitalt visitkort för en säljare eller konsult, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  },
+  "translations": {
+    "en": {
+      "tagline": "Food and drink for shops in central Sweden.",
+      "details": [
+        {
+          "label": "District",
+          "value": "Mälardalen & Östergötland"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Sales & consulting",
+        "summary": "Crisp and trustworthy: navy blue, a thin gold line and clear contact options for someone who meets many customers."
+      },
+      "meta": {
+        "title": "Example: Fjärdvik Agentur – card for sales people",
+        "description": "Example of a digital business card for a salesperson or consultant, made by MambyLy Solutions. The company and the person are fictitious."
+      }
+    }
   }
 }

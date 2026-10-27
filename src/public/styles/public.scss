@@ -8,7 +8,7 @@
 // Admin, login and Sido Butik never contain .mambyly-public, so they keep their current styles.
 
 @use "./digital-card" as dc;
-@use "./offer" as offer;
+@use "./experience" as x;
 
 $bp-mobile: 720px;
 $bp-tablet: 920px;
@@ -2096,7 +2096,7 @@ body:has(.mambyly-public) {
   }
 
   @include dc.styles;
-  @include offer.styles;
+  @include x.styles;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -2516,3 +2516,6 @@ body:has(.mambyly-public) {
     }
   }
 }
+
+// New public site: font face and page-level hooks (see _experience.scss).
+@include x.outside;

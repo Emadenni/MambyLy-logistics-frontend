@@ -1,48 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.mambylysolutions.se/</loc>
-    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/" />
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.mambylysolutions.se/exempel</loc>
-    <changefreq>monthly</changefreq>
+    <loc>https://www.mambylysolutions.se/en</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/" />
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/utforska</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/utforska" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/explore" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/utforska" />
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/explore</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/utforska" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/explore" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/utforska" />
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/webbplatser</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/webbplatser" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/websites" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/webbplatser" />
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/websites</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/webbplatser" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/websites" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/webbplatser" />
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/webbplatser/vart-satt</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/webbplatser/vart-satt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/websites/our-approach" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/webbplatser/vart-satt" />
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/websites/our-approach</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/webbplatser/vart-satt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/websites/our-approach" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/webbplatser/vart-satt" />
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/digital-card</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/digital-card" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/digital-card" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/digital-card" />
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/digital-card</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/digital-card" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/digital-card" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/digital-card" />
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.mambylysolutions.se/tj%C3%A4nster</loc>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/tj%C3%A4nster" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/tj%C3%A4nster" />
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.mambylysolutions.se/kontaktaOss</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://www.mambylysolutions.se/en/services</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/tj%C3%A4nster" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/services" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/tj%C3%A4nster" />
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/exempel</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/exempel" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/examples" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/exempel" />
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/examples</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/exempel" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/examples" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/exempel" />
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.mambylysolutions.se/omOss</loc>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/omOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/omOss" />
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.mambylysolutions.se/card</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <loc>https://www.mambylysolutions.se/en/about</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/omOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/omOss" />
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/kontaktaOss</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/kontaktaOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/kontaktaOss" />
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/contact</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/kontaktaOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/kontaktaOss" />
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mambylysolutions.se/jobbaMedOss</loc>
-    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/jobbaMedOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/careers" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/jobbaMedOss" />
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.mambylysolutions.se/sidoButik</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.mambylysolutions.se/en/careers</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/jobbaMedOss" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/careers" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/jobbaMedOss" />
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.mambylysolutions.se/sidoButik/mallar</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.3</priority>
+    <loc>https://www.mambylysolutions.se/integritet</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/integritet" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/integritet" />
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/integritet" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/integritet" />
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/card</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/card" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/card" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/card" />
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.mambylysolutions.se/en/card</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://www.mambylysolutions.se/card" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.mambylysolutions.se/en/card" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mambylysolutions.se/card" />
+    <priority>0.5</priority>
   </url>
 </urlset>

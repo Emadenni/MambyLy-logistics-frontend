@@ -23,12 +23,24 @@
   "email": "boka@rutglans.example",
   "website": "https://rutglans.example",
   "socials": [
-    { "type": "facebook", "url": "https://www.facebook.com/" },
-    { "type": "instagram", "url": "https://www.instagram.com/" }
+    {
+      "type": "facebook",
+      "url": "https://www.facebook.com/"
+    },
+    {
+      "type": "instagram",
+      "url": "https://www.instagram.com/"
+    }
   ],
   "details": [
-    { "label": "Öppet", "value": "Mån–lör 07–18" },
-    { "label": "RUT", "value": "Avdraget direkt på fakturan" }
+    {
+      "label": "Öppet",
+      "value": "Mån–lör 07–18"
+    },
+    {
+      "label": "RUT",
+      "value": "Avdraget direkt på fakturan"
+    }
   ],
   "example": {
     "sector": "Serviceföretag",
@@ -38,5 +50,29 @@
   "meta": {
     "title": "Exempel: Rutglans – visitkort för serviceföretag",
     "description": "Exempel på ett digitalt visitkort för ett lokalt serviceföretag, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Window cleaning & cleaning",
+      "tagline": "Sparkling windows – at home and at the office.",
+      "details": [
+        {
+          "label": "Open",
+          "value": "Mon–Sat 07–18"
+        },
+        {
+          "label": "RUT",
+          "value": "Deducted directly on the invoice"
+        }
+      ],
+      "example": {
+        "sector": "Service business",
+        "summary": "Bright colours, a big logo and opening hours on the back – easy to recognise, easy to book."
+      },
+      "meta": {
+        "title": "Example: Rutglans – card for service businesses",
+        "description": "Example of a digital business card for a local service business, made by MambyLy Solutions. The company and the person are fictitious."
+      }
+    }
   }
 }

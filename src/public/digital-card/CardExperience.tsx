@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiDownload, FiLink, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { FiChevronDown, FiDownload, FiLink, FiShare, FiUserPlus, FiX } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
@@ -36,6 +36,44 @@ export const IconButton: React.FC<{ label: string; onClick: () => void; children
     {children}
   </button>
 );
+
+/** Discreet, expandable menu towards the site (MambyLy's own card only). Closes after a choice and on Escape. */
+const CardMenu: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, label }) => {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const button = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        button.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <nav className={`dc-menu${open ? " is-open" : ""}`} aria-label={label}>
+      <button ref={button} type="button" className="dc-menu__toggle" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
+        <span>{label}</span>
+        <FiChevronDown aria-hidden="true" className="dc-menu__chev" />
+      </button>
+      <ul id={id} hidden={!open}>
+        {items.map((item) => (
+          <li key={item.to}>
+            <Link to={item.to} className="dc-menu__link" onClick={() => setOpen(false)}>
+              <span className="dc-menu__icon" aria-hidden="true">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
 
 const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; menu?: CardMenuItem[]; intro?: boolean }> = ({
   card,
@@ -183,20 +221,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
         </div>
       )}
 
-      {menu && menu.length > 0 && (
-        <nav className="dc-menu" aria-label={t.menuLabel}>
-          <ul>
-            {menu.map((item) => (
-              <li key={item.to}>
-                <Link to={item.to} className="dc-menu__link">
-                  <span className="dc-menu__icon" aria-hidden="true">{item.icon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
+      {menu && menu.length > 0 && <CardMenu items={menu} label={t.menuLabel} />}
 
       <Dialog
         open={qrOpen}

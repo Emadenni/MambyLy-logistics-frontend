@@ -4,13 +4,15 @@ import type { Plugin } from "vite";
 import { validateCard } from "../src/public/digital-card/validate";
 import { buildVCard, vcardFileName } from "../src/public/digital-card/vcard";
 import type { CardConfigRaw } from "../src/public/digital-card/types";
+import { copy } from "../src/public/experience/copy";
+import { CARD_PATH, EXAMPLE_BASE, LANGS, PATHS, type Lang, type StaticScreen } from "../src/public/experience/routes";
 
 /**
  * Build-only: writes dist/<route>/index.html copies of dist/index.html whose <head> already holds
- * the title, description, canonical and Open Graph/Twitter tags of that route, so social crawlers
- * that do not run JavaScript see the right preview. The copies load the same bundle; the SPA
- * router renders the route as usual. Having a real file also lets the host answer 200 (instead of
- * its 404 fallback) after it adds the trailing slash.
+ * the language, title, description, canonical, hreflang alternates and Open Graph/Twitter tags of
+ * that route, so crawlers that do not run JavaScript see the right page. The copies load the same
+ * bundle; the SPA router renders the route as usual. Having a real file also lets the host answer
+ * 200 (instead of its 404 fallback) after it adds the trailing slash.
  *
  * Also writes dist/card/<slug>.vcf for every real (non-demo) card: the static contact file that
  * the "Spara kontakt" button opens (see src/public/digital-card/vcard.ts).
@@ -22,9 +24,19 @@ const SITE = (process.env.PUBLIC_SITE_URL || "https://www.mambylysolutions.se").
 const COMPANY_CARD_SLUG = "mambyly-solutions"; // see src/public/digital-card/registry.ts
 const DEFAULT_IMAGE = "/brand/og-home.png";
 
-type PageMeta = { route: string; title: string; description: string; image: string; noindex?: boolean; canonical?: string };
+type PageMeta = {
+  route: string;
+  lang: Lang;
+  title: string;
+  description: string;
+  image: string;
+  noindex?: boolean;
+  canonical?: string;
+  alternates?: Record<Lang, string>;
+};
 
 const escapeAttr = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const abs = (route: string) => `${SITE}${encodeURI(route)}`;
 
 function setMeta(html: string, attr: "name" | "property", key: string, value: string) {
   const re = new RegExp(`<meta\\s+${attr}="${key}"\\s+content="[^"]*"\\s*/?>`);
@@ -33,66 +45,53 @@ function setMeta(html: string, attr: "name" | "property", key: string, value: st
 }
 
 export function renderRouteHtml(html: string, page: PageMeta): string {
-  const url = `${SITE}${page.canonical ?? page.route}`;
+  const url = abs(page.canonical ?? page.route);
   const image = `${SITE}${page.image}`;
-  let out = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(page.title)}</title>`);
+  let out = html.replace(/<html lang="[^"]*"/, `<html lang="${page.lang}"`);
+  out = out.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(page.title)}</title>`);
   out = setMeta(out, "name", "description", page.description);
   out = setMeta(out, "property", "og:title", page.title);
   out = setMeta(out, "property", "og:description", page.description);
   out = setMeta(out, "property", "og:url", url);
   out = setMeta(out, "property", "og:image", image);
+  out = setMeta(out, "property", "og:locale", page.lang === "en" ? "en_GB" : "sv_SE");
   out = setMeta(out, "name", "twitter:title", page.title);
   out = setMeta(out, "name", "twitter:description", page.description);
   out = setMeta(out, "name", "twitter:image", image);
-  const extra = [`<link rel="canonical" href="${escapeAttr(url)}" />`, page.noindex ? `<meta name="robots" content="noindex" />` : ""]
+  const alt = page.alternates;
+  const extra = [
+    `<link rel="canonical" href="${escapeAttr(url)}" />`,
+    alt ? `<link rel="alternate" hreflang="sv" href="${escapeAttr(abs(alt.sv))}" />` : "",
+    alt ? `<link rel="alternate" hreflang="en" href="${escapeAttr(abs(alt.en))}" />` : "",
+    alt ? `<link rel="alternate" hreflang="x-default" href="${escapeAttr(abs(alt.sv))}" />` : "",
+    page.noindex ? `<meta name="robots" content="noindex" />` : "",
+  ]
     .filter(Boolean)
     .map((t) => `    ${t}\n`)
     .join("");
   return out.replace("</head>", `${extra}  </head>`);
 }
 
-/** Public pages of the site (titles and descriptions as in their <Helmet>). */
-const sitePages: PageMeta[] = [
-  {
-    route: "/exempel",
-    title: "Exempel på digitala visitkort | MambyLy Solutions",
-    description: "Se exempel på digitala visitkort för hantverkare, säljare, fotografer och serviceföretag. Öppna ett kort, vänd på det och se hur det fungerar.",
-    image: "/brand/og-exempel.png",
-  },
-  {
-    route: "/tjänster",
-    title: "Tjänster – digitala visitkort och webbplatser | MambyLy Solutions",
-    description: "Digitalt visitkort med din logotyp och dina kontaktuppgifter – och en webbplats i samma stil när du behöver. Begär en offert.",
-    image: DEFAULT_IMAGE,
-  },
-  {
-    route: "/kontaktaOss",
-    title: "Kontakta oss – digitala visitkort och webbplatser | MambyLy Solutions",
-    description: "Berätta vad du behöver: ett digitalt visitkort, en webbplats eller båda. Vi hör av oss och tar fram en offert.",
-    image: DEFAULT_IMAGE,
-  },
-  {
-    route: "/omOss",
-    title: "Om oss | MambyLy Solutions",
-    description: "MambyLy Solutions är en liten studio i Linköping som gör digitala visitkort och webbplatser för småföretag.",
-    image: DEFAULT_IMAGE,
-  },
-  {
-    route: "/jobbaMedOss",
-    title: "Jobba med oss – Mambyly Solutions",
-    description: "Vill du jobba med oss? Se om det finns lediga tjänster eller skicka in en spontanansökan.",
-    image: DEFAULT_IMAGE,
-  },
-  // Former card service page, now a redirect in the SPA (App.tsx).
-  {
-    route: "/digital-card",
-    title: "Digitala visitkort | MambyLy Solutions",
-    description: "Digitala visitkort med din logotyp, dina färger och dina kontaktuppgifter.",
-    image: DEFAULT_IMAGE,
-    canonical: "/tjänster",
-    noindex: true,
-  },
-];
+const IMAGES: Partial<Record<StaticScreen, string>> = { examples: "/brand/og-exempel.png" };
+
+/** Every screen of the site in both languages (titles and descriptions from copy.ts). */
+function sitePages(): PageMeta[] {
+  const pages: PageMeta[] = [];
+  for (const screen of Object.keys(PATHS) as StaticScreen[]) {
+    for (const lang of LANGS) {
+      const meta = copy[lang].meta[screen as keyof (typeof copy)["sv"]["meta"]];
+      pages.push({
+        route: PATHS[screen][lang],
+        lang,
+        title: meta.title,
+        description: meta.description,
+        image: IMAGES[screen] ?? DEFAULT_IMAGE,
+        alternates: PATHS[screen],
+      });
+    }
+  }
+  return pages;
+}
 
 type CardEntry = { slug: string; raw: CardConfigRaw };
 
@@ -107,15 +106,23 @@ function readCards(root: string): CardEntry[] {
 function cardPages(root: string, cards: CardEntry[]): PageMeta[] {
   const pages: PageMeta[] = [];
   for (const { slug, raw: card } of cards) {
-    const title = card.meta?.title || [card.name, card.company].filter(Boolean).join(" – ");
-    const description = card.meta?.description || `Digitalt visitkort: ${card.name}`;
+    const metaFor = (lang: Lang) => {
+      const tr = lang !== (card.lang ?? "sv") ? card.translations?.[lang]?.meta : undefined;
+      return {
+        title: tr?.title || card.meta?.title || [card.name, card.company].filter(Boolean).join(" – "),
+        description: tr?.description || card.meta?.description || `Digitalt visitkort: ${card.name}`,
+      };
+    };
     const image = fs.existsSync(path.join(root, "public/cards", slug, "og.png")) ? `/cards/${slug}/og.png` : DEFAULT_IMAGE;
     if (card.demo) {
-      // Demo cards are presented at /exempel/<slug>; the old /card/<slug> stays as a redirect.
-      pages.push({ route: `/exempel/${slug}`, title, description, image, noindex: true });
-      pages.push({ route: `/card/${slug}`, title, description, image, noindex: true, canonical: `/exempel/${slug}` });
+      // Demo cards are presented at /exempel/<slug> and /en/examples/<slug>; /card/<slug> stays as a redirect.
+      const alternates = { sv: `${EXAMPLE_BASE.sv}/${slug}`, en: `${EXAMPLE_BASE.en}/${slug}` };
+      for (const lang of LANGS) pages.push({ route: alternates[lang], lang, ...metaFor(lang), image, noindex: true, alternates });
+      pages.push({ route: `/card/${slug}`, lang: "sv", ...metaFor("sv"), image, noindex: true, canonical: alternates.sv });
+    } else if (slug === COMPANY_CARD_SLUG) {
+      for (const lang of LANGS) pages.push({ route: CARD_PATH[lang], lang, ...metaFor(lang), image, alternates: CARD_PATH });
     } else {
-      pages.push({ route: slug === COMPANY_CARD_SLUG ? "/card" : `/card/${slug}`, title, description, image });
+      pages.push({ route: `/card/${slug}`, lang: card.lang === "en" ? "en" : "sv", ...metaFor(card.lang === "en" ? "en" : "sv"), image });
     }
   }
   return pages;
@@ -136,7 +143,9 @@ export default function staticRouteMeta(): Plugin {
       if (!fs.existsSync(indexFile)) return;
       const html = fs.readFileSync(indexFile, "utf8");
       const cards = readCards(root);
-      for (const page of [...sitePages, ...cardPages(root, cards)]) {
+      for (const page of [...sitePages(), ...cardPages(root, cards)]) {
+        // "/" is dist/index.html itself, which also serves admin, login and Sido Butik: left as it is.
+        if (page.route === "/") continue;
         const target = path.join(outDir, page.route.slice(1), "index.html");
         fs.mkdirSync(path.dirname(target), { recursive: true });
         fs.writeFileSync(target, renderRouteHtml(html, page));

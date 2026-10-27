@@ -936,41 +936,72 @@
     }
   }
 
-  // Compact site menu under MambyLy's own card: icon + name, always visible.
+  // Expandable site menu under MambyLy's own card (closed by default).
   .dc-menu {
     width: min(100%, 520px);
     margin-top: 6px;
-    padding-top: 18px;
+    padding-top: 14px;
     border-top: 1px solid var(--mp-line);
+    text-align: center;
+
+    &__toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--mp-line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--mp-ink);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        border-color: var(--mp-ink);
+        background: var(--mp-paper);
+      }
+    }
+
+    &__chev {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    &.is-open .dc-menu__chev {
+      transform: rotate(180deg);
+    }
 
     ul {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 8px;
-      margin: 0;
+      margin: 12px 0 0;
       padding: 0;
       list-style: none;
+      text-align: left;
 
-      @media (max-width: 480px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      &[hidden] {
+        display: none;
       }
     }
 
     &__link {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 8px;
+      gap: 10px;
       min-height: 48px;
-      padding: 6px 10px;
+      padding: 6px 14px;
       border: 1px solid var(--mp-line);
-      border-radius: 10px;
+      border-radius: 12px;
       background: var(--mp-paper);
       color: var(--mp-ink);
       font-size: 14px;
       font-weight: 600;
       line-height: 1.2;
-      text-align: center;
       text-decoration: none;
       transition: border-color 0.2s ease, background-color 0.2s ease;
 
@@ -990,11 +1021,20 @@
         height: 18px;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      &__chev {
+        transition: none;
+      }
+    }
   }
 
   // ---------- /card and /card/:slug ----------
-  &.mp-cardpage {
+  .mp-cardpage {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh;
     background:
       radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.8), transparent 60%),
       var(--mp-cream);

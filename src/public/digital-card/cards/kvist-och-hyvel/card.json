@@ -22,10 +22,21 @@
   "phoneDisplay": "070-000 00 00",
   "email": "jonas@kvistochhyvel.example",
   "website": "https://kvistochhyvel.example",
-  "socials": [{ "type": "instagram", "url": "https://www.instagram.com/" }],
+  "socials": [
+    {
+      "type": "instagram",
+      "url": "https://www.instagram.com/"
+    }
+  ],
   "details": [
-    { "label": "Område", "value": "Linköping med omnejd" },
-    { "label": "Gör", "value": "Kök · trappor · bokhyllor" }
+    {
+      "label": "Område",
+      "value": "Linköping med omnejd"
+    },
+    {
+      "label": "Gör",
+      "value": "Kök · trappor · bokhyllor"
+    }
   ],
   "example": {
     "sector": "Hantverkare",
@@ -35,5 +46,29 @@
   "meta": {
     "title": "Exempel: Kvist & Hyvel – visitkort för hantverkare",
     "description": "Exempel på ett digitalt visitkort för en snickare, gjort av MambyLy Solutions. Företaget och personen är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Carpenter & cabinetmaker",
+      "tagline": "Built-in solid wood – from sketch to installation.",
+      "details": [
+        {
+          "label": "Area",
+          "value": "Linköping and surroundings"
+        },
+        {
+          "label": "Makes",
+          "value": "Kitchens · stairs · bookcases"
+        }
+      ],
+      "example": {
+        "sector": "Craftsperson",
+        "summary": "Warm wood tones, a stamped monogram and a classic serif – a card that feels as solid as the work."
+      },
+      "meta": {
+        "title": "Example: Kvist & Hyvel – card for craftspeople",
+        "description": "Example of a digital business card for a carpenter, made by MambyLy Solutions. The company and the person are fictitious."
+      }
+    }
   }
 }

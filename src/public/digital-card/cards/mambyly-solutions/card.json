@@ -23,14 +23,39 @@
   "email": "info@mambylysolutions.se",
   "website": "https://www.mambylysolutions.se",
   "socials": [
-    { "type": "whatsapp", "url": "https://wa.me/46722116422" },
-    { "type": "instagram", "url": "https://www.instagram.com/mambyly_solutions/" },
-    { "type": "facebook", "url": "https://www.facebook.com/profile.php?id=61565139296744" },
-    { "type": "linkedin", "url": "https://www.linkedin.com/company/104626842/" },
-    { "type": "tiktok", "url": "https://www.tiktok.com/@mambylysolutions" }
+    {
+      "type": "whatsapp",
+      "url": "https://wa.me/46722116422"
+    },
+    {
+      "type": "instagram",
+      "url": "https://www.instagram.com/mambyly_solutions/"
+    },
+    {
+      "type": "facebook",
+      "url": "https://www.facebook.com/profile.php?id=61565139296744"
+    },
+    {
+      "type": "linkedin",
+      "url": "https://www.linkedin.com/company/104626842/"
+    },
+    {
+      "type": "tiktok",
+      "url": "https://www.tiktok.com/@mambylysolutions"
+    }
   ],
   "meta": {
     "title": "MambyLy Solutions – digitalt visitkort",
     "description": "MambyLy Solutions gör digitala visitkort och webbplatser för småföretag. Spara våra kontaktuppgifter eller dela kortet vidare."
+  },
+  "translations": {
+    "en": {
+      "role": "Digital business cards & websites",
+      "tagline": "Less hassle. More business.",
+      "meta": {
+        "title": "MambyLy Solutions – digital business card",
+        "description": "MambyLy Solutions makes digital business cards and websites for small businesses. Save our contact details or pass the card on."
+      }
+    }
   }
 }
