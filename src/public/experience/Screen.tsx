@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
-import { FiArrowLeft, FiArrowUpRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowUpRight, FiChevronDown } from "react-icons/fi";
 import logoDark from "../assets/logo-dark.svg";
 import { useCopy } from "./i18n";
 import LangSwitch from "./LangSwitch";
@@ -93,13 +93,38 @@ export const TopBar: React.FC<{
   );
 };
 
-/** Compact footer line, the same on every screen. */
+/**
+ * Footer as a small disclosure, closed by default: privacy, cookie settings, jobs, our card and ©.
+ * It opens in place (no overlay, no reserved space when closed); Escape closes it and returns the
+ * focus to its button.
+ */
 export const ScreenFooter: React.FC<{ withAdmin?: boolean }> = ({ withAdmin = false }) => {
   const t = useCopy();
   const requestConsent = useUi((s) => s.requestConsent);
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  const button = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      button.current?.focus();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
-    <footer className="mp-sfoot">
-      <ul>
+    <footer className={`mp-sfoot${open ? " is-open" : ""}`}>
+      <div className="mp-sfoot__row">
+        <button ref={button} type="button" className="mp-sfoot__toggle" aria-expanded={open} aria-controls={panelId} onClick={() => setOpen((v) => !v)}>
+          {t.common.footerInfo} <FiChevronDown aria-hidden="true" />
+        </button>
+        {withAdmin && <AdminLink />}
+      </div>
+      <ul id={panelId} hidden={!open}>
         <li>
           <Link to={pathFor("privacy", t.lang)}>{t.common.privacy}</Link>
         </li>
@@ -121,7 +146,6 @@ export const ScreenFooter: React.FC<{ withAdmin?: boolean }> = ({ withAdmin = fa
         )}
         <li className="mp-sfoot__copy">© {new Date().getFullYear()} {t.common.rights}</li>
       </ul>
-      {withAdmin && <AdminLink />}
     </footer>
   );
 };

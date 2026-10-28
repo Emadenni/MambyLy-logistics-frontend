@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiArrowUpRight, FiInfo } from "react-icons/fi";
 import logoDark from "../../assets/logo-dark.svg";
 import logoLight from "../../assets/logo-light.svg";
 import LangSwitch from "../LangSwitch";
@@ -14,7 +14,7 @@ import { conceptCopy } from "./content";
  * the way back to the gallery, the language and the note that the content is a design concept.
  * It takes the place of the quick navigation of the other screens.
  */
-export const ExitBar: React.FC<{ to?: StaticScreen; label?: string; tone?: "light" | "dark" }> = ({ to = "websites", label, tone = "light" }) => {
+export const ExitBar: React.FC<{ to?: StaticScreen; label?: string; tone?: "light" | "dark"; note?: string }> = ({ to = "websites", label, tone = "light", note }) => {
   const t = useCopy();
   const c = conceptCopy[t.lang].shared;
   const navigate = useNavigate();
@@ -40,7 +40,11 @@ export const ExitBar: React.FC<{ to?: StaticScreen; label?: string; tone?: "ligh
       <span className="mp-exit__note">
         <img src={tone === "dark" ? logoLight : logoDark} alt="MambyLy Solutions" width={74} height={21} />
         <span>
-          {c.concept} ·<wbr /> {c.fictitious}
+          {note ?? (
+            <>
+              {c.concept} ·<wbr /> {c.fictitious}
+            </>
+          )}
         </span>
       </span>
       <LangSwitch className="mp-exit__lang" />
@@ -48,7 +52,45 @@ export const ExitBar: React.FC<{ to?: StaticScreen; label?: string; tone?: "ligh
   );
 };
 
-/** Fullscreen wrapper of one demo: its own look, a skip link and the exit bar. */
+/**
+ * Answer of every demo form: nothing is sent or stored, said plainly (no fake confirmation of a
+ * booking, quote or transport).
+ */
+export const DemoNote: React.FC<{ onAgain?: () => void; text?: string }> = ({ onAgain, text }) => {
+  const t = useCopy();
+  const c = conceptCopy[t.lang].shared;
+  return (
+    <div className="cx-demonote" role="status">
+      <p>
+        <FiInfo aria-hidden="true" /> {text ?? c.demoSent}
+      </p>
+      {onAgain && (
+        <button type="button" onClick={onAgain}>
+          {c.again}
+        </button>
+      )}
+    </div>
+  );
+};
+
+/**
+ * The way from a demo to MambyLy's real contact wizard, clearly apart from the demo itself:
+ * a neutral band after the demo's own footer, with the website context already chosen.
+ */
+const WantSite: React.FC = () => {
+  const t = useCopy();
+  const c = conceptCopy[t.lang].shared;
+  return (
+    <aside className="cx-want" aria-label={c.wantSite}>
+      <p>{c.wantSite}</p>
+      <Link to={PATHS.contact[t.lang]} state={{ service: "site" }}>
+        {c.wantSiteCta} <FiArrowUpRight aria-hidden="true" />
+      </Link>
+    </aside>
+  );
+};
+
+/** Fullscreen wrapper of one demo: its own look, a skip link, the way to MambyLy and the exit bar. */
 export const ConceptFrame: React.FC<{ id: string; className?: string; children: React.ReactNode; tone?: "light" | "dark"; exit?: React.ReactNode }> = ({
   id,
   className = "",
@@ -73,6 +115,7 @@ export const ConceptFrame: React.FC<{ id: string; className?: string; children: 
         {t.common.skip}
       </a>
       {children}
+      <WantSite />
       {exit ?? <ExitBar tone={tone} />}
     </div>
   );

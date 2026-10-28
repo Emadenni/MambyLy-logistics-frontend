@@ -1,0 +1,63 @@
+{
+  "slug": "sam-berg",
+  "lang": "sv",
+  "demo": true,
+  "design": "velvet",
+  "name": "Sam Berg",
+  "role": "Konsult",
+  "tagline": "Människor · Idéer · Framsteg",
+  "theme": {
+    "front": "#141210",
+    "frontInk": "#efe7d6",
+    "accent": "#c9b48a",
+    "back": "#141210",
+    "backInk": "#efe7d6",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "sam@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Strategi och förändring"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Svart sammet",
+    "summary": "Varmt svart, champagne och spärrad text – stilla och exklusivt, utan glitter.",
+    "order": 2
+  },
+  "meta": {
+    "title": "Exempel: svart sammet visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen svart sammet som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Consultant",
+      "tagline": "People · Ideas · Progress",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Strategy and change"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Black velvet",
+        "summary": "Warm black, champagne and spaced type – quiet and exclusive, no glitter."
+      },
+      "meta": {
+        "title": "Example: black velvet business card | MambyLy Solutions",
+        "description": "A digital business card in the black velvet style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

@@ -97,7 +97,7 @@ function sitePages(): PageMeta[] {
   return pages;
 }
 
-/** The five website design concepts (fullscreen demos with fictitious content: not indexed). */
+/** The six website demos (fullscreen, fictitious content: not indexed). */
 function conceptPages(): PageMeta[] {
   return CONCEPTS.flatMap(({ id }) => {
     const alternates = { sv: conceptPath(id, "sv"), en: conceptPath(id, "en") };

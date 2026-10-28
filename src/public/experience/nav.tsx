@@ -32,7 +32,7 @@ export const GEOGRAPHY: Partial<Record<ScreenId, [number, number]>> = {
   services: [-2, 0],
   examples: [-1, 1],
   example: [-2, 1],
-  concept: [1, 1],
+  concept: [2, 0],
   about: [0, 1],
   jobs: [1, 1],
   privacy: [0, 2],

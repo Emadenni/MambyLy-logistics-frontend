@@ -1,0 +1,64 @@
+{
+  "slug": "alex-lind",
+  "lang": "sv",
+  "demo": true,
+  "design": "ivory",
+  "name": "Alex Lind",
+  "role": "Arkitekt",
+  "tagline": "Rum · Människor · Tillhörighet",
+  "theme": {
+    "front": "#f4efe3",
+    "frontInk": "#1f3a2f",
+    "accent": "#1f4d3a",
+    "back": "#1f3a2f",
+    "backInk": "#f4efe3",
+    "font": "serif",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "alex@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Bostäder och små offentliga rum"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Elfenben",
+    "summary": "Grovt bomullspapper, djupgrönt och ett asymmetriskt namn – lugnt och hantverksmässigt.",
+    "order": 1
+  },
+  "meta": {
+    "title": "Exempel: elfenben visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen elfenben som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Architect",
+      "tagline": "Spaces · People · Belonging",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Homes and small public spaces"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Ivory",
+        "summary": "Rough cotton paper, deep green and an asymmetric name – calm and crafted."
+      },
+      "meta": {
+        "title": "Example: ivory business card | MambyLy Solutions",
+        "description": "A digital business card in the ivory style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "slug": "jamie-lund",
+  "lang": "sv",
+  "demo": true,
+  "design": "expressive",
+  "name": "Jamie Lund",
+  "role": "Kreatör",
+  "tagline": "Varumärken · Kultur · Goda idéer",
+  "theme": {
+    "front": "#d9ccf6",
+    "frontInk": "#2a0f47",
+    "accent": "#c2410c",
+    "back": "#d9ccf6",
+    "backInk": "#2a0f47",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "jamie@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Varumärken och kampanjer"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Expressiv",
+    "summary": "Lavendel och orange i grafiska former – starkt, och med läsbar kontrast.",
+    "order": 6
+  },
+  "meta": {
+    "title": "Exempel: expressiv visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen expressiv som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Creative",
+      "tagline": "Brands · Culture · Good ideas",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Brands and campaigns"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Expressive",
+        "summary": "Lavender and orange in graphic shapes – bold, with readable contrast."
+      },
+      "meta": {
+        "title": "Example: expressive business card | MambyLy Solutions",
+        "description": "A digital business card in the expressive style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

@@ -272,8 +272,8 @@ const Hub: React.FC = () => {
                     <i />
                   </span>
                   <img
-                    src={media("preview-editorial-desktop", 640)}
-                    srcSet={`${media("preview-editorial-desktop", 640)} 640w, ${media("preview-editorial-desktop", 1280)} 1280w`}
+                    src={media("preview-architecture-desktop", 640)}
+                    srcSet={`${media("preview-architecture-desktop", 640)} 640w, ${media("preview-architecture-desktop", 1280)} 1280w`}
                     sizes="(min-width: 960px) 400px, 45vw"
                     alt=""
                     width={640}
@@ -282,7 +282,7 @@ const Hub: React.FC = () => {
                     decoding="async"
                   />
                 </div>
-                <img className="mp-hub__phone" src={media("preview-editorial-mobile", 390)} alt="" width={390} height={844} loading={isHome ? "eager" : "lazy"} decoding="async" />
+                <img className="mp-hub__phone" src={media("preview-restaurant-mobile", 390)} alt="" width={390} height={844} loading={isHome ? "eager" : "lazy"} decoding="async" />
               </div>
             </article>
 

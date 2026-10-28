@@ -1,9 +1,9 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
-import { FiArrowRight, FiEdit2, FiMessageCircle, FiMonitor, FiMail, FiUser, FiX } from "react-icons/fi";
+import { FiArrowRight, FiEdit2, FiMonitor, FiMail, FiUser, FiX } from "react-icons/fi";
 import { LuIdCard, LuLayers, LuSparkles } from "react-icons/lu";
-import useSubmitMessages from "../../../hooks/useSubmitMessage";
+import { submitContact, type SubmitFailure } from "../../contactSubmit";
 import { getCard } from "../../digital-card/registry";
 import { SERVICE_SUBJECTS, subjectFor, type ContactState, type ServiceKey } from "../../digital-card/service";
 import { publicContact } from "../../contact";
@@ -33,8 +33,9 @@ function composeMessage(a: WizardAnswers, lang: "sv" | "en") {
 /**
  * /kontaktaOss – three short questions. Each confirmed answer folds up into a summary at the top
  * (same layout element, animated) and stays editable. Sends through the existing hook
- * (useSubmitMessage → POST {VITE_API_BASE_URL}/clientsMessages with { name, email, subject,
- * textMessage }); the confirmation appears only after a positive response.
+ * (src/public/contactSubmit.ts → POST {VITE_API_BASE_URL}/clientsMessages with { name, email,
+ * subject, textMessage }); the confirmation appears only after the backend has confirmed that the
+ * request was stored ({ success: true }). On any failure the answers stay as they are.
  */
 const Contact: React.FC = () => {
   const t = useCopy();
@@ -43,9 +44,9 @@ const Contact: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
   const w = useWizard();
   const ids = useId();
-  const { isSubmitting, handleSubmit } = useSubmitMessages(false);
+  const [isSubmitting, setSubmitting] = useState(false);
   const [tried, setTried] = useState<Record<number, boolean>>({});
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<SubmitFailure | null>(null);
   const [done, setDone] = useState<{ name: string; email: string } | null>(null);
   const sending = useRef(false);
   const questionRef = useRef<HTMLHeadingElement>(null);
@@ -100,23 +101,23 @@ const Contact: React.FC = () => {
     }
     if (sending.current || isSubmitting) return;
     sending.current = true;
-    setFailed(false);
+    setSubmitting(true);
+    setFailed(null);
     const example = w.example ? getCard(w.example) : undefined;
-    const result = await handleSubmit({
+    const result = await submitContact({
       name: w.name.trim(),
       email: w.email.trim(),
       subject: subjectFor(w.service!, example?.demo ? example : undefined),
       message: composeMessage(w, t.lang),
-      file: null,
-      termsAccepted: w.consent,
     });
     sending.current = false;
-    if (result.success) {
+    setSubmitting(false);
+    if (result.ok) {
       setDone({ name: w.name.trim(), email: w.email.trim() });
       w.reset();
       setTried({});
     } else {
-      setFailed(true); // answers stay as they are; the visitor can try again
+      setFailed(result.reason); // answers stay as they are
     }
   };
 
@@ -361,10 +362,10 @@ const Contact: React.FC = () => {
                     </p>
                   )}
                   <button type="submit" className="mp-xbtn mp-xbtn--solid mp-xbtn--block" disabled={isSubmitting} aria-disabled={isSubmitting}>
-                    {isSubmitting ? c.sending : c.send} <FiArrowRight aria-hidden="true" />
+                    {isSubmitting ? c.sending : failed === "unknown" ? c.retryAnyway : c.send} <FiArrowRight aria-hidden="true" />
                   </button>
                   <div role="alert" className="mp-wizard__alert">
-                    {failed && <p className="mp-error mp-error--box">{c.sendError}</p>}
+                    {failed && <p className="mp-error mp-error--box">{c.sendErrors[failed]}</p>}
                   </div>
                 </motion.form>
               )}
@@ -376,10 +377,6 @@ const Contact: React.FC = () => {
           <span>{c.call}</span>
           <a href={`mailto:${publicContact.email}`}>
             <FiMail aria-hidden="true" /> {publicContact.email}
-          </a>
-          <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer">
-            <FiMessageCircle aria-hidden="true" /> {c.whatsapp}
-            <span className="mp-sr"> {t.common.opensNewTab}</span>
           </a>
         </aside>
       </div>

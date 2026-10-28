@@ -1,0 +1,64 @@
+{
+  "slug": "kim-dahl",
+  "lang": "sv",
+  "demo": true,
+  "design": "oxblood",
+  "name": "Kim Dahl",
+  "role": "Fotograf",
+  "tagline": "Människor · Platser · Berättelser",
+  "theme": {
+    "front": "#5e0f14",
+    "frontInk": "#f5ead8",
+    "accent": "#f5ead8",
+    "back": "#5e0f14",
+    "backInk": "#f5ead8",
+    "font": "serif",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "kim@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Porträtt och reportage"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Oxblodsröd",
+    "summary": "Borgogne och kräm, stor redaktionell typografi och rollen på sidan.",
+    "order": 4
+  },
+  "meta": {
+    "title": "Exempel: oxblodsröd visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen oxblodsröd som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Photographer",
+      "tagline": "People · Places · Stories",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Portraits and features"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Oxblood red",
+        "summary": "Burgundy and cream, large editorial type and the role on the side."
+      },
+      "meta": {
+        "title": "Example: oxblood red business card | MambyLy Solutions",
+        "description": "A digital business card in the oxblood red style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

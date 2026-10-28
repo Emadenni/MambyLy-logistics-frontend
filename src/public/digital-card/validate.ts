@@ -1,4 +1,4 @@
-import type { CardConfig, CardConfigRaw, CardLayout, CardSocialType } from "./types";
+import { CARD_DESIGNS, type CardConfig, type CardConfigRaw, type CardDesign, type CardLayout, type CardSocialType } from "./types";
 
 const LAYOUTS: CardLayout[] = ["classic", "craft", "split", "frame", "bold"];
 
@@ -80,6 +80,7 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBa
     slug: raw.slug,
     lang: raw.lang === "en" ? "en" : "sv",
     demo: raw.demo === true,
+    design: raw.demo === true && CARD_DESIGNS.includes(raw.design as CardDesign) ? raw.design : undefined,
     kind: raw.kind === "organization" ? "organization" : "person",
     name: text(raw.name)!,
     showNameOnFront: raw.showNameOnFront !== false,

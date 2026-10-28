@@ -79,11 +79,12 @@ const ConsentBanner: React.FC = () => {
     setStored(next);
     setOpen(false);
     setDetails(false);
+    window.dispatchEvent(new CustomEvent("cookieConsentSaved"));
     if (allowAnalytics && clarityId && !clarityStarted) {
       clarityStarted = true;
       clarity.init(clarityId);
     }
-    // Withdrawn: drop Clarity's cookies and reload so its script is no longer running.
+    // Withdrawn: drop Clarity's cookies and reload so its script (and Umami) is no longer running.
     if (!allowAnalytics && before?.analytics) {
       removeClarityCookies();
       window.location.reload();

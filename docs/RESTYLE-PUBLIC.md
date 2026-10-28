@@ -248,3 +248,70 @@ Asset: `MambyLy_Demo_Assets_v2/` (non pubblicato, in `.gitignore`); in `public/m
 - Nel wizard e nel messaggio di errore l'alternativa è l'e-mail `info@mambylysolutions.se` (stesso dominio del
   sito, già usata in policy e su `/card`) al posto del telefono. WhatsApp resta. Il biglietto `/card` mantiene i
   suoi dati reali.
+
+## Fase 7: contatti, sei siti, sei biglietti, desktop compatto
+
+Specifica: `MambyLy_Claudio_Final/` (non pubblicato, in `.gitignore`). Prevale sulle fasi precedenti dove diverge.
+Diagnosi dei contatti: `docs/CONTACT-DELIVERY.md`.
+
+### Contatti (`src/public/contactSubmit.ts`)
+
+- Un solo adattatore per i contatti pubblici (wizard; web, biglietto e richieste generiche). Stesso endpoint e
+  payload dell'hook esistente: `POST {VITE_API_BASE_URL}/clientsMessages` con `{ name, email, subject, textMessage }`.
+  `useSubmitMessage` resta invariato per `/jobMessages` e per il vecchio `ContactForm`.
+- Successo solo con `{ success: true }` (il backend risponde 201 `{ success, message, messageId }`); HTTP 200 senza
+  `success: true` o con corpo non JSON è un errore. Esiti distinti: `invalid` (400/422), `busy` (429), `server`,
+  `offline` (nessuna richiesta partita), `unknown` (timeout 15 s o richiesta respinta: forse arrivata; il testo
+  invita a scrivere per e-mail invece di reinviare, il pulsante diventa "Skicka ändå igen").
+- Risposte conservate su ogni errore, doppio invio bloccato, nessun dato in URL, analytics o localStorage.
+- Formspree preparato e **inattivo**: si attiva solo con `VITE_CONTACT_PROVIDER=formspree` e un
+  `VITE_FORMSPREE_ENDPOINT` reale `https://formspree.io/f/<id>`. Un provider per richiesta, nessun fallback.
+  Contratto dalla libreria ufficiale `@formspree/core` 4.0.0: `Accept: application/json`, successo con `next`,
+  errori in `errors[]`/`error`. Se si attiva, aggiornare l'informativa (fornitore e flusso dei dati).
+- Test: `src/__tests__/contactSubmit.test.ts` (contratto, 400/401/403/422/429/500, 200 con errore, non JSON,
+  offline, timeout, selezione del provider). Telefono e WhatsApp tolti dal percorso pubblico (resta il pulsante
+  WhatsApp sulle pagine legacy: login, admin, Sido Butik). `/card` mantiene i suoi dati.
+
+### Sei siti (`src/public/experience/concepts/`)
+
+| Rotta SV · EN | Componente | Note |
+|---|---|---|
+| `restaurang` · `restaurant` | `Restaurant.tsx` | Menu un piatto alla volta (7 piatti, una sola foto), allergeni in disclosure, prenotazione e "Hitta hit" dimostrative |
+| `fotograf` · `photographer` | `Photographer.tsx` | Provino come navigazione, serie a schermo intero (frecce, tastiera, Esc), conteggi reali (4 foto) |
+| `transport` · `transport` | `Logistics.tsx` | Percorso ritiro → consegna che mostra i luoghi digitati, riepilogo senza prezzo né prenotazione, link in basso senza hamburger |
+| `maleri` · `painting` | `Painter.tsx` | Prima/dopo con `input type=range` nativo; "Fasad" e "Tapetsering" senza foto finte |
+| `arkitektur` · `architecture` | `Architecture.tsx` | Demo editoriale conservata (planimetria, stanze, materiali), link sempre visibili invece dell'hamburger |
+| `belysning` · `lighting` | `Lighting.tsx` | Demo minimal conservata senza borsa né acquisto: Tänd/Släck, taglia, luce, collezione, "Fråga om produkten" |
+
+- Vecchie slug: `redaktionell`/`editorial` → arkitektur, `minimal` → belysning, le altre → `/webbplatser`
+  (`RETIRED_CONCEPTS` in `routes.ts`).
+- Prima/dopo dell'imbianchino: lo studio del pacchetto non è allineato al pixel. Il "dopo" è ricavato dalla metà
+  "prima" (stessa foto) ricolorando solo le pareti con una maschera (poligoni + colore) e un moltiplicatore per
+  canale misurato sullo studio; dichiarato in pagina come simulazione di design.
+- Ogni demo: `ConceptFrame` con `DemoNote` (nessun invio) e `cx-want` ("Vill du ha en sådan här webbplats?" →
+  wizard vero con contesto `site`), barra di uscita, SV/EN, `noindex`.
+- Galleria: `Carousel.tsx` (scroll nativo con snap, frecce, indice 01/06, posizione ricordata nella scheda).
+  Anteprime `preview-<id>-{mobile-390,desktop-640,desktop-1280}.webp` = screenshot reali delle demo (motion ridotto,
+  barra di uscita nascosta). Rigenerarle se una demo cambia.
+
+### Sei biglietti (`digital-card/StyleCard.tsx`, `styles/_style-cards.scss`)
+
+- `cards/<slug>/card.json` con il nuovo campo `design`: alex-lind (ivory), sam-berg (velvet), robin-ek (white),
+  kim-dahl (oxblood), charlie-holm (graphite), jamie-lund (expressive). Persone fittizie, `@example.com`, nessun
+  telefono. Vecchie slug: professionell → alex-lind, redaktionell → kim-dahl, expressiv → jamie-lund.
+- Materiali solo CSS/SVG (una grana SVG leggera), dimensioni in `em` scalate con container query: la stessa faccia
+  serve per la galleria (`mini`) e per la pagina intera.
+- Funzioni: vCard costruita dai dati del biglietto, condivisione Web Share con copia del link come alternativa,
+  QR generato dall'URL della pagina del biglietto nella lingua corrente, "Mer" in disclosure, e-mail che spiega
+  la demo. Il motore a doppia faccia (`DigitalCard`/`CardExperience`) resta per `/card` e i biglietti reali.
+
+### Layout
+
+- Desktop: la stessa colonna centrale del telefono (`--x-frame: 600px`); rimossi i layout a due colonne di hub,
+  metodo, biglietti e `/card`. Su schermi desktop alti meno di 880px Utforska usa 440px.
+- Footer: disclosure "Info & integritet" chiusa di default (Esc chiude e riporta il focus).
+- Vuoto sotto il footer: durante una transizione il layer uscente condivideva la cella della griglia e teneva la
+  pagina alta quanto la schermata precedente (misurato: da `/webbplatser` a Utforska la pagina restava alta per
+  ~460 ms). Ora il layer uscente è fuori flusso e ritagliato (`.mp-stage { overflow: clip }`), e la posizione di
+  scroll da ripristinare con Indietro viene letta prima della modifica del DOM.
+- Umami parte solo con il consenso alle statistiche (come Clarity).

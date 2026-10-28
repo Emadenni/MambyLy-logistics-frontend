@@ -1,0 +1,63 @@
+{
+  "slug": "charlie-holm",
+  "lang": "sv",
+  "demo": true,
+  "design": "graphite",
+  "name": "Charlie Holm",
+  "role": "Ingenjör",
+  "tagline": "System · Människor · En ljusare morgondag",
+  "theme": {
+    "front": "#2b2d30",
+    "frontInk": "#eceef0",
+    "accent": "#b9c2cb",
+    "back": "#2b2d30",
+    "backInk": "#eceef0",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "charlie@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Energisystem"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Grafit",
+    "summary": "Satinerad grafit, tekniskt rutnät och små etiketter i monospace.",
+    "order": 5
+  },
+  "meta": {
+    "title": "Exempel: grafit visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen grafit som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Engineer",
+      "tagline": "Systems · People · A brighter tomorrow",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Energy systems"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Graphite",
+        "summary": "Satin graphite, a technical grid and small monospace labels."
+      },
+      "meta": {
+        "title": "Example: graphite business card | MambyLy Solutions",
+        "description": "A digital business card in the graphite style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

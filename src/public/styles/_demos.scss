@@ -1,0 +1,1631 @@
+// The four newer website demos (src/public/experience/concepts: Restaurant, Photographer,
+// Logistics, Painter) and the parts every demo shares (demo note, the way to MambyLy).
+// Each demo has its own type, colours and structure; all hang under .mp-concept.
+
+$desk: 960px;
+
+@mixin desk {
+  @media (min-width: $desk) {
+    @content;
+  }
+}
+@mixin reduce {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+@mixin hidden-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+@mixin demo-field($line, $bg: #fff) {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid $line;
+  border-radius: 10px;
+  background: $bg;
+  color: inherit;
+  font: 400 16px/1.4 var(--mp-font);
+}
+
+@mixin styles {
+  // -------------------------------------------------------------------------------------------
+  // Shared by all six demos
+  // -------------------------------------------------------------------------------------------
+
+  // Answer of a demo form: nothing was sent.
+  .cx-demonote {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(127, 127, 127, 0.12);
+    font-size: 15px;
+    line-height: 1.5;
+
+    p {
+      display: flex;
+      gap: 8px;
+      margin: 0;
+
+      svg {
+        flex: none;
+        margin-top: 4px;
+      }
+    }
+
+    button {
+      justify-self: start;
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      background: transparent;
+      font-size: 14px !important;
+    }
+  }
+
+  // The way to MambyLy's real contact wizard: neutral, after the demo's own footer.
+  .cx-want {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 14px;
+    margin: 8px auto 0;
+    padding: 16px var(--cx-g) 18px;
+    border-top: 1px solid rgba(127, 127, 127, 0.25);
+    font: 400 15px/1.4 var(--mp-font);
+    text-align: center;
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: #103b35;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        background: #0a2a25;
+      }
+    }
+  }
+
+  // Centre column of the phone-first demos on wide screens.
+  %cx-column {
+    width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  // -------------------------------------------------------------------------------------------
+  // Restaurant – the menu is the site
+  // -------------------------------------------------------------------------------------------
+
+  .cx--restaurant {
+    --re-bg: #f8f1e4;
+    --re-ink: #241a14;
+    --re-red: #a3161a;
+    --re-soft: #6b5a4d;
+    background: var(--re-bg);
+    color: var(--re-ink);
+    font-family: var(--mp-font);
+
+    .cx-want {
+      @extend %cx-column;
+    }
+  }
+
+  .cx-re__head {
+    @extend %cx-column;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 0 var(--cx-g);
+    font-size: 12.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .cx-re__name {
+    color: var(--re-red);
+    font: 600 13px/1 var(--x-serif);
+    letter-spacing: 0.08em;
+  }
+
+  .cx-re__main {
+    @extend %cx-column;
+  }
+
+  .cx-re__stage {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    padding-bottom: 28px;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .cx-re__catword {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    color: var(--re-red);
+    // the word always fits the width: size follows its number of letters
+    font: 800 min(19vw, 104px, calc(min(100vw, 560px) * 1.28 / var(--len, 8))) / 0.86 var(--x-serif);
+    letter-spacing: -0.045em;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: scaleY(1.45);
+    transform-origin: top;
+  }
+
+  .cx-re__plate {
+    position: relative;
+    z-index: 1;
+    width: min(84%, 380px);
+    margin-top: clamp(48px, 13vw, 76px);
+    aspect-ratio: 1;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 42%;
+      border-radius: 50%;
+      box-shadow: 0 18px 40px rgba(60, 30, 10, 0.22);
+    }
+  }
+
+  .cx-re__noimg {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 6px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, #fffaf0 0 52%, #efe3cf 53% 55%, #fbf4e6 56% 100%);
+    box-shadow: 0 18px 40px rgba(60, 30, 10, 0.16);
+
+    span {
+      color: var(--re-red);
+      font: 400 clamp(64px, 20vw, 110px) / 1 var(--x-serif);
+    }
+
+    small {
+      color: var(--re-soft);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+  }
+
+  .cx-re__book {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: -26px;
+    min-height: 52px;
+    padding: 0 30px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--re-red);
+    color: #fff !important;
+    font: 400 19px/1 var(--x-serif) !important;
+    box-shadow: 0 10px 24px rgba(163, 22, 26, 0.3);
+
+    &:hover {
+      background: #861115;
+    }
+  }
+
+  .cx-re__menu {
+    display: grid;
+    justify-items: center;
+    padding: 0 var(--cx-g);
+    text-align: center;
+  }
+
+  .cx-re__rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin: 0 0 10px !important;
+    color: var(--re-ink);
+    font: 500 12px/1 var(--mp-font) !important;
+    letter-spacing: 0.3em !important;
+    text-transform: uppercase;
+
+    &::before,
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(36, 26, 20, 0.35);
+    }
+  }
+
+  .cx-re__dish {
+    h3 {
+      margin: 0;
+      font: 400 clamp(34px, 10vw, 46px) / 1.05 var(--x-serif) !important;
+      letter-spacing: -0.02em !important;
+    }
+
+    p {
+      margin: 6px 0 0 !important;
+      font-size: 16px;
+    }
+  }
+
+  .cx-re__price {
+    font: 400 20px/1.2 var(--x-serif);
+  }
+
+  .cx-re__info {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 4px;
+    padding: 0 4px;
+    border: 0;
+    border-bottom: 1px solid currentColor;
+    background: none;
+    font-size: 14px !important;
+  }
+
+  .cx-re__infobox {
+    max-width: 30em;
+    margin-top: 10px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.65);
+    font-size: 14.5px;
+    line-height: 1.55;
+    text-align: left;
+
+    p {
+      margin: 0 0 6px !important;
+    }
+  }
+
+  .cx-re__small {
+    color: var(--re-soft) !important;
+    font-size: 13px !important;
+  }
+
+  .cx-re__pager {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 14px;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 50%;
+      background: #f0e1cb;
+      color: var(--re-red);
+      font-size: 22px;
+
+      &:hover {
+        background: #ead2b1;
+      }
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+    }
+  }
+
+  .cx-re__hint {
+    margin: 6px 0 0 !important;
+    color: var(--re-soft) !important;
+    font-size: 12.5px;
+  }
+
+  .cx-re__cats {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 14px;
+    border-top: 1px solid rgba(163, 22, 26, 0.25);
+
+    button {
+      flex: 1;
+      min-height: 52px;
+      border: 0;
+      background: none;
+      font: 400 17px/1 var(--x-serif) !important;
+
+      &[aria-current="true"] {
+        color: var(--re-red);
+        text-decoration: underline;
+        text-underline-offset: 8px;
+        text-decoration-thickness: 2px;
+      }
+    }
+  }
+
+  .cx-re__panel {
+    display: grid;
+    gap: 10px;
+    margin: 18px var(--cx-g) 0;
+    padding: 18px;
+    border-radius: 16px;
+    background: #fffaf2;
+    box-shadow: 0 0 0 1px rgba(163, 22, 26, 0.18);
+    scroll-margin-top: 16px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    h2 {
+      margin: 0;
+      font: 400 26px/1.1 var(--x-serif) !important;
+    }
+
+    h3 {
+      margin: 6px 0 0;
+      font: 600 13px/1.2 var(--mp-font) !important;
+      letter-spacing: 0.14em !important;
+      text-transform: uppercase;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .cx-re__panelhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: #f0e1cb;
+      font-size: 18px;
+    }
+  }
+
+  .cx-re__form {
+    display: grid;
+    gap: 6px;
+
+    label,
+    .cx-re__label {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    input,
+    select {
+      @include demo-field(rgba(36, 26, 20, 0.3));
+    }
+  }
+
+  .cx-re__stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(36, 26, 20, 0.3);
+      border-radius: 50%;
+      background: #fff;
+
+      &:disabled {
+        opacity: 0.35;
+      }
+    }
+
+    output {
+      min-width: 24px;
+      font-size: 18px;
+      text-align: center;
+    }
+  }
+
+  .cx-re__err {
+    min-height: 1px;
+    margin: 0;
+    color: var(--re-red) !important;
+    font-size: 14px;
+  }
+
+  .cx-re__send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--re-red);
+    color: #fff !important;
+    font: 400 18px/1 var(--x-serif) !important;
+  }
+
+  .cx-re__find {
+    @extend %cx-column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 60px;
+    margin-top: 22px;
+    border: 0;
+    background: var(--re-red);
+    color: #fff !important;
+    font: 400 21px/1 var(--x-serif) !important;
+
+    &:hover {
+      background: #861115;
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------
+  // Photographer – the contact sheet is the navigation
+  // -------------------------------------------------------------------------------------------
+
+  .cx--photographer {
+    --ph-bg: #0e0e0d;
+    --ph-ink: #f1eee6;
+    --ph-soft: #a8a59c;
+    --ph-accent: #e3e27a;
+    background: var(--ph-bg);
+    color: var(--ph-ink);
+    font-family: var(--mp-font);
+
+    .cx-want {
+      @extend %cx-column;
+
+      a {
+        background: var(--ph-ink);
+        color: #0e0e0d;
+      }
+    }
+
+    :where(button, a, input, label, select, textarea, [tabindex]):focus-visible {
+      outline-color: var(--ph-accent);
+    }
+  }
+
+  .cx-ph__head {
+    @extend %cx-column;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    padding: 0 var(--cx-g);
+    border-bottom: 1px solid rgba(241, 238, 230, 0.18);
+    font-size: 12.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .cx-ph__main {
+    @extend %cx-column;
+    padding: 18px var(--cx-g) 0;
+
+    h1 {
+      margin: 0;
+      font: 400 clamp(27px, 7.6vw, 36px) / 1.12 var(--mp-font) !important;
+      letter-spacing: -0.02em !important;
+    }
+  }
+
+  .cx-ph__lead {
+    margin: 8px 0 0 !important;
+    color: var(--ph-soft) !important;
+    font-size: 14.5px;
+  }
+
+  .cx-ph__filters {
+    display: flex;
+    gap: 6px;
+    margin: 16px calc(-1 * var(--cx-g)) 14px;
+    padding: 0 var(--cx-g);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: none;
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid rgba(241, 238, 230, 0.28);
+      border-radius: 999px;
+      background: transparent;
+      font-size: 14px !important;
+
+      span {
+        color: var(--ph-soft);
+        font-size: 12px;
+      }
+
+      &[aria-pressed="true"] {
+        border-color: var(--ph-accent);
+        color: var(--ph-accent) !important;
+
+        span {
+          color: inherit;
+        }
+      }
+    }
+  }
+
+  .cx-ph__sheet {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // The first picture leads when the whole sheet is shown.
+    &--4 li:first-child {
+      grid-column: span 2;
+    }
+
+    &--1 li {
+      grid-column: span 2;
+    }
+  }
+
+  .cx-ph__tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 1px solid rgba(241, 238, 230, 0.16);
+    background: #000;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: cover;
+      transition: transform 0.5s ease, opacity 0.3s ease;
+    }
+
+    &:hover img {
+      transform: scale(1.03);
+    }
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--ph-accent);
+      outline-offset: -3px;
+    }
+
+    @include reduce {
+      img {
+        transition: none;
+      }
+
+      &:hover img {
+        transform: none;
+      }
+    }
+  }
+
+  .cx-ph__sheet--4 li:first-child .cx-ph__tile img {
+    aspect-ratio: 4 / 3;
+    object-position: 50% 30%;
+  }
+
+  .cx-ph__cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 10px;
+    padding: 26px 12px 10px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+    color: #fff;
+    font-size: 13.5px;
+    text-align: left;
+  }
+
+  .cx-ph__open {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--ph-accent);
+  }
+
+  .cx-ph__panel {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid rgba(241, 238, 230, 0.2);
+    scroll-margin-top: 16px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    h2 {
+      margin: 0;
+      font: 400 22px/1.2 var(--mp-font) !important;
+    }
+
+    p {
+      margin: 0;
+      color: var(--ph-soft) !important;
+      line-height: 1.6;
+    }
+  }
+
+  .cx-ph__small {
+    font-size: 13.5px;
+  }
+
+  .cx-ph__form {
+    display: grid;
+    gap: 6px;
+
+    fieldset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+
+      legend {
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+
+      label {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid rgba(241, 238, 230, 0.28);
+        border-radius: 999px;
+        cursor: pointer;
+
+        &.is-on {
+          border-color: var(--ph-accent);
+          color: var(--ph-accent);
+        }
+
+        &:has(input:focus-visible) {
+          outline: 3px solid var(--ph-accent);
+          outline-offset: 2px;
+        }
+
+        input {
+          @include hidden-input;
+        }
+      }
+    }
+
+    > label {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    input:not([type="radio"]),
+    select {
+      @include demo-field(rgba(241, 238, 230, 0.3), #1a1a18);
+      border-radius: 0;
+      color-scheme: dark;
+    }
+  }
+
+  .cx-ph__err {
+    min-height: 1px;
+    color: #ffb4a8 !important;
+    font-size: 14px;
+  }
+
+  .cx-ph__send {
+    min-height: 50px;
+    border: 0;
+    background: var(--ph-accent);
+    color: #0e0e0d !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+  }
+
+  .cx-ph__bar {
+    @extend %cx-column;
+    display: flex;
+    gap: 4px;
+    margin-top: 20px;
+    padding: 0 var(--cx-g);
+    border-top: 1px solid rgba(241, 238, 230, 0.18);
+
+    button {
+      min-height: 54px;
+      padding: 0 8px;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: none;
+      font-size: 15px !important;
+
+      &[aria-pressed="true"],
+      &[aria-expanded="true"] {
+        border-bottom-color: var(--ph-accent);
+      }
+    }
+  }
+
+  .cx-ph__booknav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    color: var(--ph-accent) !important;
+  }
+
+  .cx-ph__viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: rgba(8, 8, 7, 0.97);
+    color: var(--ph-ink);
+
+    figure {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      min-height: 0;
+      margin: 0;
+      padding: 0 16px;
+
+      img {
+        max-width: min(100%, 720px);
+        max-height: calc(100dvh - 190px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+
+    figcaption {
+      color: var(--ph-soft);
+      font-size: 14px;
+    }
+  }
+
+  .cx-ph__vhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+    font-size: 14px;
+
+    p {
+      margin: 0;
+    }
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(241, 238, 230, 0.3);
+      border-radius: 50%;
+      background: transparent;
+      font-size: 20px;
+    }
+  }
+
+  .cx-ph__vnav {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 12px 16px calc(18px + env(safe-area-inset-bottom));
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border: 1px solid rgba(241, 238, 230, 0.3);
+      border-radius: 50%;
+      background: transparent;
+      font-size: 24px;
+
+      &:hover {
+        border-color: var(--ph-accent);
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------
+  // Transport & logistics – the journey of the shipment leads
+  // -------------------------------------------------------------------------------------------
+
+  .cx--logistics {
+    --lo-bg: #f6f4ef;
+    --lo-ink: #0f1d3a;
+    --lo-soft: #4d5870;
+    --lo-orange: #c2410c;
+    --lo-line: #f26a21;
+    background: var(--lo-bg);
+    color: var(--lo-ink);
+    font-family: var(--mp-font);
+
+    .cx-want {
+      @extend %cx-column;
+    }
+  }
+
+  .cx-lo__head {
+    @extend %cx-column;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    padding: 0 var(--cx-g);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .cx-lo__main {
+    @extend %cx-column;
+    padding: 0 var(--cx-g);
+
+    h1 {
+      margin: 0;
+      font: 700 clamp(34px, 10vw, 46px) / 1.02 var(--x-serif) !important;
+      letter-spacing: -0.03em !important;
+    }
+  }
+
+  .cx-lo__route {
+    position: relative;
+    margin: 16px 0 0;
+    height: clamp(150px, 42vw, 210px);
+    border-radius: 18px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 40% 60%;
+    }
+
+    svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(246, 244, 239, 0.15), rgba(246, 244, 239, 0.05));
+    }
+  }
+
+  .cx-lo__path,
+  .cx-lo__pathon {
+    fill: none;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .cx-lo__path {
+    stroke: rgba(255, 255, 255, 0.85);
+    stroke-width: 5;
+    stroke-dasharray: 2 9;
+  }
+
+  .cx-lo__pathon {
+    stroke: var(--lo-line);
+    stroke-width: 5;
+  }
+
+  .cx-lo__pin {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 46%;
+    padding: 6px 12px 6px 8px;
+    border: 2px solid var(--lo-line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--lo-ink);
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    i {
+      flex: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--lo-line);
+    }
+
+    &--from {
+      top: 12px;
+      left: 12px;
+    }
+
+    &--to {
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+
+  .cx-lo__card {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow:
+      0 0 0 1px rgba(15, 29, 58, 0.08),
+      0 12px 30px rgba(15, 29, 58, 0.08);
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+  }
+
+  .cx-lo__field {
+    display: grid;
+    grid-template-columns: 26px 1fr;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 4px;
+
+    svg {
+      grid-row: span 2;
+      font-size: 22px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input {
+      @include demo-field(#c9cdd6);
+    }
+  }
+
+  .cx-lo__loads {
+    display: flex;
+    gap: 8px;
+    margin: 4px 0 0;
+    padding: 0;
+    border: 0;
+
+    label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+      min-height: 48px;
+      border: 1px solid #c9cdd6;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+
+      input {
+        @include hidden-input;
+      }
+
+      span {
+        display: grid;
+        font-size: 18px;
+      }
+
+      &.is-on {
+        border: 2px solid var(--lo-orange);
+        color: var(--lo-orange);
+      }
+
+      &:has(input:focus-visible) {
+        outline: 3px solid var(--lo-ink);
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  .cx-lo__err {
+    min-height: 1px;
+    margin: 0;
+    color: #b42318 !important;
+    font-size: 14px;
+  }
+
+  .cx-lo__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--lo-orange);
+    color: #fff !important;
+    font-size: 16.5px !important;
+    font-weight: 600 !important;
+
+    &:hover {
+      background: #9a3412;
+    }
+  }
+
+  .cx-lo__summary {
+    display: grid;
+    gap: 10px;
+
+    h2 {
+      margin: 0;
+      font: 700 24px/1.1 var(--x-serif) !important;
+    }
+  }
+
+  .cx-lo__sumline {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .cx-lo__note {
+    margin: 0;
+    color: var(--lo-soft) !important;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .cx-lo__sumact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    > button:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 54px;
+      padding: 0 18px;
+      border: 1px solid #c9cdd6;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .cx-lo__cta {
+      flex: 1;
+    }
+  }
+
+  .cx-lo__tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 14px 0 0 !important;
+    font-size: 14.5px;
+  }
+
+  .cx-lo__panel {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 0 0 1px rgba(15, 29, 58, 0.08);
+    scroll-margin-top: 16px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    ul {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      display: grid;
+      gap: 2px;
+    }
+
+    span,
+    p {
+      margin: 0;
+      color: var(--lo-soft);
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+  }
+
+  .cx-lo__bar {
+    @extend %cx-column;
+    display: flex;
+    margin-top: 16px;
+    border-top: 1px solid rgba(15, 29, 58, 0.15);
+
+    button {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      flex: 1;
+      min-height: 64px;
+      padding: 8px 4px;
+      border: 0;
+      background: none;
+      font-size: 13.5px !important;
+
+      span {
+        font-size: 22px;
+      }
+
+      &[aria-expanded="true"] {
+        color: var(--lo-orange);
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------
+  // Painting & decorating – the visible result leads
+  // -------------------------------------------------------------------------------------------
+
+  .cx--painter {
+    --pa-bg: #f6f1ea;
+    --pa-ink: #2d0f26;
+    --pa-plum: #3d1530;
+    --pa-terra: #a5452f;
+    --pa-soft: #6a5560;
+    background: var(--pa-bg);
+    color: var(--pa-ink);
+    font-family: var(--mp-font);
+
+    .cx-want {
+      @extend %cx-column;
+    }
+  }
+
+  .cx-pa__head {
+    @extend %cx-column;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 0 var(--cx-g);
+    font-size: 12.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .cx-pa__contact {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    border-bottom: 2px solid var(--pa-terra);
+    background: none;
+    font-size: 14px !important;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .cx-pa__main {
+    @extend %cx-column;
+    padding: 0 var(--cx-g);
+
+    h1 {
+      position: relative;
+      margin: 6px 0 16px;
+      color: var(--pa-plum);
+      font: 400 clamp(40px, 12vw, 58px) / 1 var(--x-serif) !important;
+      letter-spacing: -0.03em !important;
+
+      em {
+        display: block;
+        color: var(--pa-terra);
+        font-style: normal;
+      }
+
+      // a sober brush stroke, drawn in CSS
+      &::after {
+        content: "";
+        position: absolute;
+        top: -6px;
+        right: -8px;
+        width: 64px;
+        height: 110px;
+        border-radius: 40% 60% 30% 70%;
+        background: repeating-linear-gradient(100deg, rgba(196, 120, 96, 0.55) 0 3px, rgba(196, 120, 96, 0.25) 3px 6px);
+        transform: rotate(18deg);
+        filter: blur(0.3px);
+        opacity: 0.8;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .cx-pa__view {
+    position: relative;
+    margin: 0 calc(-1 * var(--cx-g));
+  }
+
+  .cx-pa__cmp {
+    --pos: 50%;
+    position: relative;
+    height: clamp(320px, 86vw, 470px);
+    overflow: hidden;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .cx-pa__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 52%;
+
+    &--after {
+      clip-path: inset(0 0 0 var(--pos));
+    }
+  }
+
+  .cx-pa__tag {
+    position: absolute;
+    top: 14px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--pa-ink);
+    font-size: 13px;
+
+    &--before {
+      left: 14px;
+    }
+
+    &--after {
+      right: 14px;
+    }
+  }
+
+  .cx-pa__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 2px;
+    margin-left: -1px;
+    background: #fff;
+    pointer-events: none;
+  }
+
+  .cx-pa__knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    color: var(--pa-ink);
+    font-size: 16px;
+  }
+
+  // The native range covers the picture: drag anywhere, arrows and screen readers work.
+  .cx-pa__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    -webkit-appearance: none;
+    appearance: none;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 48px;
+      height: 100%;
+    }
+
+    &::-moz-range-thumb {
+      width: 48px;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .cx-pa__cmp:has(.cx-pa__range:focus-visible) .cx-pa__knob {
+    outline: 3px solid var(--pa-plum);
+    outline-offset: 3px;
+  }
+
+  .cx-pa__cmpctl {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+
+    button {
+      min-width: 44px;
+      min-height: 40px;
+      padding: 0 12px;
+      border: 1px solid rgba(61, 21, 48, 0.25);
+      border-radius: 999px;
+      background: transparent;
+      font-size: 13.5px !important;
+
+      &[aria-pressed="true"] {
+        border-color: var(--pa-plum);
+        background: var(--pa-plum);
+        color: #fff !important;
+      }
+    }
+  }
+
+  .cx-pa__text {
+    display: grid;
+    align-content: center;
+    gap: 12px;
+    min-height: clamp(320px, 86vw, 470px);
+    padding: 24px var(--cx-g);
+    background: repeating-linear-gradient(110deg, #efe5da 0 14px, #f3ebe2 14px 28px);
+
+    ol {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding-left: 20px;
+      font-size: 16px;
+    }
+  }
+
+  .cx-pa__big {
+    margin: 0;
+    color: var(--pa-terra);
+    font: 400 clamp(38px, 11vw, 52px) / 1 var(--x-serif);
+  }
+
+  .cx-pa__small {
+    margin: 6px 0 0 !important;
+    color: var(--pa-soft) !important;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cx-pa__sim {
+    text-align: center;
+  }
+
+  .cx-pa__tabs {
+    display: flex;
+    margin-top: 14px;
+    border-bottom: 1px solid rgba(61, 21, 48, 0.2);
+
+    button {
+      flex: 1;
+      min-height: 50px;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: none;
+      font: 400 17px/1 var(--x-serif) !important;
+
+      &[aria-pressed="true"] {
+        border-bottom-color: var(--pa-plum);
+        color: var(--pa-plum);
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  .cx-pa__lead {
+    margin: 14px 0 !important;
+    font: 400 18px/1.4 var(--x-serif);
+    text-align: center;
+  }
+
+  .cx-pa__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 56px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--pa-plum);
+    color: #fff !important;
+    font: 400 19px/1 var(--x-serif) !important;
+
+    &:hover {
+      background: #2a0d20;
+    }
+  }
+
+  .cx-pa__more {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin: 6px auto 0;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid var(--pa-terra);
+    background: none;
+    font-size: 15px !important;
+  }
+
+  .cx-pa__panel {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #fffaf5;
+    box-shadow: 0 0 0 1px rgba(61, 21, 48, 0.12);
+    scroll-margin-top: 16px;
+
+    &[hidden] {
+      display: none;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--pa-plum);
+      font: 400 25px/1.1 var(--x-serif) !important;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .cx-pa__form {
+    display: grid;
+    gap: 6px;
+
+    label {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      @include demo-field(rgba(61, 21, 48, 0.25));
+    }
+
+    .cx-pa__cta {
+      margin-top: 6px;
+    }
+  }
+
+  .cx-pa__err {
+    min-height: 1px;
+    color: #a3161a !important;
+    font-size: 14px;
+  }
+
+  .cx-pa__work,
+  .cx-pa__steps {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .cx-pa__work {
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(61, 21, 48, 0.12);
+    }
+
+    span {
+      color: var(--pa-soft);
+      font-size: 13.5px;
+    }
+  }
+
+  .cx-pa__links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+
+    button {
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid currentColor;
+      background: none;
+      font-size: 15px !important;
+    }
+  }
+}

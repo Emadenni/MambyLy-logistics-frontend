@@ -10,6 +10,8 @@
 @use "./digital-card" as dc;
 @use "./experience" as x;
 @use "./concepts" as cx;
+@use "./demos" as demos;
+@use "./style-cards" as sc;
 
 $bp-mobile: 720px;
 $bp-tablet: 920px;
@@ -2099,6 +2101,8 @@ body:has(.mambyly-public) {
   @include dc.styles;
   @include x.styles;
   @include cx.styles;
+  @include demos.styles;
+  @include sc.styles;
 }
 
 // ---------------------------------------------------------------------------------------------

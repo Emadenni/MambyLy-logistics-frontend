@@ -108,6 +108,10 @@ const Stage: React.FC = () => {
   const withNav = hasQuickNav(resolved.screen);
 
   const last = useRef<{ key: string; locKey: string; screen: Resolved["screen"] } | null>(null);
+  // Scroll position of the screen being left, read during render, before the DOM changes: once the
+  // leaving screen is out of the flow the page may get shorter and the browser clamps the scroll.
+  const leftAt = useRef(0);
+  const currentKey = useRef(location.key);
   const first = last.current === null;
 
   // Computed during render, read by the leaving layer's exit variant.
@@ -117,6 +121,7 @@ const Stage: React.FC = () => {
     const vh = typeof window === "undefined" ? 800 : window.innerHeight;
     if (!prev || prev.key === key) return { enter: "fade", reduce, fix: 0, vw, vh };
     const from = window.scrollY;
+    leftAt.current = from;
     const to = navType === "POP" ? scrolls.get(location.key) ?? 0 : 0;
     return { enter: enterFrom(prev.screen, resolved.screen), reduce, fix: to - from, vw, vh };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,9 +137,10 @@ const Stage: React.FC = () => {
   useLayoutEffect(() => {
     const prev = last.current;
     last.current = { key, locKey: location.key, screen: resolved.screen };
+    currentKey.current = location.key;
     recordVisit(location.key, resolved.screen, navType);
     if (!prev || prev.key === key) return;
-    scrolls.set(prev.locKey, window.scrollY);
+    scrolls.set(prev.locKey, leftAt.current);
     const to = navType === "POP" ? scrolls.get(location.key) ?? 0 : 0;
     window.scrollTo({ top: to, left: 0, behavior: "instant" as ScrollBehavior });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +148,8 @@ const Stage: React.FC = () => {
 
   // Remember the position of the current entry too (for Forward after Back).
   useEffect(() => {
-    const save = () => scrolls.set(location.key, window.scrollY);
+    // Only for the entry on screen: a clamped scroll during a change must not overwrite the old one.
+    const save = () => currentKey.current === location.key && scrolls.set(location.key, window.scrollY);
     window.addEventListener("scroll", save, { passive: true });
     return () => window.removeEventListener("scroll", save);
   }, [location.key]);

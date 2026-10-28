@@ -29,11 +29,17 @@ export type CardTheme = {
 
 export type CardLayout = "classic" | "craft" | "split" | "frame" | "bold";
 
+/** The six premium demo designs (StyleCard.tsx): each has its own structure, type and material. */
+export const CARD_DESIGNS = ["ivory", "velvet", "white", "oxblood", "graphite", "expressive"] as const;
+export type CardDesign = (typeof CARD_DESIGNS)[number];
+
 export type CardConfigRaw = {
   slug: string;
   lang?: "sv" | "en";
   /** Demo cards use fictitious data: contact actions only show a notice. */
   demo?: boolean;
+  /** Premium demo design rendered by StyleCard instead of the flip card. */
+  design?: CardDesign;
   /** "organization": the card (and its vCard) represents a company, not a person. */
   kind?: "person" | "organization";
   name: string;

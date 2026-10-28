@@ -1,0 +1,63 @@
+{
+  "slug": "robin-ek",
+  "lang": "sv",
+  "demo": true,
+  "design": "white",
+  "name": "Robin Ek",
+  "role": "Designer",
+  "tagline": "Idéer · Gränssnitt · Effekt",
+  "theme": {
+    "front": "#ffffff",
+    "frontInk": "#111111",
+    "accent": "#1f4fd8",
+    "back": "#ffffff",
+    "backInk": "#111111",
+    "style": "solid",
+    "layout": "classic"
+  },
+  "email": "robin@example.com",
+  "website": "https://example.com",
+  "details": [
+    {
+      "label": "Arbetar med",
+      "value": "Gränssnitt och designsystem"
+    },
+    {
+      "label": "Språk",
+      "value": "Svenska · Engelska"
+    }
+  ],
+  "example": {
+    "sector": "Vitt & enkelt",
+    "summary": "Schweiziskt rutnät, blått accentstreck och textlänkar i en lodrät lista.",
+    "order": 3
+  },
+  "meta": {
+    "title": "Exempel: vitt & enkelt visitkort | MambyLy Solutions",
+    "description": "Ett digitalt visitkort i stilen vitt & enkelt som exempel. Personen och uppgifterna är påhittade."
+  },
+  "translations": {
+    "en": {
+      "role": "Designer",
+      "tagline": "Ideas · Interfaces · Impact",
+      "details": [
+        {
+          "label": "Works with",
+          "value": "Interfaces and design systems"
+        },
+        {
+          "label": "Languages",
+          "value": "Swedish · English"
+        }
+      ],
+      "example": {
+        "sector": "Clean white",
+        "summary": "A Swiss grid, a blue accent line and text links in a vertical list."
+      },
+      "meta": {
+        "title": "Example: clean white business card | MambyLy Solutions",
+        "description": "A digital business card in the clean white style as an example. The person and the details are made up."
+      }
+    }
+  }
+}

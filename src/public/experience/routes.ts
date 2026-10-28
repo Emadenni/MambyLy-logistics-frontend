@@ -45,15 +45,28 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
 export const EXAMPLE_BASE: Record<Lang, string> = { sv: "/exempel", en: "/en/examples" };
 export const CARD_PATH: Record<Lang, string> = { sv: "/card", en: "/en/card" };
 
-/** The five website design concepts (fullscreen demos), with their slug in each language. */
-export type ConceptId = "editorial" | "typographic" | "minimal" | "visual" | "interactive";
+/** The six website demos (fullscreen, fictitious showcase sites), with their slug in each language. */
+export type ConceptId = "restaurant" | "photographer" | "logistics" | "painter" | "architecture" | "lighting";
 export const CONCEPTS: { id: ConceptId; slug: Record<Lang, string> }[] = [
-  { id: "editorial", slug: { sv: "redaktionell", en: "editorial" } },
-  { id: "typographic", slug: { sv: "typografisk", en: "typographic" } },
-  { id: "minimal", slug: { sv: "minimal", en: "minimal" } },
-  { id: "visual", slug: { sv: "visuell", en: "visual" } },
-  { id: "interactive", slug: { sv: "interaktiv", en: "interactive" } },
+  { id: "restaurant", slug: { sv: "restaurang", en: "restaurant" } },
+  { id: "photographer", slug: { sv: "fotograf", en: "photographer" } },
+  { id: "logistics", slug: { sv: "transport", en: "transport" } },
+  { id: "painter", slug: { sv: "maleri", en: "painting" } },
+  { id: "architecture", slug: { sv: "arkitektur", en: "architecture" } },
+  { id: "lighting", slug: { sv: "belysning", en: "lighting" } },
 ];
+/** Slugs of the earlier gallery: the two kept demos moved, the others lead back to the gallery. */
+export const RETIRED_CONCEPTS: Record<string, ConceptId | null> = {
+  redaktionell: "architecture",
+  editorial: "architecture",
+  minimal: "lighting",
+  typografisk: null,
+  typographic: null,
+  visuell: null,
+  visual: null,
+  interaktiv: null,
+  interactive: null,
+};
 export const CONCEPT_BASE: Record<Lang, string> = { sv: "/webbplatser/koncept", en: "/en/websites/concepts" };
 export const conceptPath = (id: ConceptId, lang: Lang) => `${CONCEPT_BASE[lang]}/${CONCEPTS.find((c) => c.id === id)!.slug[lang]}`;
 export const conceptOfSlug = (slug: string | undefined, lang: Lang) => CONCEPTS.find((c) => c.slug[lang] === slug?.toLowerCase())?.id;

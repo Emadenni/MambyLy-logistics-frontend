@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { useAuthStore } from "./store/useAuthStore";
 import ScrollToTop from "./components/ScrollToTop";
@@ -30,7 +30,7 @@ import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
 // Public site: one screen at a time, Swedish and English (see src/public/experience and
 // docs/RESTYLE-PUBLIC.md). Swedish keeps the existing URLs; English lives under /en.
 import Stage from "./public/experience/Stage";
-import { CONCEPT_BASE, LANGS, PATHS } from "./public/experience/routes";
+import { CONCEPT_BASE, LANGS, PATHS, isLegacyPath } from "./public/experience/routes";
 import Hub from "./public/experience/screens/Hub";
 import Websites from "./public/experience/screens/Websites";
 import Method from "./public/experience/screens/Method";
@@ -47,6 +47,18 @@ import LegacyConsent from "./public/experience/LegacyConsent";
 
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 import { publicContact } from "./public/contact";
+
+/** The floating WhatsApp button stays on the untouched legacy pages only (admin, login, Sido Butik);
+ * the public site offers the contact wizard and e-mail. */
+const LegacyWhatsApp = () => {
+  const { pathname } = useLocation();
+  if (!isLegacyPath(pathname)) return null;
+  return (
+    <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="whatsapp-icon">
+      <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
+    </a>
+  );
+};
 
 const App = () => {
   useClarity();
@@ -116,15 +128,7 @@ const App = () => {
             <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
           </Routes>
 
-          <a
-            href={publicContact.whatsappGreetingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp"
-            className="whatsapp-icon"
-          >
-            <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
-          </a>
+          <LegacyWhatsApp />
         </Router>
       </CartProvider>
     </HelmetProvider>

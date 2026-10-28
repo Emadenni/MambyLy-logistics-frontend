@@ -2,23 +2,22 @@ import React, { useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiArrowUpRight, FiLink, FiShare2, FiSmartphone, FiUserPlus } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
-import CardShowcase from "../../components/CardShowcase";
-import { COMPANY_CARD_SLUG, examplePath, getCard } from "../../digital-card/registry";
+import StyleCard from "../../digital-card/StyleCard";
+import { COMPANY_CARD_SLUG, examplePath, getExamples } from "../../digital-card/registry";
 import { cardUrlFor } from "../../digital-card/CardExperience";
 import { qrSvg } from "../../digital-card/qr";
 import { useCopy } from "../i18n";
 import Screen, { ScreenHead, TopBar } from "../Screen";
 import { CARD_PATH, PATHS } from "../routes";
 import { media } from "../media";
-
-/** The example shown on this screen (fictitious person, see cards/professionell). */
-const DEMO_SLUG = "professionell";
+import Carousel from "../Carousel";
 
 type Tab = "card" | "share";
 
 /**
- * /digital-card – the commercial page of the digital business cards. The card on it is the real,
- * interactive component with an example's (fictitious) data; MambyLy's own card stays at /card.
+ * /digital-card – the commercial page of the digital business cards. The six example styles are
+ * right on the page in a manual gallery (real card faces, fictitious people); each opens fullscreen
+ * with its working actions. MambyLy's own card stays at /card.
  */
 const Cards: React.FC = () => {
   const t = useCopy();
@@ -26,7 +25,7 @@ const Cards: React.FC = () => {
   const [tab, setTab] = useState<Tab>("card");
   const ids = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const demo = getCard(DEMO_SLUG, t.lang);
+  const examples = getExamples(t.lang).filter((x) => x.design);
   const ownUrl = cardUrlFor(COMPANY_CARD_SLUG);
   const qr = useMemo(() => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qrSvg(ownUrl))}`, [ownUrl]);
   const order: Tab[] = ["card", "share"];
@@ -81,11 +80,22 @@ const Cards: React.FC = () => {
         </div>
 
         <div id={`${ids}-panel-card`} role="tabpanel" aria-labelledby={`${ids}-tab-card`} hidden={tab !== "card"} className="mp-try__panel">
-          {demo && <CardShowcase card={demo} className="mp-try__card" />}
+          <Carousel id="cards" className="mp-cgal" label={c.galleryLabel} prev={c.prev} next={c.next} position={c.position}>
+            {examples.map((x) => (
+              <article key={x.slug} className="mp-cgal__item">
+                <StyleCard card={x} lang={t.lang} mini />
+                <h2 className="mp-cgal__name">
+                  <Link to={examplePath(x.slug, t.lang)} className="mp-stretch">
+                    {x.example?.sector}
+                  </Link>
+                </h2>
+                <span className="mp-cgal__open" aria-hidden="true">
+                  {c.openDemo} <FiArrowUpRight />
+                </span>
+              </article>
+            ))}
+          </Carousel>
           <p className="mp-try__note">{c.demoNote}</p>
-          <Link to={examplePath(DEMO_SLUG, t.lang)} className="mp-xbtn mp-xbtn--solid">
-            {c.openDemo} <FiArrowUpRight aria-hidden="true" />
-          </Link>
         </div>
 
         <div id={`${ids}-panel-share`} role="tabpanel" aria-labelledby={`${ids}-tab-share`} hidden={tab !== "share"} className="mp-try__panel">
