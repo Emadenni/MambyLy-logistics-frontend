@@ -1,7 +1,7 @@
-import React, { useEffect, useId, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiChevronDown, FiDownload, FiLink, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { FiChevronDown, FiDownload, FiLink, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
@@ -9,7 +9,7 @@ import { cardStrings } from "./strings";
 import { canNativeShare, copyText, shareLink, type ShareResult } from "./share";
 import { downloadVCard, staticVCardPath, vcardFileName } from "./vcard";
 import { qrSvg } from "./qr";
-import { cardPath } from "./registry";
+import { cardPath, examplePath } from "./registry";
 import FlipIcon from "./FlipIcon";
 
 type Status = { tone: "ok" | "info" | "warn"; text: string } | null;
@@ -75,6 +75,59 @@ const CardMenu: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, l
   );
 };
 
+/**
+ * "Only the card": the same card element grows to the largest size that fits the screen, with only
+ * a small close button. The card is not remounted, so side, drag state and data stay as they are.
+ * The Fullscreen API is asked for from the click itself when the browser has it; if it is missing
+ * or refused, the view still covers the browser's area. Leaves with the button, Escape (also the
+ * browser's own Escape in fullscreen) and Back; the focus returns to the button that opened it.
+ */
+function useFullscreen() {
+  const root = useRef<HTMLDivElement>(null);
+  const opener = useRef<HTMLSpanElement>(null);
+  const [on, setOn] = useState(false);
+  const pushed = useRef(false);
+
+  const leave = useCallback((fromHistory: boolean) => {
+    setOn(false);
+    if (document.fullscreenElement) void document.exitFullscreen().catch(() => {});
+    if (pushed.current && !fromHistory) history.back();
+    pushed.current = false;
+    window.setTimeout(() => opener.current?.querySelector("button")?.focus(), 0);
+  }, []);
+
+  const open = () => {
+    const el = root.current;
+    // From the user's gesture, before any state change: some browsers refuse it otherwise.
+    if (el?.requestFullscreen && document.fullscreenEnabled) void el.requestFullscreen({ navigationUI: "hide" }).catch(() => {});
+    history.pushState({ ...(history.state ?? {}), dcFullscreen: true }, "");
+    pushed.current = true;
+    setOn(true);
+  };
+
+  useEffect(() => {
+    if (!on) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && leave(false);
+    const onPop = () => pushed.current && ((pushed.current = false), leave(true));
+    // The browser's own exit from fullscreen (its Escape, a gesture) also closes the view.
+    const onFs = () => !document.fullscreenElement && pushed.current && leave(false);
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("popstate", onPop);
+    document.addEventListener("fullscreenchange", onFs);
+    const overflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    window.setTimeout(() => root.current?.querySelector<HTMLElement>(".dc-full__close")?.focus(), 0);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      window.removeEventListener("popstate", onPop);
+      document.removeEventListener("fullscreenchange", onFs);
+      document.documentElement.style.overflow = overflow;
+    };
+  }, [on, leave]);
+
+  return { root, opener, on, open, close: () => leave(false) };
+}
+
 const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; menu?: CardMenuItem[]; intro?: boolean }> = ({
   card,
   headingLevel = "h2",
@@ -82,7 +135,13 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   intro = false,
 }) => {
   const t = cardStrings[card.lang];
-  const url = useMemo(() => cardUrlFor(card.slug), [card.slug]);
+  // Demo cards live at /exempel/<slug> and /en/examples/<slug>: the link, QR and vCard point to
+  // the page in the language being shown.
+  const url = useMemo(
+    () => (card.demo ? `${window.location.origin}${examplePath(card.slug, card.lang)}` : cardUrlFor(card.slug)),
+    [card.slug, card.demo, card.lang],
+  );
+  const full = useFullscreen();
   const [flipped, setFlipped] = useState(false);
   const [status, setStatus] = useState<Status>(null);
   const [manualCopy, setManualCopy] = useState(false);
@@ -166,11 +225,21 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   };
 
   return (
-    <div className="dc-experience">
+    <div ref={full.root} className={`dc-experience${full.on ? " is-full" : ""}`} role={full.on ? "dialog" : undefined} aria-modal={full.on || undefined} aria-label={full.on ? t.fullscreenLabel : undefined}>
+      {full.on && (
+        <button type="button" className="dc-full__close" onClick={full.close} aria-label={t.fullscreenClose} data-tip={t.fullscreenClose}>
+          <FiX aria-hidden="true" />
+        </button>
+      )}
       <Heading className="mp-sr">
         {t.cardLabel}: {card.name}
       </Heading>
       <DigitalCard card={card} t={t} flipped={flipped} onFlippedChange={setFlipped} onDemoAction={demoAction} intro={intro} />
+      {full.on && (
+        <p className="dc-full__rotate" aria-hidden="true">
+          {t.rotate}
+        </p>
+      )}
       <p className="dc-hint" aria-hidden="true">{t.hint}</p>
       <p className="mp-sr" aria-live="polite">{flipped ? t.showingBack : t.showingFront}</p>
 
@@ -200,6 +269,11 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
         <IconButton label={t.qr} onClick={() => setQrOpen(true)} haspopup>
           <TbQrcode aria-hidden="true" />
         </IconButton>
+        <span ref={full.opener} className="dc-full__opener">
+          <IconButton label={t.fullscreen} onClick={full.open}>
+            <FiMaximize aria-hidden="true" />
+          </IconButton>
+        </span>
       </div>
       {savedOnce && !card.demo && (
         <p className="dc-note">

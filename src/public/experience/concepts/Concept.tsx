@@ -36,12 +36,12 @@ const Concept: React.FC = () => {
   return (
     <>
       <ScreenHead lang={t.lang} title={conceptCopy[t.lang][id].meta} description={`${s.concept} · ${s.fictitious}. ${s.footer}`} paths={pathsOf(id)} noindex />
-      {id === "restaurant" && <Restaurant s={s} />}
-      {id === "photographer" && <Photographer s={s} />}
-      {id === "logistics" && <Logistics s={s} />}
-      {id === "painter" && <Painter s={s} />}
+      {id === "restaurant" && <Restaurant />}
+      {id === "photographer" && <Photographer />}
+      {id === "logistics" && <Logistics />}
+      {id === "painter" && <Painter />}
       {id === "architecture" && <Architecture c={conceptCopy[t.lang].architecture} s={s} />}
-      {id === "lighting" && <Lighting c={conceptCopy[t.lang].lighting} s={s} />}
+      {id === "lighting" && <Lighting c={conceptCopy[t.lang].lighting} />}
     </>
   );
 };

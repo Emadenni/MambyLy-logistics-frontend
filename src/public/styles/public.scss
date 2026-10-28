@@ -11,7 +11,7 @@
 @use "./experience" as x;
 @use "./concepts" as cx;
 @use "./demos" as demos;
-@use "./style-cards" as sc;
+@use "./card-designs" as cd;
 
 $bp-mobile: 720px;
 $bp-tablet: 920px;
@@ -2102,7 +2102,7 @@ body:has(.mambyly-public) {
   @include x.styles;
   @include cx.styles;
   @include demos.styles;
-  @include sc.styles;
+  @include cd.styles;
 }
 
 // ---------------------------------------------------------------------------------------------

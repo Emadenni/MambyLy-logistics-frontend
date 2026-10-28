@@ -4,7 +4,6 @@ import { FiArrowRight, FiArrowUpRight, FiChevronLeft, FiChevronRight } from "rea
 import { useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
-import type { ConceptCopy } from "./content";
 
 type Service = "interior" | "exterior" | "wallpaper";
 type Panel = "work" | "how" | "about" | "quote";
@@ -113,7 +112,7 @@ const SERVICES: Service[] = ["interior", "exterior", "wallpaper"];
  * The two pictures are the same photo; "after" has only the wall surfaces recoloured, so the
  * comparison lines up exactly. It is declared as a design simulation.
  */
-const Painter: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
+const Painter: React.FC = () => {
   const { lang } = useCopy();
   const c = copy[lang];
   const reduce = useReducedMotion() ?? false;
@@ -298,8 +297,6 @@ const Painter: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
           </button>
         </nav>
       </main>
-
-      <footer className="cx-foot">{s.footer}</footer>
     </ConceptFrame>
   );
 };

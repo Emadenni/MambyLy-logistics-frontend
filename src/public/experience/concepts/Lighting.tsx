@@ -15,7 +15,7 @@ const SCALE: Record<string, number> = { s: 1, m: 1.1, l: 1.22 };
  * open in place; the collection and the question form are showcase parts. Nothing is sold and the
  * question never leaves the browser.
  */
-const Lighting: React.FC<{ c: ConceptCopy["lighting"]; s: ConceptCopy["shared"] }> = ({ c, s }) => {
+const Lighting: React.FC<{ c: ConceptCopy["lighting"] }> = ({ c }) => {
   const reduce = useReducedMotion() ?? false;
   const ids = useId();
   const [size, setSize] = useState("m");
@@ -173,8 +173,6 @@ const Lighting: React.FC<{ c: ConceptCopy["lighting"]; s: ConceptCopy["shared"] 
           <p className="cx-mi__note">{c.note}</p>
         </section>
       </main>
-
-      <footer className="cx-foot">{s.footer}</footer>
     </ConceptFrame>
   );
 };

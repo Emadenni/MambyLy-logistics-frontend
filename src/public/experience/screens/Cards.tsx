@@ -2,7 +2,8 @@ import React, { useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiArrowUpRight, FiLink, FiShare2, FiSmartphone, FiUserPlus } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
-import StyleCard from "../../digital-card/StyleCard";
+import { CardPreview } from "../../digital-card/DigitalCard";
+import { cardStrings } from "../../digital-card/strings";
 import { COMPANY_CARD_SLUG, examplePath, getExamples } from "../../digital-card/registry";
 import { cardUrlFor } from "../../digital-card/CardExperience";
 import { qrSvg } from "../../digital-card/qr";
@@ -83,7 +84,7 @@ const Cards: React.FC = () => {
           <Carousel id="cards" className="mp-cgal" label={c.galleryLabel} prev={c.prev} next={c.next} position={c.position}>
             {examples.map((x) => (
               <article key={x.slug} className="mp-cgal__item">
-                <StyleCard card={x} lang={t.lang} mini />
+                <CardPreview card={x} t={cardStrings[x.lang]} />
                 <h2 className="mp-cgal__name">
                   <Link to={examplePath(x.slug, t.lang)} className="mp-stretch">
                     {x.example?.sector}

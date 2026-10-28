@@ -1,54 +1,40 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiArrowLeft, FiArrowUpRight, FiInfo } from "react-icons/fi";
-import logoDark from "../../assets/logo-dark.svg";
-import logoLight from "../../assets/logo-light.svg";
-import LangSwitch from "../LangSwitch";
+import { FiInfo, FiX } from "react-icons/fi";
 import { useCopy } from "../i18n";
 import { PATHS, type StaticScreen } from "../routes";
 import { previousIs } from "../visits";
 import { conceptCopy } from "./content";
 
 /**
- * The only MambyLy element inside a fullscreen demo: a discreet bar along the bottom edge with
- * the way back to the gallery, the language and the note that the content is a design concept.
- * It takes the place of the quick navigation of the other screens.
+ * The only element from outside inside a fullscreen demo (websites and cards): a small close button
+ * in the top corner that leads back to the gallery in the same language. It goes back in history
+ * when the gallery is the previous entry (so the gallery keeps its position), otherwise it links
+ * to the gallery, so direct links and refreshes always have a way out.
  */
-export const ExitBar: React.FC<{ to?: StaticScreen; label?: string; tone?: "light" | "dark"; note?: string }> = ({ to = "websites", label, tone = "light", note }) => {
+export const ExitButton: React.FC<{ to?: StaticScreen; tone?: "light" | "dark" }> = ({ to = "websites", tone = "light" }) => {
   const t = useCopy();
   const c = conceptCopy[t.lang].shared;
   const navigate = useNavigate();
   return (
-    <nav className={`mp-exit mp-exit--${tone}`} aria-label={c.exitLabel}>
+    <div className={`mp-exit mp-exit--${tone}`}>
       <Link
         to={PATHS[to][t.lang]}
-        className="mp-exit__back"
+        className="mp-exit__btn"
+        aria-label={c.exitLabel}
         onClick={(e) => {
-          // Back to the very gallery entry when that is where the visitor came from.
           if (previousIs(to) && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
             navigate(-1);
           }
         }}
       >
-        <FiArrowLeft aria-hidden="true" />
-        <span className="mp-exit__long">{label ?? c.backLong}</span>
-        <span className="mp-exit__short">
-          {label ?? c.back}
+        <FiX aria-hidden="true" />
+        <span className="mp-exit__tip" aria-hidden="true">
+          {c.exitLabel}
         </span>
       </Link>
-      <span className="mp-exit__note">
-        <img src={tone === "dark" ? logoLight : logoDark} alt="MambyLy Solutions" width={74} height={21} />
-        <span>
-          {note ?? (
-            <>
-              {c.concept} ·<wbr /> {c.fictitious}
-            </>
-          )}
-        </span>
-      </span>
-      <LangSwitch className="mp-exit__lang" />
-    </nav>
+    </div>
   );
 };
 
@@ -73,30 +59,12 @@ export const DemoNote: React.FC<{ onAgain?: () => void; text?: string }> = ({ on
   );
 };
 
-/**
- * The way from a demo to MambyLy's real contact wizard, clearly apart from the demo itself:
- * a neutral band after the demo's own footer, with the website context already chosen.
- */
-const WantSite: React.FC = () => {
-  const t = useCopy();
-  const c = conceptCopy[t.lang].shared;
-  return (
-    <aside className="cx-want" aria-label={c.wantSite}>
-      <p>{c.wantSite}</p>
-      <Link to={PATHS.contact[t.lang]} state={{ service: "site" }}>
-        {c.wantSiteCta} <FiArrowUpRight aria-hidden="true" />
-      </Link>
-    </aside>
-  );
-};
-
-/** Fullscreen wrapper of one demo: its own look, a skip link, the way to MambyLy and the exit bar. */
-export const ConceptFrame: React.FC<{ id: string; className?: string; children: React.ReactNode; tone?: "light" | "dark"; exit?: React.ReactNode }> = ({
+/** Fullscreen wrapper of one demo: its own look, a skip link and the small exit button. */
+export const ConceptFrame: React.FC<{ id: string; className?: string; children: React.ReactNode; tone?: "light" | "dark" }> = ({
   id,
   className = "",
   children,
   tone = "light",
-  exit,
 }) => {
   const t = useCopy();
   return (
@@ -114,9 +82,8 @@ export const ConceptFrame: React.FC<{ id: string; className?: string; children: 
       >
         {t.common.skip}
       </a>
+      <ExitButton tone={tone} />
       {children}
-      <WantSite />
-      {exit ?? <ExitBar tone={tone} />}
     </div>
   );
 };

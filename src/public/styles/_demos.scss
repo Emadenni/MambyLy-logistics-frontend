@@ -71,41 +71,6 @@ $desk: 960px;
     }
   }
 
-  // The way to MambyLy's real contact wizard: neutral, after the demo's own footer.
-  .cx-want {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 6px 14px;
-    margin: 8px auto 0;
-    padding: 16px var(--cx-g) 18px;
-    border-top: 1px solid rgba(127, 127, 127, 0.25);
-    font: 400 15px/1.4 var(--mp-font);
-    text-align: center;
-
-    p {
-      margin: 0;
-    }
-
-    a {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      min-height: 44px;
-      padding: 0 18px;
-      border-radius: 999px;
-      background: #103b35;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-
-      &:hover {
-        background: #0a2a25;
-      }
-    }
-  }
-
   // Centre column of the phone-first demos on wide screens.
   %cx-column {
     width: 100%;
@@ -126,9 +91,6 @@ $desk: 960px;
     color: var(--re-ink);
     font-family: var(--mp-font);
 
-    .cx-want {
-      @extend %cx-column;
-    }
   }
 
   .cx-re__head {
@@ -175,50 +137,30 @@ $desk: 960px;
     text-align: center;
     text-transform: uppercase;
     white-space: nowrap;
-    overflow: hidden;
-    transform: scaleY(1.45);
+    transform: scaleY(1.3);
     transform-origin: top;
   }
 
+  // The photograph of the dish as it is: square crop around the plate, same scale for all six,
+  // no circle mask, no extra plate drawn behind it. The box keeps its size while a photo loads.
   .cx-re__plate {
     position: relative;
     z-index: 1;
-    width: min(84%, 380px);
-    margin-top: clamp(48px, 13vw, 76px);
+    width: min(86%, 420px);
+    margin-top: clamp(44px, 12vw, 72px);
     aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #efe6d6;
+    box-shadow: 0 18px 40px rgba(60, 30, 10, 0.18);
 
     img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% 42%;
-      border-radius: 50%;
-      box-shadow: 0 18px 40px rgba(60, 30, 10, 0.22);
-    }
-  }
-
-  .cx-re__noimg {
-    display: grid;
-    place-items: center;
-    align-content: center;
-    gap: 6px;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 50% 50%, #fffaf0 0 52%, #efe3cf 53% 55%, #fbf4e6 56% 100%);
-    box-shadow: 0 18px 40px rgba(60, 30, 10, 0.16);
-
-    span {
-      color: var(--re-red);
-      font: 400 clamp(64px, 20vw, 110px) / 1 var(--x-serif);
-    }
-
-    small {
-      color: var(--re-soft);
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      object-position: 50% 50%;
     }
   }
 
@@ -527,14 +469,6 @@ $desk: 960px;
     color: var(--ph-ink);
     font-family: var(--mp-font);
 
-    .cx-want {
-      @extend %cx-column;
-
-      a {
-        background: var(--ph-ink);
-        color: #0e0e0d;
-      }
-    }
 
     :where(button, a, input, label, select, textarea, [tabindex]):focus-visible {
       outline-color: var(--ph-accent);
@@ -916,9 +850,6 @@ $desk: 960px;
     color: var(--lo-ink);
     font-family: var(--mp-font);
 
-    .cx-want {
-      @extend %cx-column;
-    }
   }
 
   .cx-lo__head {
@@ -1254,9 +1185,6 @@ $desk: 960px;
     color: var(--pa-ink);
     font-family: var(--mp-font);
 
-    .cx-want {
-      @extend %cx-column;
-    }
   }
 
   .cx-pa__head {

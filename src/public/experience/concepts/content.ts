@@ -10,7 +10,7 @@ const sv = {
   shared: {
     concept: "Demowebbplats",
     fictitious: "Fiktivt innehåll",
-    exitLabel: "Lämna demon",
+    exitLabel: "Tillbaka till galleriet",
     back: "Galleriet",
     backLong: "Tillbaka till galleriet",
     menu: "Meny",
@@ -121,7 +121,7 @@ const en: ConceptCopy = {
   shared: {
     concept: "Demo website",
     fictitious: "Fictitious content",
-    exitLabel: "Leave the demo",
+    exitLabel: "Back to gallery",
     back: "Gallery",
     backLong: "Back to the gallery",
     menu: "Menu",

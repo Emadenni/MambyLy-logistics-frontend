@@ -414,6 +414,11 @@ $x-wide: 1180px;
       gap: 12px;
       width: min(100% - 2 * var(--x-gutter), var(--x-frame));
       margin-inline: auto;
+
+      // a little wider than the column, so the breadcrumb never wraps next to SV/EN, menu and Kontakt
+      @include desk {
+        width: min(100% - 2 * var(--x-gutter), 760px);
+      }
     }
 
     &__row {
@@ -511,11 +516,48 @@ $x-wide: 1180px;
     &__end {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       margin-left: auto;
 
       @include small {
         gap: 6px;
+      }
+    }
+
+    // Narrow phones: Kontakt keeps its place as a round envelope button (the word stays for
+    // screen readers), so logo, SV/EN, the menu and Kontakt fit on one line without wrapping.
+    &__cicon {
+      display: none;
+    }
+
+    @media (max-width: 430px) {
+      &__contact.mp-xbtn {
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        min-height: 44px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+      }
+
+      &__ctext {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      &__carrow {
+        display: none;
+      }
+
+      &__cicon {
+        display: block;
+        width: 19px;
+        height: 19px;
       }
     }
 
@@ -527,10 +569,6 @@ $x-wide: 1180px;
       @include small {
         padding: 0 12px;
         font-size: 13px;
-
-        svg {
-          display: none;
-        }
       }
     }
 
@@ -681,112 +719,140 @@ $x-wide: 1180px;
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Quick navigation along the bottom edge (QuickNav.tsx)
+  // Site navigation: a compass button in the header, a compact row of icon links (NavMenu.tsx)
   // ---------------------------------------------------------------------------------------------
 
-  &.mp-x {
-    --qnav-h: 56px;
-    --qnav-gap: 10px;
-    --qnav-space: calc(var(--qnav-h) + var(--qnav-gap) * 2 + env(safe-area-inset-bottom));
+  .mp-menu {
+    position: relative;
+    flex: none;
 
-    // Low screens (phone on its side, large zoom): a slimmer bar, labels kept.
-    @media (max-height: 480px) {
-      --qnav-h: 44px;
-      --qnav-gap: 6px;
-    }
-  }
-
-  // Real room for the bar: it never covers the end of a screen.
-  &.has-qnav .mp-screen {
-    padding-bottom: var(--qnav-space);
-  }
-
-  &.has-qnav .mp-consent {
-    bottom: calc(var(--qnav-space) - var(--qnav-gap));
-  }
-
-  .mp-qnav {
-    position: fixed;
-    left: 50%;
-    bottom: calc(var(--qnav-gap) + env(safe-area-inset-bottom));
-    z-index: 30;
-    width: min(100% - 2 * 12px, 520px);
-    translate: -50% 0;
-
-    ul {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      height: var(--qnav-h);
-      margin: 0;
-      padding: 4px;
-      list-style: none;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--x-paper) 92%, transparent);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-      box-shadow:
-        0 0 0 1px rgba(16, 59, 53, 0.1),
-        0 10px 28px rgba(16, 59, 53, 0.12);
-    }
-
-    &__link {
+    &__toggle {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      height: 100%;
-      padding: 0 4px;
-      border-radius: 999px;
-      color: var(--x-muted);
-      font: 500 13.5px/1.1 var(--mp-font);
-      text-align: center;
-      text-decoration: none;
-      transition: color 0.2s ease, background-color 0.2s ease;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--x-line);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--x-ink);
+      font-size: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
 
-      @include small {
-        font-size: 12.5px;
+      svg {
+        transition: transform 0.35s var(--x-ease);
       }
 
       &:hover {
-        color: var(--x-ink);
-        background: rgba(16, 59, 53, 0.05);
+        border-color: var(--x-ink);
       }
 
       &:focus-visible {
         outline: 3px solid var(--mp-teal);
-        outline-offset: -3px;
+        outline-offset: 2px;
+      }
+
+      @include reduce {
+        svg {
+          transition: none;
+        }
+      }
+    }
+
+    &.is-open &__toggle {
+      border-color: var(--x-ink);
+      background: var(--x-ink);
+      color: var(--x-ivory);
+
+      svg {
+        transform: rotate(45deg);
+      }
+    }
+
+    // Anchored under the toggle, right-aligned, never wider than the screen.
+    &__panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: -6px;
+      z-index: 30;
+      max-width: calc(100vw - 16px);
+      padding: 6px;
+      border-radius: 999px;
+      background: var(--x-paper);
+      box-shadow:
+        0 0 0 1px rgba(16, 59, 53, 0.1),
+        0 12px 30px rgba(16, 59, 53, 0.16);
+
+      &[hidden] {
+        display: none;
+      }
+
+      ul {
+        display: flex;
+        gap: 2px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+    }
+
+    &__link {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--x-ink);
+      font-size: 20px;
+      text-decoration: none;
+
+      &:hover {
+        background: rgba(16, 59, 53, 0.07);
+      }
+
+      &:focus-visible {
+        outline: 3px solid var(--mp-teal);
+        outline-offset: -1px;
       }
 
       &.is-on {
-        color: var(--x-ink);
-        font-weight: 600;
-        background: rgba(36, 123, 103, 0.1);
+        background: var(--x-ink);
+        color: var(--x-ivory);
       }
     }
 
-    &__dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: transparent;
-      transition: background-color 0.2s ease, transform 0.2s ease;
+    // Tooltip on hover and focus; the accessible name is in the link itself (read once).
+    &__tip {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      padding: 4px 9px;
+      translate: -50% 0;
+      border-radius: 7px;
+      background: var(--x-ink);
+      color: var(--x-ivory);
+      font: 500 12.5px/1.2 var(--mp-font);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
     }
 
-    &__dot {
-      order: 2;
+    &__toggle:hover &__tip,
+    &__toggle:focus-visible &__tip,
+    &__link:hover &__tip,
+    &__link:focus-visible &__tip {
+      opacity: 1;
     }
 
-    .mp-qnav__link.is-on .mp-qnav__dot {
-      background: #247b67;
-    }
-
-    @include reduce {
-      &__link,
-      &__dot {
-        transition: none;
-      }
+    // The tooltip of the last icons opens towards the left, so it stays on screen.
+    li:nth-last-child(-n + 2) .mp-menu__tip,
+    &__toggle .mp-menu__tip {
+      left: auto;
+      right: 0;
+      translate: 0 0;
     }
   }
 
@@ -1559,322 +1625,115 @@ $x-wide: 1180px;
     }
   }
 
-  // Desktop: the same pieces, side by side, so the screen still fits in one view.
   // ---------------------------------------------------------------------------------------------
-  // Vårt sätt (method)
+  // Vårt sätt (method): one compact screen – preview and three steps side by side, one CTA
   // ---------------------------------------------------------------------------------------------
 
   .mp-method {
-    text-align: center;
+    display: grid;
+    gap: 14px;
+    padding-top: 6px;
 
     &__title {
-      margin-top: 4px !important;
-      font-size: clamp(36px, 10vw, 64px) !important;
+      font-size: clamp(32px, 8.6vw, 52px) !important;
+      line-height: 1.04 !important;
     }
 
     &__lead {
-      margin-top: 12px !important;
       color: var(--x-muted);
-      font: 400 clamp(17px, 4.6vw, 21px) / 1.35 var(--x-serif);
+      font-size: 16.5px;
+      line-height: 1.5;
     }
 
-    &__choose {
+    // The preview and the three steps share one row: no stacked cards, no decorative curves.
+    &__way {
       display: grid;
-      justify-items: center;
-      gap: 10px;
-      text-align: center;
-    }
-
-    &__question {
-      margin-bottom: 12px;
-      padding: 0;
-      color: var(--x-ink);
-      font: 500 clamp(21px, 5.6vw, 26px) / 1.2 var(--x-serif);
-    }
-
-    &__mode {
-      min-height: 3em;
-      color: var(--x-muted);
-      font-size: 14.5px;
-    }
-
-    &__note {
-      margin-bottom: 8px !important;
-      font-size: 12.5px;
-      color: var(--x-muted);
-    }
-
-    &__ctanote {
-      max-width: 30em;
-      font-size: 13px;
-      color: var(--x-muted);
-    }
-  }
-
-  .mp-segment {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    border: 0;
-
-    legend {
-      grid-column: 1 / -1;
-    }
-
-    &__opt {
-      position: relative;
-      display: flex;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 52px;
-      padding: 6px 12px;
-      border: 1px solid var(--x-line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.6);
-      color: var(--x-ink);
-      font: 400 15.5px/1.15 var(--x-serif);
-      cursor: pointer;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
-
-      input {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      svg {
-        flex: none;
-        width: 18px;
-        height: 18px;
-      }
-
-      &.is-on {
-        border-color: var(--x-ink);
-        background: var(--x-mist);
-        box-shadow: 0 6px 16px rgba(16, 59, 53, 0.1);
-      }
-
-      &:has(input:focus-visible) {
-        outline: 3px solid var(--mp-teal);
-        outline-offset: 3px;
-      }
+      gap: 16px;
+      margin-top: 4px;
     }
-  }
 
-  .mp-way {
-    position: relative;
-    width: min(100% - 2 * var(--x-gutter), 560px);
-    height: clamp(420px, 124vw, 540px);
-    margin: 4px auto 0;
-
-    &__steps {
+    &__preview {
       margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    &__step {
-      position: absolute;
-      z-index: 3;
-      display: grid;
-      max-width: 44%;
-      text-align: left;
-
-      strong {
-        font: 500 clamp(19px, 5.4vw, 26px) / 1.05 var(--x-serif);
-        color: var(--x-ink);
-      }
-
-      span {
-        color: var(--x-muted);
-        font: 400 13.5px/1.3 var(--x-serif);
-      }
-
-      small {
-        display: none;
-        margin-top: 4px;
-        color: var(--x-muted);
-        font-size: 12.5px;
-        line-height: 1.4;
-
-        @include desk {
-          display: block;
-        }
-      }
-
-      &--1 {
-        top: 0;
-        left: 4%;
-      }
-
-      &--2 {
-        top: 24%;
-        right: 0;
-        max-width: 33%;
-        text-align: right;
-      }
-
-      &--3 {
-        bottom: 0;
-        left: 2%;
-      }
-    }
-
-    &__dot {
-      position: absolute;
-      left: -12px;
-      top: 9px;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--x-ink);
-
-    }
-
-    &__step--2 .mp-way__dot {
-      left: auto;
-      right: -12px;
-    }
-
-    &__path {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-
-      path {
-        fill: none;
-        stroke: rgba(16, 59, 53, 0.45);
-        stroke-width: 1;
-        vector-effect: non-scaling-stroke;
-      }
-    }
-
-    &__picture {
-      position: absolute;
-      inset: 10% 0 18%;
-    }
-
-    &__wire {
-      position: absolute;
-      top: 4%;
-      left: 0;
-      width: 44%;
-      height: auto;
-      color: var(--x-ink);
-    }
-
-    &__site {
-      position: absolute;
-      top: 0;
-      left: 15%;
-      width: 50%;
-      transform: rotate(-1.5deg);
 
       img {
-        aspect-ratio: 560 / 640;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
         object-position: top;
       }
     }
 
-    &__widget {
-      position: absolute;
-      z-index: 2;
-      padding: 12px;
-      border-radius: 14px;
-      background: #fff;
-      box-shadow: 0 16px 36px rgba(16, 59, 53, 0.16);
-      color: var(--x-ink);
-      font-size: 11.5px;
+    &__steps {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
 
-      &--booking {
-        top: 40%;
-        right: 2%;
+      li {
         display: grid;
-        gap: 7px;
-        width: 44%;
-
-        @include small {
-          width: 50%;
-          right: 0;
-          font-size: 10.5px;
-        }
+        grid-template-columns: auto minmax(0, 1fr);
+        column-gap: 10px;
+        align-items: baseline;
       }
 
-      &--connect {
-        top: 82%;
-        right: 6%;
-        display: flex;
-        gap: 10px;
-        width: 40%;
-        background: #f7f7f3;
-
-        ul {
-          display: grid;
-          gap: 2px;
-          margin: 4px 0 0;
-          padding: 0;
-          list-style: none;
-          color: var(--x-muted);
-        }
-
-        li {
-          display: flex;
-          gap: 6px;
-          align-items: center;
-        }
+      strong {
+        color: var(--x-ink);
+        font: 500 18px/1.15 var(--x-serif);
       }
 
-      svg {
-        width: 13px;
-        height: 13px;
+      span:last-child {
+        grid-column: 2;
+        color: var(--x-muted);
+        font-size: 13.5px;
+        line-height: 1.4;
       }
     }
 
-    &__wtitle {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0 !important;
-      color: var(--x-ink) !important;
-      font: 500 15px/1.1 var(--x-serif);
-    }
-
-    &__field {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 28px;
-      padding: 0 8px;
-      border: 1px solid var(--x-line);
-      border-radius: 6px;
-      color: var(--x-muted);
-    }
-
-    &__send {
-      white-space: nowrap;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      height: 30px;
-      border-radius: 6px;
-      background: var(--x-ink);
-      color: var(--x-ivory);
+    &__no {
+      color: var(--mp-teal);
+      font-size: 12px;
       font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.06em;
     }
 
-    &__db {
-      width: 26px !important;
-      height: 26px !important;
-      flex: none;
+    // Narrow phones: the preview above, the steps below (still one compact block).
+    @media (max-width: 420px) {
+      &__way {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      &__preview {
+        width: 78%;
+        justify-self: center;
+      }
+    }
+
+    &__more {
+      margin-top: 2px;
       color: var(--x-ink);
+      font-size: 15.5px;
+      line-height: 1.5;
+    }
+
+    &__note {
+      color: var(--x-muted);
+      font-size: 13.5px;
+    }
+
+    &__end {
+      display: grid;
+      justify-items: start;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    &__ctanote {
+      color: var(--x-muted);
+      font-size: 13.5px;
     }
   }
 
@@ -3231,6 +3090,13 @@ $x-wide: 1180px;
   // /exempel/:slug – an example card fullscreen, on the surface of its own style.
   // Example card page: the surface takes the tone of the card's material.
   .mp-cardx {
+    // the card a little larger than on /card on wide screens (same proportions)
+    @include desk {
+      .dc {
+        width: min(100%, 560px);
+      }
+    }
+
     display: flex;
     flex-direction: column;
     background: var(--x-ivory);

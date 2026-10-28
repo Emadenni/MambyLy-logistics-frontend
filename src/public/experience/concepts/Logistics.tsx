@@ -5,7 +5,6 @@ import { LuLayers } from "react-icons/lu";
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
-import type { ConceptCopy } from "./content";
 
 type Load = "parcel" | "pallet" | "other";
 type Panel = "services" | "about" | "contact";
@@ -75,7 +74,7 @@ const PANEL_ICONS: Record<Panel, React.ReactNode> = { services: <FiTruck />, abo
  * collection, delivery and the kind of load; the drawn route takes their places as labels. The
  * quote request is a summary that states it is a demo – nothing is sent, priced or booked.
  */
-const Logistics: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
+const Logistics: React.FC = () => {
   const { lang } = useCopy();
   const c = copy[lang];
   const reduce = useReducedMotion() ?? false;
@@ -219,8 +218,6 @@ const Logistics: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
           </button>
         ))}
       </nav>
-
-      <footer className="cx-foot">{s.footer}</footer>
     </ConceptFrame>
   );
 };

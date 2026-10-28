@@ -9,9 +9,10 @@
   "theme": {
     "front": "#d9ccf6",
     "frontInk": "#2a0f47",
-    "accent": "#c2410c",
-    "back": "#d9ccf6",
-    "backInk": "#2a0f47",
+    "accent": "#9a3412",
+    "back": "#2a0f47",
+    "backInk": "#f3eefe",
+    "backAccent": "#ffb08a",
     "style": "solid",
     "layout": "classic"
   },

@@ -42,19 +42,3 @@ export const ChevronUp: React.FC<IconProps> = ({ className }) => (
   </svg>
 );
 
-/** Wireframe sketch behind the website preview on the method screen. */
-export const Wireframe: React.FC<IconProps> = ({ className }) => (
-  <svg className={className} viewBox="0 0 360 460" fill="none" stroke="currentColor" strokeOpacity=".28" aria-hidden="true" focusable="false">
-    <rect x="1" y="1" width="358" height="458" rx="12" fill="#f6f4ee" />
-    <path d="M1 35h358" />
-    <circle cx="16" cy="18" r="3" />
-    <circle cx="28" cy="18" r="3" />
-    <circle cx="40" cy="18" r="3" />
-    <rect x="25" y="65" width="120" height="14" />
-    <rect x="25" y="100" width="175" height="55" />
-    <rect x="25" y="175" width="115" height="30" rx="15" />
-    <rect x="25" y="235" width="310" height="120" />
-    <path d="m25 235 310 120m0-120L25 355" />
-    <path d="M25 385h285M25 400h220M25 415h245" />
-  </svg>
-);

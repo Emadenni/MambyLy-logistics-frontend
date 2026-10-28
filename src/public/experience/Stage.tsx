@@ -7,8 +7,6 @@ import { conceptOfSlug, resolvePath, translatePath, type Resolved } from "./rout
 import { savedLang } from "./i18n";
 import { recordVisit } from "./visits";
 import ConsentBanner from "./ConsentBanner";
-import QuickNav, { hasQuickNav } from "./QuickNav";
-import { useUi } from "./ui";
 import "../styles/public.scss";
 
 /** Screens that share one mounted component (the home cover lies on top of Utforska). */
@@ -104,8 +102,6 @@ const Stage: React.FC = () => {
   const reduce = useReducedMotion() ?? false;
   const resolved = resolvePath(location.pathname);
   const key = layerKey(resolved);
-  const coverShown = useUi((s) => s.coverShown);
-  const withNav = hasQuickNav(resolved.screen);
 
   const last = useRef<{ key: string; locKey: string; screen: Resolved["screen"] } | null>(null);
   // Scroll position of the screen being left, read during render, before the DOM changes: once the
@@ -171,13 +167,16 @@ const Stage: React.FC = () => {
   // entry in the other language. An explicit /en/… link always opens in English. Rendered as a
   // <Navigate>, so the router is already listening when the address changes.
   const pref = savedLang();
+  // A demo or example link is explicit about its language (its address is the language): it is
+  // never switched by a preference saved earlier.
+  const explicit = ["card", "concept", "example"].includes(resolved.screen);
   const langRedirect =
-    pref && pref !== resolved.lang && resolved.screen !== "card" && (first ? resolved.lang === "sv" : navType === "POP")
+    pref && pref !== resolved.lang && !explicit && (first ? resolved.lang === "sv" : navType === "POP")
       ? translatePath(location.pathname, pref) + location.search + location.hash
       : null;
 
   return (
-    <div className={`mambyly-public mp-x${withNav ? " has-qnav" : ""}`}>
+    <div className="mambyly-public mp-x">
       <Helmet htmlAttributes={{ lang: resolved.lang }} />
       {langRedirect ? (
         <Navigate to={langRedirect} replace state={location.state} />
@@ -190,7 +189,6 @@ const Stage: React.FC = () => {
           </AnimatePresence>
         </div>
       )}
-      {!langRedirect && <QuickNav screen={resolved.screen} shown={withNav && !coverShown} />}
       <ConsentBanner />
     </div>
   );

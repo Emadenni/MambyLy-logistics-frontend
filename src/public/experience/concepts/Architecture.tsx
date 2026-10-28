@@ -188,8 +188,6 @@ const Architecture: React.FC<{ c: ConceptCopy["architecture"]; s: ConceptCopy["s
           </form>
         </section>
       </main>
-
-      <footer className="cx-foot">{s.footer}</footer>
     </ConceptFrame>
   );
 };

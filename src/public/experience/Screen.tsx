@@ -1,10 +1,11 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
-import { FiArrowLeft, FiArrowUpRight, FiChevronDown } from "react-icons/fi";
+import { FiArrowLeft, FiArrowUpRight, FiChevronDown, FiMail } from "react-icons/fi";
 import logoDark from "../assets/logo-dark.svg";
 import { useCopy } from "./i18n";
 import LangSwitch from "./LangSwitch";
+import NavMenu from "./NavMenu";
 import { PATHS, pathFor, type Lang, type ScreenId, type StaticScreen } from "./routes";
 import { hasPrevious, previousIs } from "./visits";
 import { useUi } from "./ui";
@@ -47,7 +48,8 @@ export const ContactLink: React.FC<{ service?: ServiceKey; className?: string }>
   const t = useCopy();
   return (
     <Link to={pathFor("contact", t.lang)} state={service ? { service } : undefined} className={`mp-xbtn mp-xbtn--solid mp-bar__contact ${className}`}>
-      {t.common.contact} <FiArrowUpRight aria-hidden="true" />
+      <span className="mp-bar__ctext">{t.common.contact}</span> <FiArrowUpRight className="mp-bar__carrow" aria-hidden="true" />
+      <FiMail className="mp-bar__cicon" aria-hidden="true" />
     </Link>
   );
 };
@@ -78,6 +80,7 @@ export const TopBar: React.FC<{
         </nav>
         <div className="mp-bar__end">
           <LangSwitch />
+          <NavMenu />
           {showContact && <ContactLink service={service} />}
         </div>
       </div>

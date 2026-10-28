@@ -315,3 +315,33 @@ Diagnosi dei contatti: `docs/CONTACT-DELIVERY.md`.
   ~460 ms). Ora il layer uscente è fuori flusso e ritagliato (`.mp-stage { overflow: clip }`), e la posizione di
   scroll da ripristinare con Indietro viene letta prima della modifica del DOM.
 - Umami parte solo con il consenso alle statistiche (come Clarity).
+
+## Fase 8: demo immersive, menu a icone, menu ristorante, biglietti sul modello /card
+
+Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successive del titolare. Prevale sulla Fase 7.
+
+- **Demo immersive** (sei siti e sei biglietti): dentro c'è solo l'esperienza più `ExitButton`
+  (`ConceptChrome.tsx`): un pulsante di 44px in alto a destra, "Tillbaka till galleriet" / "Back to gallery",
+  tooltip su hover e focus, safe-area. Torna indietro nella cronologia se la galleria è la voce precedente
+  (posizione conservata), altrimenti è un link alla galleria. Tolti barra di uscita, switch lingua, footer e
+  CTA MambyLy dalle demo. Le testate delle demo lasciano libero l'angolo del pulsante.
+- **Lingua**: la lingua di una demo o di un biglietto è quella dell'indirizzo; `Stage` non la cambia più per
+  una preferenza salvata (`explicit` per `concept`, `example`, `card`). Anteprime per lingua:
+  `preview-<sv|en>-<id>-{desktop-640,desktop-1280,mobile-390}.webp` (screenshot reali, `prevgen.mjs`).
+- **Menu**: `NavMenu.tsx` sostituisce la barra inferiore (`QuickNav` rimosso). Pulsante bussola nell'header
+  (`aria-expanded`, nome "Öppna/Stäng navigering"), tendina `<nav>` di cinque icone (Utforska, Webbplatser,
+  Digitala visitkort, Om oss, Kontakt) con nome accessibile e tooltip, `aria-current="page"`; chiude con una
+  scelta, Escape (focus al pulsante) e click fuori. Sotto 430px Kontakt diventa un pulsante rotondo con busta.
+- **Ristorante**: `concepts/restaurant-menu.json` = `MENU_SV_EN.json` (sei piatti, categorie, prezzi, ingredienti
+  e allergeni illustrativi) con il nome del media al posto del percorso. Foto `dish-<id>-{480,900}.webp`, ritagli
+  quadrati con la stessa scala, nessuna maschera circolare né segnaposto. Contatore per categoria (2/3/1).
+- **Biglietti**: i sei esempi usano il motore di `/card` (`DigitalCard`/`CardExperience`: 85 × 55, fronte/retro,
+  rotazione, vCard, QR, condivisione). `card.json` → `design` aggiunge `.dc--d-<design>` (`_card-designs.scss`:
+  materiale, tipografia e composizione) e un monogramma. `StyleCard` (versione verticale) rimosso. QR e link
+  dei biglietti demo puntano alla pagina nella lingua mostrata.
+- **"Visa helskärm"** (`CardExperience` → `useFullscreen`, vale per `/card` e per i sei esempi): lo stesso
+  elemento biglietto alla misura massima visibile, solo un pulsante di chiusura; Fullscreen API chiesta dal
+  clic se disponibile, altrimenti vista immersiva nell'area del browser; in verticale resta orizzontale con
+  "Vrid telefonen…"; esce con pulsante, Escape, uscita del browser dal fullscreen e Indietro; focus restituito.
+- **Metodo**: una sola schermata (titolo, introduzione, anteprima nella lingua corrente accanto ai tre passaggi,
+  una frase sulle possibilità, una nota, una CTA verso il wizard con contesto `site`). Nessuna scelta.

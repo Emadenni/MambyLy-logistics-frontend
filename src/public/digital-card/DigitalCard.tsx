@@ -42,6 +42,8 @@ export const cardThemeProps = (card: CardConfig) => ({
     card.theme.style === "paper" ? "dc--paper" : "dc--solid",
     card.theme.font === "serif" ? "dc--serif" : "",
     card.theme.background ? "dc--image" : "",
+    // premium demo designs: material, type and composition on the same card engine
+    card.design ? `dc--d-${card.design}` : "",
   ]
     .filter(Boolean)
     .join(" "),
@@ -60,9 +62,24 @@ export const cardThemeProps = (card: CardConfig) => ({
   } as React.CSSProperties,
 });
 
+/** "Alex Lind" → "AL": the monogram of a design card without a logo. */
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((p) => p.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
 export const CardFront: React.FC<{ card: CardConfig; t: CardStrings; lazy?: boolean }> = ({ card, t, lazy }) => (
   <>
+    {card.design && <span className="dc__deco" aria-hidden="true" />}
     <div className="dc__top">
+      {card.design && !card.logoUrl && (
+        <span className="dc__mono" aria-hidden="true">
+          {initials(card.name)}
+        </span>
+      )}
       {card.logoUrl && (
         <img
           className={`dc__logo${card.logoShape === "wide" ? " dc__logo--wide" : ""}`}
@@ -80,7 +97,17 @@ export const CardFront: React.FC<{ card: CardConfig; t: CardStrings; lazy?: bool
       {card.company && <p className="dc__company">{card.company}</p>}
       {card.showNameOnFront && <p className="dc__name">{card.name}</p>}
       {card.role && <p className="dc__role">{card.role}</p>}
-      {card.tagline && <p className="dc__tagline">{card.tagline}</p>}
+      {card.tagline &&
+        (card.design ? (
+          // design cards: the tagline is a short list of words ("Rum · Människor · Tillhörighet")
+          <p className="dc__tagline dc__tagline--words">
+            {card.tagline.split("·").map((w) => (
+              <span key={w}>{w.trim()}</span>
+            ))}
+          </p>
+        ) : (
+          <p className="dc__tagline">{card.tagline}</p>
+        ))}
     </div>
     {card.photoUrl && <img className="dc__photo" src={card.photoUrl} alt="" width={120} height={120} loading={lazy ? "lazy" : undefined} draggable={false} />}
   </>

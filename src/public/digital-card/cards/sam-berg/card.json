@@ -7,11 +7,12 @@
   "role": "Konsult",
   "tagline": "Människor · Idéer · Framsteg",
   "theme": {
-    "front": "#141210",
+    "front": "#151311",
     "frontInk": "#efe7d6",
     "accent": "#c9b48a",
-    "back": "#141210",
-    "backInk": "#efe7d6",
+    "back": "#efe7d6",
+    "backInk": "#151311",
+    "backAccent": "#8a7448",
     "style": "solid",
     "layout": "classic"
   },

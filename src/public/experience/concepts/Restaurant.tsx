@@ -4,30 +4,22 @@ import { FiArrowRight, FiChevronLeft, FiChevronRight, FiMinus, FiPlus, FiX } fro
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
-import type { ConceptCopy } from "./content";
+import MENU from "./restaurant-menu.json";
 
-type Cat = "starters" | "mains" | "desserts";
-type Dish = { id: string; cat: Cat; name: string; text: string; price: string; ingredients: string; allergens: string; photo?: boolean };
+type Lang = "sv" | "en";
+type Dish = (typeof MENU.dishes)[number];
+type CatId = "starters" | "mains" | "desserts";
 
+/** Texts of the page around the menu (the menu itself comes from restaurant-menu.json). */
 const copy = {
   sv: {
-    wordmark: "Restaurang",
+    kind: "Restaurang",
     name: "Trattoria Limone",
-    menu: "Menyn",
-    book: "Boka bord",
-    findUs: "Hitta hit",
-    cats: { starters: "Förrätter", mains: "Varmrätter", desserts: "Desserter" } as Record<Cat, string>,
     catsLabel: "Kategorier",
-    prev: "Föregående rätt",
-    next: "Nästa rätt",
-    counter: "Rätt {i} av {n}",
-    allergensBtn: "Ingredienser & allergener",
-    ingredients: "Ingredienser",
-    allergens: "Allergener",
-    allergenNote: "Illustrativa uppgifter i en demo – ingen riktig allergenguide.",
-    noPhoto: "Ingen bild i demon",
+    counter: "Rätt {i} av {n} bland {cat}",
+    allergens: "Allergener (exempel)",
+    ingredientsTitle: "Ingredienser",
     swipeHint: "Svep eller använd pilarna",
-    bookTitle: "Boka bord",
     bookLead: "En demo: ingen restaurang kontaktas och inget bord bokas.",
     date: "Datum",
     time: "Tid",
@@ -39,38 +31,18 @@ const copy = {
     needName: "Fyll i datum och namn.",
     booked: "Det här är en demo – ingen bokning har gjorts och inget skickades.",
     close: "Stäng",
-    findTitle: "Hitta hit",
     findLines: ["Adressen är påhittad – restaurangen finns inte.", "På en riktig sajt står adress, karta och vägbeskrivning här."],
     hoursTitle: "Öppettider (exempel)",
     hours: ["Tis–tors 17–22", "Fre–lör 17–23", "Sön–mån stängt"],
-    dishes: [
-      { id: "burrata", cat: "starters", name: "Burrata", text: "Rostade körsbärstomater och basilikaolja.", price: "145 kr", ingredients: "Burrata, körsbärstomater, basilika, olivolja, flingsalt.", allergens: "Mjölk." },
-      { id: "vitello", cat: "starters", name: "Vitello tonnato", text: "Tunt skivad kalv, tonfiskkräm och kapris.", price: "155 kr", ingredients: "Kalvinnanlår, tonfisk, majonnäs, kapris, citron.", allergens: "Fisk, ägg." },
-      { id: "ravioli", cat: "mains", name: "Citronravioli", text: "Brynt smör, salvia och parmesan.", price: "195 kr", ingredients: "Färsk pasta, ricotta, citronskal, smör, salvia, parmesan.", allergens: "Gluten, ägg, mjölk.", photo: true },
-      { id: "risotto", cat: "mains", name: "Svamprisotto", text: "Karnaroliris, kantareller och timjan.", price: "210 kr", ingredients: "Karnaroliris, kantareller, schalottenlök, vitt vin, timjan, parmesan.", allergens: "Mjölk." },
-      { id: "torsk", cat: "mains", name: "Halstrad torsk", text: "Vita bönor, citron och gremolata.", price: "245 kr", ingredients: "Torsk, vita bönor, persilja, vitlök, citron, olivolja.", allergens: "Fisk." },
-      { id: "pannacotta", cat: "desserts", name: "Pannacotta", text: "Vanilj och rabarberkompott.", price: "105 kr", ingredients: "Grädde, vanilj, gelatin, rabarber, socker.", allergens: "Mjölk." },
-      { id: "tiramisu", cat: "desserts", name: "Tiramisu", text: "Mascarpone, espresso och kakao.", price: "115 kr", ingredients: "Mascarpone, ägg, savoiardikex, espresso, kakao.", allergens: "Gluten, ägg, mjölk." },
-    ] as Dish[],
   },
   en: {
-    wordmark: "Restaurant",
+    kind: "Restaurant",
     name: "Trattoria Limone",
-    menu: "The menu",
-    book: "Book a table",
-    findUs: "Find us",
-    cats: { starters: "Starters", mains: "Mains", desserts: "Desserts" } as Record<Cat, string>,
     catsLabel: "Categories",
-    prev: "Previous dish",
-    next: "Next dish",
-    counter: "Dish {i} of {n}",
-    allergensBtn: "Ingredients & allergens",
-    ingredients: "Ingredients",
-    allergens: "Allergens",
-    allergenNote: "Illustrative details in a demo – not a real allergen guide.",
-    noPhoto: "No picture in the demo",
+    counter: "Dish {i} of {n} in {cat}",
+    allergens: "Allergens (example)",
+    ingredientsTitle: "Ingredients",
     swipeHint: "Swipe or use the arrows",
-    bookTitle: "Book a table",
     bookLead: "A demo: no restaurant is contacted and no table is booked.",
     date: "Date",
     time: "Time",
@@ -82,32 +54,26 @@ const copy = {
     needName: "Fill in the date and your name.",
     booked: "This is a demo – no booking was made and nothing was sent.",
     close: "Close",
-    findTitle: "Find us",
     findLines: ["The address is made up – the restaurant does not exist.", "A real site shows the address, a map and directions here."],
     hoursTitle: "Opening hours (example)",
     hours: ["Tue–Thu 5–10 pm", "Fri–Sat 5–11 pm", "Sun–Mon closed"],
-    dishes: [
-      { id: "burrata", cat: "starters", name: "Burrata", text: "Roasted cherry tomatoes and basil oil.", price: "145 kr", ingredients: "Burrata, cherry tomatoes, basil, olive oil, flaky salt.", allergens: "Milk." },
-      { id: "vitello", cat: "starters", name: "Vitello tonnato", text: "Thinly sliced veal, tuna cream and capers.", price: "155 kr", ingredients: "Veal topside, tuna, mayonnaise, capers, lemon.", allergens: "Fish, egg." },
-      { id: "ravioli", cat: "mains", name: "Lemon ravioli", text: "Brown butter, sage and parmesan.", price: "195 kr", ingredients: "Fresh pasta, ricotta, lemon zest, butter, sage, parmesan.", allergens: "Gluten, egg, milk.", photo: true },
-      { id: "risotto", cat: "mains", name: "Mushroom risotto", text: "Carnaroli rice, chanterelles and thyme.", price: "210 kr", ingredients: "Carnaroli rice, chanterelles, shallot, white wine, thyme, parmesan.", allergens: "Milk." },
-      { id: "torsk", cat: "mains", name: "Seared cod", text: "White beans, lemon and gremolata.", price: "245 kr", ingredients: "Cod, white beans, parsley, garlic, lemon, olive oil.", allergens: "Fish." },
-      { id: "pannacotta", cat: "desserts", name: "Panna cotta", text: "Vanilla and rhubarb compote.", price: "105 kr", ingredients: "Cream, vanilla, gelatine, rhubarb, sugar.", allergens: "Milk." },
-      { id: "tiramisu", cat: "desserts", name: "Tiramisu", text: "Mascarpone, espresso and cocoa.", price: "115 kr", ingredients: "Mascarpone, egg, savoiardi, espresso, cocoa.", allergens: "Gluten, egg, milk." },
-    ] as Dish[],
   },
 };
 
-const CATS: Cat[] = ["starters", "mains", "desserts"];
-const START = 2; // the lemon ravioli
+const DISHES: Dish[] = MENU.dishes;
+const CATS = MENU.categories.map((c) => c.id as CatId);
+const START = Math.max(0, DISHES.findIndex((d) => d.id === MENU.initialDishId));
 const TIMES = ["17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30"];
+const label = (key: keyof typeof MENU.labels, lang: Lang) => MENU.labels[key][lang];
+const photo = (d: Dish, w: 480 | 900) => media(d.media, w);
 
 /**
- * Restaurant: the menu is the site. One dish at a time – big category word, the plate, name,
- * price and an allergen disclosure – browsed with arrows, swipe or the category row. Booking and
+ * Restaurant: the menu is the site. One dish at a time – the photograph of that very dish, its
+ * category, name, price and an ingredients/allergens disclosure – browsed with arrows, swipe or the
+ * category row. Six dishes, six photographs, matched by id (restaurant-menu.json). Booking and
  * "Find us" open in place and say plainly that nothing is sent.
  */
-const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
+const Restaurant: React.FC = () => {
   const { lang } = useCopy();
   const c = copy[lang];
   const reduce = useReducedMotion() ?? false;
@@ -121,20 +87,30 @@ const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
   const [booked, setBooked] = useState(false);
   const swipe = useRef<{ x: number; y: number; id: number } | null>(null);
 
+  const dish = DISHES[index];
+  const cat = dish.category as CatId;
+  const inCat = DISHES.filter((d) => d.category === cat);
+  const posInCat = inCat.findIndex((d) => d.id === dish.id) + 1;
+  const catLabel = (id: CatId) => MENU.categories.find((x) => x.id === id)!.label[lang];
+
   // An opened panel comes into view and takes the focus.
   useEffect(() => {
     if (panel) goTo(`${ids}-${panel}`);
   }, [panel, ids]);
 
-  const dishes = c.dishes;
-  const dish = dishes[index];
+  // The next dish is fetched ahead; the others only when they are shown.
+  useEffect(() => {
+    const next = new Image();
+    next.src = photo(DISHES[(index + 1) % DISHES.length], 900);
+  }, [index]);
+
   const go = (to: number) => {
-    const next = (to + dishes.length) % dishes.length;
+    const next = (to + DISHES.length) % DISHES.length;
     setDir(to > index ? 1 : -1);
     setIndex(next);
     setInfo(false);
   };
-  const openCat = (cat: Cat) => go(dishes.findIndex((d) => d.cat === cat));
+  const openCat = (id: CatId) => go(DISHES.findIndex((d) => d.category === id));
 
   // Horizontal swipe on the dish only; vertical movement stays a page scroll.
   const onDown = (e: React.PointerEvent) => {
@@ -162,77 +138,82 @@ const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
   return (
     <ConceptFrame id="restaurant">
       <header className="cx-re__head">
-        <span className="cx-re__kind">{c.wordmark}</span>
+        <span className="cx-re__kind">{c.kind}</span>
         <span className="cx-re__name">{c.name}</span>
       </header>
 
       <main id="cx-main-restaurant" className="cx-re__main">
         <h1 className="mp-sr" data-focus>
-          {c.name} – {c.menu}
+          {c.name} – {label("menu", lang)}
         </h1>
         <div className="cx-re__stage" onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={() => (swipe.current = null)}>
-          <p className="cx-re__catword" aria-hidden="true" style={{ "--len": c.cats[dish.cat].length } as React.CSSProperties}>
-            {c.cats[dish.cat]}
+          <p className="cx-re__catword" aria-hidden="true" style={{ "--len": catLabel(cat).length } as React.CSSProperties}>
+            {catLabel(cat)}
           </p>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={dish.id} className="cx-re__plate" {...slide}>
-              {dish.photo ? (
-                <img src={media("site-restaurant", 1024)} srcSet={`${media("site-restaurant", 640)} 640w, ${media("site-restaurant", 1024)} 1024w`} sizes="(min-width: 960px) 420px, 92vw" alt="" width={1024} height={1536} decoding="async" fetchPriority="high" draggable={false} />
-              ) : (
-                <div className="cx-re__noimg" aria-hidden="true">
-                  <span>{dish.name.charAt(0)}</span>
-                  <small>{c.noPhoto}</small>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
+          <div className="cx-re__plate">
+            <AnimatePresence mode="popLayout" initial={false}>
+              <motion.img
+                key={dish.id}
+                src={photo(dish, 900)}
+                srcSet={`${photo(dish, 480)} 480w, ${photo(dish, 900)} 900w`}
+                sizes="(min-width: 600px) 440px, 88vw"
+                alt={dish.alt[lang]}
+                width={900}
+                height={900}
+                decoding="async"
+                fetchPriority={dish.id === MENU.initialDishId ? "high" : "auto"}
+                draggable={false}
+                {...slide}
+              />
+            </AnimatePresence>
+          </div>
           <button type="button" className="cx-re__book" onClick={() => setPanel(panel === "book" ? null : "book")} aria-expanded={panel === "book"} aria-controls={`${ids}-book`}>
-            {c.book} <FiArrowRight aria-hidden="true" />
+            {label("book", lang)} <FiArrowRight aria-hidden="true" />
           </button>
         </div>
 
         <section className="cx-re__menu" aria-labelledby={`${ids}-menu`}>
           <h2 id={`${ids}-menu`} className="cx-re__rule">
-            <span>{c.menu}</span>
+            <span>{label("menu", lang)}</span>
           </h2>
           <div className="cx-re__dish" aria-live="polite" aria-atomic="true">
-            <h3>{dish.name}</h3>
-            <p>{dish.text}</p>
-            <p className="cx-re__price">{dish.price}</p>
+            <h3>{dish.name[lang]}</h3>
+            <p>{dish.description[lang]}</p>
+            <p className="cx-re__price">{dish.priceSek}&nbsp;kr</p>
           </div>
           <button type="button" className="cx-re__info" aria-expanded={info} aria-controls={`${ids}-info`} onClick={() => setInfo((v) => !v)}>
-            {c.allergensBtn} {info ? <FiMinus aria-hidden="true" /> : <FiPlus aria-hidden="true" />}
+            {label("ingredients", lang)} {info ? <FiMinus aria-hidden="true" /> : <FiPlus aria-hidden="true" />}
           </button>
           <div id={`${ids}-info`} className="cx-re__infobox" hidden={!info}>
             <p>
-              <strong>{c.ingredients}:</strong> {dish.ingredients}
+              <strong>{c.ingredientsTitle}:</strong> {dish.ingredients[lang].join(", ")}
             </p>
             <p>
-              <strong>{c.allergens}:</strong> {dish.allergens}
+              <strong>{c.allergens}:</strong> {dish.illustrativeAllergens[lang].join(", ")}
             </p>
-            <p className="cx-re__small">{c.allergenNote}</p>
+            <p className="cx-re__small">{MENU.notice[lang]}</p>
           </div>
 
           <div className="cx-re__pager">
-            <button type="button" onClick={() => go(index - 1)} aria-label={c.prev}>
+            <button type="button" onClick={() => go(index - 1)} aria-label={label("previous", lang)}>
               <FiChevronLeft aria-hidden="true" />
             </button>
             <p>
               <span aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}/{String(dishes.length).padStart(2, "0")}
+                {posInCat} / {inCat.length}
               </span>
-              <span className="mp-sr">{fill(c.counter, { i: index + 1, n: dishes.length })}</span>
+              <span className="mp-sr">{fill(c.counter, { i: posInCat, n: inCat.length, cat: catLabel(cat).toLowerCase() })}</span>
             </p>
-            <button type="button" onClick={() => go(index + 1)} aria-label={c.next}>
+            <button type="button" onClick={() => go(index + 1)} aria-label={label("next", lang)}>
               <FiChevronRight aria-hidden="true" />
             </button>
           </div>
           <p className="cx-re__hint">{c.swipeHint}</p>
 
           <nav className="cx-re__cats" aria-label={c.catsLabel}>
-            {CATS.map((cat) => (
-              <button key={cat} type="button" aria-current={dish.cat === cat ? "true" : undefined} onClick={() => openCat(cat)}>
-                {c.cats[cat]}
+            {CATS.map((id) => (
+              <button key={id} type="button" aria-current={cat === id ? "true" : undefined} onClick={() => openCat(id)}>
+                {catLabel(id)}
               </button>
             ))}
           </nav>
@@ -240,7 +221,7 @@ const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
 
         <section id={`${ids}-book`} className="cx-re__panel" hidden={panel !== "book"} aria-labelledby={`${ids}-bt`}>
           <div className="cx-re__panelhead">
-            <h2 id={`${ids}-bt`}>{c.bookTitle}</h2>
+            <h2 id={`${ids}-bt`}>{label("book", lang)}</h2>
             <button type="button" onClick={() => setPanel(null)} aria-label={c.close}>
               <FiX aria-hidden="true" />
             </button>
@@ -292,7 +273,7 @@ const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
 
         <section id={`${ids}-find`} className="cx-re__panel" hidden={panel !== "find"} aria-labelledby={`${ids}-ft`}>
           <div className="cx-re__panelhead">
-            <h2 id={`${ids}-ft`}>{c.findTitle}</h2>
+            <h2 id={`${ids}-ft`}>{label("findUs", lang)}</h2>
             <button type="button" onClick={() => setPanel(null)} aria-label={c.close}>
               <FiX aria-hidden="true" />
             </button>
@@ -310,10 +291,8 @@ const Restaurant: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
       </main>
 
       <button type="button" className="cx-re__find" onClick={() => setPanel(panel === "find" ? null : "find")} aria-expanded={panel === "find"} aria-controls={`${ids}-find`}>
-        {c.findUs} <FiArrowRight aria-hidden="true" />
+        {label("findUs", lang)} <FiArrowRight aria-hidden="true" />
       </button>
-
-      <footer className="cx-foot">{s.footer}</footer>
     </ConceptFrame>
   );
 };

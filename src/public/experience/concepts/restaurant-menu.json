@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 1,
+  "demoOnly": true,
+  "initialDishId": "lemon-ravioli",
+  "currency": "SEK",
+  "categories": [
+    {
+      "id": "starters",
+      "label": {
+        "sv": "Förrätter",
+        "en": "Starters"
+      }
+    },
+    {
+      "id": "mains",
+      "label": {
+        "sv": "Varmrätter",
+        "en": "Mains"
+      }
+    },
+    {
+      "id": "desserts",
+      "label": {
+        "sv": "Desserter",
+        "en": "Desserts"
+      }
+    }
+  ],
+  "notice": {
+    "sv": "Demomeny med illustrativa rätter, priser och allergenuppgifter. Ingen riktig beställning eller bordsbokning görs.",
+    "en": "Demo menu with illustrative dishes, prices and allergen information. No real order or table booking is made."
+  },
+  "labels": {
+    "menu": {
+      "sv": "Menyn",
+      "en": "The menu"
+    },
+    "book": {
+      "sv": "Boka bord",
+      "en": "Book a table"
+    },
+    "ingredients": {
+      "sv": "Ingredienser & allergener",
+      "en": "Ingredients & allergens"
+    },
+    "findUs": {
+      "sv": "Hitta hit",
+      "en": "Find us"
+    },
+    "previous": {
+      "sv": "Föregående rätt",
+      "en": "Previous dish"
+    },
+    "next": {
+      "sv": "Nästa rätt",
+      "en": "Next dish"
+    },
+    "exit": {
+      "sv": "Tillbaka till galleriet",
+      "en": "Back to gallery"
+    }
+  },
+  "dishes": [
+    {
+      "id": "bruschetta",
+      "category": "starters",
+      "priceSek": 95,
+      "name": {
+        "sv": "Bruschetta med tomat",
+        "en": "Tomato bruschetta"
+      },
+      "description": {
+        "sv": "Rostat surdegsbröd med tomat, basilika och olivolja.",
+        "en": "Toasted sourdough with tomatoes, basil and olive oil."
+      },
+      "ingredients": {
+        "sv": [
+          "surdegsbröd (vete)",
+          "tomat",
+          "basilika",
+          "olivolja"
+        ],
+        "en": [
+          "sourdough bread (wheat)",
+          "tomatoes",
+          "basil",
+          "olive oil"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "vete (gluten)"
+        ],
+        "en": [
+          "wheat (gluten)"
+        ]
+      },
+      "alt": {
+        "sv": "Bruschetta med tomat på en ljus keramiktallrik.",
+        "en": "Tomato bruschetta on a light ceramic plate."
+      },
+      "media": "dish-bruschetta"
+    },
+    {
+      "id": "burrata",
+      "category": "starters",
+      "priceSek": 145,
+      "name": {
+        "sv": "Burrata med tomater",
+        "en": "Burrata with tomatoes"
+      },
+      "description": {
+        "sv": "Krämig burrata med körsbärstomater, basilika och olivolja.",
+        "en": "Creamy burrata with cherry tomatoes, basil and olive oil."
+      },
+      "ingredients": {
+        "sv": [
+          "burrata (mjölk)",
+          "körsbärstomater",
+          "basilika",
+          "olivolja"
+        ],
+        "en": [
+          "burrata (milk)",
+          "cherry tomatoes",
+          "basil",
+          "olive oil"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "mjölk"
+        ],
+        "en": [
+          "milk"
+        ]
+      },
+      "alt": {
+        "sv": "Burrata med tomater på en ljus keramiktallrik.",
+        "en": "Burrata with tomatoes on a light ceramic plate."
+      },
+      "media": "dish-burrata"
+    },
+    {
+      "id": "lemon-ravioli",
+      "category": "mains",
+      "priceSek": 195,
+      "name": {
+        "sv": "Citronravioli",
+        "en": "Lemon ravioli"
+      },
+      "description": {
+        "sv": "Citronravioli med brynt smör, salvia och parmesan.",
+        "en": "Lemon ravioli with brown butter, sage and parmesan."
+      },
+      "ingredients": {
+        "sv": [
+          "pasta (vete, ägg)",
+          "ricotta (mjölk)",
+          "citron",
+          "smör (mjölk)",
+          "salvia",
+          "parmesan (mjölk)"
+        ],
+        "en": [
+          "pasta (wheat, eggs)",
+          "ricotta (milk)",
+          "lemon",
+          "butter (milk)",
+          "sage",
+          "parmesan (milk)"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "vete (gluten)",
+          "ägg",
+          "mjölk"
+        ],
+        "en": [
+          "wheat (gluten)",
+          "eggs",
+          "milk"
+        ]
+      },
+      "alt": {
+        "sv": "Citronravioli på en ljus keramiktallrik.",
+        "en": "Lemon ravioli on a light ceramic plate."
+      },
+      "media": "dish-lemon-ravioli"
+    },
+    {
+      "id": "mushroom-risotto",
+      "category": "mains",
+      "priceSek": 210,
+      "name": {
+        "sv": "Svamprisotto",
+        "en": "Mushroom risotto"
+      },
+      "description": {
+        "sv": "Carnaroliris med kantareller, parmesan och timjan.",
+        "en": "Carnaroli rice with chanterelles, parmesan and thyme."
+      },
+      "ingredients": {
+        "sv": [
+          "carnaroliris",
+          "kantareller",
+          "grönsaksbuljong (selleri)",
+          "smör (mjölk)",
+          "parmesan (mjölk)",
+          "timjan"
+        ],
+        "en": [
+          "carnaroli rice",
+          "chanterelles",
+          "vegetable stock (celery)",
+          "butter (milk)",
+          "parmesan (milk)",
+          "thyme"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "mjölk",
+          "selleri"
+        ],
+        "en": [
+          "milk",
+          "celery"
+        ]
+      },
+      "alt": {
+        "sv": "Svamprisotto på en ljus keramiktallrik.",
+        "en": "Mushroom risotto on a light ceramic plate."
+      },
+      "media": "dish-mushroom-risotto"
+    },
+    {
+      "id": "lemon-seabass",
+      "category": "mains",
+      "priceSek": 265,
+      "name": {
+        "sv": "Havsabborre med citron",
+        "en": "Sea bass with lemon"
+      },
+      "description": {
+        "sv": "Stekt havsabborre med rostad potatis, gröna grönsaker och citron.",
+        "en": "Pan-seared sea bass with roasted potatoes, green vegetables and lemon."
+      },
+      "ingredients": {
+        "sv": [
+          "havsabborre (fisk)",
+          "potatis",
+          "gröna grönsaker",
+          "citron",
+          "olivolja"
+        ],
+        "en": [
+          "sea bass (fish)",
+          "potatoes",
+          "green vegetables",
+          "lemon",
+          "olive oil"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "fisk"
+        ],
+        "en": [
+          "fish"
+        ]
+      },
+      "alt": {
+        "sv": "Havsabborre med citron på en ljus keramiktallrik.",
+        "en": "Sea bass with lemon on a light ceramic plate."
+      },
+      "media": "dish-lemon-seabass"
+    },
+    {
+      "id": "tiramisu",
+      "category": "desserts",
+      "priceSek": 95,
+      "name": {
+        "sv": "Tiramisù",
+        "en": "Tiramisù"
+      },
+      "description": {
+        "sv": "Mascarpone, kaffeindränkta kex och kakao.",
+        "en": "Mascarpone, coffee-soaked sponge fingers and cocoa."
+      },
+      "ingredients": {
+        "sv": [
+          "mascarpone (mjölk)",
+          "ägg",
+          "savoiardikex (vete, ägg)",
+          "kaffe",
+          "kakao"
+        ],
+        "en": [
+          "mascarpone (milk)",
+          "eggs",
+          "sponge fingers (wheat, eggs)",
+          "coffee",
+          "cocoa"
+        ]
+      },
+      "illustrativeAllergens": {
+        "sv": [
+          "mjölk",
+          "ägg",
+          "vete (gluten)"
+        ],
+        "en": [
+          "milk",
+          "eggs",
+          "wheat (gluten)"
+        ]
+      },
+      "alt": {
+        "sv": "Tiramisù på en ljus keramiktallrik.",
+        "en": "Tiramisù on a light ceramic plate."
+      },
+      "media": "dish-tiramisu"
+    }
+  ],
+  "source": "MambyLy_Corrections_Menu/MENU_SV_EN.json (image paths replaced by the published media name)"
+}

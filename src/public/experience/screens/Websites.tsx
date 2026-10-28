@@ -40,7 +40,7 @@ const Websites: React.FC = () => {
                   <i />
                   <i />
                 </span>
-                <img src={media(`preview-${id}-mobile`, 390)} alt={c.alt} width={390} height={844} loading={i < 2 ? "eager" : "lazy"} decoding="async" draggable={false} />
+                <img src={media(`preview-${t.lang}-${id}-mobile`, 390)} alt={c.alt} width={390} height={844} loading={i < 2 ? "eager" : "lazy"} decoding="async" draggable={false} />
               </div>
               <h2 className="mp-gal__name">
                 <Link to={conceptPath(id, t.lang)} className="mp-stretch">

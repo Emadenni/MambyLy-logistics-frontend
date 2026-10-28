@@ -40,7 +40,7 @@ $desk: 960px;
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
-    padding-bottom: calc(80px + env(safe-area-inset-bottom)); // room for the exit bar
+    padding-bottom: env(safe-area-inset-bottom);
     overflow-x: clip;
 
     @include desk {
@@ -80,58 +80,35 @@ $desk: 960px;
     }
   }
 
-  .cx-foot {
-    padding: 28px var(--cx-g) 12px;
-    font-size: 13px;
-    line-height: 1.5;
-    text-align: center;
-    opacity: 0.72;
-  }
-
-  // Exit bar: the only MambyLy element inside a demo.
+  // The only element from outside in a demo: a small close button in the top corner. The wrapper
+  // lets every gesture through; only the button takes pointer events.
   .mp-exit {
     position: fixed;
-    left: 50%;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    z-index: 30;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: min(100% - 24px, 600px);
-    height: 56px;
-    padding: 4px 6px 4px 4px;
-    translate: -50% 0;
-    border-radius: 999px;
-    background: rgba(251, 250, 246, 0.92);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    box-shadow:
-      0 0 0 1px rgba(16, 59, 53, 0.12),
-      0 10px 28px rgba(0, 0, 0, 0.16);
-    color: #103b35;
-    font: 500 14px/1.2 var(--mp-font);
+    top: calc(8px + env(safe-area-inset-top));
+    right: calc(8px + env(safe-area-inset-right));
+    z-index: 40;
+    pointer-events: none;
 
-    // Low screens (phone on its side, large zoom): a slimmer bar.
-    @media (max-height: 480px) {
-      bottom: calc(6px + env(safe-area-inset-bottom));
-      height: 46px;
-    }
-
-    &__back {
-      display: inline-flex;
-      flex: none;
-      align-items: center;
-      gap: 8px;
-      height: 100%;
-      padding: 0 18px 0 16px;
-      border-radius: 999px;
-      background: #103b35;
-      color: #f6f4ee;
-      font-weight: 600;
+    &__btn {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(251, 250, 246, 0.86);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow:
+        0 0 0 1px rgba(16, 59, 53, 0.16),
+        0 4px 14px rgba(0, 0, 0, 0.14);
+      color: #103b35;
+      font-size: 20px;
       text-decoration: none;
+      pointer-events: auto;
 
       &:hover {
-        background: #0a2a25;
+        background: #fff;
       }
 
       &:focus-visible {
@@ -140,92 +117,49 @@ $desk: 960px;
       }
     }
 
-    &__short {
-      display: none;
+    // Tooltip on hover and keyboard focus (the name itself is the aria-label: read once).
+    &__tip {
+      position: absolute;
+      top: 50%;
+      right: calc(100% + 8px);
+      padding: 5px 10px;
+      translate: 0 -50%;
+      border-radius: 8px;
+      background: #103b35;
+      color: #fff;
+      font: 500 13px/1.2 var(--mp-font);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
     }
 
-    @media (max-width: 479px) {
-      &__long {
-        display: none;
-      }
-
-      &__short {
-        display: inline;
-      }
+    &__btn:hover &__tip,
+    &__btn:focus-visible &__tip {
+      opacity: 1;
     }
 
-    &__note {
-      display: flex;
-      flex: 1;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-      color: #56645c;
-      font-size: 12px;
-
-      img {
-        flex: none;
-        width: 74px;
-        height: auto;
-      }
-
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      // Narrow phones: the note in two short lines; the logo stays on wider screens.
-      @media (max-width: 479px) {
-        font-size: 11.5px;
-        line-height: 1.25;
-
-        img {
-          display: none;
-        }
-
-        span {
-          white-space: normal;
-        }
-      }
-    }
-
-    &__lang {
-      flex: none;
-    }
-
-    &--dark {
-      background: rgba(18, 16, 18, 0.74);
+    &--dark .mp-exit__btn {
+      background: rgba(20, 18, 16, 0.72);
       box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.14),
-        0 10px 28px rgba(0, 0, 0, 0.3);
+        0 0 0 1px rgba(255, 255, 255, 0.22),
+        0 4px 14px rgba(0, 0, 0, 0.3);
       color: #f5f2ec;
 
-      .mp-exit__back {
-        background: #f6f4ee;
-        color: #103b35;
-
-        &:hover {
-          background: #fff;
-        }
-      }
-
-      .mp-exit__note {
-        color: rgba(255, 255, 255, 0.78);
-      }
-
-      .mp-lang__btn {
-        border-color: rgba(255, 255, 255, 0.45);
-        background: transparent;
-        color: #f5f2ec;
-
-        &[aria-pressed="true"] {
-          border-color: #f6f4ee;
-          background: #f6f4ee;
-          color: #103b35;
-        }
+      &:hover {
+        background: rgba(20, 18, 16, 0.9);
       }
     }
+  }
+
+  // Demo headers keep their right edge free for the close button.
+  .cx-re__head,
+  .cx-ph__head,
+  .cx-lo__head,
+  .cx-pa__head,
+  .cx-ed__head,
+  .cx-mi__head {
+    padding-right: calc(var(--cx-g) + 48px) !important;
   }
 
   // -------------------------------------------------------------------------------------------
@@ -266,6 +200,7 @@ $desk: 960px;
   }
 
   .cx-ed__mark {
+    min-height: 48px; // the link row below starts under the close button
     padding: 8px 0;
     border: 0;
     background: none;

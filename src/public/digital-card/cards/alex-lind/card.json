@@ -7,14 +7,15 @@
   "role": "Arkitekt",
   "tagline": "Rum · Människor · Tillhörighet",
   "theme": {
-    "front": "#f4efe3",
+    "front": "#f3eee2",
     "frontInk": "#1f3a2f",
-    "accent": "#1f4d3a",
+    "accent": "#3f6b55",
     "back": "#1f3a2f",
-    "backInk": "#f4efe3",
-    "font": "serif",
-    "style": "solid",
-    "layout": "classic"
+    "backInk": "#f3eee2",
+    "backAccent": "#c9d8bf",
+    "style": "paper",
+    "layout": "classic",
+    "font": "serif"
   },
   "email": "alex@example.com",
   "website": "https://example.com",

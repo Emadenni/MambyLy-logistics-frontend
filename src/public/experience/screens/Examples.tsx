@@ -2,13 +2,14 @@ import React from "react";
 import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
 import CardExperience from "../../digital-card/CardExperience";
-import StyleCard from "../../digital-card/StyleCard";
+import { CardPreview } from "../../digital-card/DigitalCard";
+import { cardStrings } from "../../digital-card/strings";
 import { examplePath, getCard, getExamples } from "../../digital-card/registry";
 import type { CardConfig } from "../../digital-card/types";
-import { fill, useCopy } from "../i18n";
+import { useCopy } from "../i18n";
 import Screen, { ScreenHead, TopBar } from "../Screen";
 import { EXAMPLE_BASE, PATHS } from "../routes";
-import { ExitBar } from "../concepts/ConceptChrome";
+import { ExitButton } from "../concepts/ConceptChrome";
 import { NotFound } from "./Privacy";
 
 /** Example cards of earlier versions of the site: moved to their closest style, or to the gallery. */
@@ -26,11 +27,11 @@ const RETIRED: Record<string, string | null> = {
 /** Designs on a dark surface (light text and controls around the card). */
 const DARK = new Set(["velvet", "oxblood", "graphite"]);
 
-/** One example in a gallery: the real card face (no controls) and its style. */
-export const ExampleTile: React.FC<{ card: CardConfig; open: string; lang: "sv" | "en"; eager?: boolean }> = ({ card, open, lang }) => (
+/** One example in a gallery: the front of the real card (no controls) and its style. */
+export const ExampleTile: React.FC<{ card: CardConfig; open: string; lang: "sv" | "en" }> = ({ card, open, lang }) => (
   <article className="mp-xtile2">
     <div className="mp-xtile2__card">
-      <StyleCard card={card} lang={lang} mini />
+      <CardPreview card={card} t={cardStrings[card.lang]} />
     </div>
     <h2 className="mp-xtile2__name">
       <Link to={examplePath(card.slug, lang)} className="mp-stretch">
@@ -81,16 +82,15 @@ export const Examples: React.FC = () => {
 };
 
 /**
- * /exempel/:slug – one example card fullscreen, on a surface in its own tone: try the actions
- * (the contact file holds the fictitious data, e-mail only explains the demo), then go on.
+ * /exempel/:slug – one example card fullscreen on a surface in its material's tone. Only the card
+ * and the small exit button: the card's own actions work (contact file with the fictitious data,
+ * sharing, QR, More); e-mail only explains the demo. The language is the site's (from the URL).
  */
 export const Example: React.FC = () => {
   const t = useCopy();
-  const x = t.example;
   const { slug } = useParams();
   const location = useLocation();
   const card = getCard(slug, t.lang);
-  const examples = getExamples(t.lang).filter((c) => c.design);
 
   if (slug && slug in RETIRED) {
     const moved = RETIRED[slug];
@@ -99,8 +99,6 @@ export const Example: React.FC = () => {
   if (!card || !card.demo || !card.example) return <NotFound />;
 
   const paths = { sv: `${EXAMPLE_BASE.sv}/${card.slug}`, en: `${EXAMPLE_BASE.en}/${card.slug}` };
-  const index = examples.findIndex((c) => c.slug === card.slug);
-  const next = examples.length > 1 ? examples[(index + 1) % examples.length] : undefined;
   const dark = !!card.design && DARK.has(card.design);
 
   return (
@@ -112,26 +110,12 @@ export const Example: React.FC = () => {
         paths={paths}
         noindex
       />
+      <ExitButton to="examples" tone={dark ? "dark" : "light"} />
       <main id="cx-main-card" className="mp-cardx__main">
-        <div className="mp-cardx__card">{card.design ? <StyleCard card={card} lang={t.lang} /> : <CardExperience card={card} />}</div>
-        <div className="mp-cardx__text">
-          <p className="mp-cardx__pill">
-            {x.pill} · {card.example.sector}
-          </p>
-          <p className="mp-cardx__summary">{card.example.summary}</p>
-        </div>
-        <div className="mp-cardx__end">
-          <Link to={PATHS.contact[t.lang]} state={{ service: "card", example: card.slug }} className="mp-xbtn mp-xbtn--solid mp-xbtn--lg mp-cardx__cta">
-            {x.cta} <FiArrowUpRight aria-hidden="true" />
-          </Link>
-          {next && (
-            <Link to={examplePath(next.slug, t.lang)} className="mp-underline mp-underline--small mp-cardx__next">
-              {fill(x.next, { name: next.example?.sector ?? next.name })} <FiArrowRight aria-hidden="true" />
-            </Link>
-          )}
+        <div className="mp-cardx__card">
+          <CardExperience card={card} headingLevel="h1" />
         </div>
       </main>
-      <ExitBar to="examples" label={x.all} tone={dark ? "dark" : "light"} note={x.pill} />
     </div>
   );
 };

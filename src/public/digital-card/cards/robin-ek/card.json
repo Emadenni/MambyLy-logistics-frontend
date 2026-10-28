@@ -10,8 +10,9 @@
     "front": "#ffffff",
     "frontInk": "#111111",
     "accent": "#1f4fd8",
-    "back": "#ffffff",
-    "backInk": "#111111",
+    "back": "#111111",
+    "backInk": "#ffffff",
+    "backAccent": "#8fb0ff",
     "style": "solid",
     "layout": "classic"
   },

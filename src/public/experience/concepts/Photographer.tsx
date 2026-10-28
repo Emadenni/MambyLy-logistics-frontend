@@ -4,7 +4,6 @@ import { FiArrowUpRight, FiChevronLeft, FiChevronRight, FiX } from "react-icons/
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
-import type { ConceptCopy } from "./content";
 
 type Cat = "portraits" | "spaces" | "brands";
 type Photo = { id: string; img: string; cat: Cat; title: string; alt: string };
@@ -94,7 +93,7 @@ const MONTHS = { sv: ["Januari", "Februari", "Mars", "April", "Maj", "Juni"], en
  * (arrows, keyboard, Escape); the category row filters the sheet and the counts are the real number
  * of pictures in the demo. "About me" and the booking request are short local panels.
  */
-const Photographer: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
+const Photographer: React.FC = () => {
   const { lang } = useCopy();
   const c = copy[lang];
   const reduce = useReducedMotion() ?? false;
@@ -258,8 +257,6 @@ const Photographer: React.FC<{ s: ConceptCopy["shared"] }> = ({ s }) => {
           {c.book} <FiArrowUpRight aria-hidden="true" />
         </button>
       </nav>
-
-      <footer className="cx-foot">{s.footer}</footer>
 
       <AnimatePresence>
         {viewer && current && (

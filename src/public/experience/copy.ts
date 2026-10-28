@@ -39,12 +39,15 @@ const sv = {
     jobs: "Jobba med oss",
     privacy: "Integritet",
   },
-  qnav: {
-    label: "Snabbnavigering",
+  menu: {
+    label: "Navigering",
+    open: "Öppna navigering",
+    close: "Stäng navigering",
     explore: "Utforska",
     websites: "Webbplatser",
-    cards: "Visitkort",
+    cards: "Digitala visitkort",
     about: "Om oss",
+    contact: "Kontakt",
   },
   cover: {
     tagline: "Enklare digitalt.",
@@ -83,32 +86,18 @@ const sv = {
     foot: "Skapad för ditt företag.",
   },
   method: {
-    title: "Enkelt på ytan. Möjligheter på djupet.",
-    lead: "Vi börjar med ditt mål. Sedan bygger vi det som behövs.",
+    title: "Enkelt att använda. Byggt för dina mål.",
+    lead: "Vi utgår från det du vill uppnå och skapar en tydlig väg dit.",
     steps: [
-      { title: "Vi lyssnar", sub: "Ditt mål", text: "Du berättar med egna ord vad sidan ska åstadkomma." },
-      { title: "Vi formar", sub: "Design som känns rätt", text: "Ett eget uttryck, med tydliga val för besökaren." },
-      { title: "Vi förverkligar", sub: "Testat före lansering", text: "Vi provar på mobil och dator innan något publiceras." },
+      { title: "Vi lyssnar", text: "Vi förstår din verksamhet och dina mål." },
+      { title: "Vi formar", text: "Vi gör innehåll, design och navigation tydliga." },
+      { title: "Vi förverkligar", text: "Vi bygger, testar och förbereder för lansering." },
     ],
-    question: "Hur mycket behöver din webbplats göra?",
-    modes: {
-      show: {
-        label: "Visa & berätta",
-        text: "En tydlig presentation: vem du är, vad du gör och hur man når dig.",
-      },
-      book: {
-        label: "Boka & koppla ihop",
-        text: "Från en tydlig presentation till bokning, formulär och kopplingar till verktyg du redan använder.",
-      },
-    },
-    modeNote: "Exempel på vad som går att bygga. Vad som ingår bestämmer vi tillsammans i offerten.",
-    previewShow: "Illustration: den redaktionella demon som en enkel presentationssida.",
-    previewBook: "Illustration: den redaktionella demon med ett bokningsformulär och kopplingar till kalender, e-post och kundregister.",
-    booking: { title: "Boka visning", date: "Datum", send: "Skicka förfrågan" },
-    connect: { title: "Koppla ihop", items: ["Kalender", "E-post", "Kundregister"] },
+    possibilities: "En tydlig presentation eller fler funktioner, som bokning och integrationer. Vi föreslår det som hjälper dig och håller upplevelsen enkel.",
+    note: "Funktioner och omfattning bestämmer vi tillsammans i offerten.",
     cta: "Berätta om din idé",
-    ctaNote: "Du behöver inte kunna tekniken – beskriv målet med egna ord. Vi hittar rätt omfattning tillsammans.",
-    included: "Se vad som ingår",
+    ctaNote: "Du behöver inte kunna tekniken. Berätta vad du vill uppnå.",
+    previewAlt: "Skärmbild av en av våra demowebbplatser: ett arkitektkontor med rubriken Ett hus som följer klippan.",
   },
   cards: {
     title: "Ett möte. En kontakt som stannar.",
@@ -387,7 +376,7 @@ const sv = {
     },
     method: {
       title: "Vårt sätt att bygga webbplatser | MambyLy Solutions",
-      description: "Enkelt på ytan, möjligheter på djupet: vi börjar med ditt mål och bygger det som behövs – testat före lansering.",
+      description: "Enkelt att använda, byggt för dina mål: vi utgår från det du vill uppnå och skapar en tydlig väg dit – byggt, testat och redo för lansering.",
     },
     cards: {
       title: "Digitala visitkort | MambyLy Solutions",
@@ -458,12 +447,15 @@ const en: Copy = {
     jobs: "Work with us",
     privacy: "Privacy",
   },
-  qnav: {
-    label: "Quick navigation",
+  menu: {
+    label: "Navigation",
+    open: "Open navigation",
+    close: "Close navigation",
     explore: "Explore",
     websites: "Websites",
     cards: "Digital cards",
     about: "About",
+    contact: "Contact",
   },
   cover: {
     tagline: "Simpler digital.",
@@ -502,32 +494,18 @@ const en: Copy = {
     foot: "Made for your business.",
   },
   method: {
-    title: "Simple to use. Capable of more.",
-    lead: "We start with your goal. Then we build what's needed.",
+    title: "Easy to use. Built around your goals.",
+    lead: "We start with what you want to achieve and create a clear path to it.",
     steps: [
-      { title: "We listen", sub: "Your goal", text: "You tell us in your own words what the site should achieve." },
-      { title: "We shape", sub: "Design that feels right", text: "A look of your own, with clear choices for visitors." },
-      { title: "We deliver", sub: "Tested before launch", text: "We test on phone and desktop before anything goes live." },
+      { title: "We listen", text: "We understand your business and your goals." },
+      { title: "We shape", text: "We make content, design and navigation clear." },
+      { title: "We deliver", text: "We build, test and prepare for launch." },
     ],
-    question: "How much does your website need to do?",
-    modes: {
-      show: {
-        label: "Show & tell",
-        text: "A clear presentation: who you are, what you do and how to reach you.",
-      },
-      book: {
-        label: "Book & connect",
-        text: "From a clear presentation to bookings, forms and connections to tools you already use.",
-      },
-    },
-    modeNote: "Examples of what can be built. What's included is agreed together in the quote.",
-    previewShow: "Illustration: the editorial demo as a simple presentation site.",
-    previewBook: "Illustration: the editorial demo with a booking form and connections to calendar, email and customer records.",
-    booking: { title: "Book a viewing", date: "Date", send: "Send request" },
-    connect: { title: "Connect", items: ["Calendar", "Email", "Customer records"] },
+    possibilities: "A clear presentation or additional features, such as booking and integrations. We recommend what helps you and keep the experience simple.",
+    note: "We agree on features and scope together in the quote.",
     cta: "Tell us about your idea",
-    ctaNote: "No need to know the technology – describe your goal in your own words. We'll find the right scope together.",
-    included: "See what's included",
+    ctaNote: "You don't need to know the technology. Tell us what you want to achieve.",
+    previewAlt: "Screenshot of one of our demo websites: an architecture studio with the headline A house that follows the cliff.",
   },
   cards: {
     title: "One meeting. A contact that stays.",
@@ -806,7 +784,7 @@ const en: Copy = {
     },
     method: {
       title: "Our approach to websites | MambyLy Solutions",
-      description: "Simple to use, capable of more: we start with your goal and build what's needed – tested before launch.",
+      description: "Easy to use, built around your goals: we start with what you want to achieve and create a clear path to it – built, tested and ready for launch.",
     },
     cards: {
       title: "Digital business cards | MambyLy Solutions",

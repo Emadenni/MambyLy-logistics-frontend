@@ -9,12 +9,13 @@
   "theme": {
     "front": "#5e0f14",
     "frontInk": "#f5ead8",
-    "accent": "#f5ead8",
-    "back": "#5e0f14",
-    "backInk": "#f5ead8",
-    "font": "serif",
+    "accent": "#e9c9a8",
+    "back": "#f5ead8",
+    "backInk": "#4f0b10",
+    "backAccent": "#8f1d24",
     "style": "solid",
-    "layout": "classic"
+    "layout": "classic",
+    "font": "serif"
   },
   "email": "kim@example.com",
   "website": "https://example.com",
