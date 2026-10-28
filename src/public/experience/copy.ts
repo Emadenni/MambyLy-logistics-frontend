@@ -67,7 +67,7 @@ const sv = {
   websites: {
     title: "Varför ska alla webbplatser se likadana ut?",
     lead: "Vi skapar egna uttryck. Med enkelhet som grund.",
-    galleryLabel: "Sex exempel",
+    galleryLabel: "Sju exempel",
     conceptNote: "Demowebbplatser framtagna av oss – påhittat innehåll, inte kundprojekt.",
     prev: "Föregående exempel",
     next: "Nästa exempel",
@@ -80,6 +80,7 @@ const sv = {
       painter: { label: "Måleri", caption: "Före och efter med ett reglage, tjänster och en offertförfrågan.", alt: "Skärmbild av måleridemon: rubriken Samma rum. Ny känsla. över ett vardagsrum som jämförs före och efter målning." },
       architecture: { label: "Arkitektur", caption: "Ett projekt som reportage: planritning, rum som öppnas och material.", alt: "Skärmbild av arkitekturdemon: serifrubriken Ett hus som följer klippan över ett ljust hus vid havet." },
       lighting: { label: "Belysning", caption: "En produkt och mycket luft: storlek, ljus och en lampa som tänds.", alt: "Skärmbild av belysningsdemon: en keramiklampa på en stenpelare och rubriken Ljus som förändrar rummet." },
+      typographic: { label: "Typografiskt koncept", caption: "Typografin är bilden: ett kulturprogram med filter, programpunkter som öppnas och en egen kväll.", alt: "Skärmbild av det typografiska konceptet: orden FORM, TYG och RÖRELSE i stora versaler över skulpturalt rött tyg." },
     },
     tagline: "Enkelt att använda. Svårt att förväxla.",
     cta: "Se vad vi erbjuder",
@@ -475,7 +476,7 @@ const en: Copy = {
   websites: {
     title: "Why should every website look the same?",
     lead: "Distinctive websites. Built around simplicity.",
-    galleryLabel: "Six examples",
+    galleryLabel: "Seven examples",
     conceptNote: "Demo websites made by us – fictitious content, not client projects.",
     prev: "Previous example",
     next: "Next example",
@@ -488,6 +489,7 @@ const en: Copy = {
       painter: { label: "Painting & decorating", caption: "Before and after with a slider, services and a quote request.", alt: "Screenshot of the painting demo: the headline Same room. A fresh feeling. over a living room compared before and after painting." },
       architecture: { label: "Architecture", caption: "One project as a feature story: a floor plan, rooms that open and materials.", alt: "Screenshot of the architecture demo: the serif headline A house that follows the cliff over a light house by the sea." },
       lighting: { label: "Lighting", caption: "One product and a lot of air: size, light and a lamp that switches on.", alt: "Screenshot of the lighting demo: a ceramic lamp on a stone plinth and the headline Light that changes a room." },
+      typographic: { label: "Typographic concept", caption: "The type is the image: a cultural programme with filters, events that open and an evening of your own.", alt: "Screenshot of the typographic concept: the words FORM, FABRIC and MOTION in large capitals over sculptural red fabric." },
     },
     tagline: "Easy to use. Hard to mistake.",
     cta: "See what we offer",

@@ -35,7 +35,14 @@ export type ContactProvider = "api" | "formspree";
 const TIMEOUT_MS = 15000;
 const FORMSPREE_ENDPOINT = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/;
 
-export function contactProvider(env: Record<string, string | undefined> = import.meta.env): ContactProvider {
+// Only the three variables this file needs (passing import.meta.env itself would inline every VITE_ value).
+const ENV: Record<string, string | undefined> = {
+  VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
+  VITE_CONTACT_PROVIDER: import.meta.env.VITE_CONTACT_PROVIDER,
+  VITE_FORMSPREE_ENDPOINT: import.meta.env.VITE_FORMSPREE_ENDPOINT,
+};
+
+export function contactProvider(env: Record<string, string | undefined> = ENV): ContactProvider {
   return env.VITE_CONTACT_PROVIDER === "formspree" && FORMSPREE_ENDPOINT.test(env.VITE_FORMSPREE_ENDPOINT ?? "") ? "formspree" : "api";
 }
 
@@ -74,7 +81,7 @@ async function post(url: string, body: unknown, headers: Record<string, string>,
 
 export async function submitContact(
   req: ContactRequest,
-  { env = import.meta.env, fetcher = fetch }: { env?: Record<string, string | undefined>; fetcher?: typeof fetch } = {},
+  { env = ENV, fetcher = fetch }: { env?: Record<string, string | undefined>; fetcher?: typeof fetch } = {},
 ): Promise<SubmitResult> {
   const provider = contactProvider(env);
 

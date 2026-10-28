@@ -11,6 +11,7 @@ import Logistics from "./Logistics";
 import Painter from "./Painter";
 import Architecture from "./Architecture";
 import Lighting from "./Lighting";
+import Typographic from "./Typographic";
 
 const pathsOf = (id: ConceptId): Record<Lang, string> => {
   const slug = CONCEPTS.find((c) => c.id === id)!.slug;
@@ -42,6 +43,7 @@ const Concept: React.FC = () => {
       {id === "painter" && <Painter />}
       {id === "architecture" && <Architecture c={conceptCopy[t.lang].architecture} s={s} />}
       {id === "lighting" && <Lighting c={conceptCopy[t.lang].lighting} />}
+      {id === "typographic" && <Typographic c={conceptCopy[t.lang].typographic} />}
     </>
   );
 };

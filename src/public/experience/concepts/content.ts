@@ -67,7 +67,35 @@ const sv = {
     date: "Önskad dag",
     send: "Skicka förfrågan",
   },
-  lighting: {
+  typographic: {
+    meta: "Typografiskt koncept – webbplatsexempel | MambyLy Solutions",
+    wordmark: "Höstprogrammet",
+    navProgram: "Program",
+    navPlan: "Min kväll",
+    season: "Höstsäsong",
+    titleLines: ["Form", "Tyg", "Rörelse"],
+    lead: "Tre helger om textil, kropp och scen. Ett påhittat kulturprogram, satt i stor typografi.",
+    filterLabel: "Visa",
+    dayLabel: "Dag",
+    categories: { all: "Allt", exhibition: "Utställning", talk: "Samtal", stage: "Scen" },
+    days: { fri: "Fre", sat: "Lör", sun: "Sön" },
+    count: "{n} programpunkter",
+    empty: "Inget i programmet för det här urvalet.",
+    add: "Lägg till i min kväll",
+    added: "I min kväll",
+    planTitle: "Min kväll",
+    planEmpty: "Lägg till programpunkter så samlas de här.",
+    planClear: "Töm",
+    items: [
+      { id: "t1", day: "fri", cat: "exhibition", time: "17:00", title: "Veck och vikt", text: "Skulpturer i siden som hänger fritt i rummet. Vandra runt och se tyget ändra färg med ljuset." },
+      { id: "t2", day: "fri", cat: "talk", time: "19:00", title: "Hur tyg minns", text: "Ett samtal om material som bär spår av händer, tid och rörelse." },
+      { id: "t3", day: "sat", cat: "stage", time: "14:00", title: "Röd rörelse", text: "Dans med åtta meter tyg. Föreställningen ändras efter publikens plats i salen." },
+      { id: "t4", day: "sat", cat: "exhibition", time: "16:00", title: "Färgens vikt", text: "Hur samma röda färg känns tung, lätt, varm eller kall beroende på ytan." },
+      { id: "t5", day: "sat", cat: "talk", time: "18:30", title: "Att klä ett rum", text: "Scenografer berättar hur textil förändrar en scen utan ett enda ord." },
+      { id: "t6", day: "sun", cat: "stage", time: "13:00", title: "Andning", text: "En lugn föreställning för alla åldrar, med ljus och ljud som följer tyget." },
+      { id: "t7", day: "sun", cat: "exhibition", time: "15:00", title: "Sista vecket", text: "Visning av hela utställningen innan den monteras ned." },
+    ],
+  },  lighting: {
     meta: "Belysning – webbplatsexempel | MambyLy Solutions",
     wordmark: "Linje & Ljus",
     kicker: "Belysning",
@@ -178,7 +206,35 @@ const en: ConceptCopy = {
     date: "Preferred day",
     send: "Send request",
   },
-  lighting: {
+  typographic: {
+    meta: "Typographic concept – website example | MambyLy Solutions",
+    wordmark: "The Autumn Programme",
+    navProgram: "Programme",
+    navPlan: "My evening",
+    season: "Autumn season",
+    titleLines: ["Form", "Fabric", "Motion"],
+    lead: "Three weekends on textile, body and stage. A made-up cultural programme, set in large type.",
+    filterLabel: "Show",
+    dayLabel: "Day",
+    categories: { all: "All", exhibition: "Exhibition", talk: "Talk", stage: "Stage" },
+    days: { fri: "Fri", sat: "Sat", sun: "Sun" },
+    count: "{n} events",
+    empty: "Nothing in the programme for this selection.",
+    add: "Add to my evening",
+    added: "In my evening",
+    planTitle: "My evening",
+    planEmpty: "Add events and they gather here.",
+    planClear: "Clear",
+    items: [
+      { id: "t1", day: "fri", cat: "exhibition", time: "17:00", title: "Fold and weight", text: "Silk sculptures hanging freely in the room. Walk around and watch the fabric change colour with the light." },
+      { id: "t2", day: "fri", cat: "talk", time: "19:00", title: "How fabric remembers", text: "A talk about materials that carry traces of hands, time and movement." },
+      { id: "t3", day: "sat", cat: "stage", time: "14:00", title: "Red motion", text: "Dance with eight metres of fabric. The performance changes with where the audience sits." },
+      { id: "t4", day: "sat", cat: "exhibition", time: "16:00", title: "The weight of colour", text: "How the same red feels heavy, light, warm or cold depending on the surface." },
+      { id: "t5", day: "sat", cat: "talk", time: "18:30", title: "Dressing a room", text: "Set designers on how textile changes a stage without a single word." },
+      { id: "t6", day: "sun", cat: "stage", time: "13:00", title: "Breath", text: "A calm performance for all ages, with light and sound that follow the fabric." },
+      { id: "t7", day: "sun", cat: "exhibition", time: "15:00", title: "The last fold", text: "A tour of the whole exhibition before it is taken down." },
+    ],
+  },  lighting: {
     meta: "Lighting – website example | MambyLy Solutions",
     wordmark: "Line & Light",
     kicker: "Lighting",
@@ -229,4 +285,4 @@ const en: ConceptCopy = {
 export const conceptCopy: Record<Lang, ConceptCopy> = { sv, en };
 
 /** Gallery order and the master image behind each concept (public/media/mambyly). */
-export const CONCEPT_ORDER: ConceptId[] = ["restaurant", "photographer", "logistics", "painter", "architecture", "lighting"];
+export const CONCEPT_ORDER: ConceptId[] = ["restaurant", "photographer", "logistics", "painter", "architecture", "lighting", "typographic"];

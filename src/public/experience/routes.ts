@@ -45,8 +45,8 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
 export const EXAMPLE_BASE: Record<Lang, string> = { sv: "/exempel", en: "/en/examples" };
 export const CARD_PATH: Record<Lang, string> = { sv: "/card", en: "/en/card" };
 
-/** The six website demos (fullscreen, fictitious showcase sites), with their slug in each language. */
-export type ConceptId = "restaurant" | "photographer" | "logistics" | "painter" | "architecture" | "lighting";
+/** The seven website demos (fullscreen, fictitious showcase sites), with their slug in each language. */
+export type ConceptId = "restaurant" | "photographer" | "logistics" | "painter" | "architecture" | "lighting" | "typographic";
 export const CONCEPTS: { id: ConceptId; slug: Record<Lang, string> }[] = [
   { id: "restaurant", slug: { sv: "restaurang", en: "restaurant" } },
   { id: "photographer", slug: { sv: "fotograf", en: "photographer" } },
@@ -54,14 +54,13 @@ export const CONCEPTS: { id: ConceptId; slug: Record<Lang, string> }[] = [
   { id: "painter", slug: { sv: "maleri", en: "painting" } },
   { id: "architecture", slug: { sv: "arkitektur", en: "architecture" } },
   { id: "lighting", slug: { sv: "belysning", en: "lighting" } },
+  { id: "typographic", slug: { sv: "typografisk", en: "typographic" } },
 ];
 /** Slugs of the earlier gallery: the two kept demos moved, the others lead back to the gallery. */
 export const RETIRED_CONCEPTS: Record<string, ConceptId | null> = {
   redaktionell: "architecture",
   editorial: "architecture",
   minimal: "lighting",
-  typografisk: null,
-  typographic: null,
   visuell: null,
   visual: null,
   interaktiv: null,
