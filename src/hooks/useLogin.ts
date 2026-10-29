@@ -27,7 +27,7 @@ const useLogin = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Invalid email or password");
+        throw new Error(response.status >= 500 ? "The server could not sign you in right now. Try again in a moment." : "Invalid email or password");
       }
 
       const data: ApiResponse = await response.json();

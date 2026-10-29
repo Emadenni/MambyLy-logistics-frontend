@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Message, ApiResponse } from "../types/common";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -8,8 +7,6 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const navigate = useNavigate();
-
   const getToken = () => {
     return sessionStorage.getItem("token");
   };
@@ -17,6 +14,7 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
   const fetchMessages = async () => {
     const token = getToken();
     setLoading(true);
+    setError(null);
 
     const endpoint = idKey === "jobMessageId" ? "/jobMessages" : "/clientsMessages";
 
@@ -31,6 +29,7 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
 
       if (response.status === 401) {
         useAuthStore.getState().handleUnauthorized();
+        return;
       }
 
       if (!response.ok) {
@@ -79,10 +78,11 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
     }
   };
 
-  const deleteMessage = async (messageId: string | undefined) => {
+  /** Resolves true only when the API confirmed the deletion. */
+  const deleteMessage = async (messageId: string | undefined): Promise<boolean> => {
     if (!messageId) {
       console.error("Error: messageId is undefined!");
-      return;
+      return false;
     }
 
     const token = getToken();
@@ -98,11 +98,8 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
       });
 
       if (response.status === 401) {
-        sessionStorage.removeItem("token");
-        alert("Session expired. Please log in again.");
-        navigate("/");
-        window.location.reload();
-        return;
+        useAuthStore.getState().handleUnauthorized();
+        return false;
       }
 
       if (!response.ok) {
@@ -110,8 +107,9 @@ const useMessages = (idKey: "clientMessageId" | "jobMessageId") => {
       }
 
       setMessages((prevMessages) => prevMessages.filter((msg) => msg[idKey] !== messageId));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete message");
+      return true;
+    } catch {
+      return false;
     }
   };
 

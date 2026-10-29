@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AdminData, ApiResponse, NewAdminData } from "../types/common";
 import { useAuthStore } from "../store/useAuthStore";
 
@@ -7,13 +6,13 @@ const useRenderAdmin = () => {
   const [admins, setAdmins] = useState<AdminData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const getToken = () => sessionStorage.getItem("token");
 
   const fetchAdmins = async () => {
     const token = getToken();
     setLoading(true);
+    setError(null);
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin`;
 
     try {
@@ -63,7 +62,8 @@ setAdmins(adminsArray); // nessun errore, il tipo è corretto
     }
   };
 
-  const deleteAdmin = async (adminId: string) => {
+  /** Resolves { ok } – with the reason when the API refused (e.g. a superadmin). */
+  const deleteAdmin = async (adminId: string): Promise<{ ok: boolean; message?: string }> => {
     const token = getToken();
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
 
@@ -77,29 +77,27 @@ setAdmins(adminsArray); // nessun errore, il tipo è corretto
       });
 
       if (response.status === 401) {
-        alert("Session expired. Please log in again.");
-        sessionStorage.removeItem("token");
-        navigate("/");
-        return;
+        useAuthStore.getState().handleUnauthorized();
+        return { ok: false };
       }
 
       if (!response.ok) {
         const responseBody = await response.text();
         if (responseBody.includes("Cannot delete a superadmin")) {
-          alert("You cannot delete a superadmin.");
-          return;
+          return { ok: false, message: "A superadmin cannot be deleted." };
         }
-        throw new Error(`Failed to delete admin: ${responseBody || "Unknown error"}`);
+        return { ok: false, message: "The admin could not be deleted. Nothing was changed." };
       }
 
-      setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.id !== adminId));
-      fetchAdmins();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete admin");
+      setAdmins((prevAdmins) => prevAdmins.filter((admin) => admin.adminId !== adminId));
+      return { ok: true };
+    } catch {
+      return { ok: false, message: "The admin could not be deleted. Check the connection and try again." };
     }
   };
 
-  const updateAdmin = async (adminId: string, updatedData: Partial<NewAdminData>) => {
+  /** Resolves true only when the API confirmed the update. */
+  const updateAdmin = async (adminId: string, updatedData: Partial<NewAdminData>): Promise<boolean> => {
     const token = getToken();
     const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/admin/${adminId}`;
 
@@ -116,23 +114,21 @@ setAdmins(adminsArray); // nessun errore, il tipo è corretto
       });
 
       if (response.status === 401) {
-        alert("Session expired. Please log in again.");
-        sessionStorage.removeItem("token");
-        navigate("/");
-        return;
+        useAuthStore.getState().handleUnauthorized();
+        return false;
       }
 
       if (!response.ok) {
-        const responseBody = await response.text();
-        throw new Error(`Failed to update admin: ${responseBody || "Unknown error"}`);
+        return false;
       }
 
       const updatedAdmin: NewAdminData = await response.json();
       setAdmins((prevAdmins) =>
-        prevAdmins.map((admin) => (admin.id === adminId ? { ...admin, ...updatedAdmin } : admin))
+        prevAdmins.map((admin) => (admin.adminId === adminId ? { ...admin, ...updatedAdmin } : admin))
       );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update admin");
+      return true;
+    } catch {
+      return false;
     }
   };
 

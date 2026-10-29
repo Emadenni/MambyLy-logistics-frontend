@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { adminValidation } from "../utils/adminValidation";
 import { AdminData, FieldErrors, ApiResponse } from "../types/common";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
 const useRegisterAdmin = () => {
@@ -20,8 +19,6 @@ const useRegisterAdmin = () => {
     email: null,
     password: null,  // Aggiungi errori per la password
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof AdminData) => {
     setNewAdmin({ ...newAdmin, [field]: e.target.value });
@@ -85,12 +82,11 @@ const useRegisterAdmin = () => {
 
       if (response.status === 401) {
         useAuthStore.getState().handleUnauthorized();
+        return { success: false, message: "Session expired." };
       }
 
       if (response.ok) {
         setError(null);
-        alert("Admin added successfully");
-        window.location.reload();
         return { success: true, message: "Admin added successfully." };
       } else {
         if (data.error === "Email Already in use") {

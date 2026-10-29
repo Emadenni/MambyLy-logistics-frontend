@@ -21,8 +21,9 @@ import "./pages/WorkWithUs/WorkWithUs";
 import "./pages/AboutUs/aboutUs.scss";
 import "./components/ContactsListBox/contactsListBox.scss";
 import "./pages/NotFoundPage/NotFoundPage";
-import AdminPage from "./pages/AdminPage/AdminPage";
-import LoginForm from "./components/LoginForm/LoginForm";
+// Admin and its sign-in (src/admin): own layout and styles, same hooks and requests as before.
+import AdminApp from "./admin/AdminApp";
+import LoginScreen from "./admin/LoginScreen";
 import SidoButik from "./pages/SidoButik/SidoButik";
 import Templates from "./pages/Templates/Templates";
 import TemplateDetails from "./components/TemplateDetails/TemplateDetails";
@@ -48,11 +49,11 @@ import LegacyConsent from "./public/experience/LegacyConsent";
 import whatsapp_icon from "./assets/images/socials/whatsapp_icon.webp";
 import { publicContact } from "./public/contact";
 
-/** The floating WhatsApp button stays on the untouched legacy pages only (admin, login, Sido Butik);
- * the public site offers the contact wizard and e-mail. */
+/** The floating WhatsApp button stays on Sido Butik only; the public site offers the contact wizard
+ * and e-mail, and in the admin and its sign-in it would only cover the work. */
 const LegacyWhatsApp = () => {
   const { pathname } = useLocation();
-  if (!isLegacyPath(pathname)) return null;
+  if (!isLegacyPath(pathname) || /^\/(admin|login)(\/|$)/i.test(pathname)) return null;
   return (
     <a href={publicContact.whatsappGreetingUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="whatsapp-icon">
       <img src={whatsapp_icon} alt="whatsapp_icon" className="social_icon" loading="lazy" />
@@ -124,8 +125,8 @@ const App = () => {
               <Route path="/sidoButik/mallar" element={<Templates />} />
               <Route path="/sidoButik/mallar/:templateId" element={<TemplateDetails />} />
             </Route>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/admin" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
+            <Route path="/login" element={<LoginScreen />} />
+            <Route path="/admin/*" element={isAuthenticated ? <AdminApp /> : <Navigate to="/login" replace />} />
           </Routes>
 
           <LegacyWhatsApp />

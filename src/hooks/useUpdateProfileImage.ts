@@ -6,14 +6,19 @@ const useUpdateProfileImage = () => {
   const [error, setError] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const uploadImage = async (file: File, adminId: string) => {
+  /** Resolves true only when the API returned the new image URL. */
+  const uploadImage = async (file: File, adminId: string): Promise<boolean> => {
     setIsUploading(true);
     setError(null);
 
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Image = reader.result as string;
+      const base64Image = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => reject(new Error("The image could not be read."));
+        reader.readAsDataURL(file);
+      });
+      {
 
         const requestData = {
           base64Image: base64Image,
@@ -34,6 +39,7 @@ const useUpdateProfileImage = () => {
 
         if (response.status === 401) {
           useAuthStore.getState().handleUnauthorized();
+          return false;
         }
 
         const data = await response.json();
@@ -44,15 +50,14 @@ const useUpdateProfileImage = () => {
 
         if (data.imageUrl) {
           setImageUrl(data.imageUrl);
-        } else {
-          throw new Error("Unexpected response format: imageUrl not found");
+          return true;
         }
-      };
-
-      reader.readAsDataURL(file);
+        throw new Error("Unexpected response format: imageUrl not found");
+      }
     } catch (err: any) {
       console.error("Upload error:", err.message);
-      setError(err.message);
+      setError("The image could not be uploaded. The previous image is still in use.");
+      return false;
     } finally {
       setIsUploading(false);
     }

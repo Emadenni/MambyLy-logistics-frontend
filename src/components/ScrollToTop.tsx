@@ -7,8 +7,9 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // The public site restores and resets scroll itself (src/public/experience/Stage.tsx).
-    if (!isLegacyPath(pathname)) return;
+    // The public site restores and resets scroll itself (src/public/experience/Stage.tsx), and so
+    // does the admin (back to a list keeps its position, src/admin/MessagesSection.tsx).
+    if (!isLegacyPath(pathname) || /^\/admin(\/|$)/i.test(pathname)) return;
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [pathname]);
 

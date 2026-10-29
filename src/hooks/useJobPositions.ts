@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { JobPosition } from "../types/common";
 import { useAuthStore } from "../store/useAuthStore";
-import { useNavigate } from "react-router-dom";
 
 const useJobPositions = () => {
-  const navigate = useNavigate();
   const [jobPositions, setJobPositions] = useState<JobPosition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,14 +10,16 @@ const useJobPositions = () => {
 
   const authToken = sessionStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchJobPositions = async () => {
+  const fetchJobPositions = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/jobPositions`;
         const response = await fetch(apiUrl);
 
         if (response.status === 401) {
           useAuthStore.getState().handleUnauthorized();
+          return;
         }
 
         if (!response.ok) {
@@ -39,13 +39,16 @@ const useJobPositions = () => {
       }
     };
 
+  useEffect(() => {
     fetchJobPositions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addJobPosition = async (positionData: JobPosition) => {
+  /** Resolves true only when the API confirmed the new position. */
+  const addJobPosition = async (positionData: JobPosition): Promise<boolean> => {
     if (!authToken) {
-      setError("No authentication token found.");
-      return;
+      useAuthStore.getState().handleUnauthorized();
+      return false;
     }
 
     try {
@@ -61,11 +64,8 @@ const useJobPositions = () => {
       });
 
       if (response.status === 401) {
-        sessionStorage.removeItem("token");
-        alert("Session expired. Please log in again.");
-        navigate("/");
-        window.location.reload();
-        return;
+        useAuthStore.getState().handleUnauthorized();
+        return false;
       }
 
       if (!response.ok) {
@@ -74,19 +74,19 @@ const useJobPositions = () => {
 
       const data = await response.json();
       setJobPositions((prevPositions) => [...prevPositions, data]);
-      alert("Position successfully added");
-      setError(null);
-    } catch (err) {
-      setError("Failed to add job position.");
+      return true;
+    } catch {
+      return false;
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const deleteJobPosition = async (positionId: string, createdAt: string) => {
+  /** Resolves true only when the API confirmed the deletion. */
+  const deleteJobPosition = async (positionId: string, createdAt: string): Promise<boolean> => {
     if (!authToken) {
-      setError("No authentication token found.");
-      return;
+      useAuthStore.getState().handleUnauthorized();
+      return false;
     }
 
     try {
@@ -101,11 +101,8 @@ const useJobPositions = () => {
       });
 
       if (response.status === 401) {
-        sessionStorage.removeItem("token");
-        alert("Session expired. Please log in again.");
-        navigate("/");
-        window.location.reload();
-        return;
+        useAuthStore.getState().handleUnauthorized();
+        return false;
       }
 
       if (!response.ok) {
@@ -113,9 +110,9 @@ const useJobPositions = () => {
       }
 
       setJobPositions((prevPositions) => prevPositions.filter((position) => position.positionId !== positionId));
-      alert("Position successfully deleted.");
-    } catch (err) {
-      setError("Failed to delete job position.");
+      return true;
+    } catch {
+      return false;
     }
   };
 
@@ -127,6 +124,7 @@ const useJobPositions = () => {
     isSubmitting,
     setJobPositions,
     deleteJobPosition,
+    reload: fetchJobPositions,
   };
 };
 
