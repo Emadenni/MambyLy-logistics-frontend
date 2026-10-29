@@ -369,3 +369,15 @@ Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successi
   carta satinata con profondità tonale (viola); un simbolo della professione per card (Lucide: bussola,
   pennino, diaframma, circuito, scintille; l'avorio ha già l'arco) e un dettaglio a secco (cornice avorio,
   filetto bianco e rosso). Tutto in `_card-designs.scss`, generato da `materials2.cjs` (scratchpad).
+
+## Fase 11: Utforska in una schermata, footer semplice, materiali visibili
+
+- **Footer**: niente più tendina; i collegamenti legali sono sempre visibili in una riga compatta che va a
+  capo (`ScreenFooter`), con la safe-area contata una volta.
+- **Utforska**: per altezze ≥ 500px lo schermo è una griglia `auto / 1fr / auto` con `min-height: 100dvh`
+  (non sommata a header e footer); titoli, lead, immagini e "Om oss" prendono le misure anche
+  dall'altezza (`dvh`). Sotto 700px sparisce la frase secondaria del pannello biglietti, sotto 600px il lead
+  dei siti e il © (presente su tutte le altre pagine). Sotto 500px (orizzontale, zoom) la pagina scorre.
+  Misurato `scrollHeight` = `clientHeight` da 375×553 a 1920×1080, SV ed EN.
+- **Biglietti**: velluto nero rifatto come peluria morbida sfumata (niente punti chiari) con zone di velluto
+  schiacciato; viola con trama satinata più ampia e profondità tonale; simboli un po' più grandi.

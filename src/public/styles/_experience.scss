@@ -592,55 +592,30 @@ $x-wide: 1180px;
   }
 
   // Compact footer line
+  // Compact footer: the legal links in one wrapping line, always visible. The safe area (iPhone home
+  // indicator) is counted here, once.
   .mp-sfoot {
-    // the safe area (iPhone home indicator) is counted here, once
-    padding: 10px var(--x-gutter) calc(14px + env(safe-area-inset-bottom));
+    padding: 8px var(--x-gutter) calc(10px + env(safe-area-inset-bottom));
     text-align: center;
-
-    &__row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .mp-sfoot__toggle {
-      gap: 6px;
-      min-height: 44px;
-      padding: 0 10px;
-      color: var(--x-muted);
-      font-size: 13px;
-
-      svg {
-        transition: transform 0.25s var(--x-ease);
-      }
-    }
-
-    &.is-open .mp-sfoot__toggle svg {
-      transform: rotate(180deg);
-    }
-
-    ul[hidden] {
-      display: none;
-    }
 
     ul {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
-      gap: 4px 18px;
+      gap: 0 14px;
       margin: 0;
       padding: 0;
       list-style: none;
       color: var(--x-muted);
-      font-size: 13px;
+      font-size: 12.5px;
     }
 
     a,
     button {
       display: inline-flex;
       align-items: center;
-      min-height: 36px;
+      min-height: 32px;
       padding: 0;
       border: 0;
       background: none;
@@ -658,7 +633,7 @@ $x-wide: 1180px;
     &__copy {
       display: inline-flex;
       align-items: center;
-      min-height: 36px;
+      min-height: 32px;
     }
 
     .admin_link_container {
@@ -668,57 +643,141 @@ $x-wide: 1180px;
       a {
         display: inline-grid;
         place-items: center;
-        min-width: 36px;
-        min-height: 36px;
+        min-width: 32px;
+        min-height: 32px;
       }
     }
 
     .admin_link_icon {
       position: static;
-      max-width: 16px;
-      opacity: 0.55;
+      max-width: 14px;
+      opacity: 0.5;
     }
-
   }
 
-  // Utforska is one screen: its footer line is a little tighter.
-  // On tall phones the destinations sit in the middle of the free height instead of leaving one
-  // empty band above the footer; the footer still ends the page (no space below it).
-  .mp-screen--explore .mp-screen__main {
-    justify-content: center;
-    padding-bottom: 6px;
-  }
+  // ---------------------------------------------------------------------------------------------
+  // Utforska: exactly one screen. The screen IS the dynamic viewport (100dvh, not added to header
+  // and footer): rows bar / destinations / footer; the two service panels share the free height and
+  // their pictures follow it, so nothing scrolls on normal phones and desktops. Very low screens
+  // (landscape phone, high zoom) fall back to normal scrolling below.
+  // ---------------------------------------------------------------------------------------------
 
-  // Laptop screens (about 800px high): a narrower column keeps Utforska in one view.
-  @media (min-width: $x-desk) and (max-height: 880px) {
+  @media (min-height: 500px) {
     .mp-screen--explore {
-      .mp-hub,
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      // exactly the viewport when everything fits (it is sized to); taller only if it really cannot
+      min-height: 100vh;
+      min-height: 100dvh;
+
+      > .mp-skip {
+        position: absolute;
+      }
+
+      .mp-screen__main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 0;
+        padding: 0;
+        gap: 0;
+      }
+
+      .mp-hub {
+        grid-template-rows: minmax(0, auto) minmax(0, auto);
+        gap: min(10px, 1.2dvh);
+        margin-top: min(6px, 0.8dvh);
+      }
+
+      .mp-hub__panel {
+        min-height: 0;
+        padding: min(16px, 1.9dvh) 14px min(16px, 1.9dvh) 20px;
+      }
+
+      .mp-hub__title {
+        margin-bottom: min(8px, 1dvh);
+        font-size: clamp(27px, min(9.6vw, 5.6dvh), 50px);
+      }
+
+      .mp-hub__lead {
+        font-size: clamp(16px, min(5.2vw, 3dvh), 26px);
+      }
+
+      .mp-hub__more {
+        margin-top: min(12px, 1.4dvh);
+      }
+
+      // the pictures take their height from the screen (width follows their proportions)
+      .mp-hub__visual--web {
+        width: min(100%, calc(19dvh * 1.75));
+      }
+
+      .mp-hub__visual--cards {
+        width: min(100%, calc(17dvh * 1.3));
+      }
+
       .mp-hub__foot {
-        width: min(100% - 2 * var(--x-gutter), 440px);
+        margin-top: min(4px, 0.5dvh);
       }
 
       .mp-hub__people {
-        width: 104px;
+        width: auto;
+        height: min(118px, 13dvh);
+        margin-bottom: -6px;
+      }
+
+      .mp-hub__about {
+        min-height: 44px;
+        font-size: clamp(24px, min(6.6vw, 4dvh), 34px);
+      }
+
+      .mp-sfoot {
+        padding-top: 4px;
+        padding-bottom: calc(4px + env(safe-area-inset-bottom));
+
+        ul {
+          gap: 0 12px;
+          font-size: 12px;
+        }
+
+        a,
+        button,
+        .mp-sfoot__copy {
+          min-height: 28px;
+        }
       }
     }
-  }
 
-  .mp-screen--explore .mp-sfoot {
-    padding-top: 4px;
-    padding-bottom: calc(2px + env(safe-area-inset-bottom));
-
-    ul {
-      gap: 0 16px;
+    // Short phones (and phones with the browser bars out): the secondary sentence of the cards
+    // panel steps aside; the title, the lead of the websites panel and both buttons stay.
+    @media (max-height: 700px) {
+      .mp-screen--explore .mp-hub__panel--cards .mp-hub__text {
+        display: none;
+      }
     }
 
-    a,
-    button,
-    .mp-sfoot__copy {
-      min-height: 32px;
-    }
+    @media (max-height: 600px) {
+      .mp-screen--explore {
+        .mp-hub__lead {
+          display: none;
+        }
 
-    .admin_link_container {
-      margin-top: 0;
+        .mp-sfoot__copy {
+          display: none; // © also on every other page
+        }
+
+        .mp-hub__visual--web {
+          width: min(100%, calc(16dvh * 1.75));
+        }
+
+        .mp-hub__visual--cards {
+          width: min(100%, calc(14dvh * 1.3));
+        }
+
+        .mp-hub__people {
+          height: 10dvh;
+        }
+      }
     }
   }
 
