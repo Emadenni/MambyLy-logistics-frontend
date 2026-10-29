@@ -593,7 +593,8 @@ $x-wide: 1180px;
 
   // Compact footer line
   .mp-sfoot {
-    padding: 10px var(--x-gutter) 14px;
+    // the safe area (iPhone home indicator) is counted here, once
+    padding: 10px var(--x-gutter) calc(14px + env(safe-area-inset-bottom));
     text-align: center;
 
     &__row {
@@ -681,7 +682,10 @@ $x-wide: 1180px;
   }
 
   // Utforska is one screen: its footer line is a little tighter.
+  // On tall phones the destinations sit in the middle of the free height instead of leaving one
+  // empty band above the footer; the footer still ends the page (no space below it).
   .mp-screen--explore .mp-screen__main {
+    justify-content: center;
     padding-bottom: 6px;
   }
 
@@ -701,7 +705,7 @@ $x-wide: 1180px;
 
   .mp-screen--explore .mp-sfoot {
     padding-top: 4px;
-    padding-bottom: 2px;
+    padding-bottom: calc(2px + env(safe-area-inset-bottom));
 
     ul {
       gap: 0 16px;
@@ -3236,6 +3240,12 @@ $x-wide: 1180px;
 
   body:has(.mp-x) {
     background-color: #f6f4ee;
+  }
+
+  // The public pages end at their footer. The browser's bounce past the end (overscroll, not an
+  // overflow of the document) used to show an empty band of page background below it.
+  html:has(.mp-x) {
+    overscroll-behavior-y: none;
   }
 
   // The floating WhatsApp button stays away from the cover, the wizard (which has its own

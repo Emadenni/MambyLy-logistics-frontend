@@ -357,3 +357,15 @@ Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successi
   `_card-designs.scss`, generati da rilievo con luce diffusa, fibre, satinatura o grana opaca).
 - **Contatti**: `contactSubmit.ts` incorpora solo le tre variabili che usa. Per i test locali compilare con
   `VITE_API_BASE_URL=https://execute-api.invalid` (mai la build di produzione dietro un mock).
+
+## Fase 10: fondo di Utforska, materiali e dettagli dei biglietti
+
+- **Fondo pagina**: misurato sul sito pubblicato (ingresso diretto, dalla copertina, ritorno dalle demo,
+  footer aperto/chiuso, barre del browser, rotazione, 320–412px): il documento finisce sempre al footer,
+  nessun overflow. Lo spazio visibile veniva dal rimbalzo del browser oltre la fine (overscroll) e dalla
+  banda vuota sopra il footer sui telefoni alti. Ora `html:has(.mp-x) { overscroll-behavior-y: none }`, il
+  contenuto di Utforska è centrato nell'altezza libera e il footer conta la safe-area una sola volta.
+- **Biglietti**: velluto più fine e senza lucido (nero), pelle finissima sul retro nero del biglietto bianco,
+  carta satinata con profondità tonale (viola); un simbolo della professione per card (Lucide: bussola,
+  pennino, diaframma, circuito, scintille; l'avorio ha già l'arco) e un dettaglio a secco (cornice avorio,
+  filetto bianco e rosso). Tutto in `_card-designs.scss`, generato da `materials2.cjs` (scratchpad).

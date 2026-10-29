@@ -8,12 +8,12 @@ $grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width=
 $m-ivory: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' seed='7' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='2.4' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.32 0 0 0 0 0.27 0 0 0 0 0.18 -0.42 0 0 0 0.42'/%3E %3C/filter%3E %3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.06 .11' numOctaves='3' seed='11' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.42 0 0 0 0 0.3 1.9 0 0 0 -1.22'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3Crect width='100%' height='100%' filter='url(%23f)'/%3E%3C/svg%3E");
 $m-ivory-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='4' seed='7' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='2.4' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0.05 0 0 0 0 0.03 -0.38 0 0 0 0.38'/%3E %3C/filter%3E %3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.06 .11' numOctaves='3' seed='11' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.9 0 0 0 0 0.82 1.6 0 0 0 -1.08'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3Crect width='100%' height='100%' filter='url(%23f)'/%3E%3C/svg%3E");
 $m-cotton-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' seed='3' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='1.6' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.26 0 0 0 0 0.2 -0.26 0 0 0 0.26'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3C/svg%3E");
-$m-velvet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E %3Cfilter id='c' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.007' numOctaves='2' seed='5' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.94 0 0 0 0 0.85 0.16 0 0 0 -0.05'/%3E %3C/filter%3E %3Cfilter id='p' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='9' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.12 0 0 0 -0.04'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23c)'/%3E%3Crect width='100%' height='100%' filter='url(%23p)'/%3E%3C/svg%3E");
+$m-velvet: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E %3Cfilter id='d' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.007' numOctaves='2' seed='5' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.94 0 0 0 0 0.85 0.1 0 0 0 -0.03'/%3E %3C/filter%3E %3Cfilter id='p' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2' seed='9' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.96 0 0 0 0 0.9 0.5 0 0 0 -0.31'/%3E %3C/filter%3E %3Cfilter id='q' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='19' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0 0 0 -0.3'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23d)'/%3E%3Crect width='100%' height='100%' filter='url(%23p)'/%3E%3Crect width='100%' height='100%' filter='url(%23q)'/%3E%3C/svg%3E");
 $m-pressed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='4' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='0.9' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.2 0 0 0 0 0.22 -0.14 0 0 0 0.14'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3C/svg%3E");
-$m-pressed-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='4' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='0.9' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.3 0 0 0 0.3'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3C/svg%3E");
+$m-leather: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='turbulence' baseFrequency='.32' numOctaves='2' seed='41' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='3.2' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='48'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.5 0 0 0 0.5'/%3E %3C/filter%3E %3Cfilter id='s' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='turbulence' baseFrequency='.32' numOctaves='2' seed='41' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='3.2' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='40'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.16 0 0 0 -0.0992'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3Crect width='100%' height='100%' filter='url(%23s)'/%3E%3C/svg%3E");
 $m-dyed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' seed='13' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='1.7' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.13 0 0 0 0 0 0 0 0 0 0.02 -0.34 0 0 0 0.34'/%3E %3C/filter%3E %3Cfilter id='f' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.08 .14' numOctaves='3' seed='17' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.7 0 0 0 0 0.62 1.4 0 0 0 -0.98'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3Crect width='100%' height='100%' filter='url(%23f)'/%3E%3C/svg%3E");
 $m-brushed: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='140'%3E %3Cfilter id='l' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.0025 .95' numOctaves='2' seed='21' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.55 0 0 0 -0.24'/%3E %3C/filter%3E %3Cfilter id='d' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='.0035 .8' numOctaves='2' seed='22' stitchTiles='stitch'/%3E %3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0 0 0 -0.26'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23l)'/%3E%3Crect width='100%' height='100%' filter='url(%23d)'/%3E%3C/svg%3E");
-$m-matte: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.25' numOctaves='2' seed='31' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='0.8' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.16 0 0 0 0 0.06 0 0 0 0 0.24 -0.16 0 0 0 0.16'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3C/svg%3E");
+$m-satin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E %3Cfilter id='r' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.3 .9' numOctaves='2' seed='31' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='0.9' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.06 0 0 0 0 0.28 -0.17 0 0 0 0.17'/%3E %3C/filter%3E %3Cfilter id='s' x='0' y='0' width='100%' height='100%'%3E %3CfeTurbulence type='fractalNoise' baseFrequency='1.3 .9' numOctaves='2' seed='31' stitchTiles='stitch'/%3E %3CfeDiffuseLighting surfaceScale='0.9' lighting-color='%23fff'%3E%3CfeDistantLight azimuth='225' elevation='40'/%3E%3C/feDiffuseLighting%3E %3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.12 0 0 0 -0.08399999999999999'/%3E %3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23r)'/%3E%3Crect width='100%' height='100%' filter='url(%23s)'/%3E%3C/svg%3E");
 $mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
 @mixin styles {
@@ -381,8 +381,8 @@ $mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
   // ===============================================================================================
   // Materials: one surface per design, on the whole card (front and back), never a patch.
-  // Each is its own SVG (relief with diffuse light, fibres, satin brushing or matte tooth), tiled
-  // seamlessly (stitchTiles) and kept faint, so texts and icons stay sharp. Static: nothing moves.
+  // Each is its own SVG (relief with diffuse light, fibres, pile, leather cells, brushing or satin),
+  // tiled seamlessly (stitchTiles) and kept faint, so texts and icons stay sharp. Nothing moves.
   // ===============================================================================================
 
   .dc.dc--d-ivory .dc__face {
@@ -397,14 +397,19 @@ $mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     background-blend-mode: normal;
   }
 
+  // black velvet: fine pile, soft depth, no gloss
   .dc.dc--d-velvet .dc__face--front {
     background-image:
       $m-velvet,
-      radial-gradient(90% 70% at 28% 8%, rgba(255, 236, 205, 0.09), transparent 62%),
-      radial-gradient(80% 90% at 92% 105%, rgba(0, 0, 0, 0.45), transparent 60%),
-      linear-gradient(160deg, #1d1a17, #0e0d0c);
-    background-size: 300px 300px, auto, auto, auto;
+      radial-gradient(80% 65% at 30% 12%, rgba(255, 238, 210, 0.07), transparent 65%),
+      radial-gradient(90% 90% at 85% 100%, rgba(0, 0, 0, 0.5), transparent 65%),
+      linear-gradient(165deg, #1b1916, #0f0e0c);
+    background-size: 240px 240px, auto, auto, auto;
     background-blend-mode: normal;
+
+    &::after {
+      background: none; // no glossy sheen on velvet
+    }
   }
 
   .dc.dc--d-velvet .dc__face--back {
@@ -419,9 +424,10 @@ $mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     background-blend-mode: normal;
   }
 
+  // the back of the white card is black: a fine leather (the velvet stays on the black card only)
   .dc.dc--d-white .dc__face--back {
-    background-image: $m-pressed-dark, linear-gradient(170deg, #1a1a1a, #0d0d0d);
-    background-size: 220px 220px, auto;
+    background-image: $m-leather, radial-gradient(90% 70% at 20% 0%, rgba(255, 255, 255, 0.06), transparent 60%), linear-gradient(170deg, #1c1c1c, #0f0f0f);
+    background-size: 200px 200px, auto, auto;
     background-blend-mode: normal;
   }
 
@@ -446,14 +452,122 @@ $mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
     background-blend-mode: normal;
   }
 
-  .dc.dc--d-expressive .dc__face {
-    background-image: $m-matte;
-    background-size: 200px 200px;
+  // lavender satin paper with a gentle tonal depth; the orange forms stay clean above it
+  .dc.dc--d-expressive .dc__face--front {
+    background-image:
+      $m-satin,
+      radial-gradient(100% 80% at 18% 8%, rgba(255, 255, 255, 0.32), transparent 60%),
+      radial-gradient(90% 80% at 80% 100%, rgba(80, 40, 140, 0.1), transparent 65%);
+    background-size: 180px 180px, auto, auto;
     background-blend-mode: normal;
   }
 
-  // the coloured forms of the expressive card stay clean above the paper tooth
+  .dc.dc--d-expressive .dc__face--back {
+    background-image: $m-satin, radial-gradient(100% 80% at 20% 0%, rgba(255, 255, 255, 0.08), transparent 60%);
+    background-size: 180px 180px, auto;
+    background-blend-mode: normal;
+  }
+
   .dc.dc--d-expressive .dc__deco {
     z-index: 0;
+  }
+
+  // ===============================================================================================
+  // Small details: the profession symbol (one icon family) and one blind-embossed line per card
+  // ===============================================================================================
+
+  .dc__symbol {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    width: 4.6cqi;
+    height: 4.6cqi;
+    pointer-events: none;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 1.5;
+    }
+  }
+
+  .dc--d-velvet .dc__symbol {
+    top: 6.2cqi;
+    left: 50%;
+    translate: -50% 0;
+    color: var(--dc-accent);
+    opacity: 0.85;
+  }
+
+  .dc--d-white .dc__symbol {
+    top: 13.6cqi;
+    right: 7cqi;
+    color: var(--dc-accent);
+  }
+
+  .dc--d-oxblood .dc__symbol {
+    top: 14cqi;
+    right: 7cqi;
+    color: var(--dc-front-ink);
+    opacity: 0.8;
+  }
+
+  .dc--d-graphite .dc__symbol {
+    right: 7cqi;
+    bottom: 6.5cqi;
+    color: var(--dc-front-ink);
+    opacity: 0.6;
+  }
+
+  // inside the orange form, white on orange
+  .dc--d-expressive .dc__symbol {
+    right: 7cqi;
+    bottom: 0.9cqi;
+    width: 4cqi;
+    height: 4cqi;
+    color: #fff;
+  }
+
+  // blind embossing: light and shade only, no ink
+  .dc.dc--d-ivory .dc__face--front::before {
+    content: "";
+    position: absolute;
+    inset: 3cqi;
+    border-radius: 2.4cqi;
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, 0.8),
+      inset -1px -1px 0 rgba(70, 55, 30, 0.14);
+    pointer-events: none;
+  }
+
+  .dc--d-velvet .dc__deco {
+    border-color: rgba(201, 180, 138, 0.28);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255, 240, 210, 0.06);
+  }
+
+  .dc--d-white .dc__role::before {
+    content: "";
+    display: block;
+    width: 24cqi;
+    height: 0.7cqi;
+    margin: 0 0 2.2cqi;
+    border-radius: 1cqi;
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.14),
+      0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+
+  .dc.dc--d-oxblood .dc__face--front::before {
+    content: "";
+    position: absolute;
+    left: 7cqi;
+    right: 7cqi;
+    bottom: 17cqi;
+    height: 0.5cqi;
+    border-radius: 1cqi;
+    box-shadow:
+      inset 0 1px 1px rgba(0, 0, 0, 0.35),
+      0 1px 0 rgba(255, 220, 210, 0.1);
+    pointer-events: none;
   }
 }

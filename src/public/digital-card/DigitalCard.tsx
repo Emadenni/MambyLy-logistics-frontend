@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import { FiGlobe, FiMail, FiPhone, FiInstagram, FiFacebook, FiLinkedin, FiYoutube, FiLink, FiMessageCircle } from "react-icons/fi";
 import { FaTiktok } from "react-icons/fa";
+import { LuAperture, LuCircuitBoard, LuCompass, LuPenTool, LuSparkles } from "react-icons/lu";
 import type { CardConfig } from "./types";
 import type { CardStrings } from "./strings";
 
@@ -62,6 +63,15 @@ export const cardThemeProps = (card: CardConfig) => ({
   } as React.CSSProperties,
 });
 
+/** One small symbol of the profession per design card (one icon family; the ivory card has its arch). */
+const SYMBOLS: Partial<Record<NonNullable<CardConfig["design"]>, React.ReactNode>> = {
+  velvet: <LuCompass />,
+  white: <LuPenTool />,
+  oxblood: <LuAperture />,
+  graphite: <LuCircuitBoard />,
+  expressive: <LuSparkles />,
+};
+
 /** "Alex Lind" → "AL": the monogram of a design card without a logo. */
 const initials = (name: string) =>
   name
@@ -74,6 +84,11 @@ const initials = (name: string) =>
 export const CardFront: React.FC<{ card: CardConfig; t: CardStrings; lazy?: boolean }> = ({ card, t, lazy }) => (
   <>
     {card.design && <span className="dc__deco" aria-hidden="true" />}
+    {card.design && SYMBOLS[card.design] && (
+      <span className="dc__symbol" aria-hidden="true">
+        {SYMBOLS[card.design]}
+      </span>
+    )}
     <div className="dc__top">
       {card.design && !card.logoUrl && (
         <span className="dc__mono" aria-hidden="true">
