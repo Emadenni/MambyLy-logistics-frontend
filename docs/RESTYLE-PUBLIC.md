@@ -110,16 +110,39 @@ non sono disponibili (richiedono HTTPS): restano i fallback. URL condivisi, vCar
 Contatti: telefono da `src/public/contact.ts`, e-mail `info@mambylysolutions.se` (il dominio con MX attivi;
 `mambyly.se` non risolve), social come nel `SocialBox` del sito. Link discreto "Vårt visitkort" nel footer.
 
-Sotto il biglietto: "Spara kontakt" (icona + testo), poi pulsanti solo icona con etichetta accessibile e tooltip
-(Dela kortet / Kopiera länken secondo la disponibilità di Web Share, Visa baksidan / Visa framsidan, Visa QR-kod)
-e il menu espandibile "Mer från MambyLy" (chiuso all'inizio, `aria-expanded`, Escape lo chiude): Webbplatser,
+Sotto il biglietto, in un unico gruppo: il suggerimento breve "Svep upp för att dela · Tryck för att vända"
+(solo su schermo touch con Web Share) e una piccola barra di azioni del biglietto (`role=group`, non la
+navigazione del sito). "Spara kontakt" è l'azione primaria piena; sotto ~336px di larghezza resta l'icona con il
+nome accessibile. Seguono pulsanti tondi da 44px solo icona, con etichetta e tooltip: Dela kortet (sempre
+presente), Visa baksidan / Visa framsidan (`aria-pressed`), Visa QR-kod, Visa helskärm. I colori vengono dai token
+`--dcx-*` su `.dc-experience--<design>`: velvet champagne, ivory verde profondo, white blu, oxblood crema,
+graphite argento, expressive viola, `brand` per MambyLy. Sul biglietto MambyLy segue il menu espandibile "Mer från MambyLy" (chiuso all'inizio, `aria-expanded`, Escape lo chiude): Webbplatser,
 Digitala visitkort, Exempel, Om oss, Kontakt, dalla lista condivisa `destinations` in `experience/nav.tsx`, nella
 lingua dell'interfaccia. In alto a destra lo switch SV/EN.
 
 Accenno iniziale: breve inclinazione (≈1,25 s) su un wrapper `.dc__tilt` separato dalle trasformazioni di
 trascinamento e rotazione; una volta per scheda (`sessionStorage`), si interrompe al primo tocco/tasto/focus,
-disattivato con `prefers-reduced-motion`. Il biglietto usa `touch-action: pan-y`: il trascinamento orizzontale
-gira il biglietto, quello verticale fa scorrere la pagina (lo "swipe in su per condividere" è stato tolto).
+disattivato con `prefers-reduced-motion`.
+
+Gesti (`DigitalCard.tsx`): l'asse si decide una volta sola, dopo 8px.
+- Orizzontale: gira il biglietto, come prima.
+- Verticale (solo touch o penna, con `|dy| > 1,2·|dx|`): la card si solleva un poco e non gira mai. Al rilascio,
+  se `dy < -56px` e (velocità < -0,4 px/ms oppure `dy < -110px`), `onSwipeUp` viene chiamato dentro `pointerup`.
+  Così `navigator.share()` parte senza attese e conserva l'attivazione utente.
+- Un gesto quindi gira oppure condivide, mai le due cose. `pointercancel` riporta la card al suo posto, un secondo
+  dito non avvia nulla e si apre un solo pannello alla volta.
+
+Lo swipe era stato tolto in d622dc5 (`touch-action: pan-y`). Ora la card usa `touch-action: pinch-zoom`: la
+pagina scorre toccando fuori dalla card.
+
+Condivisione:
+- Se l'utente chiude il pannello senza condividere, non compare nulla.
+- Se Web Share manca, o il browser rifiuta la chiamata (NotAllowedError, per esempio quando non accetta lo swipe
+  come gesto), compare un pannello discreto con l'URL e "Kopiera länk". La conferma appare solo se la copia è
+  avvenuta davvero.
+- In "solo biglietto" suggerimento e barra sono nascosti, e lo swipe condivide solo se il dispositivo ha Web Share.
+
+Test: `card-e2e.mjs` nello scratchpad, con condivisione simulata.
 
 ### Salva contatto (vCard)
 

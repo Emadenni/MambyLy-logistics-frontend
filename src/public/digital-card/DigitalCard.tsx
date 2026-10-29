@@ -10,7 +10,12 @@ import type { CardStrings } from "./strings";
  * configuration (colours, layout, font, logo), never from a separate implementation.
  *  - Decorative tilt: follows a mouse pointer (never needed to use the card).
  *  - Drag / rotate: a horizontal drag turns the card; on release it settles on the nearest side.
- *    Vertical swipes stay with the browser (touch-action: pan-y), so the page always scrolls.
+ *  - Swipe up (touch and pen, only when onSwipeUp is given): the axis is chosen once, when the
+ *    finger has moved DRAG_START px, so one gesture either turns the card or shares it, never
+ *    both. A decisive upward swipe calls onSwipeUp synchronously inside pointerup, so the parent
+ *    can call navigator.share() while the user activation is still valid. The card then owns
+ *    one-finger touches (touch-action: pinch-zoom); without onSwipeUp vertical swipes stay with
+ *    the browser (pan-y) and scroll the page.
  *  - Tap, Enter or Space flips; arrow keys tilt. Links/buttons on the visible side keep working.
  *  - intro: a short sideways tilt once per tab session, on a wrapper of its own (never on the
  *    element that carries the drag / flip transform). Stops as soon as the user interacts.
@@ -23,12 +28,18 @@ type Props = {
   t: CardStrings;
   flipped: boolean;
   onFlippedChange: (flipped: boolean) => void;
+  /** Upward swipe on a touch screen; called inside pointerup (keeps the user activation). */
+  onSwipeUp?: () => void;
   /** Demo cards: contact actions only show a notice. */
   onDemoAction: () => void;
   intro?: boolean;
 };
 
 const DRAG_START = 8;
+/** Swipe up: at least this far, and either fast or long; the vertical axis must clearly dominate. */
+const SWIPE_MIN = 56;
+const SWIPE_LONG = 110;
+const SWIPE_SPEED = -0.4; // px/ms
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isBack = (ry: number) => Math.abs(Math.round(ry / 180)) % 2 === 1;
@@ -249,14 +260,27 @@ export const CardPreview: React.FC<{ card: CardConfig; t: CardStrings; withBack?
   );
 };
 
-const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDemoAction, intro = false }) => {
+const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwipeUp, onDemoAction, intro = false }) => {
   const keysId = useId();
   const stage = useRef<HTMLDivElement>(null);
   const body = useRef<HTMLDivElement>(null);
   const front = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLDivElement>(null);
-  const pose = useRef({ ry: 0, rx: 0, hx: 0, hy: 0 });
-  const drag = useRef<{ id: number; x0: number; y0: number; x: number; y: number; t: number; vx: number; ry0: number; moving: boolean } | null>(null);
+  const pose = useRef({ ry: 0, rx: 0, hx: 0, hy: 0, ty: 0 });
+  const drag = useRef<{
+    id: number;
+    touch: boolean;
+    x0: number;
+    y0: number;
+    x: number;
+    y: number;
+    t: number;
+    vx: number;
+    vy: number;
+    ry0: number;
+    moving: boolean;
+    axis: "x" | "y";
+  } | null>(null);
   const swallowClickUntil = useRef(0);
   const frame = useRef(0);
   const [nudging, setNudging] = useState(false);
@@ -266,9 +290,9 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
     frame.current = requestAnimationFrame(() => {
       const el = body.current;
       if (!el) return;
-      const { ry, rx, hx, hy } = pose.current;
+      const { ry, rx, hx, hy, ty } = pose.current;
       el.dataset.motion = motion;
-      el.style.transform = `rotateX(${rx + hy}deg) rotateY(${ry + hx}deg)`;
+      el.style.transform = `translateY(${ty}px) rotateX(${rx + hy}deg) rotateY(${ry + hx}deg)`;
       el.style.setProperty("--dc-sheen-x", `${30 + Math.sin(((ry + hx) * Math.PI) / 180) * 45}%`);
       el.style.setProperty("--dc-sheen-y", `${20 - (rx + hy) * 2.5}%`);
     });
@@ -312,6 +336,7 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
     p.rx = 0;
     p.hx = 0;
     p.hy = 0;
+    p.ty = 0;
     render("settle");
     const showBack = isBack(ry);
     if (showBack !== flipped) onFlippedChange(showBack);
@@ -319,8 +344,22 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     stopNudge();
-    if (e.button !== 0) return;
-    drag.current = { id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, t: e.timeStamp, vx: 0, ry0: Math.round(pose.current.ry / 180) * 180, moving: false };
+    // One gesture at a time: a second finger never starts (or restarts) a drag.
+    if (e.button !== 0 || drag.current) return;
+    drag.current = {
+      id: e.pointerId,
+      touch: e.pointerType !== "mouse",
+      x0: e.clientX,
+      y0: e.clientY,
+      x: e.clientX,
+      y: e.clientY,
+      t: e.timeStamp,
+      vx: 0,
+      vy: 0,
+      ry0: Math.round(pose.current.ry / 180) * 180,
+      moving: false,
+      axis: "x",
+    };
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -339,16 +378,27 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
     if (!d.moving) {
       if (Math.hypot(dx, dy) < DRAG_START) return;
       d.moving = true;
+      // Chosen once: vertical only on touch / pen, with sharing on offer, and clearly vertical.
+      d.axis = onSwipeUp && d.touch && Math.abs(dy) > Math.abs(dx) * 1.2 ? "y" : "x";
       stage.current?.setPointerCapture(e.pointerId);
       p.hx = 0;
       p.hy = 0;
     }
     const dt = Math.max(1, e.timeStamp - d.t);
     d.vx = 0.7 * ((e.clientX - d.x) / dt) + 0.3 * d.vx;
+    d.vy = 0.7 * ((e.clientY - d.y) / dt) + 0.3 * d.vy;
     d.x = e.clientX;
     d.y = e.clientY;
     d.t = e.timeStamp;
     if (reducedMotion()) return; // no continuous motion; the result is applied on release
+    if (d.axis === "y") {
+      // The card lifts a little with the finger (and resists going down); it never turns.
+      p.ry = d.ry0;
+      p.rx = clamp(-dy * 0.06, -8, 8);
+      p.ty = dy < 0 ? Math.max(dy, -160) * 0.3 : Math.min(dy, 80) * 0.12;
+      render("follow");
+      return;
+    }
     p.ry = d.ry0 + dx * 0.55;
     p.rx = clamp(-dy * 0.12, -20, 20);
     render("follow");
@@ -361,6 +411,15 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
     if (!d.moving) return; // a tap: handled by onClick
     swallowClickUntil.current = performance.now() + 400;
     const dx = e.clientX - d.x0;
+    const dy = e.clientY - d.y0;
+
+    if (d.axis === "y") {
+      const up = dy < -SWIPE_MIN && Math.abs(dy) > Math.abs(dx) * 1.2 && (d.vy < SWIPE_SPEED || dy < -SWIPE_LONG);
+      // First, inside this pointerup: navigator.share() needs the user activation of the gesture.
+      if (up) onSwipeUp?.();
+      settle(d.ry0); // back in place, on the side that was showing
+      return;
+    }
 
     let target = d.ry0;
     if (reducedMotion()) {
@@ -434,7 +493,7 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onDem
     <div className={theme.className} style={theme.style} lang={card.lang}>
       <div
         ref={stage}
-        className="dc__stage"
+        className={`dc__stage${onSwipeUp ? " dc__stage--swipe" : ""}`}
         tabIndex={0}
         role="group"
         aria-label={`${t.cardLabel}: ${card.name} – ${flipped ? t.back : t.front}`}

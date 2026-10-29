@@ -3153,11 +3153,19 @@ $x-wide: 1180px;
   // /exempel/:slug – an example card fullscreen, on the surface of its own style.
   // Example card page: the surface takes the tone of the card's material.
   .mp-cardx {
+    // The card, its hint and its action bar are one group, centred in the screen. The card is as
+    // wide as the screen allows, and also as the height allows once the controls below it
+    // (about 140px) and the page's padding are kept: on a phone held sideways or at a high zoom
+    // the whole group still fits. Never smaller than 260px (then the page scrolls). 85 × 55.
+    --cardx-max: 440px;
+
+    .dc {
+      width: min(100%, var(--cardx-max), max(260px, calc((100dvh - 200px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
+    }
+
     // the card a little larger than on /card on wide screens (same proportions)
     @include desk {
-      .dc {
-        width: min(100%, 560px);
-      }
+      --cardx-max: 560px;
     }
 
     display: flex;
@@ -3221,7 +3229,7 @@ $x-wide: 1180px;
       gap: 18px;
       width: min(100% - 2 * var(--x-gutter), var(--x-frame));
       margin: 0 auto;
-      padding: clamp(18px, 4vh, 48px) 0 24px;
+      padding: clamp(18px, 4vh, 48px) 0 max(18px, env(safe-area-inset-bottom));
 
     }
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiChevronDown, FiDownload, FiLink, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { FiChevronDown, FiCopy, FiDownload, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
@@ -13,6 +13,8 @@ import { cardPath, examplePath } from "./registry";
 import FlipIcon from "./FlipIcon";
 
 type Status = { tone: "ok" | "info" | "warn"; text: string } | null;
+/** Why the copy-link alternative is showing (never a claim that something was shared). */
+type ShareAlt = "unsupported" | "gesture" | "failed" | null;
 
 export type CardMenuItem = { to: string; label: string; icon: React.ReactNode };
 
@@ -26,16 +28,28 @@ const isIOS = () =>
   /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
 /** Icon-only button: translated accessible name + the same text as tooltip on hover and focus. */
-export const IconButton: React.FC<{ label: string; onClick: () => void; children: React.ReactNode; haspopup?: boolean }> = ({
+export const IconButton: React.FC<{ label: string; onClick: () => void; children: React.ReactNode; haspopup?: boolean; pressed?: boolean }> = ({
   label,
   onClick,
   children,
   haspopup,
+  pressed,
 }) => (
-  <button type="button" className="dc-iconbtn" aria-label={label} data-tip={label} onClick={onClick} aria-haspopup={haspopup ? "dialog" : undefined}>
+  <button
+    type="button"
+    className="dc-iconbtn"
+    aria-label={label}
+    data-tip={label}
+    onClick={onClick}
+    aria-haspopup={haspopup ? "dialog" : undefined}
+    aria-pressed={pressed}
+  >
     {children}
   </button>
 );
+
+/** Touch screen: where "swipe up" is a gesture people can actually make. */
+const coarsePointer = () => typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse)").matches;
 
 /** Discreet, expandable menu towards the site (MambyLy's own card only). Closes after a choice and on Escape. */
 const CardMenu: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, label }) => {
@@ -144,43 +158,52 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   const full = useFullscreen();
   const [flipped, setFlipped] = useState(false);
   const [status, setStatus] = useState<Status>(null);
-  const [manualCopy, setManualCopy] = useState(false);
+  const [shareAlt, setShareAlt] = useState<ShareAlt>(null);
+  const [copied, setCopied] = useState<"copied" | "failed" | null>(null);
   const [qrOpen, setQrOpen] = useState(false);
   const [savedOnce, setSavedOnce] = useState(false);
   const [nativeShare] = useState(canNativeShare);
+  const [touch] = useState(coarsePointer);
+  const sharing = useRef(false);
   const qrMarkup = useMemo(() => qrSvg(url), [url]);
   const qrSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(qrMarkup)}`;
   const Heading = headingLevel;
   // Real cards in a production build have a static .vcf next to the page (see vcard.ts).
   const staticVCard = import.meta.env.PROD && !card.demo;
 
-  const showManual = (text: string) => {
-    setStatus({ tone: "warn", text });
-    setManualCopy(true);
+  const openAlt = (why: Exclude<ShareAlt, null>) => {
+    setCopied(null);
+    setShareAlt(why);
   };
 
-  const onShareResult = (result: ShareResult) => {
-    if (result === "shared") setStatus({ tone: "ok", text: t.shared });
-    else if (result === "aborted") setStatus({ tone: "info", text: t.shareAborted }); // not an error, no auto-copy
-    else if (result === "unavailable") showManual(t.shareUnavailable);
-    else showManual(t.shareFailed);
-  };
-
-  /** Called directly from the click (no await before navigator.share). */
-  const share = () => {
+  /**
+   * The Share button and the swipe. Called directly from the click / pointerup, so nothing is
+   * awaited before navigator.share(). One sheet at a time: a second tap or swipe while the sheet
+   * is open does nothing. Closing the sheet without sharing is not an error and shows nothing.
+   */
+  const share = (from: "button" | "gesture") => {
+    if (sharing.current) return;
+    if (!nativeShare) return openAlt("unsupported");
+    sharing.current = true;
     setStatus(null);
-    void shareLink({ title: card.company ? `${card.name} – ${card.company}` : card.name, text: card.kind === "organization" ? t.shareTextOrg(card.name) : t.shareText(card.name), url }).then(onShareResult);
+    const title = card.company ? `${card.name} – ${card.company}` : card.name;
+    const text = card.kind === "organization" ? t.shareTextOrg(card.name) : t.shareText(card.name);
+    void shareLink({ title, text, url }).then((result: ShareResult) => {
+      sharing.current = false;
+      if (result === "shared") {
+        setShareAlt(null);
+        setStatus({ tone: "ok", text: t.shared });
+      } else if (result === "unavailable") {
+        // NotAllowedError: typically the browser did not accept the swipe as a user gesture.
+        openAlt(from === "gesture" ? "gesture" : "failed");
+      } else if (result === "error") {
+        openAlt("failed");
+      }
+    });
   };
 
   const copy = () => {
-    void copyText(url).then((r) => {
-      if (r === "copied") {
-        setStatus({ tone: "ok", text: t.copied });
-        setManualCopy(false);
-      } else {
-        showManual(t.copyFailed);
-      }
-    });
+    void copyText(url).then(setCopied);
   };
 
   // Never claims the contact was saved: only the phone can do that, after the user confirms.
@@ -225,7 +248,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   };
 
   return (
-    <div ref={full.root} className={`dc-experience${full.on ? " is-full" : ""}`} role={full.on ? "dialog" : undefined} aria-modal={full.on || undefined} aria-label={full.on ? t.fullscreenLabel : undefined}>
+    <div ref={full.root} className={`dc-experience dc-experience--${card.design ?? "brand"}${full.on ? " is-full" : ""}`} role={full.on ? "dialog" : undefined} aria-modal={full.on || undefined} aria-label={full.on ? t.fullscreenLabel : undefined}>
       {full.on && (
         <button type="button" className="dc-full__close" onClick={full.close} aria-label={t.fullscreenClose} data-tip={t.fullscreenClose}>
           <FiX aria-hidden="true" />
@@ -234,36 +257,48 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
       <Heading className="mp-sr">
         {t.cardLabel}: {card.name}
       </Heading>
-      <DigitalCard card={card} t={t} flipped={flipped} onFlippedChange={setFlipped} onDemoAction={demoAction} intro={intro} />
+      <DigitalCard
+        card={card}
+        t={t}
+        flipped={flipped}
+        onFlippedChange={setFlipped}
+        // Only the card in fullscreen has no copy-link panel to fall back on: there the swipe
+        // shares only where the device has a share sheet.
+        onSwipeUp={!full.on || nativeShare ? () => share("gesture") : undefined}
+        onDemoAction={demoAction}
+        intro={intro}
+      />
       {full.on && (
         <p className="dc-full__rotate" aria-hidden="true">
           {t.rotate}
         </p>
       )}
-      <p className="dc-hint" aria-hidden="true">{t.hint}</p>
+      {/* Both gestures really work here: a touch screen with a share sheet. */}
+      {touch && nativeShare && (
+        <p className="dc-hint" aria-hidden="true">
+          {t.hint}
+        </p>
+      )}
       <p className="mp-sr" aria-live="polite">{flipped ? t.showingBack : t.showingFront}</p>
 
-      <div className="dc-actions">
+      <div className="dc-actions" role="group" aria-label={t.actionsLabel}>
         <a
-          className="mp-btn mp-btn--primary dc-save"
+          className="dc-save"
+          aria-label={t.save}
+          data-tip={t.save}
           href={staticVCard ? staticVCardPath(card) : "#"}
           // iOS opens a served .vcf in its own contact sheet; `download` would only file it away.
           download={staticVCard && isIOS() ? undefined : vcardFileName(card)}
           type="text/vcard"
           onClick={onSaveContact}
         >
-          <FiUserPlus aria-hidden="true" /> {t.save}
+          <FiUserPlus aria-hidden="true" />
+          <span className="dc-save__text">{t.save}</span>
         </a>
-        {nativeShare ? (
-          <IconButton label={t.share} onClick={share}>
-            <FiShare aria-hidden="true" />
-          </IconButton>
-        ) : (
-          <IconButton label={t.copy} onClick={copy}>
-            <FiLink aria-hidden="true" />
-          </IconButton>
-        )}
-        <IconButton label={flipped ? t.flipToFront : t.flipToBack} onClick={() => setFlipped((v) => !v)}>
+        <IconButton label={t.share} onClick={() => share("button")}>
+          <FiShare aria-hidden="true" />
+        </IconButton>
+        <IconButton label={flipped ? t.flipToFront : t.flipToBack} onClick={() => setFlipped((v) => !v)} pressed={flipped}>
           <FlipIcon />
         </IconButton>
         <IconButton label={t.qr} onClick={() => setQrOpen(true)} haspopup>
@@ -288,10 +323,26 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
       <div className="dc-status" role="status" aria-live="polite">
         {status && <p className={`dc-status__msg dc-status__msg--${status.tone}`}>{status.text}</p>}
       </div>
-      {manualCopy && (
-        <div className="dc-manual">
-          <label htmlFor={`dc-url-${card.slug}`}>{t.manualLabel}</label>
-          <input id={`dc-url-${card.slug}`} type="text" readOnly value={url} onFocus={(e) => e.currentTarget.select()} />
+      {shareAlt && (
+        <div className="dc-sharealt">
+          <p className="dc-sharealt__why" role="status">
+            {shareAlt === "unsupported" ? t.shareUnavailable : shareAlt === "gesture" ? t.shareGesture : t.shareFailed}
+          </p>
+          <label className="mp-sr" htmlFor={`dc-url-${card.slug}`}>
+            {t.manualLabel}
+          </label>
+          <div className="dc-sharealt__row">
+            <input id={`dc-url-${card.slug}`} type="text" readOnly value={url} onFocus={(e) => e.currentTarget.select()} />
+            <button type="button" className="dc-sharealt__copy" onClick={copy}>
+              <FiCopy aria-hidden="true" /> {t.copyLink}
+            </button>
+            <button type="button" className="dc-sharealt__close" onClick={() => setShareAlt(null)} aria-label={t.closeShareAlt}>
+              <FiX aria-hidden="true" />
+            </button>
+          </div>
+          <p className="dc-sharealt__result" aria-live="polite">
+            {copied === "copied" ? t.copied : copied === "failed" ? t.copyFailed : ""}
+          </p>
         </div>
       )}
 

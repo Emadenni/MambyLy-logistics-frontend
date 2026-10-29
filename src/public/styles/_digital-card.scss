@@ -29,6 +29,12 @@
     perspective: 1300px;
     // Horizontal drags turn the card; vertical swipes stay with the browser, so the page scrolls.
     touch-action: pan-y;
+
+    // Swipe up shares: the card keeps one-finger touches (pinch zoom stays with the browser).
+    // The page around the card still scrolls.
+    &--swipe {
+      touch-action: pinch-zoom;
+    }
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
@@ -795,12 +801,96 @@
   }
 
   // ---------- Controls around the card ----------
+  // Card, short gesture hint and the small action bar read as one group: tight, fluid gaps.
+  // The controls take their colours from tokens per card design (below), never one fixed green.
   .dc-experience {
+    --dcx-ink: #103b35; // icons and text of the controls
+    --dcx-line: rgba(16, 59, 53, 0.22); // fine borders
+    --dcx-surface: rgba(255, 255, 255, 0.55); // control background
+    --dcx-hover: rgba(16, 59, 53, 0.08);
+    --dcx-primary: #103b35; // the save action
+    --dcx-on-primary: #f6f4ee;
+    --dcx-muted: rgba(16, 59, 53, 0.72);
+    --dcx-focus: #247b67;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: clamp(8px, 1.6vh, 12px);
     width: 100%;
+    container-type: inline-size;
+  }
+
+  // Dark velvet: dark controls, champagne accents.
+  .dc-experience--velvet {
+    --dcx-ink: #efe7d6;
+    --dcx-line: rgba(201, 180, 138, 0.42);
+    --dcx-surface: rgba(255, 248, 232, 0.04);
+    --dcx-hover: rgba(201, 180, 138, 0.14);
+    --dcx-primary: #c9b48a;
+    --dcx-on-primary: #151311;
+    --dcx-muted: rgba(239, 231, 214, 0.72);
+    --dcx-focus: #e3cf9f;
+  }
+
+  // Ivory cotton: deep green on a warm surface.
+  .dc-experience--ivory {
+    --dcx-ink: #1f3a2f;
+    --dcx-line: rgba(31, 58, 47, 0.24);
+    --dcx-surface: rgba(255, 252, 244, 0.7);
+    --dcx-hover: rgba(31, 58, 47, 0.08);
+    --dcx-primary: #1f3a2f;
+    --dcx-on-primary: #f3eee2;
+    --dcx-muted: rgba(31, 58, 47, 0.74);
+    --dcx-focus: #3f6b55;
+  }
+
+  // Pressed white: black ink, the card's blue for the save action.
+  .dc-experience--white {
+    --dcx-ink: #111;
+    --dcx-line: rgba(17, 17, 17, 0.18);
+    --dcx-surface: rgba(255, 255, 255, 0.8);
+    --dcx-hover: rgba(31, 79, 216, 0.08);
+    --dcx-primary: #1f4fd8;
+    --dcx-on-primary: #fff;
+    --dcx-muted: rgba(17, 17, 17, 0.7);
+    --dcx-focus: #1f4fd8;
+  }
+
+  // Oxblood: cream on bordeaux.
+  .dc-experience--oxblood {
+    --dcx-ink: #f5ead8;
+    --dcx-line: rgba(233, 201, 168, 0.4);
+    --dcx-surface: rgba(245, 234, 216, 0.05);
+    --dcx-hover: rgba(245, 234, 216, 0.12);
+    --dcx-primary: #f5ead8;
+    --dcx-on-primary: #5e0f14;
+    --dcx-muted: rgba(245, 234, 216, 0.74);
+    --dcx-focus: #e9c9a8;
+  }
+
+  // Graphite: silver details.
+  .dc-experience--graphite {
+    --dcx-ink: #eceef0;
+    --dcx-line: rgba(185, 194, 203, 0.4);
+    --dcx-surface: rgba(236, 238, 240, 0.05);
+    --dcx-hover: rgba(185, 194, 203, 0.14);
+    --dcx-primary: #c9d0d7;
+    --dcx-on-primary: #1d1f22;
+    --dcx-muted: rgba(236, 238, 240, 0.72);
+    --dcx-focus: #dfe5ea;
+  }
+
+  // Lavender and orange: deep violet controls, the burnt orange as focus.
+  .dc-experience--expressive {
+    --dcx-ink: #2a0f47;
+    --dcx-line: rgba(42, 15, 71, 0.24);
+    --dcx-surface: rgba(255, 255, 255, 0.5);
+    --dcx-hover: rgba(42, 15, 71, 0.08);
+    --dcx-primary: #2a0f47;
+    --dcx-on-primary: #f3eefe;
+    --dcx-muted: rgba(42, 15, 71, 0.76);
+    --dcx-focus: #9a3412;
   }
 
   // ---------- "Only the card" (fullscreen view) ----------
@@ -820,7 +910,8 @@
     background: radial-gradient(120% 90% at 50% 40%, #2a2d2b, #121413);
     overflow: hidden;
 
-    > :not(.dc):not(.dc-full__close):not(.dc-full__rotate) {
+    // The copy-link panel stays: it only appears after a swipe that could not open the sheet.
+    > :not(.dc):not(.dc-full__close):not(.dc-full__rotate):not(.dc-sharealt) {
       display: none !important;
     }
 
@@ -884,44 +975,57 @@
     display: contents;
   }
 
+  // One short line, secondary to the card (only where both gestures really work).
   .dc-hint {
-    margin: 4px 0 0;
-    color: var(--mp-muted);
-    font-size: 13px;
+    margin: 0;
+    color: var(--dcx-muted);
+    font-size: 12.5px;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
     text-align: center;
   }
 
+  // The card's own actions (not the site's navigation): compact, fine borders, the theme's tokens.
   .dc-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
-    max-width: 520px;
-
-    @media (max-width: 380px) {
-      .dc-save {
-        flex: 1 1 100%;
-      }
-    }
+    gap: 4px;
+    max-width: 100%;
   }
 
-  .dc-iconbtn {
+  // Prefixed with .dc-experience: page-level button resets (.mp-concept button) must not win.
+  .dc-experience .dc-iconbtn,
+  .dc-experience .dc-save {
     position: relative;
-    display: inline-grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 44px;
+    height: 44px;
     padding: 0;
-    border: 1.5px solid var(--mp-ink);
-    border-radius: 10px;
-    background: transparent;
-    color: var(--mp-ink);
+    border: 1px solid var(--dcx-line);
+    border-radius: 999px;
+    background: var(--dcx-surface);
+    color: var(--dcx-ink);
+    font: inherit;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    text-decoration: none;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 
     svg {
-      width: 22px;
-      height: 22px;
+      flex: none;
+      width: 19px;
+      height: 19px;
+      stroke-width: 1.8;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--dcx-focus);
+      outline-offset: 3px;
     }
 
     // Tooltip: the same text as the accessible name, on hover and on keyboard focus.
@@ -933,44 +1037,125 @@
       left: 50%;
       padding: 6px 10px;
       border-radius: 7px;
-      background: var(--mp-ink);
-      color: var(--mp-on-dark);
-      font-size: 13px;
+      background: var(--dcx-primary);
+      color: var(--dcx-on-primary);
+      font-size: 12.5px;
       font-weight: 600;
       line-height: 1.2;
       white-space: nowrap;
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
       transform: translate(-50%, 4px);
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
     }
 
     @media (hover: hover) {
       &:hover {
-        background: var(--mp-ink);
-        color: var(--mp-on-dark);
+        border-color: var(--dcx-ink);
+        background: var(--dcx-hover);
       }
 
       &:hover::after {
         opacity: 1;
+        visibility: visible;
         transform: translate(-50%, 0);
       }
     }
 
     &:focus-visible::after {
       opacity: 1;
+      visibility: visible;
       transform: translate(-50%, 0);
     }
   }
 
-  .dc-save {
-    min-height: 48px;
+  // The last button (fullscreen, inside its display: contents wrapper): the tooltip opens
+  // inwards, never past the screen.
+  .dc-experience .dc-full__opener .dc-iconbtn::after {
+    left: auto;
+    right: 0;
+    transform: translate(0, 4px);
+  }
+
+  .dc-experience .dc-full__opener .dc-iconbtn:focus-visible::after {
+    transform: none;
+  }
+
+  @media (hover: hover) {
+    .dc-experience .dc-full__opener .dc-iconbtn:hover::after {
+      transform: none;
+    }
+  }
+
+  .dc-experience .dc-iconbtn {
+    width: 44px;
+
+    // State that is on (the back is showing).
+    &[aria-pressed="true"] {
+      border-color: var(--dcx-ink);
+      box-shadow: inset 0 0 0 1px var(--dcx-ink);
+    }
+  }
+
+  // The primary action, a little stronger than the others: filled, with its name.
+  .dc-experience .dc-save {
+    gap: 7px;
+    padding: 0 15px 0 12px;
+    border-color: var(--dcx-primary);
+    background: var(--dcx-primary);
+    color: var(--dcx-on-primary);
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    // the visible name already says it
+    &::after {
+      display: none;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--dcx-primary);
+        background: var(--dcx-primary);
+        color: var(--dcx-on-primary);
+        filter: brightness(1.08);
+      }
+    }
+  }
+
+  // Very narrow (small phones, high zoom): the save action keeps its icon and its accessible
+  // name, the row stays on one line.
+  @container (max-width: 336px) {
+    .dc-experience .dc-save {
+      width: 44px;
+      padding: 0;
+
+      &::after {
+        display: block;
+        left: 0;
+        transform: translate(0, 4px);
+      }
+
+      &:focus-visible::after {
+        transform: none;
+      }
+    }
+
+    .dc-save__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
   }
 
   .dc-note {
     max-width: 460px;
     margin: 0;
-    color: var(--mp-muted);
+    color: var(--dcx-muted);
     font-size: 13px;
     text-align: center;
 
@@ -979,7 +1164,7 @@
       padding: 0;
       border: 0;
       background: none;
-      color: var(--mp-ink);
+      color: var(--dcx-ink);
       font: inherit;
       font-weight: 600;
       text-decoration: underline;
@@ -989,9 +1174,13 @@
   }
 
   .dc-status {
-    min-height: 24px;
     max-width: 460px;
     text-align: center;
+
+    // Empty live region: stays in the page (so it announces), but takes no room in the group.
+    &:empty {
+      position: absolute;
+    }
 
     &__msg {
       margin: 0;
@@ -1014,32 +1203,108 @@
     }
   }
 
-  .dc-manual {
+  // Copy-link alternative: discreet, in the theme, only after sharing could not open.
+  .dc-experience .dc-sharealt {
     display: grid;
-    gap: 6px;
+    grid-template-columns: minmax(0, 1fr); // the URL field shrinks, the buttons stay inside
+    gap: 8px;
     width: min(100%, 460px);
+    padding: 12px;
+    border: 1px solid var(--dcx-line);
+    border-radius: 14px;
+    background: var(--dcx-surface);
+    color: var(--dcx-ink);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
 
-    label {
+    &__why,
+    &__result {
+      margin: 0;
       font-size: 13px;
-      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    &__result:empty {
+      display: none;
+    }
+
+    &__row {
+      display: flex;
+      gap: 6px;
     }
 
     input {
+      flex: 1 1 0;
       width: 100%;
-      min-height: 44px;
+      min-width: 0;
+      height: 44px;
       padding: 0 12px;
-      border: 1.5px solid var(--mp-field);
-      border-radius: var(--mp-radius-sm);
-      background: var(--mp-paper);
-      color: var(--mp-ink);
+      border: 1px solid var(--dcx-line);
+      border-radius: 10px;
+      background: transparent;
+      color: inherit;
       font: inherit;
-      font-size: 14px;
+      font-size: 13.5px;
+    }
 
-      &:focus-visible {
-        outline: 3px solid var(--mp-teal);
-        outline-offset: 2px;
+    &__copy,
+    &__close {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 44px;
+      border: 1px solid var(--dcx-line);
+      border-radius: 10px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+
+      svg {
+        width: 17px;
+        height: 17px;
       }
     }
+
+    &__copy {
+      padding: 0 12px;
+      border-color: var(--dcx-primary);
+      background: var(--dcx-primary);
+      color: var(--dcx-on-primary);
+    }
+
+    &__close {
+      width: 44px;
+    }
+
+    input:focus-visible,
+    &__copy:focus-visible,
+    &__close:focus-visible {
+      outline: 2px solid var(--dcx-focus);
+      outline-offset: 2px;
+    }
+
+    @container (max-width: 330px) {
+      &__row {
+        flex-wrap: wrap;
+      }
+
+      input {
+        flex-basis: 100%;
+      }
+
+      &__copy {
+        flex: 1 1 auto;
+      }
+    }
+  }
+
+  .dc-experience.is-full .dc-sharealt {
+    width: min(100%, 420px);
   }
 
   // Expandable site menu under MambyLy's own card (closed by default).
@@ -1152,6 +1417,12 @@
     align-items: center;
     justify-content: center;
     padding: clamp(32px, 7vh, 88px) var(--mp-gutter) 24px;
+  }
+
+  // On low screens (phone sideways, high zoom) the card also follows the height, so the card and
+  // its actions stay together under the page's header (never below 260px; then the page scrolls).
+  .mp-cardpage__main .dc {
+    width: min(100%, 440px, max(260px, calc((100dvh - 300px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
   }
 
   .mp-cardpage__footer {
