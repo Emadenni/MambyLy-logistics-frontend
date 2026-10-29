@@ -345,3 +345,15 @@ Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successi
   "Vrid telefonen…"; esce con pulsante, Escape, uscita del browser dal fullscreen e Indietro; focus restituito.
 - **Metodo**: una sola schermata (titolo, introduzione, anteprima nella lingua corrente accanto ai tre passaggi,
   una frase sulle possibilità, una nota, una CTA verso il wizard con contesto `site`). Nessuna scelta.
+
+## Fase 9: settima demo, titolo del ristorante, materiali dei biglietti
+
+- **Settima demo**: `Typographic.tsx` (concept tipografico rosso, foto `site-typographic`, dalla versione
+  d0e8100) di nuovo in galleria come "Typografiskt koncept" / "Typographic concept", slug
+  `typografisk` / `typographic`, immersiva come le altre; programma fittizio rinominato "Höstprogrammet".
+- **Ristorante**: la parola di categoria sta intera sopra la foto (altezza fissa, nessun salto tra le
+  categorie); gli scatti non permettono uno scontorno pulito del piatto, quindi niente sovrapposizione.
+- **Biglietti**: un materiale SVG per design su tutta la superficie, fronte e retro (`$m-*` in
+  `_card-designs.scss`, generati da rilievo con luce diffusa, fibre, satinatura o grana opaca).
+- **Contatti**: `contactSubmit.ts` incorpora solo le tre variabili che usa. Per i test locali compilare con
+  `VITE_API_BASE_URL=https://execute-api.invalid` (mai la build di produzione dietro un mock).

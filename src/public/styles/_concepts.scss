@@ -1180,6 +1180,23 @@ $desk: 960px;
       gap: 6px;
     }
 
+    // Phones: the name on the first row (beside the close button), the links on a row below it.
+    @include phone {
+      flex-wrap: wrap;
+      gap: 0 8px;
+
+      .cx-ty__mark {
+        display: flex;
+        align-items: center;
+        min-height: 54px;
+      }
+
+      nav {
+        flex-basis: 100%;
+        margin-left: -8px;
+      }
+    }
+
     a {
       display: inline-flex;
       align-items: center;
