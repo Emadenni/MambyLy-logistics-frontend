@@ -3102,7 +3102,12 @@ $x-wide: 1180px;
   }
 
   // MambyLy's own card, in the look of the site: ivory glass, the link mark, the logo on top.
+  // One screen: header, a small label, the card, its actions and the site's icon row all fit
+  // the visible height. The card's width follows that height once the rest (--own-rest, about
+  // 270px, plus the safe areas) is kept; under 240px wide the page may scroll instead of cutting.
   .mp-cardpage--own {
+    --own-rest: 270px;
+
     background:
       radial-gradient(120% 55% at 70% 108%, rgba(36, 123, 103, 0.26), transparent 60%),
       url("/media/mambyly/hero-glass-1024.webp") center / cover no-repeat,
@@ -3110,17 +3115,26 @@ $x-wide: 1180px;
 
     .mp-cardpage__top {
       justify-content: space-between;
+      padding-top: max(10px, env(safe-area-inset-top));
     }
 
     .mp-cardpage__main {
       flex-direction: column;
-      gap: 18px;
-      padding-top: clamp(20px, 5vh, 64px);
+      gap: clamp(8px, 1.8vh, 16px);
+      padding: clamp(6px, 2.5vh, 40px) var(--mp-gutter) max(12px, env(safe-area-inset-bottom));
     }
 
-    .mp-cardpage__brand {
-      color: var(--x-ink);
-      font-weight: 600;
+    .mp-cardpage__main .dc {
+      width: min(100%, 440px, max(240px, calc((100dvh - var(--own-rest) - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
+    }
+
+    // Phone held sideways: the label goes (the header already names MambyLy), the rest stays.
+    @media (orientation: landscape) and (max-height: 500px) {
+      --own-rest: 222px;
+
+      .mp-cardpage__eyebrow {
+        display: none;
+      }
     }
   }
 
@@ -3138,16 +3152,16 @@ $x-wide: 1180px;
   .mp-cardpage__eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin: 0;
     color: var(--x-ink) !important;
-    font: 500 clamp(20px, 5.4vw, 26px) / 1.2 var(--x-serif);
+    font: 500 15px / 1.2 var(--x-serif); // a short, secondary label above the card
     letter-spacing: -0.01em;
   }
 
   .mp-cardpage__mark {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
   }
 
   // /exempel/:slug – an example card fullscreen, on the surface of its own style.

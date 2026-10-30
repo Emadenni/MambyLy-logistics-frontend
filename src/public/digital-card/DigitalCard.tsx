@@ -14,8 +14,11 @@ import type { CardStrings } from "./strings";
  *    finger has moved DRAG_START px, so one gesture either turns the card or shares it, never
  *    both. A decisive upward swipe calls onSwipeUp synchronously inside pointerup, so the parent
  *    can call navigator.share() while the user activation is still valid. The card then owns
- *    one-finger touches (touch-action: pinch-zoom); without onSwipeUp vertical swipes stay with
- *    the browser (pan-y) and scroll the page.
+ *    its touches (touch-action: none, plus a non-passive touchmove that cancels scrolling: iOS
+ *    Safari ignores touch-action: pinch-zoom and would take the swipe and cancel the pointer).
+ *    Where touch events exist the share starts in the touchend that follows the pointerup, the
+ *    event every mobile browser treats as a user activation. Without onSwipeUp vertical swipes
+ *    stay with the browser (pan-y) and scroll the page.
  *  - Tap, Enter or Space flips; arrow keys tilt. Links/buttons on the visible side keep working.
  *  - intro: a short sideways tilt once per tab session, on a wrapper of its own (never on the
  *    element that carries the drag / flip transform). Stops as soon as the user interacts.
@@ -43,6 +46,12 @@ const SWIPE_SPEED = -0.4; // px/ms
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isBack = (ry: number) => Math.abs(Math.round(ry / 180)) % 2 === 1;
+/** A decisive swipe up from the gesture's start to (x, y). */
+const isSwipeUp = (d: { x0: number; y0: number; vy: number }, x: number, y: number) => {
+  const dx = x - d.x0;
+  const dy = y - d.y0;
+  return dy < -SWIPE_MIN && Math.abs(dy) > Math.abs(dx) * 1.2 && (d.vy < SWIPE_SPEED || dy < -SWIPE_LONG);
+};
 
 const socialIcon = { whatsapp: FiMessageCircle, instagram: FiInstagram, facebook: FiFacebook, linkedin: FiLinkedin, youtube: FiYoutube, tiktok: FaTiktok, x: FiLink };
 
@@ -280,8 +289,13 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     ry0: number;
     moving: boolean;
     axis: "x" | "y";
+    shared?: boolean;
   } | null>(null);
   const swallowClickUntil = useRef(0);
+  /** A recognised swipe up waiting for its touchend (see above). */
+  const pendingSwipe = useRef(false);
+  const swipeUp = useRef(onSwipeUp);
+  swipeUp.current = onSwipeUp;
   const frame = useRef(0);
   const [nudging, setNudging] = useState(false);
 
@@ -299,6 +313,43 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
   }, []);
 
   useEffect(() => () => cancelAnimationFrame(frame.current), []);
+
+  // Native listeners: React's touch listeners are passive, so they could not stop the scroll.
+  const swipeOn = !!onSwipeUp;
+  useEffect(() => {
+    const el = stage.current;
+    if (!el || !swipeOn) return;
+    const reset = () => {
+      pendingSwipe.current = false;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (drag.current?.touch && e.cancelable) e.preventDefault();
+    };
+    const onTouchEnd = (e: TouchEvent) => {
+      if (pendingSwipe.current) {
+        pendingSwipe.current = false;
+        swipeUp.current?.();
+        return;
+      }
+      // A browser that sends touchend before pointerup: decide here, pointerup then only settles.
+      const d = drag.current;
+      const p = e.changedTouches[0];
+      if (d?.touch && d.moving && d.axis === "y" && !d.shared && p && isSwipeUp(d, p.clientX, p.clientY)) {
+        d.shared = true;
+        swipeUp.current?.();
+      }
+    };
+    el.addEventListener("touchstart", reset, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", reset);
+    return () => {
+      el.removeEventListener("touchstart", reset);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", reset);
+    };
+  }, [swipeOn]);
 
   // Intro hint: at most once per tab session and card, never with reduced motion.
   useEffect(() => {
@@ -411,12 +462,13 @@ const DigitalCard: React.FC<Props> = ({ card, t, flipped, onFlippedChange, onSwi
     if (!d.moving) return; // a tap: handled by onClick
     swallowClickUntil.current = performance.now() + 400;
     const dx = e.clientX - d.x0;
-    const dy = e.clientY - d.y0;
 
     if (d.axis === "y") {
-      const up = dy < -SWIPE_MIN && Math.abs(dy) > Math.abs(dx) * 1.2 && (d.vy < SWIPE_SPEED || dy < -SWIPE_LONG);
-      // First, inside this pointerup: navigator.share() needs the user activation of the gesture.
-      if (up) onSwipeUp?.();
+      const up = !d.shared && isSwipeUp(d, e.clientX, e.clientY);
+      // navigator.share() needs the gesture's user activation: a finger shares from the touchend
+      // that follows (same gesture, no timer); a pen without touch events shares right here.
+      if (up && e.pointerType === "touch" && "ontouchend" in window) pendingSwipe.current = true;
+      else if (up) onSwipeUp?.();
       settle(d.ry0); // back in place, on the side that was showing
       return;
     }

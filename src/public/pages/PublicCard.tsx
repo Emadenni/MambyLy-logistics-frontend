@@ -8,10 +8,13 @@ import { cardStrings } from "../digital-card/strings";
 import { copy } from "../experience/copy";
 import { savedLang } from "../experience/i18n";
 import { destinations } from "../experience/nav";
-import { CARD_PATH, PATHS, langOfPath, type Lang } from "../experience/routes";
+import { CARD_PATH, PATHS, langOfPath, type Lang, type StaticScreen } from "../experience/routes";
 import LangSwitch from "../experience/LangSwitch";
 import logoDark from "../assets/logo-dark.svg";
 import { LinkMark } from "../experience/icons";
+
+/** The site pages under MambyLy's own card: what the card leads to, nothing more. */
+const SITE_NAV: StaticScreen[] = ["websites", "cards", "about", "contact"];
 
 /**
  * /card – MambyLy's own card (also the NFC destination, so it never redirects); /en/card – the
@@ -62,7 +65,9 @@ const PublicCard: React.FC = () => {
   const description = card.meta?.description || `${cs.cardLabel}: ${card.name}`;
   const url = cardUrlFor(card.slug);
   const menu: CardMenuItem[] | undefined = isCompany
-    ? destinations.map((d) => ({ to: PATHS[d.screen][lang], label: d.label(t), icon: d.icon }))
+    ? destinations
+        .filter((d) => SITE_NAV.includes(d.screen))
+        .map((d) => ({ to: PATHS[d.screen][lang], label: d.label(t), icon: d.icon }))
     : undefined;
 
   return (
@@ -107,12 +112,15 @@ const PublicCard: React.FC = () => {
         <CardExperience card={card} headingLevel="h1" intro menu={menu} />
       </main>
 
-      <footer className="mp-cardpage__footer">
-        <Link to={PATHS.explore[lang]} className="mp-cardpage__brand">
-          <span>{isCompany ? t.cardPage.toSite : cs.createdBy}</span>
-          {isCompany ? <FiArrowRight aria-hidden="true" /> : <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />}
-        </Link>
-      </footer>
+      {/* MambyLy's own card leads to the site through its logo and the icon row under the card. */}
+      {!isCompany && (
+        <footer className="mp-cardpage__footer">
+          <Link to={PATHS.explore[lang]} className="mp-cardpage__brand">
+            <span>{cs.createdBy}</span>
+            <img src={logoDark} alt="MambyLy Solutions" width={104} height={30} />
+          </Link>
+        </footer>
+      )}
     </div>
   );
 };

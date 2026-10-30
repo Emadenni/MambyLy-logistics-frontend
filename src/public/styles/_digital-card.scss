@@ -30,10 +30,10 @@
     // Horizontal drags turn the card; vertical swipes stay with the browser, so the page scrolls.
     touch-action: pan-y;
 
-    // Swipe up shares: the card keeps one-finger touches (pinch zoom stays with the browser).
-    // The page around the card still scrolls.
+    // Swipe up shares: the card keeps its touches. Not pinch-zoom: iOS Safari does not know it,
+    // falls back to pan-y and takes the swipe for itself. The page around the card still scrolls.
     &--swipe {
-      touch-action: pinch-zoom;
+      touch-action: none;
     }
     user-select: none;
     -webkit-user-select: none;
@@ -1307,95 +1307,83 @@
     width: min(100%, 420px);
   }
 
-  // Expandable site menu under MambyLy's own card (closed by default).
-  .dc-menu {
-    width: min(100%, 520px);
-    margin-top: 6px;
-    padding-top: 14px;
-    border-top: 1px solid var(--mp-line);
-    text-align: center;
-
-    &__toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 0 16px;
-      border: 1px solid var(--mp-line);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--mp-ink);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-
-      &:hover {
-        border-color: var(--mp-ink);
-        background: var(--mp-paper);
-      }
-    }
-
-    &__chev {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.25s ease;
-    }
-
-    &.is-open .dc-menu__chev {
-      transform: rotate(180deg);
-    }
+  // The site's pages under MambyLy's own card: one quiet row of icons, apart from the card's
+  // actions (no surface, no border; a short gap and a fine rule between the two).
+  .dc-sitenav {
+    margin-top: 2px;
+    padding-top: clamp(4px, 1vh, 8px);
+    border-top: 1px solid var(--dcx-line);
 
     ul {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 8px;
-      margin: 12px 0 0;
+      display: flex;
+      justify-content: center;
+      gap: clamp(6px, 3vw, 18px);
+      margin: 0;
       padding: 0;
       list-style: none;
-      text-align: left;
-
-      &[hidden] {
-        display: none;
-      }
     }
 
     &__link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 48px;
-      padding: 6px 14px;
-      border: 1px solid var(--mp-line);
-      border-radius: 12px;
-      background: var(--mp-paper);
-      color: var(--mp-ink);
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.2;
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--dcx-muted);
       text-decoration: none;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-
-      &:hover {
-        border-color: var(--mp-ink);
-        background: #fff;
-      }
-    }
-
-    &__icon {
-      display: inline-grid;
-      flex: none;
-      color: var(--mp-teal);
+      transition: color 0.2s ease, background-color 0.2s ease;
 
       svg {
-        width: 18px;
-        height: 18px;
+        width: 19px;
+        height: 19px;
+        stroke-width: 1.7;
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      &__chev {
-        transition: none;
+      &:focus-visible {
+        outline: 2px solid var(--dcx-focus);
+        outline-offset: 1px;
+      }
+
+      // Tooltip: the same text as the accessible name, on hover and on keyboard focus.
+      &::after {
+        content: attr(data-tip);
+        position: absolute;
+        z-index: 5;
+        bottom: calc(100% + 4px);
+        left: 50%;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: var(--dcx-primary);
+        color: var(--dcx-on-primary);
+        font-size: 12.5px;
+        font-weight: 600;
+        line-height: 1.2;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translate(-50%, 4px);
+        transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          background: var(--dcx-hover);
+          color: var(--dcx-ink);
+        }
+
+        &:hover::after {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, 0);
+        }
+      }
+
+      &:focus-visible::after {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
       }
     }
   }

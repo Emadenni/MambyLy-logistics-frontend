@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiChevronDown, FiCopy, FiDownload, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { FiCopy, FiDownload, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
@@ -51,43 +51,23 @@ export const IconButton: React.FC<{ label: string; onClick: () => void; children
 /** Touch screen: where "swipe up" is a gesture people can actually make. */
 const coarsePointer = () => typeof window !== "undefined" && !!window.matchMedia?.("(pointer: coarse)").matches;
 
-/** Discreet, expandable menu towards the site (MambyLy's own card only). Closes after a choice and on Escape. */
-const CardMenu: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, label }) => {
-  const [open, setOpen] = useState(false);
-  const id = useId();
-  const button = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        button.current?.focus();
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  return (
-    <nav className={`dc-menu${open ? " is-open" : ""}`} aria-label={label}>
-      <button ref={button} type="button" className="dc-menu__toggle" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
-        <span>{label}</span>
-        <FiChevronDown aria-hidden="true" className="dc-menu__chev" />
-      </button>
-      <ul id={id} hidden={!open}>
-        {items.map((item) => (
-          <li key={item.to}>
-            <Link to={item.to} className="dc-menu__link" onClick={() => setOpen(false)}>
-              <span className="dc-menu__icon" aria-hidden="true">{item.icon}</span>
-              <span>{item.label}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
+/**
+ * The site's pages as one small row of icons under MambyLy's own card: always visible, no
+ * dropdown, each link with its name (accessible name + tooltip on hover and focus).
+ */
+const SiteNav: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, label }) => (
+  <nav className="dc-sitenav" aria-label={label}>
+    <ul>
+      {items.map((item) => (
+        <li key={item.to}>
+          <Link to={item.to} className="dc-sitenav__link" aria-label={item.label} data-tip={item.label}>
+            {item.icon}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </nav>
+);
 
 /**
  * "Only the card": the same card element grows to the largest size that fits the screen, with only
@@ -346,7 +326,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
         </div>
       )}
 
-      {menu && menu.length > 0 && <CardMenu items={menu} label={t.menuLabel} />}
+      {menu && menu.length > 0 && <SiteNav items={menu} label={t.menuLabel} />}
 
       <Dialog
         open={qrOpen}

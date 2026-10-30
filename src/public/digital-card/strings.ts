@@ -47,7 +47,7 @@ const sv = {
   vcardFallback: "Hände inget?",
   vcardDownload: "Ladda ner kontaktfilen",
   vcardDownloaded: "Om filen laddades ner: öppna den och välj att lägga till kontakten.",
-  menuLabel: "Mer från MambyLy",
+  menuLabel: "MambyLy: webbplatsens sidor",
   localhostNote: "Länken pekar på den här datorn (localhost) och fungerar inte på andra enheter.",
   createdBy: "Digitalt visitkort av",
 };
@@ -97,7 +97,7 @@ const en: typeof sv = {
   vcardFallback: "Nothing happened?",
   vcardDownload: "Download the contact file",
   vcardDownloaded: "If the file was downloaded: open it and choose to add the contact.",
-  menuLabel: "More from MambyLy",
+  menuLabel: "MambyLy: pages of the website",
   localhostNote: "The link points to this computer (localhost) and will not work on other devices.",
   createdBy: "Digital business card by",
 };

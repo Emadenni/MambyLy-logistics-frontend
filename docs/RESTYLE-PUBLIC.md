@@ -116,9 +116,9 @@ navigazione del sito). "Spara kontakt" è l'azione primaria piena; sotto ~336px 
 nome accessibile. Seguono pulsanti tondi da 44px solo icona, con etichetta e tooltip: Dela kortet (sempre
 presente), Visa baksidan / Visa framsidan (`aria-pressed`), Visa QR-kod, Visa helskärm. I colori vengono dai token
 `--dcx-*` su `.dc-experience--<design>`: velvet champagne, ivory verde profondo, white blu, oxblood crema,
-graphite argento, expressive viola, `brand` per MambyLy. Sul biglietto MambyLy segue il menu espandibile "Mer från MambyLy" (chiuso all'inizio, `aria-expanded`, Escape lo chiude): Webbplatser,
-Digitala visitkort, Exempel, Om oss, Kontakt, dalla lista condivisa `destinations` in `experience/nav.tsx`, nella
-lingua dell'interfaccia. In alto a destra lo switch SV/EN.
+graphite argento, expressive viola, `brand` per MambyLy. Sul biglietto MambyLy, dopo una riga sottile, una fila di icone sempre visibile (`.dc-sitenav`, niente tendina; nome accessibile + tooltip): Webbplatser,
+Digitala visitkort, Om oss, Kontakt (`SITE_NAV` in `PublicCard.tsx`, dalla lista `destinations` di `experience/nav.tsx`), nella
+lingua dell'interfaccia. In alto a destra lo switch SV/EN; "Vårt digitala visitkort" è una piccola etichetta (nascosta con il telefono in orizzontale). Niente footer: tutto sta in una schermata (`--own-rest` ≈ 270px riservati, la larghezza della card segue l'altezza; minimo 240px, poi la pagina scorre). Le demo non hanno la fila di icone.
 
 Accenno iniziale: breve inclinazione (≈1,25 s) su un wrapper `.dc__tilt` separato dalle trasformazioni di
 trascinamento e rotazione; una volta per scheda (`sessionStorage`), si interrompe al primo tocco/tasto/focus,
@@ -127,12 +127,12 @@ disattivato con `prefers-reduced-motion`.
 Gesti (`DigitalCard.tsx`): l'asse si decide una volta sola, dopo 8px.
 - Orizzontale: gira il biglietto, come prima.
 - Verticale (solo touch o penna, con `|dy| > 1,2·|dx|`): la card si solleva un poco e non gira mai. Al rilascio,
-  se `dy < -56px` e (velocità < -0,4 px/ms oppure `dy < -110px`), `onSwipeUp` viene chiamato dentro `pointerup`.
+  se `dy < -56px` e (velocità < -0,4 px/ms oppure `dy < -110px`), `onSwipeUp` viene chiamato nel `touchend` dello stesso gesto (con la penna o senza touch events, dentro `pointerup`; se un browser manda `touchend` prima di `pointerup`, decide `touchend`).
   Così `navigator.share()` parte senza attese e conserva l'attivazione utente.
 - Un gesto quindi gira oppure condivide, mai le due cose. `pointercancel` riporta la card al suo posto, un secondo
   dito non avvia nulla e si apre un solo pannello alla volta.
 
-Lo swipe era stato tolto in d622dc5 (`touch-action: pan-y`). Ora la card usa `touch-action: pinch-zoom`: la
+Lo swipe era stato tolto in d622dc5 (`touch-action: pan-y`). 18cc70f usava `touch-action: pinch-zoom`, che iOS Safari non conosce: ricadeva su `pan-y`, il browser prendeva lo swipe e mandava `pointercancel`. Ora `touch-action: none` sulla card più un `touchmove` non passivo che annulla lo scroll durante il gesto; la
 pagina scorre toccando fuori dalla card.
 
 Condivisione:
