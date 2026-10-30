@@ -3124,7 +3124,7 @@ $x-wide: 1180px;
       padding: clamp(6px, 2.5vh, 40px) var(--mp-gutter) max(12px, env(safe-area-inset-bottom));
     }
 
-    .mp-cardpage__main .dc {
+    .mp-cardpage__main .dc-experience:not(.is-full) > .dc {
       width: min(100%, 440px, max(240px, calc((100dvh - var(--own-rest) - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
     }
 
@@ -3169,12 +3169,12 @@ $x-wide: 1180px;
   .mp-cardx {
     // The card, its hint and its action bar are one group, centred in the screen. The card is as
     // wide as the screen allows, and also as the height allows once the controls below it
-    // (about 140px) and the page's padding are kept: on a phone held sideways or at a high zoom
+    // (about 195px with the profile icon row) and the page's padding are kept: on a phone held sideways or at a high zoom
     // the whole group still fits. Never smaller than 260px (then the page scrolls). 85 × 55.
     --cardx-max: 440px;
 
-    .dc {
-      width: min(100%, var(--cardx-max), max(260px, calc((100dvh - 200px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
+    .dc-experience:not(.is-full) > .dc {
+      width: min(100%, var(--cardx-max), max(260px, calc((100dvh - 255px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
     }
 
     // the card a little larger than on /card on wide screens (same proportions)

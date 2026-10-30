@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dialog } from "@mui/material";
-import { FiCopy, FiDownload, FiMaximize, FiShare, FiUserPlus, FiX } from "react-icons/fi";
+import { FiBriefcase, FiCopy, FiDownload, FiLayers, FiMail, FiMaximize, FiShare, FiUser, FiUserPlus, FiX } from "react-icons/fi";
 import { TbQrcode } from "react-icons/tb";
 import DigitalCard from "./DigitalCard";
 import type { CardConfig } from "./types";
-import { cardStrings } from "./strings";
+import { cardStrings, type CardStrings } from "./strings";
 import { canNativeShare, copyText, shareLink, type ShareResult } from "./share";
 import { downloadVCard, staticVCardPath, vcardFileName } from "./vcard";
 import { qrSvg } from "./qr";
@@ -68,6 +68,108 @@ const SiteNav: React.FC<{ items: CardMenuItem[]; label: string }> = ({ items, la
     </ul>
   </nav>
 );
+
+type PanelId = "work" | "profile" | "contact";
+
+/**
+ * Demo cards: the fictitious person's own pages as a second quiet row of icons. Each opens a
+ * compact panel (MUI Dialog: focus inside, Escape and the close buttons return the focus to the
+ * icon). Fictitious texts only: no links, no form, nothing is sent.
+ */
+const ProfilePanels: React.FC<{ card: CardConfig; profile: NonNullable<CardConfig["profile"]>; t: CardStrings }> = ({ card, profile, t }) => {
+  const [panel, setPanel] = useState<PanelId | null>(null);
+  const titleId = `dc-panel-title-${card.slug}`;
+  const items: { id: PanelId; label: string; icon: React.ReactNode }[] = [
+    { id: "work", label: profile.work.title, icon: profile.work.kind === "work" ? <FiLayers aria-hidden="true" /> : <FiBriefcase aria-hidden="true" /> },
+    { id: "profile", label: t.profile, icon: <FiUser aria-hidden="true" /> },
+    { id: "contact", label: t.contact, icon: <FiMail aria-hidden="true" /> },
+  ];
+  const close = () => setPanel(null);
+  const current = items.find((i) => i.id === panel);
+
+  return (
+    <>
+      <nav className="dc-sitenav" aria-label={t.profileNav(card.name)}>
+        <ul>
+          {items.map((item) => (
+            <li key={item.id}>
+              <button type="button" className="dc-sitenav__link" aria-label={item.label} data-tip={item.label} aria-haspopup="dialog" onClick={() => setPanel(item.id)}>
+                {item.icon}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Dialog
+        open={!!panel}
+        onClose={close}
+        className="mp-dialog"
+        aria-labelledby={titleId}
+        PaperProps={{ className: `mp-dialog__paper mp-dialog__paper--narrow dc-panel dc-panel--${card.design ?? "brand"}`, lang: card.lang } as object}
+      >
+        <button type="button" className="mp-dialog__close" onClick={close} aria-label={t.close}>
+          <FiX aria-hidden="true" />
+        </button>
+        <div className="mp-dialog__body dc-panel__body">
+          <p className="dc-panel__who">
+            {card.name}
+            {card.role && <span> · {card.role}</span>}
+          </p>
+          <h2 id={titleId}>{current?.label}</h2>
+          {panel === "work" && (
+            <ul className="dc-panel__list">
+              {profile.work.items.map((i) => (
+                <li key={i.title}>
+                  <h3>{i.title}</h3>
+                  <p>{i.text}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {panel === "profile" && (
+            <>
+              <p className="dc-panel__about">{profile.about}</p>
+              {card.details && card.details.length > 0 && (
+                <dl className="dc-panel__facts">
+                  {card.details.map((d) => (
+                    <div key={d.label}>
+                      <dt>{d.label}</dt>
+                      <dd>{d.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </>
+          )}
+          {panel === "contact" && (
+            <dl className="dc-panel__facts">
+              {card.email && (
+                <div>
+                  <dt>{t.email}</dt>
+                  <dd>{card.email}</dd>
+                </div>
+              )}
+              {card.website && (
+                <div>
+                  <dt>{t.website}</dt>
+                  <dd>{card.website.label}</dd>
+                </div>
+              )}
+              <div>
+                <dt>{t.availability}</dt>
+                <dd>{profile.availability}</dd>
+              </div>
+            </dl>
+          )}
+          <p className="dc-panel__note">{t.exampleNote}</p>
+          <button type="button" className="dc-panel__back" onClick={close}>
+            {t.backToCard}
+          </button>
+        </div>
+      </Dialog>
+    </>
+  );
+};
 
 /**
  * "Only the card": the same card element grows to the largest size that fits the screen, with only
@@ -327,6 +429,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
       )}
 
       {menu && menu.length > 0 && <SiteNav items={menu} label={t.menuLabel} />}
+      {card.demo && card.profile && <ProfilePanels card={card} profile={card.profile} t={t} />}
 
       <Dialog
         open={qrOpen}

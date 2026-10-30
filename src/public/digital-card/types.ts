@@ -66,6 +66,11 @@ export type CardConfigRaw = {
   /** Extra lines for the back, e.g. opening hours */
   details?: { label: string; value: string }[];
   meta?: { title?: string; description?: string };
+  /**
+   * Demo cards only: the fictitious person's own pages, opened as small panels from the icon row
+   * under the card (work / profile / contact). Never real contact data.
+   */
+  profile?: CardProfile;
   /** Demo cards shown in the gallery (/exempel): sector label, short description and order. */
   example?: { sector: string; summary: string; order?: number };
   /** Texts in another language, merged over the card when the site is shown in that language. */
@@ -73,7 +78,7 @@ export type CardConfigRaw = {
 };
 
 /** Translatable texts of a card (contact details, names and logos never change with the language). */
-export type CardTranslation = Partial<Pick<CardConfigRaw, "role" | "tagline" | "details" | "meta">> & {
+export type CardTranslation = Partial<Pick<CardConfigRaw, "role" | "tagline" | "details" | "meta" | "profile">> & {
   example?: { sector?: string; summary?: string };
 };
 
@@ -94,4 +99,14 @@ export type CardConfig = Omit<CardConfigRaw, "phone" | "email" | "website" | "so
   photoUrl?: string;
   theme: CardTheme & { backAccent: string; style: "paper" | "solid"; layout: CardLayout; font: "sans" | "serif" };
   example?: { sector: string; summary: string; order: number };
+};
+
+/** The fictitious person's pages on a demo card. */
+export type CardProfile = {
+  /** Title of the work panel and its icon: "services" (Tjänster) or "work" (Projekt / Uppdrag). */
+  work: { kind: "services" | "work"; title: string; items: { title: string; text: string }[] };
+  /** A few sentences about the person. */
+  about: string;
+  /** Where and when: e.g. "Göteborg · svarar inom en arbetsdag" (no real address). */
+  availability: string;
 };

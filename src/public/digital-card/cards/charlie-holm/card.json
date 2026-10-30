@@ -28,6 +28,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "services",
+      "title": "Tjänster",
+      "items": [
+        {
+          "title": "Energiberäkningar",
+          "text": "Underlag som visar var en byggnad kan spara mest."
+        },
+        {
+          "title": "Styrsystem",
+          "text": "Ventilation och värme som samverkar och går att följa upp."
+        },
+        {
+          "title": "Teknisk rådgivning",
+          "text": "Ett andra par ögon före stora investeringar."
+        }
+      ]
+    },
+    "about": "Charlie arbetar med tekniska system i byggnader, med fokus på lägre energianvändning och drift som fungerar i vardagen.",
+    "availability": "Västerås · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Grafit",
     "summary": "Satinerad grafit, tekniskt rutnät och små etiketter i monospace.",
@@ -51,6 +73,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "services",
+          "title": "Services",
+          "items": [
+            {
+              "title": "Energy calculations",
+              "text": "Figures that show where a building can save the most."
+            },
+            {
+              "title": "Control systems",
+              "text": "Ventilation and heating that work together and can be followed up."
+            },
+            {
+              "title": "Technical advice",
+              "text": "A second pair of eyes before large investments."
+            }
+          ]
+        },
+        "about": "Charlie works with technical systems in buildings, focused on lower energy use and operation that works day to day.",
+        "availability": "Västerås · replies within one working day"
+      },
       "example": {
         "sector": "Graphite",
         "summary": "Satin graphite, a technical grid and small monospace labels."

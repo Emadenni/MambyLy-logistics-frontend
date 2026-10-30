@@ -28,6 +28,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "work",
+      "title": "Projekt",
+      "items": [
+        {
+          "title": "Bokningsapp",
+          "text": "Ett enklare flöde för att boka tider, testat med riktiga användare."
+        },
+        {
+          "title": "Designsystem",
+          "text": "Komponenter och riktlinjer som gör det lätt att bygga konsekvent."
+        },
+        {
+          "title": "Webbplats för en ateljé",
+          "text": "Lugn struktur, stora bilder och snabb laddning."
+        }
+      ]
+    },
+    "about": "Robin formger digitala tjänster som är tydliga att använda – från första skiss till färdiga gränssnitt.",
+    "availability": "Göteborg · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Vitt & enkelt",
     "summary": "Schweiziskt rutnät, blått accentstreck och textlänkar i en lodrät lista.",
@@ -51,6 +73,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "work",
+          "title": "Projects",
+          "items": [
+            {
+              "title": "Booking app",
+              "text": "A simpler flow for booking appointments, tested with real users."
+            },
+            {
+              "title": "Design system",
+              "text": "Components and guidelines that make it easy to build consistently."
+            },
+            {
+              "title": "Website for a studio",
+              "text": "Calm structure, large images and fast loading."
+            }
+          ]
+        },
+        "about": "Robin designs digital services that are clear to use – from the first sketch to finished interfaces.",
+        "availability": "Gothenburg · replies within one working day"
+      },
       "example": {
         "sector": "Clean white",
         "summary": "A Swiss grid, a blue accent line and text links in a vertical list."

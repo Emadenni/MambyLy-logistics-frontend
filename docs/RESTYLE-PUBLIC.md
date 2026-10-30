@@ -118,7 +118,7 @@ presente), Visa baksidan / Visa framsidan (`aria-pressed`), Visa QR-kod, Visa he
 `--dcx-*` su `.dc-experience--<design>`: velvet champagne, ivory verde profondo, white blu, oxblood crema,
 graphite argento, expressive viola, `brand` per MambyLy. Sul biglietto MambyLy, dopo una riga sottile, una fila di icone sempre visibile (`.dc-sitenav`, niente tendina; nome accessibile + tooltip): Webbplatser,
 Digitala visitkort, Om oss, Kontakt (`SITE_NAV` in `PublicCard.tsx`, dalla lista `destinations` di `experience/nav.tsx`), nella
-lingua dell'interfaccia. In alto a destra lo switch SV/EN; "Vårt digitala visitkort" è una piccola etichetta (nascosta con il telefono in orizzontale). Niente footer: tutto sta in una schermata (`--own-rest` ≈ 270px riservati, la larghezza della card segue l'altezza; minimo 240px, poi la pagina scorre). Le demo non hanno la fila di icone.
+lingua dell'interfaccia. In alto a destra lo switch SV/EN; "Vårt digitala visitkort" è una piccola etichetta (nascosta con il telefono in orizzontale). Niente footer: tutto sta in una schermata (`--own-rest` ≈ 270px riservati, la larghezza della card segue l'altezza; minimo 240px, poi la pagina scorre). Le demo hanno invece la fila della persona fittizia (vedi sotto).
 
 Accenno iniziale: breve inclinazione (≈1,25 s) su un wrapper `.dc__tilt` separato dalle trasformazioni di
 trascinamento e rotazione; una volta per scheda (`sessionStorage`), si interrompe al primo tocco/tasto/focus,
@@ -143,6 +143,19 @@ Condivisione:
 - In "solo biglietto" suggerimento e barra sono nascosti, e lo swipe condivide solo se il dispositivo ha Web Share.
 
 Test: `card-e2e.mjs` nello scratchpad, con condivisione simulata.
+
+Solo biglietto e rotazione (2026-10-30): la card reale restava piccola dopo una rotazione perché la regola di
+pagina di /card (`.mp-cardpage--own .mp-cardpage__main .dc`, larghezza legata all'altezza meno ~270px) aveva la
+stessa specificità di `.dc-experience.is-full .dc` e veniva dopo: valeva anche a schermo intero (in orizzontale
+260px invece di 547px). Ora le regole di pagina valgono solo per `.dc-experience:not(.is-full) > .dc`, e a schermo
+intero `.dc-experience.is-full` è un size container: `width: min(100cqw, (100cqh - hint) · 85/55)`. Il browser
+ricalcola a ogni resize, rotazione e cambio fullscreen: niente JS, niente scala memorizzata. Fallback vw/dvh.
+
+Menu delle demo: ogni biglietto di esempio ha una seconda fila di icone (`ProfilePanels` in `CardExperience.tsx`)
+con Tjänster/Projekt/Uppdrag, Profil, Kontakt della persona fittizia, dai dati `profile` di `card.json` (+ `en`).
+Ogni icona apre un pannello MUI Dialog nei colori del design (`$dcx-themes` in `_digital-card.scss`, mappa unica
+per barra, fila e pannelli): testi fittizi, nessun link, nessun modulo, nota "Exempel … inga meddelanden skickas",
+"Tillbaka till kortet". In solo biglietto entrambe le file sono nascoste.
 
 ### Salva contatto (vCard)
 

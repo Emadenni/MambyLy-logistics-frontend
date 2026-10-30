@@ -29,6 +29,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "work",
+      "title": "Uppdrag",
+      "items": [
+        {
+          "title": "Porträtt",
+          "text": "Personliga porträtt för webb, press och profiler."
+        },
+        {
+          "title": "Reportage",
+          "text": "Berättande bilder från platser, evenemang och vardag."
+        },
+        {
+          "title": "Företagsbilder",
+          "text": "Miljöer, team och detaljer som visar hur ni arbetar."
+        }
+      ]
+    },
+    "about": "Kim fotograferar människor och platser i naturligt ljus och med gott om tid. Bilderna ska kännas äkta, inte arrangerade.",
+    "availability": "Uppsala · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Oxblodsröd",
     "summary": "Borgogne och kräm, stor redaktionell typografi och rollen på sidan.",
@@ -52,6 +74,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "work",
+          "title": "Assignments",
+          "items": [
+            {
+              "title": "Portraits",
+              "text": "Personal portraits for the web, press and profiles."
+            },
+            {
+              "title": "Reportage",
+              "text": "Story-telling pictures of places, events and everyday life."
+            },
+            {
+              "title": "Company pictures",
+              "text": "Settings, teams and details that show how you work."
+            }
+          ]
+        },
+        "about": "Kim photographs people and places in natural light and with plenty of time. The pictures should feel real, not staged.",
+        "availability": "Uppsala · replies within one working day"
+      },
       "example": {
         "sector": "Oxblood red",
         "summary": "Burgundy and cream, large editorial type and the role on the side."

@@ -1,8 +1,37 @@
+@use "sass:map";
+
 // Digital business card (src/public/digital-card) and its pages. Included inside .mambyly-public.
 //
 // One card engine, several compositions: .dc--layout-<classic|craft|split|frame|bold>, plus
 // .dc--paper / .dc--solid (surface) and .dc--serif (type). Colours always come from the card's
 // configuration (--dc-*), so a new client never needs new CSS for its palette.
+
+// Colours of the controls around the card, per card design (`brand` = MambyLy's own and client
+// cards). One map for the action bar, the profile row and the panels the demos open (those are in
+// a portal, outside .dc-experience): ink = icons and text, line = fine borders, surface = control
+// background, sheet = opaque panel background, primary = the save action.
+$dcx-themes: (
+  // MambyLy: deep green on ivory.
+  "brand": (ink: #103b35, line: rgba(16, 59, 53, 0.22), surface: rgba(255, 255, 255, 0.55), sheet: #fbfaf6, hover: rgba(16, 59, 53, 0.08), primary: #103b35, on-primary: #f6f4ee, muted: rgba(16, 59, 53, 0.72), focus: #247b67),
+  // Dark velvet: dark controls, champagne accents.
+  "velvet": (ink: #efe7d6, line: rgba(201, 180, 138, 0.42), surface: rgba(255, 248, 232, 0.04), sheet: #1b1916, hover: rgba(201, 180, 138, 0.14), primary: #c9b48a, on-primary: #151311, muted: rgba(239, 231, 214, 0.72), focus: #e3cf9f),
+  // Ivory cotton: deep green on a warm surface.
+  "ivory": (ink: #1f3a2f, line: rgba(31, 58, 47, 0.24), surface: rgba(255, 252, 244, 0.7), sheet: #f7f2e7, hover: rgba(31, 58, 47, 0.08), primary: #1f3a2f, on-primary: #f3eee2, muted: rgba(31, 58, 47, 0.74), focus: #3f6b55),
+  // Pressed white: black ink, the card's blue for the save action.
+  "white": (ink: #111, line: rgba(17, 17, 17, 0.18), surface: rgba(255, 255, 255, 0.8), sheet: #fff, hover: rgba(31, 79, 216, 0.08), primary: #1f4fd8, on-primary: #fff, muted: rgba(17, 17, 17, 0.7), focus: #1f4fd8),
+  // Oxblood: cream on bordeaux.
+  "oxblood": (ink: #f5ead8, line: rgba(233, 201, 168, 0.4), surface: rgba(245, 234, 216, 0.05), sheet: #3a0b0f, hover: rgba(245, 234, 216, 0.12), primary: #f5ead8, on-primary: #5e0f14, muted: rgba(245, 234, 216, 0.74), focus: #e9c9a8),
+  // Graphite: silver details.
+  "graphite": (ink: #eceef0, line: rgba(185, 194, 203, 0.4), surface: rgba(236, 238, 240, 0.05), sheet: #26292d, hover: rgba(185, 194, 203, 0.14), primary: #c9d0d7, on-primary: #1d1f22, muted: rgba(236, 238, 240, 0.72), focus: #dfe5ea),
+  // Lavender and orange: deep violet controls, the burnt orange as focus.
+  "expressive": (ink: #2a0f47, line: rgba(42, 15, 71, 0.24), surface: rgba(255, 255, 255, 0.5), sheet: #f7f3ff, hover: rgba(42, 15, 71, 0.08), primary: #2a0f47, on-primary: #f3eefe, muted: rgba(42, 15, 71, 0.76), focus: #9a3412),
+);
+
+@mixin dcx-tokens($design) {
+  @each $key, $value in map.get($dcx-themes, $design) {
+    --dcx-#{$key}: #{$value};
+  }
+}
 
 @mixin styles {
   // ---------- Card ----------
@@ -804,14 +833,7 @@
   // Card, short gesture hint and the small action bar read as one group: tight, fluid gaps.
   // The controls take their colours from tokens per card design (below), never one fixed green.
   .dc-experience {
-    --dcx-ink: #103b35; // icons and text of the controls
-    --dcx-line: rgba(16, 59, 53, 0.22); // fine borders
-    --dcx-surface: rgba(255, 255, 255, 0.55); // control background
-    --dcx-hover: rgba(16, 59, 53, 0.08);
-    --dcx-primary: #103b35; // the save action
-    --dcx-on-primary: #f6f4ee;
-    --dcx-muted: rgba(16, 59, 53, 0.72);
-    --dcx-focus: #247b67;
+    @include dcx-tokens("brand");
 
     display: flex;
     flex-direction: column;
@@ -821,85 +843,28 @@
     container-type: inline-size;
   }
 
-  // Dark velvet: dark controls, champagne accents.
-  .dc-experience--velvet {
-    --dcx-ink: #efe7d6;
-    --dcx-line: rgba(201, 180, 138, 0.42);
-    --dcx-surface: rgba(255, 248, 232, 0.04);
-    --dcx-hover: rgba(201, 180, 138, 0.14);
-    --dcx-primary: #c9b48a;
-    --dcx-on-primary: #151311;
-    --dcx-muted: rgba(239, 231, 214, 0.72);
-    --dcx-focus: #e3cf9f;
-  }
-
-  // Ivory cotton: deep green on a warm surface.
-  .dc-experience--ivory {
-    --dcx-ink: #1f3a2f;
-    --dcx-line: rgba(31, 58, 47, 0.24);
-    --dcx-surface: rgba(255, 252, 244, 0.7);
-    --dcx-hover: rgba(31, 58, 47, 0.08);
-    --dcx-primary: #1f3a2f;
-    --dcx-on-primary: #f3eee2;
-    --dcx-muted: rgba(31, 58, 47, 0.74);
-    --dcx-focus: #3f6b55;
-  }
-
-  // Pressed white: black ink, the card's blue for the save action.
-  .dc-experience--white {
-    --dcx-ink: #111;
-    --dcx-line: rgba(17, 17, 17, 0.18);
-    --dcx-surface: rgba(255, 255, 255, 0.8);
-    --dcx-hover: rgba(31, 79, 216, 0.08);
-    --dcx-primary: #1f4fd8;
-    --dcx-on-primary: #fff;
-    --dcx-muted: rgba(17, 17, 17, 0.7);
-    --dcx-focus: #1f4fd8;
-  }
-
-  // Oxblood: cream on bordeaux.
-  .dc-experience--oxblood {
-    --dcx-ink: #f5ead8;
-    --dcx-line: rgba(233, 201, 168, 0.4);
-    --dcx-surface: rgba(245, 234, 216, 0.05);
-    --dcx-hover: rgba(245, 234, 216, 0.12);
-    --dcx-primary: #f5ead8;
-    --dcx-on-primary: #5e0f14;
-    --dcx-muted: rgba(245, 234, 216, 0.74);
-    --dcx-focus: #e9c9a8;
-  }
-
-  // Graphite: silver details.
-  .dc-experience--graphite {
-    --dcx-ink: #eceef0;
-    --dcx-line: rgba(185, 194, 203, 0.4);
-    --dcx-surface: rgba(236, 238, 240, 0.05);
-    --dcx-hover: rgba(185, 194, 203, 0.14);
-    --dcx-primary: #c9d0d7;
-    --dcx-on-primary: #1d1f22;
-    --dcx-muted: rgba(236, 238, 240, 0.72);
-    --dcx-focus: #dfe5ea;
-  }
-
-  // Lavender and orange: deep violet controls, the burnt orange as focus.
-  .dc-experience--expressive {
-    --dcx-ink: #2a0f47;
-    --dcx-line: rgba(42, 15, 71, 0.24);
-    --dcx-surface: rgba(255, 255, 255, 0.5);
-    --dcx-hover: rgba(42, 15, 71, 0.08);
-    --dcx-primary: #2a0f47;
-    --dcx-on-primary: #f3eefe;
-    --dcx-muted: rgba(42, 15, 71, 0.76);
-    --dcx-focus: #9a3412;
+  @each $design, $tokens in $dcx-themes {
+    @if $design != "brand" {
+      .dc-experience--#{$design} {
+        @include dcx-tokens($design);
+      }
+    }
   }
 
   // ---------- "Only the card" (fullscreen view) ----------
   // The same card element, as large as the visible area allows, with its 85 × 55 proportions.
   // Everything else of the experience steps aside; only the small close button stays.
+  // The size comes from this element's own box (a size container: container units, recomputed by
+  // the browser on every resize, rotation and fullscreen change; no JS, no stored scale), never
+  // from the page's layout. The page rules that size the card in the normal view are scoped to
+  // .dc-experience:not(.is-full): before, /card's height rule also applied here and kept the card
+  // at its small sideways size after a rotation.
   .dc-experience.is-full {
     --full-pad: 18px;
+    // fallback for browsers without container units
     --full-w: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right) - 2 * var(--full-pad));
     --full-h: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 2 * var(--full-pad) - var(--full-hint, 0px));
+    container-type: size;
     position: fixed;
     inset: 0;
     z-index: 1300;
@@ -915,10 +880,14 @@
       display: none !important;
     }
 
-    .dc {
+    > .dc {
       width: min(var(--full-w), var(--full-h) * 85 / 55);
       max-width: none;
       margin: 0;
+
+      @supports (width: 1cqw) {
+        width: min(100cqw, (100cqh - var(--full-hint, 0px)) * 85 / 55);
+      }
     }
 
     // Phone held upright: the card stays a horizontal rectangle; a short hint suggests turning.
@@ -1309,6 +1278,15 @@
 
   // The site's pages under MambyLy's own card: one quiet row of icons, apart from the card's
   // actions (no surface, no border; a short gap and a fine rule between the two).
+  // The demos' profile row uses buttons (they open panels): no page-level button look.
+  .dc-experience .dc-sitenav button.dc-sitenav__link {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
   .dc-sitenav {
     margin-top: 2px;
     padding-top: clamp(4px, 1vh, 8px);
@@ -1409,7 +1387,7 @@
 
   // On low screens (phone sideways, high zoom) the card also follows the height, so the card and
   // its actions stay together under the page's header (never below 260px; then the page scrolls).
-  .mp-cardpage__main .dc {
+  .mp-cardpage__main .dc-experience:not(.is-full) > .dc {
     width: min(100%, 440px, max(260px, calc((100dvh - 300px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 85 / 55)));
   }
 
@@ -1437,6 +1415,140 @@
 
 // QR dialog (portal, inside .mp-dialog)
 @mixin dialog-styles {
+  // Panels of a demo card's profile row (work / profile / contact), in the card's own colours.
+  @each $design, $tokens in $dcx-themes {
+    .dc-panel--#{$design} {
+      @include dcx-tokens($design);
+    }
+  }
+
+  .mp-dialog__paper.dc-panel {
+    max-width: 440px;
+    border: 1px solid var(--dcx-line);
+    background: var(--dcx-sheet);
+    color: var(--dcx-ink);
+
+    .mp-dialog__close {
+      border-color: var(--dcx-line);
+      background: transparent;
+      color: var(--dcx-ink);
+
+      &:hover {
+        background: var(--dcx-hover);
+      }
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--dcx-focus);
+      outline-offset: 2px;
+    }
+
+    h2,
+    h3 {
+      color: var(--dcx-ink);
+    }
+
+    p,
+    dd {
+      color: var(--dcx-muted);
+    }
+  }
+
+  .dc-panel__body {
+    display: grid;
+    gap: 14px;
+    padding-top: 22px !important;
+
+    h2 {
+      margin: 0 !important;
+      font-size: 24px !important;
+    }
+
+    p {
+      margin: 0 !important;
+    }
+  }
+
+  .dc-panel__who {
+    margin-right: 48px !important; // the close button
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dc-panel__list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding-top: 12px;
+      border-top: 1px solid var(--dcx-line);
+    }
+
+    h3 {
+      margin: 0 0 4px;
+      font-size: 15.5px;
+      font-weight: 650;
+    }
+
+    p {
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+  }
+
+  .dc-panel__about {
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+
+  .dc-panel__facts {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+
+    div {
+      padding-top: 10px;
+      border-top: 1px solid var(--dcx-line);
+    }
+
+    dt {
+      color: var(--dcx-ink);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    dd {
+      margin: 2px 0 0;
+      font-size: 15px;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .dc-panel__note {
+    font-size: 13px !important;
+  }
+
+  .dc-panel__back {
+    justify-self: start;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--dcx-primary);
+    border-radius: 999px;
+    background: var(--dcx-primary);
+    color: var(--dcx-on-primary);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
   .dc-qr {
     text-align: center;
 

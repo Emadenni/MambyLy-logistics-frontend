@@ -28,6 +28,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "work",
+      "title": "Projekt",
+      "items": [
+        {
+          "title": "Varumärke för ett kafé",
+          "text": "Namn, logotyp och tonalitet för en ny plats i stan."
+        },
+        {
+          "title": "Lokal kampanj",
+          "text": "Idé och bilder till en kampanj i sociala medier."
+        },
+        {
+          "title": "Festivalidentitet",
+          "text": "Färger, typografi och skyltar för en helg med musik."
+        }
+      ]
+    },
+    "about": "Jamie skapar varumärken och idéer som syns och känns – gärna med lite mod och mycket omtanke.",
+    "availability": "Örebro · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Expressiv",
     "summary": "Lavendel och orange i grafiska former – starkt, och med läsbar kontrast.",
@@ -51,6 +73,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "work",
+          "title": "Projects",
+          "items": [
+            {
+              "title": "Brand for a café",
+              "text": "Name, logo and tone of voice for a new place in town."
+            },
+            {
+              "title": "Local campaign",
+              "text": "Idea and pictures for a social media campaign."
+            },
+            {
+              "title": "Festival identity",
+              "text": "Colours, type and signs for a weekend of music."
+            }
+          ]
+        },
+        "about": "Jamie creates brands and ideas that get noticed and felt – with a little courage and a lot of care.",
+        "availability": "Örebro · replies within one working day"
+      },
       "example": {
         "sector": "Expressive",
         "summary": "Lavender and orange in graphic shapes – bold, with readable contrast."

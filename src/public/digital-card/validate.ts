@@ -1,4 +1,4 @@
-import { CARD_DESIGNS, type CardConfig, type CardConfigRaw, type CardDesign, type CardLayout, type CardSocialType } from "./types";
+import { CARD_DESIGNS, type CardConfig, type CardConfigRaw, type CardDesign, type CardLayout, type CardProfile, type CardSocialType } from "./types";
 
 const LAYOUTS: CardLayout[] = ["classic", "craft", "split", "frame", "bold"];
 
@@ -48,6 +48,20 @@ export function safeHttpsUrl(value: unknown): URL | undefined {
 
 const hostMatches = (url: URL, hosts: string[]) =>
   hosts.some((h) => url.hostname === h || url.hostname.endsWith(`.${h}`));
+
+/** A demo card's panels: only plain texts, at most four work items; incomplete → no panels. */
+function validProfile(p: CardProfile | undefined): CardProfile | undefined {
+  if (!p) return undefined;
+  const items = (Array.isArray(p.work?.items) ? p.work.items : [])
+    .map((i) => ({ title: text(i?.title, 60), text: text(i?.text, 180) }))
+    .filter((i): i is { title: string; text: string } => !!i.title && !!i.text)
+    .slice(0, 4);
+  const title = text(p.work?.title, 30);
+  const about = text(p.about, 400);
+  const availability = text(p.availability, 90);
+  if (!title || !items.length || !about || !availability) return undefined;
+  return { work: { kind: p.work.kind === "work" ? "work" : "services", title, items }, about, availability };
+}
 
 /**
  * Validates a raw card configuration. Invalid or missing optional fields are dropped (and the
@@ -106,6 +120,7 @@ export function validateCard(raw: CardConfigRaw, assets: { logo?: string; logoBa
     logoUrl: assets.logo,
     photoUrl: assets.photo,
     meta: { title: text(raw.meta?.title, 70), description: text(raw.meta?.description, 200) },
+    profile: raw.demo === true ? validProfile(raw.profile) : undefined,
     example:
       raw.demo === true && text(raw.example?.sector, 40) && text(raw.example?.summary, 220)
         ? { sector: text(raw.example?.sector, 40)!, summary: text(raw.example?.summary, 220)!, order: Number(raw.example?.order) || 99 }

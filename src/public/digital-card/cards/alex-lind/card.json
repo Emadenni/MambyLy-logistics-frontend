@@ -29,6 +29,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "work",
+      "title": "Projekt",
+      "items": [
+        {
+          "title": "Villa vid vattnet",
+          "text": "Ett fritidshus i trä med stora glaspartier mot havet och skyddade uteplatser."
+        },
+        {
+          "title": "Kontor i kvarteret",
+          "text": "Ett gammalt tryckeri blir ljusa arbetsplatser runt en gemensam innergård."
+        },
+        {
+          "title": "Förskola i trä",
+          "text": "Låga volymer runt en skyddad gård, med dagsljus i varje rum."
+        }
+      ]
+    },
+    "about": "Alex ritar bostäder och offentliga rum där människor trivs. Arbetet börjar alltid med platsen och med dem som ska använda den.",
+    "availability": "Malmö · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Elfenben",
     "summary": "Grovt bomullspapper, djupgrönt och ett asymmetriskt namn – lugnt och hantverksmässigt.",
@@ -52,6 +74,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "work",
+          "title": "Projects",
+          "items": [
+            {
+              "title": "House by the water",
+              "text": "A timber holiday home with large windows towards the sea and sheltered terraces."
+            },
+            {
+              "title": "Offices in the block",
+              "text": "An old printing works becomes bright workplaces around a shared courtyard."
+            },
+            {
+              "title": "Timber preschool",
+              "text": "Low volumes around a sheltered yard, with daylight in every room."
+            }
+          ]
+        },
+        "about": "Alex designs homes and public spaces where people feel at ease. The work always starts with the place and the people who will use it.",
+        "availability": "Malmö · replies within one working day"
+      },
       "example": {
         "sector": "Ivory",
         "summary": "Rough cotton paper, deep green and an asymmetric name – calm and crafted."

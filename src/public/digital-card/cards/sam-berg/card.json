@@ -28,6 +28,28 @@
       "value": "Svenska · Engelska"
     }
   ],
+  "profile": {
+    "work": {
+      "kind": "services",
+      "title": "Tjänster",
+      "items": [
+        {
+          "title": "Strategi",
+          "text": "Tydliga mål och en plan som hela ledningsgruppen står bakom."
+        },
+        {
+          "title": "Förändringsledning",
+          "text": "Stöd när organisationen ska börja arbeta på ett nytt sätt."
+        },
+        {
+          "title": "Workshops",
+          "text": "Halvdagar som leder till beslut, inte bara till idéer."
+        }
+      ]
+    },
+    "about": "Sam hjälper företag att gå från idé till förändring som håller. Lugnt, konkret och med människorna i centrum.",
+    "availability": "Stockholm · svarar inom en arbetsdag"
+  },
   "example": {
     "sector": "Svart sammet",
     "summary": "Varmt svart, champagne och spärrad text – stilla och exklusivt, utan glitter.",
@@ -51,6 +73,28 @@
           "value": "Swedish · English"
         }
       ],
+      "profile": {
+        "work": {
+          "kind": "services",
+          "title": "Services",
+          "items": [
+            {
+              "title": "Strategy",
+              "text": "Clear goals and a plan the whole management team stands behind."
+            },
+            {
+              "title": "Change management",
+              "text": "Support when the organisation starts working in a new way."
+            },
+            {
+              "title": "Workshops",
+              "text": "Half days that end in decisions, not only in ideas."
+            }
+          ]
+        },
+        "about": "Sam helps companies go from an idea to change that lasts. Calm, concrete and with people at the centre.",
+        "availability": "Stockholm · replies within one working day"
+      },
       "example": {
         "sector": "Black velvet",
         "summary": "Warm black, champagne and spaced type – quiet and exclusive, no glitter."
