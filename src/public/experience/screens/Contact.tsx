@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { FiArrowRight, FiEdit2, FiMonitor, FiMail, FiUser, FiX } from "react-icons/fi";
 import { LuIdCard, LuLayers, LuSparkles } from "react-icons/lu";
-import { submitContact, type SubmitFailure } from "../../contactSubmit";
+import { submitContact, type DeliveryOutcome, type SubmitFailure } from "../../contactSubmit";
 import { getCard } from "../../digital-card/registry";
 import { SERVICE_SUBJECTS, subjectFor, type ContactState, type ServiceKey } from "../../digital-card/service";
 import { publicContact } from "../../contact";
@@ -32,10 +32,9 @@ function composeMessage(a: WizardAnswers, lang: "sv" | "en") {
 
 /**
  * /kontaktaOss – three short questions. Each confirmed answer folds up into a summary at the top
- * (same layout element, animated) and stays editable. Sends through the existing hook
- * (src/public/contactSubmit.ts → POST {VITE_API_BASE_URL}/clientsMessages with { name, email,
- * subject, textMessage }); the confirmation appears only after the backend has confirmed that the
- * request was stored ({ success: true }). On any failure the answers stay as they are.
+ * (same layout element, animated) and stays editable. Sends through src/public/contactSubmit.ts, to the
+ * existing API and to Formspree; the confirmation appears once at least one of them has confirmed, and
+ * says only what is known. When neither did, the answers stay as they are.
  */
 const Contact: React.FC = () => {
   const t = useCopy();
@@ -47,7 +46,7 @@ const Contact: React.FC = () => {
   const [isSubmitting, setSubmitting] = useState(false);
   const [tried, setTried] = useState<Record<number, boolean>>({});
   const [failed, setFailed] = useState<SubmitFailure | null>(null);
-  const [done, setDone] = useState<{ name: string; email: string } | null>(null);
+  const [done, setDone] = useState<{ name: string; email: string; delivered: Extract<DeliveryOutcome, { ok: true }>["delivered"] } | null>(null);
   const sending = useRef(false);
   const questionRef = useRef<HTMLHeadingElement>(null);
   const doneRef = useRef<HTMLHeadingElement>(null);
@@ -113,7 +112,7 @@ const Contact: React.FC = () => {
     sending.current = false;
     setSubmitting(false);
     if (result.ok) {
-      setDone({ name: w.name.trim(), email: w.email.trim() });
+      setDone({ name: w.name.trim(), email: w.email.trim(), delivered: result.delivered });
       w.reset();
       setTried({});
     } else {
@@ -159,7 +158,7 @@ const Contact: React.FC = () => {
             <h2 ref={doneRef} tabIndex={-1} className="mp-display mp-wizard__q">
               {fill(c.successTitle, { name: done.name.split(" ")[0] })}
             </h2>
-            <p className="mp-wizard__sub">{fill(c.successText, { email: done.email })}</p>
+            <p className="mp-wizard__sub">{fill(done.delivered === "api" ? c.successTextStored : done.delivered === "formspree" ? c.successTextArrived : c.successText, { email: done.email })}</p>
             <Link to={PATHS.explore[t.lang]} className="mp-xbtn mp-xbtn--solid mp-xbtn--lg">
               {c.successBack} <FiArrowRight aria-hidden="true" />
             </Link>

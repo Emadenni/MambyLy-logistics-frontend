@@ -41,9 +41,7 @@ resta `info@mambylysolutions.se`. La casella non è stata verificata da qui.
 
 - **A. Notifica nel backend esistente**: aggiungere alla Lambda un invio (es. SES o Brevo) dopo il salvataggio.
   È una modifica del backend, fuori dal perimetro autorizzato: non fatta.
-- **B. Formspree** (preparato, inattivo): servono un endpoint `https://formspree.io/f/<id>` creato dal titolare
-  con destinatario verificato, poi `VITE_CONTACT_PROVIDER=formspree` e `VITE_FORMSPREE_ENDPOINT` nella build, e
-  l'aggiornamento dell'informativa. Con Formspree le richieste non finiscono più nel database/admin.
-- Nel frattempo: controllare le richieste nel pannello admin.
+- **B. Formspree: attivo dal novembre 2026, in aggiunta all'API.** Il wizard invia a entrambi; il database resta la
+  fonte della dashboard. Vedi `docs/RESTYLE-PUBLIC.md`. La consegna in casella va provata con un invio reale.
 
 Una prova end-to-end reale (invio + ricezione in casella) richiede un'istruzione esplicita e non è stata fatta.

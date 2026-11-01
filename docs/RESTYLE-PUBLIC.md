@@ -300,10 +300,12 @@ Diagnosi dei contatti: `docs/CONTACT-DELIVERY.md`.
   `offline` (nessuna richiesta partita), `unknown` (timeout 15 s o richiesta respinta: forse arrivata; il testo
   invita a scrivere per e-mail invece di reinviare, il pulsante diventa "Skicka ändå igen").
 - Risposte conservate su ogni errore, doppio invio bloccato, nessun dato in URL, analytics o localStorage.
-- Formspree preparato e **inattivo**: si attiva solo con `VITE_CONTACT_PROVIDER=formspree` e un
-  `VITE_FORMSPREE_ENDPOINT` reale `https://formspree.io/f/<id>`. Un provider per richiesta, nessun fallback.
+- Doppio invio indipendente (`Promise.allSettled`, nessun retry): API come sopra e Formspree
+  `POST {VITE_FORMSPREE_ENDPOINT}` con `{ name, email, subject, message }`. Conferma se almeno uno riesce, con un testo
+  diverso per esito (`full`, `api`, `formspree`); dati conservati se nessuno riesce. Endpoint di default solo nelle build
+  di produzione (`vite.config.ts`), sovrascrivibile dalla variabile; sviluppo e demo non inviano a Formspree.
   Contratto dalla libreria ufficiale `@formspree/core` 4.0.0: `Accept: application/json`, successo con `next`,
-  errori in `errors[]`/`error`. Se si attiva, aggiornare l'informativa (fornitore e flusso dei dati).
+  errori in `errors[]`/`error`. Solo il wizard: non demo, candidature, Sido Butik, admin o login.
 - Test: `src/__tests__/contactSubmit.test.ts` (contratto, 400/401/403/422/429/500, 200 con errore, non JSON,
   offline, timeout, selezione del provider). Telefono e WhatsApp tolti dal percorso pubblico (resta il pulsante
   WhatsApp sulle pagine legacy: login, admin, Sido Butik). `/card` mantiene i suoi dati.

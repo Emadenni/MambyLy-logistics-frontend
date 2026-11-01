@@ -259,6 +259,8 @@ const sv = {
     retryAnyway: "Skicka ändå igen",
     successTitle: "Tack, {name}!",
     successText: "Vi har tagit emot din förfrågan och svarar till {email}.",
+    successTextStored: "Din förfrågan är registrerad hos oss och vi svarar till {email}.",
+    successTextArrived: "Din förfrågan har kommit fram och vi svarar till {email}.",
     successBack: "Till Utforska",
     call: "Hellre e-post?",
     whatsapp: "WhatsApp",
@@ -290,13 +292,13 @@ const sv = {
   },
   privacy: {
     title: "Integritet & cookies",
-    updated: "Senast uppdaterad: oktober 2026",
+    updated: "Senast uppdaterad: november 2026",
     intro:
       "Vi värnar om din integritet. Här beskriver vi hur vi samlar in, använder och skyddar dina personuppgifter i enlighet med dataskyddsförordningen (GDPR), och vilka cookies och liknande tekniker webbplatsen använder.",
     sections: [
       {
         title: "Vilka uppgifter samlar vi in?",
-        text: "De uppgifter du själv lämnar i våra formulär: namn, e-postadress, vad förfrågan gäller och ditt meddelande. Skickar du en jobbansökan tar vi också emot ditt CV. Uppgifterna skickas till vårt eget formulär-API och används inte i webbadresser eller statistik.",
+        text: "De uppgifter du själv lämnar i våra formulär: namn, e-postadress, vad förfrågan gäller och ditt meddelande. Skickar du en jobbansökan tar vi också emot ditt CV. Uppgifterna skickas till vårt eget formulär-API, och förfrågningar via kontaktformuläret även till Formspree (se Tredje part). De används inte i webbadresser eller statistik.",
       },
       {
         title: "Hur används uppgifterna?",
@@ -308,7 +310,7 @@ const sv = {
       },
       {
         title: "Tredje part",
-        text: "Vi delar inte dina personuppgifter med tredje part utan ditt uttryckliga samtycke, utom när det krävs enligt lag.",
+        text: "Förfrågningar via kontaktformuläret (namn, e-postadress, ämne och meddelande) skickas också till Formspree, som tillhandahålls av Formspree, Inc. och levererar dem till oss som e-post. Formspree använder infrastruktur i USA, så uppgifterna behandlas utanför EU/EES. Läs mer i Formsprees integritetspolicy: formspree.io/legal/privacy-policy. Jobbansökningar skickas inte till Formspree. I övrigt delar vi inte dina personuppgifter med tredje part utan ditt uttryckliga samtycke, utom när det krävs enligt lag.",
       },
       {
         title: "Dina rättigheter",
@@ -667,6 +669,8 @@ const en: Copy = {
     retryAnyway: "Send again anyway",
     successTitle: "Thank you, {name}!",
     successText: "We've received your request and will reply to {email}.",
+    successTextStored: "Your request is registered with us and we will reply to {email}.",
+    successTextArrived: "Your request has come through and we will reply to {email}.",
     successBack: "Back to Explore",
     call: "Prefer email?",
     whatsapp: "WhatsApp",
@@ -698,13 +702,13 @@ const en: Copy = {
   },
   privacy: {
     title: "Privacy & cookies",
-    updated: "Last updated: October 2026",
+    updated: "Last updated: November 2026",
     intro:
       "We care about your privacy. This page explains how we collect, use and protect your personal data under the General Data Protection Regulation (GDPR), and which cookies and similar technologies the website uses.",
     sections: [
       {
         title: "What data do we collect?",
-        text: "The details you enter in our forms: name, email address, what your request is about and your message. If you send a job application, we also receive your CV. The data is sent to our own form API and is never used in web addresses or statistics.",
+        text: "The details you enter in our forms: name, email address, what your request is about and your message. If you send a job application, we also receive your CV. The data is sent to our own form API, and requests through the contact form also to Formspree (see Third parties). It is never used in web addresses or statistics.",
       },
       {
         title: "How is the data used?",
@@ -716,7 +720,7 @@ const en: Copy = {
       },
       {
         title: "Third parties",
-        text: "We do not share your personal data with third parties without your explicit consent, except where required by law.",
+        text: "Requests through the contact form (name, email address, subject and message) are also sent to Formspree, provided by Formspree, Inc., which delivers them to us as email. Formspree uses infrastructure in the United States, so the data is processed outside the EU/EEA. Read more in Formspree's privacy policy: formspree.io/legal/privacy-policy. Job applications are not sent to Formspree. Otherwise we do not share your personal data with third parties without your explicit consent, except where required by law.",
       },
       {
         title: "Your rights",

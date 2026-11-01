@@ -1,16 +1,17 @@
 /**
- * One way out for every public MambyLy contact request (wizard, card and generic requests).
+ * One way out for every public MambyLy contact request (the wizard). Each valid request starts two
+ * independent deliveries; neither waits for or falls back on the other, and neither is retried:
  *
- * Provider "api" (default and the only active one): the existing backend,
- * POST {VITE_API_BASE_URL}/clientsMessages with { name, email, subject, textMessage } – the same
- * endpoint and payload as src/hooks/useSubmitMessage.ts. The backend validates with Joi (name 2–100,
- * email, subject 3–255, textMessage 10–2000), stores the request in DynamoDB and answers
- * 201 { success: true, messageId }. It does NOT send any e-mail notification: a positive answer
- * means "request stored", which is what the success screen says.
+ * API: the existing backend, POST {VITE_API_BASE_URL}/clientsMessages with
+ * { name, email, subject, textMessage } – the same endpoint and payload as src/hooks/useSubmitMessage.ts.
+ * The backend validates with Joi (name 2–100, email, subject 3–255, textMessage 10–2000), stores the
+ * request in DynamoDB (the admin dashboard reads it) and answers 201 { success: true, messageId }.
+ * It sends no e-mail.
  *
- * Provider "formspree" (prepared, inactive): used only when VITE_CONTACT_PROVIDER=formspree AND
- * VITE_FORMSPREE_ENDPOINT is a real https://formspree.io/f/<id> form endpoint. Exactly one provider
- * is used per request; there is no fallback from one to the other.
+ * Formspree: the e-mail notification, POST {VITE_FORMSPREE_ENDPOINT} with
+ * { name, email, subject, message }. Used only when the variable is a https://formspree.io/f/<id>
+ * endpoint: development and the local demo have none. A positive answer means Formspree accepted the
+ * request, not that the e-mail reached the inbox.
  *
  * Nothing here logs or stores what the visitor wrote.
  */
@@ -30,21 +31,22 @@ export type SubmitFailure =
 
 export type SubmitResult = { ok: true; id?: string } | { ok: false; reason: SubmitFailure; status?: number };
 
-export type ContactProvider = "api" | "formspree";
+/**
+ * full: every configured delivery succeeded. api / formspree: only that one did, and the screen
+ * says nothing about the other. failed: none did; the visitor keeps the answers and decides.
+ */
+export type DeliveryOutcome = { ok: true; delivered: "full" | "api" | "formspree" } | { ok: false; reason: SubmitFailure };
 
 const TIMEOUT_MS = 15000;
 const FORMSPREE_ENDPOINT = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/;
 
-// Only the three variables this file needs (passing import.meta.env itself would inline every VITE_ value).
+// Only the two variables this file needs (passing import.meta.env itself would inline every VITE_ value).
 const ENV: Record<string, string | undefined> = {
   VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
-  VITE_CONTACT_PROVIDER: import.meta.env.VITE_CONTACT_PROVIDER,
   VITE_FORMSPREE_ENDPOINT: import.meta.env.VITE_FORMSPREE_ENDPOINT,
 };
 
-export function contactProvider(env: Record<string, string | undefined> = ENV): ContactProvider {
-  return env.VITE_CONTACT_PROVIDER === "formspree" && FORMSPREE_ENDPOINT.test(env.VITE_FORMSPREE_ENDPOINT ?? "") ? "formspree" : "api";
-}
+export const formspreeEnabled = (env: Record<string, string | undefined> = ENV) => FORMSPREE_ENDPOINT.test(env.VITE_FORMSPREE_ENDPOINT ?? "");
 
 const readJson = async (response: Response): Promise<unknown> => {
   try {
@@ -79,27 +81,22 @@ async function post(url: string, body: unknown, headers: Record<string, string>,
   }
 }
 
-export async function submitContact(
-  req: ContactRequest,
-  { env = ENV, fetcher = fetch }: { env?: Record<string, string | undefined>; fetcher?: typeof fetch } = {},
-): Promise<SubmitResult> {
-  const provider = contactProvider(env);
+/** Formspree answers 200 { next, ok: true }; errors carry "errors" or "error" (see @formspree/core). */
+export async function sendToFormspree(req: ContactRequest, env: Record<string, string | undefined>, fetcher: typeof fetch): Promise<SubmitResult> {
+  const r = await post(
+    env.VITE_FORMSPREE_ENDPOINT!,
+    { name: req.name, email: req.email, subject: req.subject, message: req.message },
+    { Accept: "application/json", "Content-Type": "application/json" },
+    fetcher,
+  );
+  if ("timeout" in r) return { ok: false, reason: "unknown" };
+  if (!("response" in r)) return { ok: false, reason: r.offline ? "offline" : "unknown" };
+  const { response, data } = r;
+  if (response.ok && isObject(data) && (typeof data.next === "string" || data.ok === true) && !("errors" in data) && !("error" in data)) return { ok: true };
+  return { ok: false, reason: response.ok ? "server" : failureOf(response.status), status: response.status };
+}
 
-  if (provider === "formspree") {
-    const r = await post(
-      env.VITE_FORMSPREE_ENDPOINT!,
-      { name: req.name, email: req.email, _subject: req.subject, message: req.message },
-      { Accept: "application/json", "Content-Type": "application/json" },
-      fetcher,
-    );
-    if ("timeout" in r) return { ok: false, reason: "unknown" };
-    if (!("response" in r)) return { ok: false, reason: r.offline ? "offline" : "unknown" };
-    const { response, data } = r;
-    // Formspree: success carries "next"; errors carry "errors" or "error".
-    if (response.ok && isObject(data) && typeof data.next === "string" && !("errors" in data) && !("error" in data)) return { ok: true };
-    return { ok: false, reason: response.ok ? "server" : failureOf(response.status), status: response.status };
-  }
-
+export async function sendToApi(req: ContactRequest, env: Record<string, string | undefined>, fetcher: typeof fetch): Promise<SubmitResult> {
   const r = await post(
     `${env.VITE_API_BASE_URL}/clientsMessages`,
     { name: req.name, email: req.email, subject: req.subject, textMessage: req.message },
@@ -116,4 +113,30 @@ export async function submitContact(
     return { ok: true, id: typeof data.messageId === "string" ? data.messageId : undefined };
   }
   return { ok: false, reason: response.ok ? "server" : failureOf(response.status), status: response.status };
+}
+
+const settled = (r: PromiseSettledResult<SubmitResult>): SubmitResult => (r.status === "fulfilled" ? r.value : { ok: false, reason: "unknown" });
+
+/** What went wrong, without personal data: only the two outcomes and their HTTP status. */
+const diagnose = (name: string, r: SubmitResult) => (r.ok ? `${name}:ok` : `${name}:${r.reason}${r.status ? `:${r.status}` : ""}`);
+
+export async function submitContact(
+  req: ContactRequest,
+  { env = ENV, fetcher = fetch }: { env?: Record<string, string | undefined>; fetcher?: typeof fetch } = {},
+): Promise<DeliveryOutcome> {
+  const both = formspreeEnabled(env);
+  const [apiSettled, formspreeSettled] = await Promise.allSettled([
+    sendToApi(req, env, fetcher),
+    both ? sendToFormspree(req, env, fetcher) : Promise.resolve<SubmitResult>({ ok: true }),
+  ]);
+  const api = settled(apiSettled);
+  const formspree = settled(formspreeSettled);
+  if (!api.ok || !formspree.ok) console.warn(`[contact] ${diagnose("api", api)} ${diagnose("formspree", formspree)}`);
+  if (api.ok && formspree.ok) return { ok: true, delivered: "full" };
+  if (api.ok) return { ok: true, delivered: "api" };
+  if (formspree.ok) return { ok: true, delivered: "formspree" };
+  // Neither succeeded. One that may have arrived decides: the visitor must not be pushed to send twice.
+  const reasons = [api.reason, !formspree.ok ? formspree.reason : api.reason];
+  const reason = reasons.includes("unknown") ? "unknown" : reasons.includes("offline") ? "offline" : reasons.includes("invalid") ? "invalid" : api.reason;
+  return { ok: false, reason };
 }
