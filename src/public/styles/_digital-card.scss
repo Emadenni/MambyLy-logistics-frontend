@@ -1626,14 +1626,15 @@ $dc-paper: radial-gradient(130% 62% at 50% -6%, rgba(255, 247, 228, 0.9), rgba(2
     }
   }
 
+  // More specific than the general dialog title: this one has to clear the close button.
+  .mp-dialog__body.dc-qr h2 {
+    margin-right: 48px;
+    font-size: clamp(21px, 6.6vw, 28px);
+    text-align: left;
+  }
+
   .dc-qr {
     text-align: center;
-
-    h2 {
-      margin-right: 48px;
-      font-size: clamp(21px, 6.6vw, 28px);
-      text-align: left;
-    }
 
     &__code {
       display: block;
