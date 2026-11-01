@@ -24,8 +24,6 @@ const RETIRED: Record<string, string | null> = {
   "studio-halvljus": null,
 };
 
-/** Designs on a dark surface (light text and controls around the card). */
-const DARK = new Set(["velvet", "oxblood", "graphite"]);
 
 /** One example in a gallery: the front of the real card (no controls) and its style. */
 export const ExampleTile: React.FC<{ card: CardConfig; open: string; lang: "sv" | "en" }> = ({ card, open, lang }) => (
@@ -99,10 +97,9 @@ export const Example: React.FC = () => {
   if (!card || !card.demo || !card.example) return <NotFound />;
 
   const paths = { sv: `${EXAMPLE_BASE.sv}/${card.slug}`, en: `${EXAMPLE_BASE.en}/${card.slug}` };
-  const dark = !!card.design && DARK.has(card.design);
 
   return (
-    <div className={`mp-concept mp-cardx mp-cardx--${card.design ?? "flip"}${dark ? " mp-cardx--dark" : ""}`}>
+    <div className={`mp-concept mp-cardx mp-cardx--${card.design ?? "flip"}`}>
       <ScreenHead
         lang={t.lang}
         title={card.meta?.title || `${card.example.sector} | MambyLy Solutions`}
@@ -110,7 +107,7 @@ export const Example: React.FC = () => {
         paths={paths}
         noindex
       />
-      <ExitButton to="examples" tone={dark ? "dark" : "light"} />
+      <ExitButton to="examples" tone="light" />
       <main id="cx-main-card" className="mp-cardx__main">
         <div className="mp-cardx__card">
           <CardExperience card={card} headingLevel="h1" />

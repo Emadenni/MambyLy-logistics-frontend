@@ -107,6 +107,9 @@ html:has(.mambyly-public) {
 
 body:has(.mambyly-public) {
   background-color: #f6f4ee;
+  // 100vh in the reset is the height with the Android address bar retracted: taller than the screen
+  // while the bar is open, so the page scrolled and showed an empty band below the footer.
+  min-height: 0;
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -7,6 +7,8 @@ import type { CardConfigRaw } from "../src/public/digital-card/types";
 import { copy } from "../src/public/experience/copy";
 import { CARD_PATH, CONCEPTS, EXAMPLE_BASE, LANGS, PATHS, conceptPath, type Lang, type StaticScreen } from "../src/public/experience/routes";
 import { conceptCopy } from "../src/public/experience/concepts/content";
+import { cardIconDir, cardManifestPath } from "../src/public/digital-card/install";
+import { CARD_PAGE_COLOR, cardShortName, writeCardInstall } from "./card-install";
 
 /**
  * Build-only: writes dist/<route>/index.html copies of dist/index.html whose <head> already holds
@@ -34,6 +36,8 @@ type PageMeta = {
   noindex?: boolean;
   canonical?: string;
   alternates?: Record<Lang, string>;
+  /** This address is a card that can be added to the home screen. */
+  card?: CardConfigRaw;
 };
 
 const escapeAttr = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -62,8 +66,14 @@ export function renderRouteHtml(html: string, page: PageMeta): string {
   out = setMeta(out, "name", "twitter:title", page.title);
   out = setMeta(out, "name", "twitter:description", page.description);
   out = setMeta(out, "name", "twitter:image", image);
+  if (page.card) {
+    out = out.replace(/<link rel="manifest" href="[^"]*" ?\/?>/, `<link rel="manifest" href="${cardManifestPath(page.card.slug, page.route)}" />`);
+    out = out.replace(/<link rel="apple-touch-icon"([^>]*) href="\/brand\/[^"]*"/, `<link rel="apple-touch-icon"$1 href="${cardIconDir(page.card.slug)}/apple-touch-icon.png"`);
+    out = out.replace(/<meta name="theme-color" content="[^"]*" ?\/?>/, `<meta name="theme-color" content="${CARD_PAGE_COLOR}" />`);
+  }
   const alt = page.alternates;
   const extra = [
+    page.card ? `<meta name="apple-mobile-web-app-capable" content="yes" />\n    <meta name="apple-mobile-web-app-title" content="${escapeAttr(cardShortName(page.card))}" />` : "",
     `<link rel="canonical" href="${escapeAttr(url)}" ${RH} />`,
     alt ? `<link rel="alternate" hreflang="sv" href="${escapeAttr(abs(alt.sv))}" ${RH} />` : "",
     alt ? `<link rel="alternate" hreflang="en" href="${escapeAttr(abs(alt.en))}" ${RH} />` : "",
@@ -140,12 +150,12 @@ function cardPages(root: string, cards: CardEntry[]): PageMeta[] {
     if (card.demo) {
       // Demo cards are presented at /exempel/<slug> and /en/examples/<slug>; /card/<slug> stays as a redirect.
       const alternates = { sv: `${EXAMPLE_BASE.sv}/${slug}`, en: `${EXAMPLE_BASE.en}/${slug}` };
-      for (const lang of LANGS) pages.push({ route: alternates[lang], lang, ...metaFor(lang), image, noindex: true, alternates });
+      for (const lang of LANGS) pages.push({ route: alternates[lang], lang, ...metaFor(lang), image, noindex: true, alternates, card });
       pages.push({ route: `/card/${slug}`, lang: "sv", ...metaFor("sv"), image, noindex: true, canonical: alternates.sv });
     } else if (slug === COMPANY_CARD_SLUG) {
-      for (const lang of LANGS) pages.push({ route: CARD_PATH[lang], lang, ...metaFor(lang), image, alternates: CARD_PATH });
+      for (const lang of LANGS) pages.push({ route: CARD_PATH[lang], lang, ...metaFor(lang), image, alternates: CARD_PATH, card });
     } else {
-      pages.push({ route: `/card/${slug}`, lang: card.lang === "en" ? "en" : "sv", ...metaFor(card.lang === "en" ? "en" : "sv"), image });
+      pages.push({ route: `/card/${slug}`, lang: card.lang === "en" ? "en" : "sv", ...metaFor(card.lang === "en" ? "en" : "sv"), image, card });
     }
   }
   return pages;
@@ -161,17 +171,22 @@ export default function staticRouteMeta(): Plugin {
       root = config.root;
       outDir = path.resolve(config.root, config.build.outDir);
     },
-    closeBundle() {
+    async closeBundle() {
       const indexFile = path.join(outDir, "index.html");
       if (!fs.existsSync(indexFile)) return;
       const html = fs.readFileSync(indexFile, "utf8");
       const cards = readCards(root);
-      for (const page of [...sitePages(), ...conceptPages(), ...cardPages(root, cards)]) {
+      const pages = [...sitePages(), ...conceptPages(), ...cardPages(root, cards)];
+      for (const page of pages) {
         // "/" is dist/index.html itself, which also serves admin, login and Sido Butik: left as it is.
         if (page.route === "/") continue;
         const target = path.join(outDir, page.route.slice(1), "index.html");
         fs.mkdirSync(path.dirname(target), { recursive: true });
         fs.writeFileSync(target, renderRouteHtml(html, page));
+      }
+      // Home-screen icons and manifests, card by card.
+      for (const { slug, raw } of cards) {
+        await writeCardInstall(root, outDir, raw, pages.filter((p) => p.card?.slug === slug));
       }
       // Static contact files for real cards (same generator as the in-page download).
       for (const { slug, raw } of cards) {

@@ -11,6 +11,9 @@ import { downloadVCard, staticVCardPath, vcardFileName } from "./vcard";
 import { qrSvg } from "./qr";
 import { cardPath, examplePath } from "./registry";
 import FlipIcon from "./FlipIcon";
+import HomeScreen from "./HomeScreen";
+import { useCardHead, useLinksOutOfApp } from "./useCardApp";
+import { isStandalone } from "./install";
 
 type Status = { tone: "ok" | "info" | "warn"; text: string } | null;
 /** Why the copy-link alternative is showing (never a claim that something was shared). */
@@ -105,7 +108,7 @@ const ProfilePanels: React.FC<{ card: CardConfig; profile: NonNullable<CardConfi
         onClose={close}
         className="mp-dialog"
         aria-labelledby={titleId}
-        PaperProps={{ className: `mp-dialog__paper mp-dialog__paper--narrow dc-panel dc-panel--${card.design ?? "brand"}`, lang: card.lang } as object}
+        PaperProps={{ className: "mp-dialog__paper mp-dialog__paper--narrow dc-panel", lang: card.lang } as object}
       >
         <button type="button" className="mp-dialog__close" onClick={close} aria-label={t.close}>
           <FiX aria-hidden="true" />
@@ -237,7 +240,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
     () => (card.demo ? `${window.location.origin}${examplePath(card.slug, card.lang)}` : cardUrlFor(card.slug)),
     [card.slug, card.demo, card.lang],
   );
-  const full = useFullscreen();
+  const { root: fullRoot, opener: fullOpener, on: isFull, open: openFull, close: closeFull } = useFullscreen();
   const [flipped, setFlipped] = useState(false);
   const [status, setStatus] = useState<Status>(null);
   const [shareAlt, setShareAlt] = useState<ShareAlt>(null);
@@ -252,6 +255,8 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   const Heading = headingLevel;
   // Real cards in a production build have a static .vcf next to the page (see vcard.ts).
   const staticVCard = import.meta.env.PROD && !card.demo;
+  useCardHead(card);
+  useLinksOutOfApp();
 
   const openAlt = (why: Exclude<ShareAlt, null>) => {
     setCopied(null);
@@ -330,9 +335,9 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
   };
 
   return (
-    <div ref={full.root} className={`dc-experience dc-experience--${card.design ?? "brand"}${full.on ? " is-full" : ""}`} role={full.on ? "dialog" : undefined} aria-modal={full.on || undefined} aria-label={full.on ? t.fullscreenLabel : undefined}>
-      {full.on && (
-        <button type="button" className="dc-full__close" onClick={full.close} aria-label={t.fullscreenClose} data-tip={t.fullscreenClose}>
+    <div ref={fullRoot} className={`dc-experience dc-experience--${card.design ?? "brand"}${isFull ? " is-full" : ""}`} role={isFull ? "dialog" : undefined} aria-modal={isFull || undefined} aria-label={isFull ? t.fullscreenLabel : undefined}>
+      {isFull && (
+        <button type="button" className="dc-full__close" onClick={closeFull} aria-label={t.fullscreenClose} data-tip={t.fullscreenClose}>
           <FiX aria-hidden="true" />
         </button>
       )}
@@ -346,11 +351,11 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
         onFlippedChange={setFlipped}
         // Only the card in fullscreen has no copy-link panel to fall back on: there the swipe
         // shares only where the device has a share sheet.
-        onSwipeUp={!full.on || nativeShare ? () => share("gesture") : undefined}
+        onSwipeUp={!isFull || nativeShare ? () => share("gesture") : undefined}
         onDemoAction={demoAction}
         intro={intro}
       />
-      {full.on && (
+      {isFull && (
         <p className="dc-full__rotate" aria-hidden="true">
           {t.rotate}
         </p>
@@ -371,6 +376,8 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
           href={staticVCard ? staticVCardPath(card) : "#"}
           // iOS opens a served .vcf in its own contact sheet; `download` would only file it away.
           download={staticVCard && isIOS() ? undefined : vcardFileName(card)}
+          // Installed on iOS the contact sheet opens in the browser: the app has no way back from it.
+          target={staticVCard && isIOS() && isStandalone() ? "_blank" : undefined}
           type="text/vcard"
           onClick={onSaveContact}
         >
@@ -386,8 +393,8 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
         <IconButton label={t.qr} onClick={() => setQrOpen(true)} haspopup>
           <TbQrcode aria-hidden="true" />
         </IconButton>
-        <span ref={full.opener} className="dc-full__opener">
-          <IconButton label={t.fullscreen} onClick={full.open}>
+        <span ref={fullOpener} className="dc-full__opener">
+          <IconButton label={t.fullscreen} onClick={openFull}>
             <FiMaximize aria-hidden="true" />
           </IconButton>
         </span>
@@ -430,6 +437,7 @@ const CardExperience: React.FC<{ card: CardConfig; headingLevel?: "h1" | "h2"; m
 
       {menu && menu.length > 0 && <SiteNav items={menu} label={t.menuLabel} />}
       {card.demo && card.profile && <ProfilePanels card={card} profile={card.profile} t={t} />}
+      {!isFull && <HomeScreen card={card} url={url} qrSrc={qrSrc} qrAlt={t.qrAlt(url)} onStatus={setStatus} />}
 
       <Dialog
         open={qrOpen}

@@ -417,3 +417,13 @@ Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successi
   Misurato `scrollHeight` = `clientHeight` da 375×553 a 1920×1080, SV ed EN.
 - **Biglietti**: velluto nero rifatto come peluria morbida sfumata (niente punti chiari) con zone di velluto
   schiacciato; viola con trama satinata più ampia e profondità tonale; simboli un po' più grandi.
+
+## Biglietti sulla schermata Home
+
+`build/card-install.ts` (chiamato da `build/static-route-meta.ts`) scrive per ogni biglietto `dist/cards/<slug>/`:
+icone `any`, maskable, `apple-touch-icon` (PNG da SVG con `@resvg/resvg-wasm`, nessun binario nativo) e un manifest per
+indirizzo (`sv.webmanifest`, `en.webmanifest`). Icona: il simbolo quadrato del biglietto (`logoBack`, o `logo` se non è
+`wide`), altrimenti il monogramma sui colori del tema. Le pagine statiche dei biglietti puntano già a questi file;
+`useCardHead` li imposta anche quando si arriva dal router e li restituisce al sito all'uscita. Dall'app installata
+`useLinksOutOfApp` apre nel browser i link che escono dal biglietto. Pulsante e guide: `digital-card/HomeScreen.tsx`.
+Le icone del sito (`public/favicon*`, `public/brand/icon-*`) si rigenerano con `node scripts/brand-icons.mjs`.
