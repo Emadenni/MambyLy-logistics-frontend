@@ -1630,7 +1630,8 @@ $dc-paper: radial-gradient(130% 62% at 50% -6%, rgba(255, 247, 228, 0.9), rgba(2
     text-align: center;
 
     h2 {
-      margin-right: 40px;
+      margin-right: 48px;
+      font-size: clamp(21px, 6.6vw, 28px);
       text-align: left;
     }
 
