@@ -16,6 +16,7 @@ let ready: Promise<void> | null = null;
 
 /** The card pages are ivory whatever the card: also the splash when the app opens. */
 export const CARD_PAGE_COLOR = "#f6f4ee";
+const SITE = (process.env.PUBLIC_SITE_URL || "https://www.mambylysolutions.se").replace(/\/$/, "");
 
 const MIME: Record<string, string> = { ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg" };
 
@@ -97,6 +98,8 @@ export async function writeCardInstall(root: string, outDir: string, card: CardC
       background_color: CARD_PAGE_COLOR,
       theme_color: CARD_PAGE_COLOR,
       prefer_related_applications: false,
+      // Lets Chrome on Android tell the page that this card is already installed.
+      related_applications: [{ platform: "webapp", url: `${SITE}${cardManifestPath(card.slug, route)}` }],
       icons: [
         { src: `${base}/icon-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
         { src: `${base}/icon-512.png`, sizes: "512x512", type: "image/png", purpose: "any" },

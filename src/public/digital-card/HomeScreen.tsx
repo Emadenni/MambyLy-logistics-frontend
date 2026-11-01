@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog } from "@mui/material";
 import { FiCopy, FiX } from "react-icons/fi";
 import type { CardConfig } from "./types";
 import { copyText } from "./share";
-import { guideKind, isStandalone, promptInstall, type GuideKind } from "./install";
+import { guideKind, hasOffer, isStandalone, offerTime, onOfferChange, promptInstall, type GuideKind } from "./install";
 
 type Guide = { title: string; steps: string[]; note?: string };
 type HomeCopy = {
   add: string;
+  addNow: string;
+  already: string;
   accepted: string;
   dismissed: string;
   vsContact: string;
@@ -20,6 +22,8 @@ type HomeCopy = {
 const copy: Record<"sv" | "en" | "it", HomeCopy> = {
   sv: {
     add: "Lägg till på hemskärmen",
+    addNow: "Lägg till nu",
+    already: "Kortet finns redan på den här enheten. Öppna det från hemskärmen.",
     accepted: "Bekräftat. Webbläsaren lägger till kortet på den här enheten.",
     dismissed: "Kortet lades inte till. Du kan försöka igen när du vill.",
     vsContact: "Det här lägger till en genväg till kortet. ”Spara kontakt” är något annat: det sparar uppgifterna i kontakterna.",
@@ -54,6 +58,8 @@ const copy: Record<"sv" | "en" | "it", HomeCopy> = {
   },
   en: {
     add: "Add to Home Screen",
+    addNow: "Add now",
+    already: "The card is already on this device. Open it from your home screen.",
     accepted: "Confirmed. Your browser is adding the card to this device.",
     dismissed: "The card was not added. You can try again whenever you like.",
     vsContact: "This adds a shortcut to the card. “Save contact” is separate: it puts the details in your address book.",
@@ -88,6 +94,8 @@ const copy: Record<"sv" | "en" | "it", HomeCopy> = {
   },
   it: {
     add: "Aggiungi alla Home",
+    addNow: "Aggiungi ora",
+    already: "Il biglietto è già su questo dispositivo. Aprilo dalla schermata Home.",
     accepted: "Confermato. Il browser sta aggiungendo il biglietto a questo dispositivo.",
     dismissed: "Il biglietto non è stato aggiunto. Puoi riprovare quando vuoi.",
     vsContact: "Così aggiungi un accesso rapido al biglietto. Salvare il contatto è un’altra cosa: inserisce i dati in rubrica.",
@@ -137,13 +145,27 @@ const HomeScreen: React.FC<{
   const [guide, setGuide] = useState<GuideKind | null>(null);
   const [lastGuide, setLastGuide] = useState<GuideKind>("android");
   const [copied, setCopied] = useState<"copied" | "failed" | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [offer, setOffer] = useState(hasOffer);
+  useEffect(() => {
+    const update = () => setOffer(hasOffer());
+    update();
+    return onOfferChange(update);
+  }, []);
   const t = copy[homeLang(card.lang)];
   if (standalone) return null;
+  // ?install-debug on a phone: what Chrome has told the page so far.
+  const debug = new URLSearchParams(window.location.search).has("install-debug");
 
   const add = () => {
+    if (busy) return;
+    setBusy(true);
+    setGuide(null);
     void promptInstall().then((result) => {
+      setBusy(false);
       if (result === "accepted") onStatus({ tone: "ok", text: t.accepted });
       else if (result === "dismissed") onStatus({ tone: "info", text: t.dismissed });
+      else if (result === "installed") onStatus({ tone: "info", text: t.already });
       else {
         const kind = guideKind();
         setCopied(null);
@@ -161,19 +183,31 @@ const HomeScreen: React.FC<{
 
   return (
     <>
-      <button type="button" className="dc-home" onClick={add} aria-haspopup="dialog">
+      <button type="button" className="dc-home" onClick={add} aria-haspopup="dialog" aria-busy={busy}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="6" y="2.5" width="12" height="19" rx="2.5" />
           <path d="M12 8.5v7M8.5 12h7" />
         </svg>
         {t.add}
       </button>
+      {debug && (
+        <p className="dc-note" data-install-debug>
+          offer: {offer ? `yes (${offerTime()} ms)` : "no"} · event API: {"BeforeInstallPromptEvent" in window ? "yes" : "no"} · manifest:{" "}
+          {document.querySelector('link[rel="manifest"]')?.getAttribute("href")} · {guideKind()}
+        </p>
+      )}
       <Dialog open={guide !== null} onClose={close} className="mp-dialog" aria-labelledby={titleId} PaperProps={{ className: "mp-dialog__paper mp-dialog__paper--narrow" }}>
         <button type="button" className="mp-dialog__close" onClick={close} aria-label={t.close}>
           <FiX aria-hidden="true" />
         </button>
         <div className="mp-dialog__body dc-qr dc-homeguide" lang={homeLang(card.lang)}>
           <h2 id={titleId}>{shown.title}</h2>
+          {/* Chrome's offer came after the tap: from here the native prompt is one tap away. */}
+          {offer && (
+            <button type="button" className="mp-btn" onClick={add}>
+              {t.addNow}
+            </button>
+          )}
           {lastGuide === "desktop" && <img className="dc-qr__code" src={qrSrc} alt={qrAlt} width={168} height={168} />}
           <ol>
             {shown.steps.map((step) => (

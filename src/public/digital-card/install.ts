@@ -1,15 +1,14 @@
 /**
  * "Add to Home Screen" for one card. The browser decides whether installing is possible, so nothing
  * here claims more than it knows: the native prompt is used only if the browser offered it for this
- * card's manifest, and every other case gets instructions. There is no reliable "already installed"
- * check, so none is made.
+ * card's manifest, and every other case gets instructions.
  */
 interface InstallPromptEvent extends Event {
   prompt: () => Promise<unknown>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-export type PromptResult = "accepted" | "dismissed" | "unavailable";
+export type PromptResult = "accepted" | "dismissed" | "unavailable" | "installed";
 export type GuideKind = "ios-safari" | "ios-browser" | "in-app" | "android" | "desktop";
 
 export const SITE_MANIFEST = "/manifest.json";
@@ -21,7 +20,51 @@ export const cardManifestPath = (slug: string, route: string) => `${cardIconDir(
 
 const manifestHref = () => document.querySelector<HTMLLinkElement>('link[rel="manifest"]')?.getAttribute("href") ?? "";
 
-let deferred: { event: InstallPromptEvent; manifest: string } | null = null;
+let deferred: { event: InstallPromptEvent; manifest: string; at: number } | null = null;
+const listeners = new Set<() => void>();
+const notify = () => listeners.forEach((listener) => listener());
+
+/** The offer is for the card on screen: one reached through the router may still hold another's. */
+export const hasOffer = () => !!deferred && deferred.manifest === manifestHref();
+export const offerTime = () => (deferred ? Math.round(deferred.at) : null);
+export function onOfferChange(listener: () => void) {
+  listeners.add(listener);
+  return () => void listeners.delete(listener);
+}
+
+/** Only Chromium browsers ever send the event: elsewhere there is nothing to wait for. */
+const canOffer = () => typeof window !== "undefined" && "BeforeInstallPromptEvent" in window;
+
+/**
+ * Chrome sends the event when its own checks are done, which on a phone can be after the visitor's
+ * first tap. prompt() needs the tap's activation, which lasts about 5 seconds, so a tap waits a little.
+ */
+const OFFER_WAIT = 3500;
+function waitForOffer() {
+  return new Promise<boolean>((resolve) => {
+    if (hasOffer()) return resolve(true);
+    if (!canOffer()) return resolve(false);
+    const done = (value: boolean) => {
+      window.clearTimeout(timer);
+      stop();
+      resolve(value);
+    };
+    const timer = window.setTimeout(() => done(false), OFFER_WAIT);
+    const stop = onOfferChange(() => {
+      if (hasOffer()) done(true);
+    });
+  });
+}
+
+/** Chrome on Android can tell that this card is already installed (see related_applications). */
+async function alreadyInstalled() {
+  const nav = navigator as Navigator & { getInstalledRelatedApps?: () => Promise<unknown[]> };
+  try {
+    return !!nav.getInstalledRelatedApps && (await nav.getInstalledRelatedApps()).length > 0;
+  } catch {
+    return false;
+  }
+}
 
 // Registered when the bundle loads, because the event can fire before React has mounted. The site's
 // own manifest keeps the browser's default behaviour: only a card's prompt waits for our button.
@@ -30,24 +73,34 @@ if (typeof window !== "undefined") {
     const manifest = manifestHref();
     if (!manifest.startsWith("/cards/")) return;
     e.preventDefault();
-    deferred = { event: e as InstallPromptEvent, manifest };
+    deferred = { event: e as InstallPromptEvent, manifest, at: performance.now() };
+    notify();
   });
   window.addEventListener("appinstalled", () => {
     deferred = null;
+    notify();
   });
 }
 
-/** Must be called inside the click handler. The event is single-use, so it is always cleared. */
+/** Must be called inside the click handler. The event is single-use once the prompt has opened. */
 export async function promptInstall(): Promise<PromptResult> {
-  const offer = deferred;
-  // An offer made for another card (reached through the router) would install the wrong one.
-  if (!offer || offer.manifest !== manifestHref()) return "unavailable";
-  deferred = null;
+  if (!hasOffer()) {
+    if (await alreadyInstalled()) return "installed";
+    if (!(await waitForOffer())) return "unavailable";
+  }
+  const offer = deferred!;
   try {
     await offer.event.prompt();
+  } catch {
+    // Refused (the tap's activation ran out): the offer is still good for the next tap.
+    return "unavailable";
+  }
+  deferred = null;
+  notify();
+  try {
     return (await offer.event.userChoice).outcome;
   } catch {
-    return "unavailable";
+    return "dismissed";
   }
 }
 

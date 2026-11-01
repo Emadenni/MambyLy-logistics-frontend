@@ -1143,6 +1143,11 @@ $dc-paper: radial-gradient(130% 62% at 50% -6%, rgba(255, 247, 228, 0.9), rgba(2
     font-size: 12.5px;
     cursor: pointer;
 
+    &[aria-busy="true"] {
+      opacity: 0.6;
+      cursor: progress;
+    }
+
     svg {
       width: 15px;
       height: 15px;

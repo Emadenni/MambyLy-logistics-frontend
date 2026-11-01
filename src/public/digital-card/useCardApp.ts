@@ -8,7 +8,8 @@ const setHeadTag = (selector: string, create: () => HTMLElement, attr: string, v
     el = create();
     document.head.appendChild(el);
   }
-  el.setAttribute(attr, value);
+  // Unchanged stays untouched: a new manifest address restarts Chrome's install checks.
+  if (el.getAttribute(attr) !== value) el.setAttribute(attr, value);
 };
 
 const metaTag = (name: string) => () => {
