@@ -21,6 +21,7 @@ export function startClarity(projectId: string) {
 export function withdrawClarity() {
   clarityApi()?.("consentv2", { ad_Storage: "denied", analytics_Storage: "denied" });
   clarityStarted = false;
+  sessionStorage.removeItem("_cltk");
   const host = window.location.hostname;
   const domains = ["", host, `.${host}`, `.${host.split(".").slice(-2).join(".")}`];
   for (const name of ["_clck", "_clsk"]) {
