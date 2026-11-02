@@ -300,7 +300,7 @@ const sv = {
     sections: [
       {
         title: "Personuppgiftsansvarig",
-        text: "MambyLy Solutions (företagsuppgifterna ovan) ansvarar för behandlingen av dina personuppgifter. Frågor om integritet skickar du till info@mambylysolutions.se.",
+        text: "Personuppgiftsansvarig är Emanuele De Negri, Orrvägen 6, 595 70 Boxholm, Sverige. Frågor om integritet skickar du till info@mambylysolutions.se.",
       },
       {
         title: "Vilka uppgifter behandlar vi, varför och med vilket stöd?",
@@ -312,11 +312,11 @@ const sv = {
       },
       {
         title: "Vilka leverantörer behandlar uppgifterna?",
-        text: "Amazon Web Services (AWS): driftar webbplatsen och lagrar formulärens uppgifter. Formspree, Inc.: tar emot kontaktformulärets uppgifter (namn, e-post, ämne och meddelande) och skickar dem till oss som e-post; jobbansökningar skickas inte dit. Google: vår e-post tar emot dessa meddelanden. Microsoft (Clarity): statistik och inspelning av hur sidan används, bara med ditt samtycke; formulärfält maskeras och admin körs inte. Umami Software, Inc. (Umami): räknar sidvisningar utan cookies, bara med ditt samtycke. Vi säljer inte dina uppgifter.",
+        text: "Amazon Web Services (AWS): driftar webbplatsen och lagrar formulärens uppgifter. Formspree, Inc.: tar emot kontaktformulärets uppgifter (namn, e-post, ämne och meddelande) och skickar dem till oss som e-post; jobbansökningar skickas inte dit. Zoho Mail (Zoho Corporation): vår e-posttjänst. Cool Company Skandinavien AB: sköter faktureringen när du blir kund. Microsoft (Clarity): statistik och inspelning av hur sidan används, bara med ditt samtycke; formulärfält maskeras och admin körs inte. Umami Software, Inc. (Umami): räknar sidvisningar utan cookies, bara med ditt samtycke. Vi säljer inte dina uppgifter.",
       },
       {
         title: "Överföring utanför EU/EES",
-        text: "Formspree, Microsoft, Google och Umami kan behandla uppgifter i USA eller andra länder utanför EU/EES. Kontakta oss om du vill veta vilka skyddsåtgärder som gäller för en viss leverantör.",
+        text: "Formspree, Microsoft, Zoho och Umami kan behandla uppgifter i USA eller andra länder utanför EU/EES. Kontakta oss om du vill veta vilka skyddsåtgärder som gäller för en viss leverantör.",
       },
       {
         title: "Hur skyddas uppgifterna?",
@@ -329,9 +329,10 @@ const sv = {
     ],
     companyTitle: "Företagsuppgifter",
     company: [
-      { label: "Företag", value: "MambyLy Solutions" },
-      { label: "Organisationsnummer", value: "[ORGANISATIONSNUMMER – LÄGGS TILL]" },
-      { label: "Adress", value: "[POSTADRESS – LÄGGS TILL]" },
+      { label: "Verksamhet", value: "MambyLy Solutions är namnet som Emanuele De Negri arbetar under som frilansare." },
+      { label: "Fakturering", value: "Sker via Cool Company (Cool Company Skandinavien AB)." },
+      { label: "Ansvarig", value: "Emanuele De Negri" },
+      { label: "Adress", value: "Orrvägen 6, 595 70 Boxholm, Sverige" },
       { label: "E-post", value: "info@mambylysolutions.se" },
       { label: "Telefon", value: "072 211 64 22" },
     ],
@@ -724,7 +725,7 @@ const en: Copy = {
     sections: [
       {
         title: "Data controller",
-        text: "MambyLy Solutions (the company details above) is responsible for the processing of your personal data. Send privacy questions to info@mambylysolutions.se.",
+        text: "The data controller is Emanuele De Negri, Orrvägen 6, 595 70 Boxholm, Sweden. Send privacy questions to info@mambylysolutions.se.",
       },
       {
         title: "What data do we process, why and on what basis?",
@@ -736,11 +737,11 @@ const en: Copy = {
       },
       {
         title: "Which suppliers process the data?",
-        text: "Amazon Web Services (AWS): hosts the website and stores the data from the forms. Formspree, Inc.: receives the contact form data (name, email, subject and message) and sends it to us as email; job applications are not sent there. Google: our email receives these messages. Microsoft (Clarity): statistics and recording of how the site is used, only with your consent; form fields are masked and the admin is excluded. Umami Software, Inc. (Umami): counts page views without cookies, only with your consent. We do not sell your data.",
+        text: "Amazon Web Services (AWS): hosts the website and stores the data from the forms. Formspree, Inc.: receives the contact form data (name, email, subject and message) and sends it to us as email; job applications are not sent there. Zoho Mail (Zoho Corporation): our email service. Cool Company Skandinavien AB: handles invoicing when you become a customer. Microsoft (Clarity): statistics and recording of how the site is used, only with your consent; form fields are masked and the admin is excluded. Umami Software, Inc. (Umami): counts page views without cookies, only with your consent. We do not sell your data.",
       },
       {
         title: "Transfers outside the EU/EEA",
-        text: "Formspree, Microsoft, Google and Umami may process data in the United States or other countries outside the EU/EEA. Contact us if you want to know which safeguards apply to a given supplier.",
+        text: "Formspree, Microsoft, Zoho and Umami may process data in the United States or other countries outside the EU/EEA. Contact us if you want to know which safeguards apply to a given supplier.",
       },
       {
         title: "How is the data protected?",
@@ -753,9 +754,10 @@ const en: Copy = {
     ],
     companyTitle: "Company details",
     company: [
-      { label: "Company", value: "MambyLy Solutions" },
-      { label: "Company registration number", value: "[REGISTRATION NUMBER – TO BE ADDED]" },
-      { label: "Address", value: "[POSTAL ADDRESS – TO BE ADDED]" },
+      { label: "Business", value: "MambyLy Solutions is the name Emanuele De Negri works under as a freelancer." },
+      { label: "Invoicing", value: "Handled through Cool Company (Cool Company Skandinavien AB)." },
+      { label: "Responsible", value: "Emanuele De Negri" },
+      { label: "Address", value: "Orrvägen 6, 595 70 Boxholm, Sweden" },
       { label: "Email", value: "info@mambylysolutions.se" },
       { label: "Phone", value: "+46 72 211 64 22" },
     ],
