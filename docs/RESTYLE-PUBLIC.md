@@ -426,6 +426,7 @@ Specifica: `MambyLy_Corrections_Menu/` (non pubblicato) e le correzioni successi
 icone `any`, maskable, `apple-touch-icon` (PNG da SVG con `@resvg/resvg-wasm`, nessun binario nativo) e un manifest per
 indirizzo (`sv.webmanifest`, `en.webmanifest`). Icona: il simbolo quadrato del biglietto (`logoBack`, o `logo` se non è
 `wide`), altrimenti il monogramma sui colori del tema. Le pagine statiche dei biglietti puntano già a questi file;
-`useCardHead` li imposta anche quando si arriva dal router e li restituisce al sito all'uscita. Dall'app installata
+`useCardHead` li imposta anche quando si arriva dal router e rimuove il manifest all'uscita. Il sito non ha un manifest
+generale, di proposito: un'app con scope `/` copre tutti i biglietti e Chrome smette di inviare `beforeinstallprompt`. Dall'app installata
 `useLinksOutOfApp` apre nel browser i link che escono dal biglietto. Pulsante e guide: `digital-card/HomeScreen.tsx`.
 Le icone del sito (`public/favicon*`, `public/brand/icon-*`) si rigenerano con `node scripts/brand-icons.mjs`.

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { CardConfig } from "./types";
-import { SITE_APPLE_ICON, SITE_MANIFEST, cardIconDir, cardManifestPath, isStandalone } from "./install";
+import { SITE_APPLE_ICON, cardIconDir, cardManifestPath, isStandalone } from "./install";
 
 const setHeadTag = (selector: string, create: () => HTMLElement, attr: string, value: string) => {
   let el = document.head.querySelector<HTMLElement>(selector);
@@ -27,7 +27,8 @@ const shortAppName = (card: CardConfig) => {
 
 /**
  * The page's manifest and Apple tags follow the card, also when it was reached through the router
- * (the card's static HTML already has them). Leaving the card hands them back to the site.
+ * (the card's static HTML already has them). Leaving the card removes the manifest: the site has none,
+ * because an app with scope "/" would cover every card and Chrome would stop offering them.
  */
 export function useCardHead(card: CardConfig) {
   useEffect(() => {
@@ -36,7 +37,7 @@ export function useCardHead(card: CardConfig) {
     setHeadTag('meta[name="apple-mobile-web-app-capable"]', metaTag("apple-mobile-web-app-capable"), "content", "yes");
     setHeadTag('meta[name="apple-mobile-web-app-title"]', metaTag("apple-mobile-web-app-title"), "content", shortAppName(card));
     return () => {
-      document.head.querySelector('link[rel="manifest"]')?.setAttribute("href", SITE_MANIFEST);
+      document.head.querySelector('link[rel="manifest"]')?.remove();
       document.head.querySelector('link[rel="apple-touch-icon"]')?.setAttribute("href", SITE_APPLE_ICON);
       document.head.querySelector('meta[name="apple-mobile-web-app-capable"]')?.remove();
       document.head.querySelector('meta[name="apple-mobile-web-app-title"]')?.remove();

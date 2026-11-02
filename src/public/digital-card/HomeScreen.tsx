@@ -3,13 +3,14 @@ import { Dialog } from "@mui/material";
 import { FiCopy, FiX } from "react-icons/fi";
 import type { CardConfig } from "./types";
 import { copyText } from "./share";
-import { guideKind, hasOffer, isStandalone, offerTime, onOfferChange, promptInstall, type GuideKind } from "./install";
+import { canOffer, guideKind, hasOffer, isStandalone, offerTime, onOfferChange, promptInstall, type GuideKind } from "./install";
 
 type Guide = { title: string; steps: string[]; note?: string };
 type HomeCopy = {
   add: string;
   addNow: string;
   already: string;
+  noOffer: string;
   accepted: string;
   dismissed: string;
   vsContact: string;
@@ -24,6 +25,7 @@ const copy: Record<"sv" | "en" | "it", HomeCopy> = {
     add: "Lägg till på hemskärmen",
     addNow: "Lägg till nu",
     already: "Kortet finns redan på den här enheten. Öppna det från hemskärmen.",
+    noOffer: "Chrome erbjuder inte installation just nu. Oftast beror det på att MambyLy redan finns som app på telefonen: ta bort appen och försök igen.",
     accepted: "Bekräftat. Webbläsaren lägger till kortet på den här enheten.",
     dismissed: "Kortet lades inte till. Du kan försöka igen när du vill.",
     vsContact: "Det här lägger till en genväg till kortet. ”Spara kontakt” är något annat: det sparar uppgifterna i kontakterna.",
@@ -60,6 +62,7 @@ const copy: Record<"sv" | "en" | "it", HomeCopy> = {
     add: "Add to Home Screen",
     addNow: "Add now",
     already: "The card is already on this device. Open it from your home screen.",
+    noOffer: "Chrome isn’t offering the install right now. This usually means MambyLy is already an app on this phone: remove that app and try again.",
     accepted: "Confirmed. Your browser is adding the card to this device.",
     dismissed: "The card was not added. You can try again whenever you like.",
     vsContact: "This adds a shortcut to the card. “Save contact” is separate: it puts the details in your address book.",
@@ -96,6 +99,7 @@ const copy: Record<"sv" | "en" | "it", HomeCopy> = {
     add: "Aggiungi alla Home",
     addNow: "Aggiungi ora",
     already: "Il biglietto è già su questo dispositivo. Aprilo dalla schermata Home.",
+    noOffer: "Chrome al momento non propone l’installazione. Di solito significa che MambyLy è già un’app sul telefono: rimuovila e riprova.",
     accepted: "Confermato. Il browser sta aggiungendo il biglietto a questo dispositivo.",
     dismissed: "Il biglietto non è stato aggiunto. Puoi riprovare quando vuoi.",
     vsContact: "Così aggiungi un accesso rapido al biglietto. Salvare il contatto è un’altra cosa: inserisce i dati in rubrica.",
@@ -168,6 +172,11 @@ const HomeScreen: React.FC<{
       else if (result === "installed") onStatus({ tone: "info", text: t.already });
       else {
         const kind = guideKind();
+        // Android browsers with a native prompt never get the guide: only Chrome can install there.
+        if (kind === "android" && canOffer()) {
+          onStatus({ tone: "info", text: t.noOffer });
+          return;
+        }
         setCopied(null);
         setLastGuide(kind);
         setGuide(kind);

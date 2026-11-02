@@ -67,7 +67,8 @@ export function renderRouteHtml(html: string, page: PageMeta): string {
   out = setMeta(out, "name", "twitter:description", page.description);
   out = setMeta(out, "name", "twitter:image", image);
   if (page.card) {
-    out = out.replace(/<link rel="manifest" href="[^"]*" ?\/?>/, `<link rel="manifest" href="${cardManifestPath(page.card.slug, page.route)}" />`);
+    // Only card pages link a manifest: a site-wide one would cover the cards and Chrome would stop offering them.
+    out = out.replace("</head>", `  <link rel="manifest" href="${cardManifestPath(page.card.slug, page.route)}" />\n  </head>`);
     out = out.replace(/<link rel="apple-touch-icon"([^>]*) href="\/brand\/[^"]*"/, `<link rel="apple-touch-icon"$1 href="${cardIconDir(page.card.slug)}/apple-touch-icon.png"`);
     out = out.replace(/<meta name="theme-color" content="[^"]*" ?\/?>/, `<meta name="theme-color" content="${CARD_PAGE_COLOR}" />`);
   }

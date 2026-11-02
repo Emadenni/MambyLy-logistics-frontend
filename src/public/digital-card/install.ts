@@ -11,7 +11,6 @@ interface InstallPromptEvent extends Event {
 export type PromptResult = "accepted" | "dismissed" | "unavailable" | "installed";
 export type GuideKind = "ios-safari" | "ios-browser" | "in-app" | "android" | "desktop";
 
-export const SITE_MANIFEST = "/manifest.json";
 export const SITE_APPLE_ICON = "/brand/apple-touch-icon.png";
 
 export const cardIconDir = (slug: string) => `/cards/${slug}`;
@@ -33,7 +32,7 @@ export function onOfferChange(listener: () => void) {
 }
 
 /** Only Chromium browsers ever send the event: elsewhere there is nothing to wait for. */
-const canOffer = () => typeof window !== "undefined" && "BeforeInstallPromptEvent" in window;
+export const canOffer = () => typeof window !== "undefined" && "BeforeInstallPromptEvent" in window;
 
 /**
  * Chrome sends the event when its own checks are done, which on a phone can be after the visitor's
@@ -66,8 +65,7 @@ async function alreadyInstalled() {
   }
 }
 
-// Registered when the bundle loads, because the event can fire before React has mounted. The site's
-// own manifest keeps the browser's default behaviour: only a card's prompt waits for our button.
+// Registered when the bundle loads, because the event can fire before React has mounted.
 if (typeof window !== "undefined") {
   window.addEventListener("beforeinstallprompt", (e) => {
     const manifest = manifestHref();
