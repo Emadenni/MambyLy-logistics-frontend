@@ -7,8 +7,7 @@ import PromoBanner from "./components/PromoBanner/PromoBanner";
 import CookieConsentBanner from "./components/CookieConsentBanner/CookieConsentBanner";
 import PublicLayout from "./components/PublicLayout";
 import { CartProvider } from "./Context/CartContext";
-import { useClarity } from "./hooks/useClarity";
-import { useUmami } from "./hooks/useUmami";
+import Analytics from "./components/Analytics";
 
 // Pre-restyle public pages: no longer routed, but still imported so that their stylesheets
 // stay in the bundle in the same order and admin/login/Sido Butik keep the exact same CSS.
@@ -62,9 +61,6 @@ const LegacyWhatsApp = () => {
 };
 
 const App = () => {
-  useClarity();
-  useUmami();
-
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   // Commentato per testare LCP senza blocchi
@@ -92,7 +88,7 @@ const App = () => {
     <HelmetProvider>
       <CartProvider>
         <Router>
-          {/* Previous banner, unchanged, for admin, login and Sido Butik; the public site has its own. */}
+          {/* Previous banner, unchanged, for Sido Butik; the public site has its own, admin and login none. */}
           <LegacyConsent banner={<CookieConsentBanner />} />
           <ScrollToTop />
           {/* <PromoBanner /> */}
@@ -130,6 +126,7 @@ const App = () => {
           </Routes>
 
           <LegacyWhatsApp />
+          <Analytics />
         </Router>
       </CartProvider>
     </HelmetProvider>

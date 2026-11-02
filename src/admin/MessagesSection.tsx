@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FiArrowLeft, FiCopy, FiExternalLink, FiMail, FiPaperclip, FiRefreshCw, FiSearch, FiTrash2, FiX } from "react-icons/fi";
+import { useAuthStore } from "../store/useAuthStore";
 import useMessages from "../hooks/useMessages";
 import { Message } from "../types/common";
 import { Button, ConfirmDialog, EmptyState, ErrorState, Loading, Notice, useAdminTitle } from "./ui";
@@ -62,10 +63,20 @@ const RANGES = [
   { value: "90", label: "Last 90 days" },
 ];
 
+/** A stored value only becomes a link if it is a web address: never javascript: or data:. */
+const safeHref = (url?: string | null) => {
+  try {
+    const parsed = new URL(url ?? "");
+    return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
+};
+
 const preview = (text: string) => (text || "").replace(/\s+/g, " ").trim();
 
 const MessageList: React.FC = () => {
-  const { cfg, messages, loading, error, fetchMessages, scroll, flash, setFlash } = useCtx();
+  const { cfg, messages, loading, error, fetchMessages, deleteMessage, scroll, flash, setFlash } = useCtx();
   const [params, setParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,6 +117,45 @@ const MessageList: React.FC = () => {
     return list.sort((a, b) => (sort === "newest" ? time(b.sentAt) - time(a.sentAt) : time(a.sentAt) - time(b.sentAt)));
   }, [messages, q, range, subject, cv, sort]);
 
+  // Selection: only what the current search and filters show can be selected or deleted.
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
+  const [confirmBulk, setConfirmBulk] = useState(false);
+  const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
+  const [notDeleted, setNotDeleted] = useState<string[]>([]);
+  const bulkBusy = useRef(false);
+  const selectedShown = useMemo(() => shown.filter((m) => selected.has(idOf(m, cfg))), [shown, selected, cfg]);
+  const allSelected = shown.length > 0 && selectedShown.length === shown.length;
+  const toggle = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
+  const toggleAll = () => setSelected(allSelected ? new Set() : new Set(shown.map((m) => idOf(m, cfg))));
+
+  // One at a time through the existing single delete: the API has no bulk endpoint.
+  const deleteSelected = async () => {
+    if (bulkBusy.current) return;
+    bulkBusy.current = true;
+    const targets = selectedShown;
+    const failed: Message[] = [];
+    setNotDeleted([]);
+    setFlash(null);
+    setProgress({ done: 0, total: targets.length });
+    for (const [i, m] of targets.entries()) {
+      if (!(await deleteMessage(idOf(m, cfg)))) failed.push(m);
+      setProgress({ done: i + 1, total: targets.length });
+      if (!useAuthStore.getState().isAuthenticated) break; // session ended: the login screen takes over
+    }
+    bulkBusy.current = false;
+    setProgress(null);
+    setConfirmBulk(false);
+    setSelected(new Set(failed.map((m) => idOf(m, cfg))));
+    setNotDeleted(failed.map((m) => `${m.name || m.email || "(No name)"} · ${shortDate(m.sentAt)}`));
+    const deleted = targets.length - failed.length;
+    if (deleted) setFlash(`${deleted} ${deleted === 1 ? cfg.noun : cfg.nouns} deleted.`);
+  };
+
   // Back from a message: same scroll position and focus on the message that was open.
   const restored = useRef(false);
   useLayoutEffect(() => {
@@ -142,6 +192,19 @@ const MessageList: React.FC = () => {
       {flash && (
         <Notice tone="success" onClose={() => setFlash(null)}>
           {flash}
+        </Notice>
+      )}
+
+      {notDeleted.length > 0 && (
+        <Notice tone="error" onClose={() => setNotDeleted([])}>
+          <p>
+            {notDeleted.length} {notDeleted.length === 1 ? cfg.noun : cfg.nouns} could not be deleted and {notDeleted.length === 1 ? "is" : "are"} still selected:
+          </p>
+          <ul className="ad-bulk__failed">
+            {notDeleted.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
+          </ul>
         </Notice>
       )}
 
@@ -228,6 +291,19 @@ const MessageList: React.FC = () => {
             />
           ) : (
             <>
+              <div className="ad-bulk" role="group" aria-label={`Select ${cfg.nouns}`}>
+                <label className="ad-bulk__all">
+                  <input type="checkbox" checked={allSelected} onChange={toggleAll} ref={(el) => { if (el) el.indeterminate = selectedShown.length > 0 && !allSelected; }} />
+                  Select all{filtersActive ? " shown" : ""} ({shown.length})
+                </label>
+                <span className="ad-bulk__count" role="status" aria-live="polite">
+                  {selectedShown.length} selected
+                </span>
+                <Button size="sm" variant="danger" icon={<FiTrash2 />} disabled={!selectedShown.length} onClick={() => setConfirmBulk(true)}>
+                  Delete selected
+                </Button>
+              </div>
+
               {/* Desktop and tablet: a real table */}
               <div className="ad-table-wrap">
                 <table className="ad-table">
@@ -236,6 +312,9 @@ const MessageList: React.FC = () => {
                   </caption>
                   <thead>
                     <tr>
+                      <th scope="col" className="ad-table__pick">
+                        <span className="ad-sr">Select</span>
+                      </th>
                       <th scope="col">From</th>
                       <th scope="col">Subject and message</th>
                       {cfg.cv && <th scope="col">CV</th>}
@@ -246,7 +325,10 @@ const MessageList: React.FC = () => {
                     {shown.map((m) => {
                       const id = idOf(m, cfg);
                       return (
-                        <tr key={id} onClick={() => open(id)} className="ad-table__row">
+                        <tr key={id} onClick={() => open(id)} className={`ad-table__row${selected.has(id) ? " is-selected" : ""}`}>
+                          <td className="ad-table__pick" onClick={(e) => e.stopPropagation()}>
+                            <input type="checkbox" checked={selected.has(id)} onChange={() => toggle(id)} aria-label={`Select ${cfg.noun} from ${m.name || m.email || "unknown"}`} />
+                          </td>
                           <td>
                             <Link to={encodeURIComponent(id)} state={{ from: location.search }} onClick={(e) => { e.stopPropagation(); remember(id)(); }} data-open-id={id} className="ad-table__open">
                               {m.name || "(No name)"}
@@ -273,7 +355,10 @@ const MessageList: React.FC = () => {
                 {shown.map((m) => {
                   const id = idOf(m, cfg);
                   return (
-                    <li key={id}>
+                    <li key={id} className="ad-cards__item">
+                      <label className="ad-cards__pick">
+                        <input type="checkbox" checked={selected.has(id)} onChange={() => toggle(id)} aria-label={`Select ${cfg.noun} from ${m.name || m.email || "unknown"}`} />
+                      </label>
                       <Link to={encodeURIComponent(id)} state={{ from: location.search }} onClick={remember(id)} data-open-id={id} className="ad-card">
                         <span className="ad-card__top">
                           <span className="ad-card__name">{m.name || "(No name)"}</span>
@@ -298,6 +383,29 @@ const MessageList: React.FC = () => {
           )}
         </>
       )}
+
+      <ConfirmDialog
+        open={confirmBulk}
+        title={`Delete ${selectedShown.length} ${selectedShown.length === 1 ? cfg.noun : cfg.nouns}?`}
+        text={
+          progress ? (
+            <p role="status" aria-live="polite">
+              Deleting {progress.done} of {progress.total}…
+            </p>
+          ) : (
+            <p>
+              <strong>
+                {selectedShown.length} {selectedShown.length === 1 ? cfg.noun : cfg.nouns}
+              </strong>{" "}
+              will be deleted permanently. This cannot be undone.
+            </p>
+          )
+        }
+        confirmLabel={`Delete ${selectedShown.length}`}
+        busy={!!progress}
+        onConfirm={deleteSelected}
+        onCancel={() => setConfirmBulk(false)}
+      />
     </section>
   );
 };
@@ -420,8 +528,8 @@ const MessageDetail: React.FC = () => {
             <div>
               <dt>CV</dt>
               <dd>
-                {message.uploadCv ? (
-                  <a href={message.uploadCv} target="_blank" rel="noopener noreferrer" className="ad-link">
+                {safeHref(message.uploadCv) ? (
+                  <a href={safeHref(message.uploadCv)!} target="_blank" rel="noopener noreferrer" className="ad-link">
                     Open CV <FiExternalLink aria-hidden="true" />
                     <span className="ad-sr"> (opens in a new tab)</span>
                   </a>

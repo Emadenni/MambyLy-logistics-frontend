@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /admin/
-Disallow: /login
+Allow: /
 
-Sitemap: https://mambylysolutions.se/sitemap.xml
+Sitemap: https://www.mambylysolutions.se/sitemap.xml

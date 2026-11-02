@@ -134,7 +134,6 @@ const Contact: React.FC = () => {
   const serviceErr = err(1, !!w.service);
   const messageErr = err(1, validMessage(w));
   const emailErr = err(2, validEmail(w));
-  const consentErr = err(2, w.consent);
 
   const summaries: { step: 0 | 1; icon: React.ReactNode; label: string; value: string }[] = [];
   if (w.step > 0) summaries.push({ step: 0, icon: <FiUser />, label: c.summaryName, value: w.name.trim() });
@@ -148,7 +147,7 @@ const Contact: React.FC = () => {
       head={<ScreenHead lang={t.lang} title={t.meta.contact.title} description={t.meta.contact.description} screen="contact" />}
       bar={<TopBar crumbs={[{ label: t.nav.contact }]} back={{ screen: "explore", label: t.common.back, anyPrevious: true }} showContact={false} />}
     >
-      <div className="mp-col mp-wizard">
+      <div className="mp-col mp-wizard" data-clarity-mask="true">
         <h1 className="mp-sr" data-focus>
           {c.title}
         </h1>
@@ -341,25 +340,11 @@ const Contact: React.FC = () => {
                       {c.errors.email}
                     </p>
                   )}
-                  <label className="mp-check">
-                    <input
-                      type="checkbox"
-                      checked={w.consent}
-                      onChange={(e) => w.set({ consent: e.target.checked })}
-                      aria-invalid={consentErr || undefined}
-                      aria-describedby={consentErr ? `${ids}-consent-err` : undefined}
-                    />
-                    <span>
-                      {c.consentBefore}
-                      <Link to={PATHS.privacy[t.lang]}>{c.consentLink}</Link>
-                      {c.consentAfter}
-                    </span>
-                  </label>
-                  {consentErr && (
-                    <p id={`${ids}-consent-err`} className="mp-error">
-                      {c.errors.consent}
-                    </p>
-                  )}
+                  <p className="mp-wizard__notice">
+                    {c.noticeBefore}
+                    <Link to={PATHS.privacy[t.lang]}>{c.consentLink}</Link>
+                    {c.consentAfter}
+                  </p>
                   <button type="submit" className="mp-xbtn mp-xbtn--solid mp-xbtn--block" disabled={isSubmitting} aria-disabled={isSubmitting}>
                     {isSubmitting ? c.sending : failed === "unknown" ? c.retryAnyway : c.send} <FiArrowRight aria-hidden="true" />
                   </button>

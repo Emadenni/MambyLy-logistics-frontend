@@ -84,7 +84,7 @@ const Jobs: React.FC = () => {
             {j.success}
           </p>
         ) : (
-          <form className="mp-form2" onSubmit={onSubmit} noValidate aria-busy={isSubmitting}>
+          <form className="mp-form2" data-clarity-mask="true" onSubmit={onSubmit} noValidate aria-busy={isSubmitting}>
             <h2 className="mp-form2__title">{j.formTitle}</h2>
             <label className="mp-label" htmlFor={`${ids}-name`}>
               {j.name}

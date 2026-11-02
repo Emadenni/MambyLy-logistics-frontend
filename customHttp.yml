@@ -1,0 +1,32 @@
+# AWS Amplify reads this file at deploy. Security headers for every response; see SECURITY-PRIVACY-REPORT.md.
+customHeaders:
+  - pattern: '**/*'
+    headers:
+      - key: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self' https://*.clarity.ms https://cloud.umami.is; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://uyhokr7waa.execute-api.eu-north-1.amazonaws.com https://formspree.io https://*.clarity.ms https://c.bing.com https://cloud.umami.is https://gateway.umami.is https://api.emailjs.com; frame-src https://main.d2nczcu0nsnr0f.amplifyapp.com; manifest-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+      - key: X-Frame-Options
+        value: SAMEORIGIN
+      - key: X-Content-Type-Options
+        value: nosniff
+      - key: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - key: Permissions-Policy
+        value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+      - key: Strict-Transport-Security
+        value: "max-age=31536000"
+  - pattern: '/admin'
+    headers:
+      - key: X-Robots-Tag
+        value: "noindex, nofollow"
+  - pattern: '/admin/**/*'
+    headers:
+      - key: X-Robots-Tag
+        value: "noindex, nofollow"
+  - pattern: '/login'
+    headers:
+      - key: X-Robots-Tag
+        value: "noindex, nofollow"
+  - pattern: '/login/**/*'
+    headers:
+      - key: X-Robots-Tag
+        value: "noindex, nofollow"

@@ -14,10 +14,9 @@ export type WizardAnswers = {
   example?: string;
   message: string;
   email: string;
-  consent: boolean;
 };
 
-const empty: WizardAnswers = { step: 0, name: "", message: "", email: "", consent: false };
+const empty: WizardAnswers = { step: 0, name: "", message: "", email: "" };
 
 type WizardStore = WizardAnswers & {
   set: (patch: Partial<WizardAnswers>) => void;
@@ -43,4 +42,4 @@ export const validMessage = (a: WizardAnswers) => a.message.trim().length >= MES
 export const validEmail = (a: WizardAnswers) => EMAIL_PATTERN.test(a.email.trim());
 
 export const stepValid = (a: WizardAnswers, step: number) =>
-  step === 0 ? validName(a) : step === 1 ? !!a.service && validMessage(a) : validEmail(a) && a.consent;
+  step === 0 ? validName(a) : step === 1 ? !!a.service && validMessage(a) : validEmail(a);

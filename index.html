@@ -8,13 +8,7 @@
       it does not touch routing, authentication or application state.
       "legacy" (/admin, /login, /sidoButik…) gets exactly the previous loader, preloads and icons.
     -->
-    <script>
-      (function () {
-        var first = location.pathname.split("/")[1].toLowerCase();
-        var legacy = first === "admin" || first === "login" || first === "sidobutik";
-        document.documentElement.setAttribute("data-boot", legacy ? "legacy" : "public");
-      })();
-    </script>
+    <script src="/boot/route.js"></script>
     <style>
       html[data-boot="public"] { background: #f6f4ee; }
       #initial-loader.mp-boot {
@@ -86,14 +80,7 @@
       <link rel="icon" href="/favicon-512x512.png" sizes="512x512" type="image/png" />
 
     </template>
-    <script>
-      (function () {
-        if (document.documentElement.getAttribute("data-boot") !== "legacy") return;
-        var icons = document.querySelectorAll("link[data-boot-icon]");
-        for (var i = 0; i < icons.length; i++) icons[i].parentNode.removeChild(icons[i]);
-        document.head.appendChild(document.getElementById("boot-head-legacy").content.cloneNode(true));
-      })();
-    </script>
+    <script src="/boot/legacy-head.js"></script>
 
     <!-- Meta Tag for Theme Color -->
     <meta name="theme-color" content="#ffffff" />
@@ -190,12 +177,7 @@
         <span class="mp-boot__sr">Laddar…</span>
       </div>
     </template>
-    <script>
-      (function () {
-        var t = document.getElementById("boot-loader-" + document.documentElement.getAttribute("data-boot"));
-        if (t) document.body.insertBefore(t.content.cloneNode(true), t);
-      })();
-    </script>
+    <script src="/boot/loader.js"></script>
 
     <div id="root"></div>
     <div id="modal-root"></div>

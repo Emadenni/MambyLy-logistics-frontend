@@ -107,6 +107,9 @@ export const ScreenFooter: React.FC<{ withAdmin?: boolean }> = ({ withAdmin = fa
           <Link to={pathFor("privacy", t.lang)}>{t.common.privacy}</Link>
         </li>
         <li>
+          <Link to={`${pathFor("privacy", t.lang)}#foretag`}>{t.common.companyInfo}</Link>
+        </li>
+        <li>
           <button type="button" onClick={requestConsent}>
             {t.common.cookieSettings}
           </button>

@@ -1,21 +1,20 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import clarity from "@microsoft/clarity";
 import { useCopy } from "./i18n";
 import { pathFor } from "./routes";
 import { useUi } from "./ui";
+import { withdrawClarity } from "../../hooks/analytics";
 
 /**
  * Cookie choice for the public site. Same storage key and shape as the previous banner
- * (localStorage "cookieConsent" = { essential, analytics, marketing }), so useClarity() keeps
- * working unchanged: Microsoft Clarity starts only when analytics is true. There is no marketing
- * technology on the site, so "marketing" is always stored as false.
+ * (localStorage "cookieConsent" = { essential, analytics, marketing }): Microsoft Clarity and Umami
+ * start only when analytics is true (see hooks/analytics.ts). There is no marketing technology on
+ * the site, so "marketing" is always stored as false.
  *
  * Unlike the previous banner it does not block the page or lock scrolling, and it waits until the
  * home cover is lifted (nothing optional is loaded before a choice anyway).
  */
 const KEY = "cookieConsent";
-const clarityId = import.meta.env.VITE_CLARITY_ID;
 
 type Consent = { essential: true; analytics: boolean; marketing: false };
 
@@ -28,17 +27,6 @@ function readConsent(): Consent | null {
   }
 }
 
-/** First-party cookies set by Clarity; removed when the visitor withdraws consent. */
-function removeClarityCookies() {
-  const host = window.location.hostname;
-  const domains = ["", host, `.${host}`, `.${host.split(".").slice(-2).join(".")}`];
-  for (const name of ["_clck", "_clsk"]) {
-    for (const d of domains) document.cookie = `${name}=; Max-Age=0; path=/${d ? `; domain=${d}` : ""}`;
-  }
-}
-
-let clarityStarted = false;
-
 const ConsentBanner: React.FC = () => {
   const t = useCopy();
   const titleId = useId();
@@ -46,15 +34,12 @@ const ConsentBanner: React.FC = () => {
   const requested = useUi((s) => s.consentRequested);
   const [stored, setStored] = useState<Consent | null>(readConsent);
   const [open, setOpen] = useState(() => readConsent() === null);
-  const [details, setDetails] = useState(false);
-  const [analytics, setAnalytics] = useState(() => readConsent()?.analytics ?? false);
   const title = useRef<HTMLHeadingElement>(null);
 
   // Opened again from "Cookieinställningar" (and by useClarity when the stored value is invalid).
   useEffect(() => {
     if (!requested) return;
-    setAnalytics(readConsent()?.analytics ?? false);
-    setDetails(true);
+    setStored(readConsent());
     setOpen(true);
     window.setTimeout(() => title.current?.focus(), 0);
   }, [requested]);
@@ -78,15 +63,10 @@ const ConsentBanner: React.FC = () => {
     }
     setStored(next);
     setOpen(false);
-    setDetails(false);
     window.dispatchEvent(new CustomEvent("cookieConsentSaved"));
-    if (allowAnalytics && clarityId && !clarityStarted) {
-      clarityStarted = true;
-      clarity.init(clarityId);
-    }
     // Withdrawn: drop Clarity's cookies and reload so its script (and Umami) is no longer running.
     if (!allowAnalytics && before?.analytics) {
-      removeClarityCookies();
+      withdrawClarity();
       window.location.reload();
     }
   };
@@ -105,50 +85,15 @@ const ConsentBanner: React.FC = () => {
         </Link>
       </p>
 
-      {details && (
-        <ul className="mp-consent__options">
-          <li>
-            <span className="mp-consent__opt">
-              <strong>{t.consent.necessary}</strong>
-              <small>{t.consent.necessaryText}</small>
-            </span>
-            <span className="mp-consent__always">{t.consent.always}</span>
-          </li>
-          <li>
-            <label className="mp-consent__opt" htmlFor={`${titleId}-a`}>
-              <strong>{t.consent.analytics}</strong>
-              <small>{t.consent.analyticsText}</small>
-            </label>
-            <input
-              id={`${titleId}-a`}
-              type="checkbox"
-              role="switch"
-              className="mp-switch"
-              checked={analytics}
-              onChange={(e) => setAnalytics(e.target.checked)}
-            />
-          </li>
-        </ul>
-      )}
+      {stored && <p className="mp-consent__state">{stored.analytics ? t.consent.stateOn : t.consent.stateOff}</p>}
 
       <div className="mp-consent__actions">
         <button type="button" className="mp-xbtn mp-xbtn--choice" onClick={() => save(false)}>
           {t.consent.reject}
         </button>
-        {details ? (
-          <button type="button" className="mp-xbtn mp-xbtn--choice" onClick={() => save(analytics)}>
-            {t.consent.save}
-          </button>
-        ) : (
-          <>
-            <button type="button" className="mp-xbtn mp-xbtn--link" onClick={() => setDetails(true)}>
-              {t.consent.details}
-            </button>
-            <button type="button" className="mp-xbtn mp-xbtn--choice" onClick={() => save(true)}>
-              {t.consent.accept}
-            </button>
-          </>
-        )}
+        <button type="button" className="mp-xbtn mp-xbtn--choice" onClick={() => save(true)}>
+          {t.consent.accept}
+        </button>
       </div>
     </section>
   );

@@ -10,11 +10,13 @@ const analyticsAllowed = () => {
   }
 };
 
-export const useUmami = () => {
+export const UMAMI_SCRIPT_ID = "umami-script";
+
+export const useUmami = (excluded: boolean) => {
   useEffect(() => {
-    const scriptId = "umami-script";
+    const scriptId = UMAMI_SCRIPT_ID;
     const load = () => {
-      if (document.getElementById(scriptId) || !analyticsAllowed()) return;
+      if (excluded || document.getElementById(scriptId) || !analyticsAllowed()) return;
       if (!import.meta.env.VITE_UMAMI_SCRIPT_URL || !import.meta.env.VITE_UMAMI_SITE_ID) return;
 
       const script = document.createElement("script");
@@ -29,5 +31,5 @@ export const useUmami = () => {
     // Fired by the consent banner when a choice is saved.
     window.addEventListener("cookieConsentSaved", load);
     return () => window.removeEventListener("cookieConsentSaved", load);
-  }, []);
+  }, [excluded]);
 };

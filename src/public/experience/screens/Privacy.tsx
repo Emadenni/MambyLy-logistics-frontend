@@ -26,6 +26,17 @@ export const Privacy: React.FC = () => {
         </h1>
         <p className="mp-legal__meta">{p.updated}</p>
         <p>{p.intro}</p>
+        <section id="foretag">
+          <h2>{p.companyTitle}</h2>
+          <dl className="mp-legal__facts">
+            {p.company.map((row) => (
+              <div key={row.label}>
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
         {p.sections.map((s) => (
           <section key={s.title}>
             <h2>{s.title}</h2>
