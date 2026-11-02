@@ -304,7 +304,11 @@ const sv = {
       },
       {
         title: "Vilka uppgifter behandlar vi, varför och med vilket stöd?",
-        text: "Kontaktformuläret: namn, e-postadress, vad förfrågan gäller och ditt meddelande. Vi använder uppgifterna för att svara och för att förbereda och leverera det du frågar om. Stödet är åtgärder före eller enligt avtal och vårt berättigade intresse av att besvara förfrågningar (GDPR art. 6.1 b och f). Jobbansökningar: namn, e-postadress, meddelande och CV, för att bedöma ansökan, med ditt samtycke (art. 6.1 a). Statistik: hur sidan används, t.ex. sidvisningar, klick och scroll, teknisk information om enheten och ett slumpmässigt id, bara om du valt Acceptera i cookierutan (samtycke, art. 6.1 a och 9 kap. 28 § lagen om elektronisk kommunikation). Vi använder inte dina uppgifter för marknadsföring.",
+        text: "Kontaktformuläret: namn, e-postadress, vad förfrågan gäller och ditt meddelande. Vi använder uppgifterna för att svara och för att förbereda och leverera det du frågar om. Stödet är åtgärder före eller enligt avtal och vårt berättigade intresse av att besvara förfrågningar (GDPR art. 6.1 b och f). Jobbansökningar: namn, e-postadress, meddelande och CV, för att bedöma ansökan, med ditt samtycke (art. 6.1 a). Statistik: hur sidan används, t.ex. sidvisningar, klick och scroll, teknisk information om enheten och ett slumpmässigt id, bara om du valt Acceptera i cookierutan (samtycke, art. 6.1 a och 9 kap. 28 § lagen om elektronisk kommunikation). Kontaktar du oss via webbplatsen använder vi dina uppgifter bara för att svara och hantera din förfrågan: inga nyhetsbrev eller marknadsföring utan ditt samtycke.",
+      },
+      {
+        title: "Kontakter med företag",
+        text: "Vi kan kontakta företag och yrkesverksamma för att presentera våra tjänster. Då använder vi offentliga företagskontaktuppgifter (företagets namn, e-post och telefon till företaget, företagets profil i sociala medier) från offentliga källor som företagets webbplats, Google Maps, Instagram och företagsregister eller företagskataloger. Stödet är vårt berättigade intresse av att presentera våra tjänster för företag (GDPR art. 6.1 f). Uppgifterna sparas i högst 12 månader om vi inte får svar eller om intresse saknas. Du kan när som helst be oss att inte kontakta dig igen och att radera uppgifterna, genom att svara på meddelandet eller skriva till info@mambylysolutions.se. Då gör vi det direkt.",
       },
       {
         title: "Hur länge sparar vi uppgifterna?",
@@ -729,7 +733,11 @@ const en: Copy = {
       },
       {
         title: "What data do we process, why and on what basis?",
-        text: "Contact form: name, email address, what your request is about and your message. We use this to reply and to prepare and deliver what you ask about. The basis is steps before or under a contract and our legitimate interest in answering requests (GDPR Art. 6(1)(b) and (f)). Job applications: name, email address, message and CV, to assess the application, with your consent (Art. 6(1)(a)). Statistics: how the site is used, e.g. page views, clicks and scrolling, technical information about the device and a random ID, only if you chose Accept in the cookie box (consent, Art. 6(1)(a) and Chapter 9, Section 28 of the Swedish Electronic Communications Act). We do not use your data for marketing.",
+        text: "Contact form: name, email address, what your request is about and your message. We use this to reply and to prepare and deliver what you ask about. The basis is steps before or under a contract and our legitimate interest in answering requests (GDPR Art. 6(1)(b) and (f)). Job applications: name, email address, message and CV, to assess the application, with your consent (Art. 6(1)(a)). Statistics: how the site is used, e.g. page views, clicks and scrolling, technical information about the device and a random ID, only if you chose Accept in the cookie box (consent, Art. 6(1)(a) and Chapter 9, Section 28 of the Swedish Electronic Communications Act). If you contact us through the website, we use your data only to reply and to handle your request: no newsletters or marketing without your consent.",
+      },
+      {
+        title: "Contacts with businesses",
+        text: "We may contact businesses and professionals to present our services. For this we use public business contact details (the company's name, its business email and phone, its business social media profile) from public sources such as the company's website, Google Maps, Instagram and company registers or directories. The basis is our legitimate interest in presenting our services to businesses (GDPR Art. 6(1)(f)). This data is kept for at most 12 months if there is no reply or no interest. You can ask us at any time not to contact you again and to delete the data, by replying to the message or writing to info@mambylysolutions.se. We will do so straight away.",
       },
       {
         title: "How long do we keep the data?",
