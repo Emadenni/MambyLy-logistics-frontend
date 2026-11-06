@@ -108,6 +108,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     const captions = CHAPTERS.map((c) => el.querySelector<HTMLElement>(`[data-caption="${c.id}"]`));
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
     const heroFoot = el.querySelector<HTMLElement>("[data-hero-foot]");
+    const arch = el.querySelector<HTMLElement>("[data-arch]");
     const dots = [...el.querySelectorAll<HTMLElement>("[data-dot]")];
     let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
@@ -157,6 +158,13 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         dots.forEach((d) => (d.dataset.dot === here ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current")));
       }
       if (heroTitle && !reduce) heroTitle.style.opacity = (1 - seg(p, T.heroTitleOut[0], T.heroTitleOut[1])).toFixed(3);
+      // the cream opening behind the objects closes with the hero's green
+      if (arch && !reduce) {
+        const out = seg(p, 0.05, 0.13);
+        arch.style.opacity = (1 - out).toFixed(3);
+        arch.style.transform = `scale(${(1 - out * 0.12).toFixed(4)})`;
+        arch.style.visibility = out > 0.99 ? "hidden" : "";
+      }
       if (heroFoot && !reduce) {
         const out = seg(p, 0.02, 0.08);
         heroFoot.style.opacity = (1 - out).toFixed(3);
@@ -355,6 +363,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
         <div className="mp-tale__backdrop" aria-hidden="true" />
         {!still && <div ref={green} className="mp-tale__green" aria-hidden="true" />}
+        {/* hero: a cream opening in the green, behind the objects */}
+        {!still && <div className="mp-tale__arch" data-arch="" aria-hidden="true" />}
         {gl && (
           <Suspense fallback={null}>
             <StoryCanvas lang={t.lang} />

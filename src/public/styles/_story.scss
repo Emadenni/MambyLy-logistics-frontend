@@ -514,15 +514,46 @@ $cover-background:
 
     }
 
+    // Hero: a cream opening in the green, behind the objects (the green card reads on cream).
+    // Fixed like the green, under the canvas.
+    &__arch {
+      position: fixed;
+      left: 50%;
+      top: calc(96px + 10.5svh);
+      z-index: 0;
+      width: min(88vw, 420px);
+      height: min(40svh, 380px);
+      margin-left: max(-44vw, -210px);
+      border-radius: 999px 999px 32px 32px;
+      background:
+        radial-gradient(90% 70% at 50% 100%, rgba(127, 156, 144, 0.32), transparent 70%),
+        linear-gradient(180deg, #fbfaf6 0%, #f3efe4 100%);
+      box-shadow:
+        0 30px 80px rgba(5, 25, 22, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform-origin: 50% 60%;
+      pointer-events: none;
+
+      @include desk {
+        left: auto;
+        right: max(var(--x-gutter), calc((100vw - 1180px) / 2));
+        top: 50%;
+        width: min(52vw, 640px);
+        height: min(66svh, 560px);
+        margin: calc(min(66svh, 560px) / -2 + 30px) 0 0;
+        border-radius: 999px 999px 40px 40px;
+      }
+    }
+
     // Under the objects: what MambyLy does, the two ways in, and an invitation to scroll.
     &__hero-foot {
       position: absolute;
       left: var(--x-gutter);
       right: var(--x-gutter);
-      bottom: max(5svh, 28px);
+      bottom: max(3.5svh, 20px);
       display: grid;
       justify-items: center;
-      gap: 14px;
+      gap: 12px;
       text-align: center;
       pointer-events: auto;
       will-change: opacity, transform;
@@ -538,17 +569,21 @@ $cover-background:
     }
 
     &__hero-sub {
-      max-width: 26rem;
+      max-width: 22rem;
       margin: 0;
       color: rgba(246, 244, 238, 0.86);
-      font: 400 clamp(16px, 4.2vw, 19px) / 1.5 var(--mp-font);
+      font: 400 clamp(15px, 3.9vw, 19px) / 1.45 var(--mp-font);
+
+      @include desk {
+        max-width: 26rem;
+      }
     }
 
     &__hero-links {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
 
       @include desk {
         justify-content: flex-start;
@@ -558,17 +593,24 @@ $cover-background:
     &__chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      min-height: 46px;
-      padding: 0 20px;
+      gap: 6px;
+      min-height: 44px;
+      padding: 0 16px;
       border: 1px solid rgba(246, 244, 238, 0.45);
       border-radius: 999px;
       background: rgba(246, 244, 238, 0.08);
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
       color: var(--story-cream);
-      font: 500 15px / 1 var(--mp-font);
+      font: 500 14px / 1 var(--mp-font);
       text-decoration: none;
+
+      @include desk {
+        gap: 8px;
+        min-height: 46px;
+        padding: 0 20px;
+        font-size: 15px;
+      }
       transition:
         background-color 0.25s ease,
         border-color 0.25s ease;
@@ -585,6 +627,11 @@ $cover-background:
     }
 
     &__scroll {
+      // only where there is room for it
+      @media (max-height: 780px) {
+        display: none !important;
+      }
+
       display: grid;
       justify-items: center;
       gap: 8px;
@@ -621,10 +668,12 @@ $cover-background:
     &__hero {
       margin: 0;
       color: var(--story-green);
-      font: 400 clamp(52px, 13vw, 132px) / 0.95 var(--x-serif);
+      font: 400 clamp(44px, 11.6vw, 132px) / 0.95 var(--x-serif);
+      white-space: nowrap;
 
       @include desk {
         font-size: clamp(64px, 8.4vw, 124px);
+        white-space: normal;
       }
       letter-spacing: -0.02em;
 
