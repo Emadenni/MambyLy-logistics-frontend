@@ -6,7 +6,22 @@ import { publicContact } from "../../contact";
 import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
-import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, clamp, greenRadius, linkDraw, linkPulse, linksOpacity, seg, type ChapterId } from "./storyTimeline";
+import {
+  CAPTION_EDGE,
+  CHAPTERS,
+  HERO_PANEL,
+  STORY_SCREENS,
+  T,
+  band,
+  clamp,
+  greenRadius,
+  heroGreen,
+  linkDraw,
+  linkPulse,
+  linksOpacity,
+  seg,
+  type ChapterId,
+} from "./storyTimeline";
 import { story } from "./progress";
 import { hasWebGL } from "./webgl";
 import { CardPreview } from "../../digital-card/DigitalCard";
@@ -113,6 +128,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
+    let split = false;
     let copied: HTMLCanvasElement | null = null;
     const profileLayer = site.current?.querySelector<HTMLElement>("[data-layer=profile]");
     const webLayer = site.current?.querySelector<HTMLElement>("[data-layer=web]");
@@ -173,11 +189,18 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       }
       // Chapter 4: the green opens behind the card, at the moment the scene is showing.
       const shown = story.scene ? story.shown : p;
-      const radius = reduce ? 0 : greenRadius(shown);
+      // Larger screens: the hero's green is a panel on the left that slides out; phones: a full
+      // green that closes as a circle into the objects.
+      const panel = !reduce && !story.mobile ? heroGreen(shown) : 0;
+      const radius = reduce ? 0 : greenRadius(shown, story.mobile);
       const g = green.current;
       if (g) {
-        g.style.visibility = radius > 0.05 ? "visible" : "hidden";
-        if (radius > 0.05) {
+        g.style.visibility = radius > 0.05 || panel > 0.002 ? "visible" : "hidden";
+        if (panel > 0.002 && radius <= 0.05) {
+          g.style.setProperty("--fx", "18%");
+          g.style.setProperty("--fy", "45%");
+          g.style.clipPath = `inset(0 ${(100 - HERO_PANEL * 100 * panel).toFixed(2)}% 0 0)`;
+        } else if (radius > 0.05) {
           const early = shown < 0.3;
           const fx = story.scene ? story.focus.x.toFixed(1) : early ? "55" : "62";
           const fy = story.scene ? story.focus.y.toFixed(1) : early ? "55" : "45";
@@ -189,6 +212,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       if (radius > T.green.creamAbove !== dark) {
         dark = !dark;
         screen?.classList.toggle("is-dark", dark);
+      }
+      if (panel > 0.5 !== split) {
+        split = !split;
+        screen?.classList.toggle("is-split", split);
       }
       // Chapter 2: thin lines join card -> phone -> website; a light runs along each, and the brand
       // follows it (the scene switches the screens at the same moments).
@@ -289,7 +316,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
-      screen?.classList.remove("is-dark");
+      screen?.classList.remove("is-dark", "is-split");
     };
   }, [reduce]);
 

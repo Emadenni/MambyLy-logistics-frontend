@@ -64,9 +64,9 @@ export const PHONE = { w: 1.0, h: 2.06, d: 0.09 };
 export const BROWSER = { w: 3.2, h: 2.16, d: 0.06, bar: 0.16, r: 0.07 };
 
 export const CARD_FRAMES: Frame[] = [
-  // 1 hero: in front, a little left of centre, the smallest of the three
-  [0.0, pose(0.45, -1.3, 0.9, 0.22, -0.32, 0.05, 0.62)],
-  [0.12, pose(0.4, -1.2, 0.9, 0.2, -0.38, 0.05, 0.62)],
+  // 1 hero (larger screens): in front of the website's lower left corner, same angle as the others
+  [0.0, pose(0.95, -0.95, 0.8, 0.06, -0.26, 0, 0.6)],
+  [0.12, pose(0.95, -0.89, 0.8, 0.06, -0.3, 0, 0.6)],
   // 2 identity: first in the row card -> phone -> website
   [0.2, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
   [0.32, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
@@ -84,9 +84,9 @@ export const CARD_FRAMES: Frame[] = [
 export const CARD_GONE = 0.93;
 
 export const PHONE_FRAMES: Frame[] = [
-  // 1 hero: right of centre
-  [0.0, pose(2.35, -0.55, 0.35, 0.05, -0.36, 0.07)],
-  [0.12, pose(2.3, -0.5, 0.35, 0.05, -0.42, 0.07)],
+  // 1 hero (larger screens): in front of the website's right edge
+  [0.0, pose(3.35, -0.3, 0.5, 0.06, -0.26, 0, 0.92)],
+  [0.12, pose(3.35, -0.24, 0.5, 0.06, -0.3, 0, 0.92)],
   // 2 identity: the middle of the row
   [0.2, pose(1.45, 0.05, 0.25, 0.02, -0.06, 0, 0.72)],
   [0.32, pose(1.45, 0.05, 0.25, 0.02, -0.06, 0, 0.72)],
@@ -106,9 +106,9 @@ export const PHONE_FRAMES: Frame[] = [
 export const PHONE_SHOWN = [0, 0.92] as const;
 
 export const BROWSER_FRAMES: Frame[] = [
-  // 1 hero: left and behind, the largest
-  [0.0, pose(-1.55, -0.6, -0.7, 0.05, 0.34, -0.02, 0.86)],
-  [0.12, pose(-1.5, -0.55, -0.7, 0.05, 0.3, -0.02, 0.86)],
+  // 1 hero (larger screens): the website, right of the green panel; phone and card in front of it
+  [0.0, pose(1.85, 0.22, -0.4, 0.06, -0.26, 0, 0.95)],
+  [0.12, pose(1.85, 0.28, -0.4, 0.06, -0.3, 0, 0.95)],
   // 2 identity: last in the row
   [0.2, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
   [0.32, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
@@ -122,10 +122,6 @@ export const BROWSER_FRAMES: Frame[] = [
   [0.62, pose(-3.8, 2.4, -4.5, 0.2, 0.5, -0.05, 0.6)],
 ];
 export const BROWSER_GONE = 0.64;
-
-/** Larger screens: in the hero the objects stand right of the title and its text. */
-export const heroDeskShift = (p: number) => 1.05 * (1 - seg(p, 0.1, 0.2));
-export const heroDeskScale = (p: number) => 1 - 0.2 * (1 - seg(p, 0.1, 0.2));
 
 /**
  * Phones: objects higher (the text sits below) and closer together. Keyframes stay the desktop
@@ -162,11 +158,19 @@ const scanOnPhone = (p: number) => seg(p, 0.73, 0.76) * (1 - seg(p, 0.85, 0.88))
 const PHONE_SCAN_CARD: PhonePose = [pose(-0.5, 1.3, 0, 0.08, -Math.PI - 0.3, 0.02, 0.6), scanOnPhone];
 const PHONE_SCAN_PHONE: PhonePose = [pose(1.2, 1.32, 0.9, 0.02, -0.35, 0.03, 0.82), scanOnPhone];
 
+/** Hero on phones: the three stacked in the middle, the card in front (larger screens: HERO frames). */
+const heroOnPhone = (p: number) => 1 - seg(p, 0.1, 0.18);
+const PHONE_HERO = {
+  card: [pose(0.19, 0.08, 0.9, 0.22, -0.32, 0.05, 0.62), heroOnPhone] as PhonePose,
+  phone: [pose(0.99, 0.64, 0.35, 0.05, -0.36, 0.07, 1), heroOnPhone] as PhonePose,
+  browser: [pose(-0.65, 0.6, -0.7, 0.05, 0.34, -0.02, 0.86), heroOnPhone] as PhonePose,
+};
+
 /** Every object's own poses on phones. */
 export const PHONE_POSES: Record<"card" | "phone" | "browser", PhonePose[]> = {
-  card: [[PHONE_ROW.card, identityRow], PHONE_SCAN_CARD],
-  phone: [[PHONE_ROW.phone, identityRow], PHONE_SCAN_PHONE],
-  browser: [[PHONE_ROW.browser, identityRow], PHONE_SITE, PHONE_SITE_TURNED],
+  card: [PHONE_HERO.card, [PHONE_ROW.card, identityRow], PHONE_SCAN_CARD],
+  phone: [PHONE_HERO.phone, [PHONE_ROW.phone, identityRow], PHONE_SCAN_PHONE],
+  browser: [PHONE_HERO.browser, [PHONE_ROW.browser, identityRow], PHONE_SITE, PHONE_SITE_TURNED],
 };
 
 // -------------------------------------------------------------------------------------------------
@@ -238,8 +242,12 @@ export const siteDemoAt = (p: number) => clamp((p - T.demos[0]) / (T.demos[1] - 
 /** Exploded card at p: 0 = one card, 1 = three layers apart. */
 export const explode = (p: number) => seg(p, T.explode.in[0], T.explode.in[1]) * (1 - seg(p, T.explode.out[0], T.explode.out[1]));
 /** Radius of the green background, in % of the viewport diagonal circle. */
-export const greenRadius = (p: number) =>
-  Math.max(1 - seg(p, T.heroGreen[0], T.heroGreen[1]), seg(p, T.green.in[0], T.green.in[1]) * (1 - seg(p, T.green.out[0], T.green.out[1]))) * 150;
+export const greenRadius = (p: number, hero = true) =>
+  Math.max(hero ? heroGreen(p) : 0, seg(p, T.green.in[0], T.green.in[1]) * (1 - seg(p, T.green.out[0], T.green.out[1]))) * 150;
+/** How much of the hero's green is there (1 at the top, 0 from chapter 2). */
+export const heroGreen = (p: number) => 1 - seg(p, T.heroGreen[0], T.heroGreen[1]);
+/** Larger screens: the hero's green is a panel on the left, this wide (share of the window). */
+export const HERO_PANEL = 0.42;
 
 /** Exploded view (chapter 4): how far front and back sheets move from the core, in world units. */
 export const EXPLODE_GAP = 0.95;

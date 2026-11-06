@@ -176,13 +176,20 @@ $cover-background:
     --story-sage-soft: #cfdcd4;
     --story-muted: #5d6b66;
 
-    // The bar floats over the scene instead of taking a row of the page.
+    // The bar floats over the scene instead of taking a row of the page: always white, whatever
+    // the chapter behind it.
     .mp-bar {
       position: fixed;
       inset: 0 0 auto;
-      background: transparent;
-      -webkit-backdrop-filter: none;
-      backdrop-filter: none;
+      background: #ffffff;
+      box-shadow: 0 1px 0 rgba(16, 59, 53, 0.08);
+    }
+
+    // a larger logo on phones
+    @media (max-width: 759px) {
+      .mp-bar__logo img {
+        width: 138px;
+      }
     }
 
     .mp-screen__main {
@@ -196,12 +203,7 @@ $cover-background:
     }
 
     .mp-tale__title,
-    .mp-tale__text,
-    .mp-bar__logo img,
-    .mp-bar__crumbs,
-    .mp-lang__btn,
-    .mp-menu__toggle,
-    .mp-bar__contact {
+    .mp-tale__text {
       transition:
         color 0.45s ease,
         background-color 0.45s ease,
@@ -213,7 +215,14 @@ $cover-background:
       background: var(--story-cream);
     }
 
-    // On the green of chapter 4 the text and the header turn cream.
+    // Larger screens, hero: the text column is on the green panel.
+    &.is-split {
+      .mp-tale__hero {
+        color: var(--story-cream);
+      }
+    }
+
+    // On the green the text turns cream (the header stays white).
     &.is-dark {
       .mp-tale__title {
         color: var(--story-cream);
@@ -221,34 +230,6 @@ $cover-background:
 
       .mp-tale__text {
         color: rgba(246, 244, 238, 0.78);
-      }
-
-      .mp-bar__logo img {
-        filter: brightness(0) invert(0.96);
-      }
-
-      .mp-bar__crumbs,
-      .mp-bar__crumbs * {
-        color: rgba(246, 244, 238, 0.82);
-      }
-
-      .mp-lang__btn,
-      .mp-menu__toggle {
-        border-color: rgba(246, 244, 238, 0.45);
-        background: rgba(246, 244, 238, 0.08);
-        color: var(--story-cream);
-
-        &[aria-pressed="true"] {
-          border-color: var(--story-cream);
-          background: var(--story-cream);
-          color: var(--story-green);
-        }
-      }
-
-      .mp-bar__contact {
-        border-color: var(--story-cream);
-        background: var(--story-cream);
-        color: var(--story-green);
       }
 
       .mp-tale__dots button span {
@@ -510,8 +491,8 @@ $cover-background:
         // larger screens: title and text on the left, the objects on the right
         @include desk {
           justify-self: start;
-          max-width: min(46vw, 40rem);
-          padding-top: 12svh;
+          max-width: min(36vw, 40rem);
+          padding-top: 14svh;
           text-align: left;
         }
       }
@@ -539,10 +520,7 @@ $cover-background:
       pointer-events: none;
 
       @include desk {
-        left: 68%;
-        top: 52%;
-        width: 78vw;
-        height: 105svh;
+        display: none;
       }
     }
 
@@ -563,7 +541,7 @@ $cover-background:
         left: max(var(--x-gutter), calc((100vw - 1180px) / 2));
         right: auto;
         bottom: max(9svh, 48px);
-        max-width: min(34vw, 27rem);
+        max-width: min(34vw, 27rem, 42vw - 2 * var(--x-gutter));
         justify-items: start;
         text-align: left;
       }
@@ -673,7 +651,7 @@ $cover-background:
       white-space: nowrap;
 
       @include desk {
-        font-size: clamp(64px, 8.4vw, 124px);
+        font-size: clamp(60px, 7vw, 112px);
         white-space: normal;
       }
       letter-spacing: -0.02em;
