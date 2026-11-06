@@ -160,6 +160,59 @@ $story-desk: 760px;
       position: relative;
       z-index: 1;
     }
+
+    .mp-tale__title,
+    .mp-tale__text,
+    .mp-bar__logo img,
+    .mp-bar__crumbs,
+    .mp-lang__btn,
+    .mp-menu__toggle,
+    .mp-bar__contact {
+      transition:
+        color 0.45s ease,
+        background-color 0.45s ease,
+        border-color 0.45s ease,
+        filter 0.45s ease;
+    }
+
+    // On the green of chapter 4 the text and the header turn cream.
+    &.is-dark {
+      .mp-tale__title {
+        color: var(--story-cream);
+      }
+
+      .mp-tale__text {
+        color: rgba(246, 244, 238, 0.78);
+      }
+
+      .mp-bar__logo img {
+        filter: brightness(0) invert(0.96);
+      }
+
+      .mp-bar__crumbs,
+      .mp-bar__crumbs * {
+        color: rgba(246, 244, 238, 0.82);
+      }
+
+      .mp-lang__btn,
+      .mp-menu__toggle {
+        border-color: rgba(246, 244, 238, 0.45);
+        background: rgba(246, 244, 238, 0.08);
+        color: var(--story-cream);
+
+        &[aria-pressed="true"] {
+          border-color: var(--story-cream);
+          background: var(--story-cream);
+          color: var(--story-green);
+        }
+      }
+
+      .mp-bar__contact {
+        border-color: var(--story-cream);
+        background: var(--story-cream);
+        color: var(--story-green);
+      }
+    }
   }
 
   .mp-tale {
@@ -189,6 +242,22 @@ $story-desk: 760px;
     // One screen taller than its share, minus one screen of margin: the chapter still starts at its
     // place in the story, and its sticky caption stays on screen for the whole chapter (consecutive
     // chapters overlap by one screen, where one caption fades out and the next fades in).
+    // Chapter 4: deep green that opens as a circle behind the card (StoryPage sets clip-path and the
+    // centre --fx/--fy every frame). Under the canvas, over the page.
+    &__green {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100lvh;
+      z-index: 0;
+      background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), #22584d 0, var(--story-green) 48%, #0a2723 100%);
+      clip-path: circle(0% at 50% 50%);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
     &__chapter {
       position: relative;
       z-index: 1;

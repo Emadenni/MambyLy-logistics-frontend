@@ -1,15 +1,17 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { easing } from "maath";
 import type { Lang } from "../routes";
-import { CARD, CARD_FRAMES, CARD_GONE, MOBILE, PHONE_FRAMES, kf, seg, type Pose } from "./storyTimeline";
+import { CARD, CARD_FRAMES, CARD_GONE, EXPLODE_GAP, MOBILE, PHONE_FRAMES, explode, kf, seg, type Pose } from "./storyTimeline";
 import { story } from "./progress";
 import CardModel from "./CardModel";
 import PaperCards from "./PaperCards";
 import PhoneModel from "./PhoneModel";
 import NfcRings from "./NfcRings";
+import CardCore from "./CardCore";
+import Floaters from "./Floaters";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
 const LAG = { card: 0.32, phone: 0.24 };
@@ -62,13 +64,27 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
     pose.y -= left * INTRO.drop;
     pose.rx += left * 0.5;
   });
-  useFrame(() => {
-    if (ref.current) ref.current.visible = story.shown < CARD_GONE;
+  const front = useRef<THREE.Group>(null);
+  const back = useRef<THREE.Group>(null);
+  const at = useMemo(() => new THREE.Vector3(), []);
+  useFrame(({ camera }) => {
+    const g = ref.current;
+    if (!g) return;
+    g.visible = story.shown < CARD_GONE;
+    // chapter 4: the sheets move apart along the card's own depth and show its inside
+    const ex = explode(story.shown) * EXPLODE_GAP;
+    if (front.current) front.current.position.z = ex;
+    if (back.current) back.current.position.z = -ex;
+    // where the card is on screen, for the green background that opens behind it
+    at.setFromMatrixPosition(g.matrixWorld).project(camera);
+    story.focus.x = (at.x + 1) * 50;
+    story.focus.y = (1 - at.y) * 50;
   });
   return (
     <group ref={ref}>
-      <CardModel lang={lang}>
+      <CardModel lang={lang} frontRef={front} backRef={back}>
         <NfcRings />
+        <CardCore />
       </CardModel>
     </group>
   );
@@ -95,6 +111,40 @@ const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
   );
 };
 
+/**
+ * Compiles every material of the scene ahead of time (objects of later chapters are hidden, and a
+ * shader compiled on first sight stalls the frame where it appears). Twice: the card and phone
+ * graphics arrive a moment later and change their materials.
+ */
+const Warmup: React.FC = () => {
+  const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
+  useEffect(() => {
+    const run = () => {
+      const hidden: THREE.Object3D[] = [];
+      scene.traverse((o) => {
+        if (!o.visible) {
+          hidden.push(o);
+          o.visible = true;
+        }
+      });
+      gl.compile(scene, camera);
+      // one real frame off screen: the glass (transmission) pass and its shader variants are set up
+      // on the first frame that draws it
+      const target = new THREE.WebGLRenderTarget(64, 64);
+      gl.setRenderTarget(target);
+      gl.render(scene, camera);
+      gl.setRenderTarget(null);
+      target.dispose();
+      hidden.forEach((o) => (o.visible = false));
+    };
+    const ids = [1200, 3500].map((ms) => window.setTimeout(run, ms));
+    return () => ids.forEach((id) => window.clearTimeout(id));
+  }, [gl, scene, camera]);
+  return null;
+};
+
 /** Narrow screens see less of the world at fov 30: the whole scene shrinks until the card fits. */
 const FIT_WIDTH = CARD.w * 1.18;
 const Fit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -105,7 +155,9 @@ const Fit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 /** Damped progress shared by the scene, so every object reads the same moment. */
 const Clock: React.FC = () => {
+  useEffect(() => () => void (story.scene = false), []);
   useFrame((_, dt) => {
+    story.scene = true;
     easing.damp(story, "shown", story.p, LAG.card, dt);
   });
   return null;
@@ -141,10 +193,12 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
       }}
     >
       <Clock />
+      <Warmup />
       <Studio />
       <Fit>
         <Card lang={lang} />
         <PaperCards />
+        <Floaters />
         <Phone lang={lang} />
       </Fit>
     </Canvas>

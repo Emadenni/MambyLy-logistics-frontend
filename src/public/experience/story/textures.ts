@@ -298,3 +298,58 @@ export const profileTexture = async (lang: Lang, labels: { save: string; email: 
   button(labels.website, cy + 770, false);
   return texture(c);
 };
+
+// -------------------------------------------------------------------------------------------------
+// Token icons (chapter 4): thin green line icons on sage
+// -------------------------------------------------------------------------------------------------
+
+export type TokenIcon = "phone" | "mail" | "pin" | "web" | "link";
+
+export const iconTexture = (icon: TokenIcon) => {
+  const S = 256;
+  const [c, x] = canvas(S, S);
+  x.fillStyle = "#cfdcd4";
+  x.fillRect(0, 0, S, S);
+  x.strokeStyle = C.green;
+  x.fillStyle = C.green;
+  x.lineWidth = 12;
+  x.lineCap = "round";
+  x.lineJoin = "round";
+  x.translate(S / 2, S / 2);
+  x.beginPath();
+  if (icon === "phone") {
+    x.roundRect(-34, -56, 68, 112, 14);
+    x.stroke();
+    x.beginPath();
+    x.moveTo(-10, 38);
+    x.lineTo(10, 38);
+  } else if (icon === "mail") {
+    x.roundRect(-58, -40, 116, 80, 10);
+    x.stroke();
+    x.beginPath();
+    x.moveTo(-56, -36);
+    x.lineTo(0, 6);
+    x.lineTo(56, -36);
+  } else if (icon === "pin") {
+    x.moveTo(0, 60);
+    x.bezierCurveTo(-30, 20, -46, -2, -46, -22);
+    x.arc(0, -22, 46, Math.PI, 0);
+    x.bezierCurveTo(46, -2, 30, 20, 0, 60);
+    x.stroke();
+    x.beginPath();
+    x.arc(0, -22, 15, 0, Math.PI * 2);
+  } else if (icon === "web") {
+    x.arc(0, 0, 56, 0, Math.PI * 2);
+    x.stroke();
+    x.beginPath();
+    x.ellipse(0, 0, 24, 56, 0, 0, Math.PI * 2);
+    x.moveTo(-56, 0);
+    x.lineTo(56, 0);
+  } else {
+    x.rotate(-Math.PI / 4);
+    x.roundRect(-60, -20, 64, 40, 20);
+    x.roundRect(-4, -20, 64, 40, 20);
+  }
+  x.stroke();
+  return texture(c);
+};

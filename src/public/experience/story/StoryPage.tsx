@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useCopy } from "../i18n";
-import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, seg, type ChapterId } from "./storyTimeline";
+import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, greenRadius, seg, type ChapterId } from "./storyTimeline";
 import { story } from "./progress";
 
 // The 3D scene is a separate bundle, loaded once the page is on screen.
@@ -21,6 +21,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const reduce = useReducedMotion() ?? false;
   const root = useRef<HTMLDivElement>(null);
   const debug = useRef<HTMLDivElement>(null);
+  const green = useRef<HTMLDivElement>(null);
   const [gl, setGl] = useState(false);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
@@ -62,6 +63,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     if (!el) return;
     const captions = CHAPTERS.map((c) => el.querySelector<HTMLElement>(`[data-caption="${c.id}"]`));
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
+    const screen = el.closest<HTMLElement>(".mp-screen");
+    let dark = false;
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -84,6 +87,24 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
       if (heroTitle && !reduce) heroTitle.style.opacity = (1 - seg(p, T.heroTitleOut[0], T.heroTitleOut[1])).toFixed(3);
+      // Chapter 4: the green opens behind the card, at the moment the scene is showing.
+      const shown = story.scene ? story.shown : p;
+      const radius = reduce ? 0 : greenRadius(shown);
+      const g = green.current;
+      if (g) {
+        g.style.visibility = radius > 0.05 ? "visible" : "hidden";
+        if (radius > 0.05) {
+          const fx = story.scene ? story.focus.x.toFixed(1) : "62";
+          const fy = story.scene ? story.focus.y.toFixed(1) : "45";
+          g.style.setProperty("--fx", `${fx}%`);
+          g.style.setProperty("--fy", `${fy}%`);
+          g.style.clipPath = `circle(${radius.toFixed(2)}% at ${fx}% ${fy}%)`;
+        }
+      }
+      if (radius > T.green.creamAbove !== dark) {
+        dark = !dark;
+        screen?.classList.toggle("is-dark", dark);
+      }
       if (debug.current) {
         frames++;
         const now = performance.now();
@@ -97,7 +118,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       }
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(frame);
+      screen?.classList.remove("is-dark");
+    };
   }, [reduce]);
 
   // The scene loads after the first paint, when the browser is idle.
@@ -127,6 +151,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
   return (
     <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
+      <div ref={green} className="mp-tale__green" aria-hidden="true" />
       {gl && (
         <Suspense fallback={null}>
           <StoryCanvas lang={t.lang} />

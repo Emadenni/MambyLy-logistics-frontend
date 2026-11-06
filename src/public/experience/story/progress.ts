@@ -8,6 +8,10 @@ export const story = {
   /** The story is on screen (false while the home veil is down). */
   active: false,
   shown: 0,
+  /** The 3D scene is running (until then `shown` means nothing). */
+  scene: false,
   mobile: false,
   pointer: { x: 0, y: 0 },
+  /** The card on screen, in % of the viewport (written by the scene). */
+  focus: { x: 50, y: 50 },
 };

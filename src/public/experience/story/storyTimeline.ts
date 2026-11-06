@@ -103,3 +103,20 @@ export const CHAPTERS: { id: ChapterId; from: number; to: number }[] = [
 /** Scroll length of the whole story, in viewport heights (the page is this plus one screen). */
 export const STORY_SCREENS = 10;
 export const CAPTION_EDGE = 0.04;
+
+/** Exploded view (chapter 4): how far front and back sheets move from the core, in world units. */
+export const EXPLODE_GAP = 0.95;
+
+/** Chapter 4 floaters around the card centre: [x, y, z]. Tokens carry an icon; glass is desktop only. */
+export const TOKENS: { icon: "phone" | "mail" | "pin" | "web" | "link"; at: [number, number, number] }[] = [
+  { icon: "phone", at: [-2.7, 1.25, -0.6] },
+  { icon: "mail", at: [2.55, 1.55, 0.4] },
+  { icon: "pin", at: [2.95, -0.85, -1.2] },
+  { icon: "web", at: [-2.35, -1.45, 0.8] },
+  { icon: "link", at: [0.35, -2.05, -1.8] },
+];
+export const GLASS: [number, number, number][] = [
+  [-1.35, 2.0, -1.6],
+  [1.55, -1.95, 0.9],
+  [3.3, 0.55, -0.4],
+];
