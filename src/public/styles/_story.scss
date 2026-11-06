@@ -4,6 +4,12 @@
 
 $story-desk: 760px;
 
+// The home cover's background: ivory, the glass waves, a green glow from the lower right.
+$cover-background:
+  radial-gradient(120% 60% at 70% 105%, rgba(36, 123, 103, 0.32), transparent 60%),
+  url("/media/mambyly/hero-glass-1024.webp") center / cover no-repeat,
+  #f6f4ee;
+
 @mixin desk {
   @media (min-width: $story-desk) {
     @content;
@@ -31,14 +37,11 @@ $story-desk: 760px;
       cursor: grabbing;
     }
 
-    // The silk's resting colours (VeilCanvas fragment shader): cream, sage in the lower corners.
+    // The cover's background (as before the veil); VeilCanvas prints the same layers on the silk.
     &__silk {
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(58% 47% at 100% 100%, rgba(127, 156, 144, 0.24), rgba(127, 156, 144, 0.16) 33%, rgba(127, 156, 144, 0.05) 67%, transparent),
-        radial-gradient(75% 58% at 0% 100%, rgba(127, 156, 144, 0.34), rgba(127, 156, 144, 0.24) 33%, rgba(127, 156, 144, 0.08) 67%, transparent),
-        var(--x-ivory);
+      background: $cover-background;
     }
 
     // The logo's centre sits at 43% of the height, the tagline below it.
@@ -242,6 +245,19 @@ $story-desk: 760px;
     // One screen taller than its share, minus one screen of margin: the chapter still starts at its
     // place in the story, and its sticky caption stays on screen for the whole chapter (consecutive
     // chapters overlap by one screen, where one caption fades out and the next fades in).
+    // The same background as the veil, fixed behind the whole story.
+    &__backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100lvh;
+      z-index: 0;
+      background: $cover-background;
+      pointer-events: none;
+    }
+
     // Chapter 4: deep green that opens as a circle behind the card (StoryPage sets clip-path and the
     // centre --fx/--fy every frame). Under the canvas, over the page.
     &__green {

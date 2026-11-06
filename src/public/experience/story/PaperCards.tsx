@@ -26,7 +26,7 @@ const CARDS: [number, number, number, number, number, number][] = [
 ];
 const PHONE_COUNT = 6;
 const SIZE = 0.52;
-const LAG = 0.28;
+const LAG = 0.16;
 
 const PaperCards: React.FC = () => {
   const refs = useRef<(THREE.Group | null)[]>([]);

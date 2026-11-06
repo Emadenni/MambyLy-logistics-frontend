@@ -9,7 +9,7 @@ import { iconTexture } from "./textures";
 
 /** Where the card is in chapter 4 (CARD_FRAMES 0.53–0.64), desktop and phones. */
 const CENTER = { desk: [1.0, 0.15], phone: [0, 1.25] } as const;
-const LAG = 0.35;
+const LAG = 0.2;
 
 const amountAt = (p: number) => seg(p, T.floaters.in[0], T.floaters.in[1]) * (1 - seg(p, T.floaters.out[0], T.floaters.out[1]));
 

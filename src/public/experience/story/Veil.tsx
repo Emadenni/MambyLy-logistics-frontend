@@ -17,7 +17,7 @@ const BACK_S = 1.1;
 const LOWER_S = 0.9;
 const REDUCED_S = 0.3;
 /** What of the page underneath zooms in and sharpens while the veil opens (the visible screen). */
-const UNDER = ".mp-under .mp-bar, .mp-under .mp-tale__gl, .mp-under .mp-tale__chapter--hero";
+const UNDER = ".mp-under .mp-bar, .mp-under .mp-tale__backdrop, .mp-under .mp-tale__gl, .mp-under .mp-tale__chapter--hero";
 
 const hasWebGL = () => {
   try {

@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
  * Returns the cleanup.
  */
 export const startScroll = (root: HTMLElement, smooth: boolean) => {
-  const lenis = smooth ? new Lenis({ autoRaf: false, lerp: 0.09 }) : null;
+  const lenis = smooth ? new Lenis({ autoRaf: false, lerp: 0.16 }) : null;
   const raf = (time: number) => lenis?.raf(time * 1000);
   if (lenis) {
     lenis.on("scroll", ScrollTrigger.update);

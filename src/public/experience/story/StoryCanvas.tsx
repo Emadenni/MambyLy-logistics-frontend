@@ -14,7 +14,7 @@ import CardCore from "./CardCore";
 import Floaters from "./Floaters";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
-const LAG = { card: 0.32, phone: 0.24 };
+const LAG = { card: 0.16, phone: 0.13 };
 /** The card floats up from below when the story first shows (after the veil, or on arrival). */
 const INTRO = { s: 1.6, drop: 2.8 };
 

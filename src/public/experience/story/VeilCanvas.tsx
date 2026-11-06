@@ -26,8 +26,9 @@ void main(){
   gl_Position = projectionMatrix * viewMatrix * w;
 }`;
 
-// The prototype's silk. One change: the diffuse term is divided by its value on the flat veil
-// (FLAT), so the resting silk is exactly the site's cream and the HTML stand-in matches it.
+// The prototype's silk. Changes: the diffuse term is divided by its value on the flat veil (FLAT),
+// so the resting silk shows its print with the colours of the HTML stand-in; the print (uMap) is
+// the whole cover, background included, and the light streak lies over it.
 const fragmentShader = /* glsl */ `
 uniform sampler2D uMap; uniform float uP; uniform vec3 uCream, uSage, uGreen, uGreen2;
 varying vec2 vUv; varying vec3 vWorld; varying float vAbove;
@@ -45,10 +46,10 @@ void main(){
     float g = max(smoothstep(.75,.0,length((vUv-vec2(0.,0.))*vec2(1.0,1.3))),
                   smoothstep(.7,.0,length((vUv-vec2(1.,0.))*vec2(1.2,1.5))));
     col = mix(uCream, uSage, g*.55);
-    float streak = smoothstep(.006,.0,abs(vUv.y-(.92+.25*sin(vUv.x*2.2+.6)))) * smoothstep(.2,.9,vUv.x);
-    col += vec3(1.0)*streak*.35;
     vec4 tx = texture2D(uMap, vUv);
     col = mix(col, tx.rgb, tx.a);
+    float streak = smoothstep(.006,.0,abs(vUv.y-(.92+.25*sin(vUv.x*2.2+.6)))) * smoothstep(.2,.9,vUv.x);
+    col += vec3(1.0)*streak*.18;
     col = col*diff + vec3(1.0)*spec*.28 + vec3(1.0)*sheen*.12;
     if (uP > 0.001 && vAbove > 0.0) col *= 1.0 - .22*exp(-vAbove*2.2);
   } else {
@@ -60,9 +61,28 @@ void main(){
   #include <colorspace_fragment>
 }`;
 
+const COVER_IMAGE = "/media/mambyly/hero-glass-1024.webp";
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement | null>((ok) => {
+    const img = new Image();
+    img.onload = () => ok(img);
+    img.onerror = () => ok(null);
+    img.src = src;
+  });
+
+/** CSS "background-size: cover; background-position: center" on a 2D canvas. */
+const drawCover = (ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) => {
+  const s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+  const dw = img.naturalWidth * s;
+  const dh = img.naturalHeight * s;
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+};
+
 /**
- * The print on the silk: logo and tagline drawn where the HTML ones are on screen, so the switch
- * from the HTML stand-in to the silk shows no jump. The texture covers the whole (oversized) plane.
+ * The print on the silk: the cover's background (the same layers as .mp-veil__silk in CSS), then
+ * logo and tagline drawn where the HTML ones are on screen, so the switch from the HTML stand-in to
+ * the silk shows no jump. The texture covers the whole (oversized) plane.
  */
 const drawPrint = async (brand: HTMLElement) => {
   await document.fonts.ready;
@@ -79,7 +99,22 @@ const drawPrint = async (brand: HTMLElement) => {
   canvas.height = Math.round(H * scale);
   const ctx = canvas.getContext("2d")!;
   ctx.scale(scale, scale);
+  const photo = await loadImage(COVER_IMAGE);
+  ctx.fillStyle = "#f6f4ee";
+  ctx.fillRect(0, 0, W, H);
+  if (photo) drawCover(ctx, photo, 0, 0, W, H);
   ctx.translate((W - vw) / 2, (H - vh) / 2);
+  if (photo) drawCover(ctx, photo, 0, 0, vw, vh);
+  // radial-gradient(120% 60% at 70% 105%, rgba(36, 123, 103, 0.32), transparent 60%)
+  ctx.save();
+  ctx.translate(vw * 0.7, vh * 1.05);
+  ctx.scale(1, (vh * 0.6) / (vw * 1.2));
+  const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, vw * 1.2);
+  glow.addColorStop(0, "rgba(36, 123, 103, 0.32)");
+  glow.addColorStop(0.6, "rgba(36, 123, 103, 0)");
+  ctx.fillStyle = glow;
+  ctx.fillRect(-vw * 1.3, -vw * 1.3, vw * 2.6, vw * 2.6);
+  ctx.restore();
   if (img) {
     const r = img.getBoundingClientRect();
     ctx.drawImage(img, r.left, r.top, r.width, r.height);

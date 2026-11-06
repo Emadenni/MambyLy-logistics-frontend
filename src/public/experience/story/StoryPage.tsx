@@ -151,6 +151,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
   return (
     <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
+      <div className="mp-tale__backdrop" aria-hidden="true" />
       <div ref={green} className="mp-tale__green" aria-hidden="true" />
       {gl && (
         <Suspense fallback={null}>
