@@ -63,6 +63,16 @@ void main(){
 
 const COVER_IMAGE = "/media/mambyly/hero-glass-1024.webp";
 
+/**
+ * Green glows on the cream silk, as [width, height, x, y] shares of the window, colour and where it
+ * fades out (the same layers as .mp-veil__silk in _story.scss).
+ */
+const VEIL_GREENS: [number, number, number, number, string, number][] = [
+  [1.2, 0.6, 0.7, 1.05, "rgba(36, 123, 103, 0.42)", 0.6],
+  [0.85, 0.55, 0.0, 0.0, "rgba(16, 59, 53, 0.62)", 0.66],
+  [0.6, 0.45, 1.0, 0.42, "rgba(29, 80, 71, 0.48)", 0.66],
+];
+
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement | null>((ok) => {
     const img = new Image();
@@ -106,21 +116,29 @@ const drawPrint = async (brand: HTMLElement) => {
   ctx.translate((W - vw) / 2, (H - vh) / 2);
   if (photo) drawCover(ctx, photo, 0, 0, vw, vh);
   // radial-gradient(120% 60% at 70% 105%, rgba(36, 123, 103, 0.32), transparent 60%)
-  ctx.save();
-  ctx.translate(vw * 0.7, vh * 1.05);
-  ctx.scale(1, (vh * 0.6) / (vw * 1.2));
-  const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, vw * 1.2);
-  glow.addColorStop(0, "rgba(36, 123, 103, 0.32)");
-  glow.addColorStop(0.6, "rgba(36, 123, 103, 0)");
-  ctx.fillStyle = glow;
-  ctx.fillRect(-vw * 1.3, -vw * 1.3, vw * 2.6, vw * 2.6);
-  ctx.restore();
+  // the green glows of .mp-veil__silk: radial-gradient(w h at x y, colour, transparent stop)
+  for (const [w, h, x, y, colour, stop] of VEIL_GREENS) {
+    ctx.save();
+    ctx.translate(vw * x, vh * y);
+    ctx.scale(1, (vh * h) / (vw * w));
+    const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, vw * w);
+    glow.addColorStop(0, colour);
+    glow.addColorStop(stop, colour.replace(/[\d.]+\)$/, "0)"));
+    ctx.fillStyle = glow;
+    ctx.fillRect(-vw * 3, -vw * 3, vw * 6, vw * 6);
+    ctx.restore();
+  }
+  // Positions are taken relative to the veil, not the window: when the veil comes back down from
+  // Utforska it is still lifted while this runs.
+  const veilEl = brand.closest<HTMLElement>(".mp-veil");
+  const origin = veilEl?.getBoundingClientRect() ?? { left: 0, top: 0 };
   if (img) {
     const r = img.getBoundingClientRect();
-    ctx.drawImage(img, r.left, r.top, r.width, r.height);
+    ctx.drawImage(img, r.left - origin.left, r.top - origin.top, r.width, r.height);
   }
   if (line) {
-    const r = line.getBoundingClientRect();
+    const r0 = line.getBoundingClientRect();
+    const r = { left: r0.left - origin.left, top: r0.top - origin.top, width: r0.width, height: r0.height };
     const cs = getComputedStyle(line);
     ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     if ("letterSpacing" in ctx) (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
