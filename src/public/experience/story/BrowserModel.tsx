@@ -4,10 +4,11 @@ import { useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import type { Lang } from "../routes";
 import { media } from "../media";
-import { BROWSER, SITE_DEMOS, brandSiteShown, siteDemoAt, siteLayers } from "./storyTimeline";
+import { BROWSER, SITE_DEMOS, brandSiteShown, seg, siteDemoAt, siteLayers } from "./storyTimeline";
 import { story } from "./progress";
 import { brandPageTexture } from "./textures";
 import { cardShape, faceGeometry } from "./CardModel";
+import { scrollPage, useScrollingPage } from "./scrollingPage";
 
 /** Website pictures as lit screen textures: MambyLy's real demos, loaded once per language. */
 const useDemoTextures = (lang: Lang) => {
@@ -88,11 +89,14 @@ const BrowserModel: React.FC<{ lang: Lang; anchor?: React.RefObject<THREE.Object
   const screenA = useRef<THREE.Mesh>(null);
   const screenB = useRef<THREE.MeshBasicMaterial>(null);
   const brandLayer = useRef<THREE.MeshBasicMaterial>(null);
+  const heroLayer = useRef<THREE.MeshBasicMaterial>(null);
   const layers = useRef<(THREE.Mesh | null)[]>([]);
   const inset = 0.05;
   const screenW = BROWSER.w - inset * 2;
   const screenH = BROWSER.h - BROWSER.bar - inset;
   const screen = useMemo(() => faceGeometry(cardShape(screenW, screenH, 0.03), screenW, screenH), [screenW, screenH]);
+  // hero: the whole house website, scrolling slowly (gives way to the still page from chapter 2)
+  const page = useScrollingPage(media(`scroll-${lang}-architecture-desktop`, 1280), { w: 1280, h: 2233 }, screenW / screenH);
   const strips = useMemo(() => LAYERS.map((l) => strip(screenW, screenH, l.from, l.to)), [screenW, screenH]);
   useEffect(
     () => () => {
@@ -105,9 +109,11 @@ const BrowserModel: React.FC<{ lang: Lang; anchor?: React.RefObject<THREE.Object
   const barY = BROWSER.h / 2 - BROWSER.bar / 2;
   const screenY = -BROWSER.bar / 2 + inset / 2;
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     const p = story.shown;
     if (brandLayer.current) brandLayer.current.opacity = brandSiteShown(p);
+    scrollPage(page, clock.elapsedTime, 1.5);
+    if (heroLayer.current) heroLayer.current.opacity = 1 - seg(p, 0.1, 0.17);
     // the demo on screen and the next one fading in over it
     const at = siteDemoAt(p);
     const i = Math.min(SITE_DEMOS.length - 1, Math.floor(at));
@@ -150,6 +156,11 @@ const BrowserModel: React.FC<{ lang: Lang; anchor?: React.RefObject<THREE.Object
       <mesh ref={screenA} geometry={screen} position={[0, screenY, z + 0.001]}>
         {demos[0] ? <meshBasicMaterial key="site" map={demos[0]} toneMapped={false} /> : <meshBasicMaterial key="blank" color="#fbfaf6" toneMapped={false} />}
       </mesh>
+      {page && (
+        <mesh geometry={screen} position={[0, screenY, z + 0.0012]}>
+          <meshBasicMaterial ref={heroLayer} map={page} toneMapped={false} transparent depthWrite={false} />
+        </mesh>
+      )}
       {demos[0] && (
         <mesh geometry={screen} position={[0, screenY, z + 0.0015]}>
           <meshBasicMaterial ref={screenB} map={demos[0]} toneMapped={false} transparent opacity={0} depthWrite={false} />

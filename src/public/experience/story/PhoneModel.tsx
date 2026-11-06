@@ -7,34 +7,27 @@ import type { Lang } from "../routes";
 import { PHONE, profileShown, savePressed, scanShown, shareShown } from "./storyTimeline";
 import { story } from "./progress";
 import { cardShape, faceGeometry } from "./CardModel";
-import { SCREEN, cameraTexture, lockTexture, profileTexture, shareTexture } from "./textures";
+import { SCREEN, cameraTexture, profileTexture, shareTexture } from "./textures";
+import { media } from "../media";
+import { scrollPage, useScrollingPage } from "./scrollingPage";
 
 const useScreens = (lang: Lang) => {
-  const [maps, setMaps] = useState<{ lock: THREE.Texture; profile: THREE.Texture; camera: THREE.Texture; share: THREE.Texture } | null>(null);
+  const [maps, setMaps] = useState<{ profile: THREE.Texture; camera: THREE.Texture; share: THREE.Texture } | null>(null);
   useEffect(() => {
     let live = true;
-    const draw = () => {
-      const s = cardStrings[lang];
-      Promise.all([lockTexture(lang), profileTexture(lang, { save: s.save, email: s.email, website: s.website }), cameraTexture(lang), shareTexture(lang)]).then(
-        ([lock, profile, camera, share]) => {
-          if (!live) return [lock, profile, camera, share].forEach((t) => t.dispose());
-          story.profile = profile.image as HTMLCanvasElement;
-          setMaps((old) => {
-            if (old) Object.values(old).forEach((t) => t.dispose());
-            return { lock, profile, camera, share };
-          });
-        },
-      );
-    };
-    draw();
-    // the lock screen shows the real time: redrawn at every new minute
-    let tick = window.setTimeout(function next() {
-      draw();
-      tick = window.setTimeout(next, 60_000);
-    }, 60_000 - (Date.now() % 60_000) + 50);
+    const s = cardStrings[lang];
+    Promise.all([profileTexture(lang, { save: s.save, email: s.email, website: s.website }), cameraTexture(lang), shareTexture(lang)]).then(
+      ([profile, camera, share]) => {
+        if (!live) return [profile, camera, share].forEach((t) => t.dispose());
+        story.profile = profile.image as HTMLCanvasElement;
+        setMaps((old) => {
+          if (old) Object.values(old).forEach((t) => t.dispose());
+          return { profile, camera, share };
+        });
+      },
+    );
     return () => {
       live = false;
-      window.clearTimeout(tick);
     };
   }, [lang]);
   useEffect(
@@ -47,8 +40,10 @@ const useScreens = (lang: Lang) => {
 };
 
 /**
- * A plain modern phone: graphite body, a screen that is lit (not shaded by the scene). The lock
- * screen fades into MambyLy's digital profile in chapter 2, and again after the scan in chapter 4.
+ * A plain modern phone: graphite body, a screen that is lit (not shaded by the scene). Its screen
+ * shows a website that scrolls by itself (the same architecture demo as the browser, mobile
+ * version); MambyLy's digital profile fades in over it in chapter 2, and again after the scan in
+ * chapter 4.
  * `screenRef` exposes the screen for the website reveal of chapter 5.
  */
 const PhoneModel: React.FC<{
@@ -57,6 +52,7 @@ const PhoneModel: React.FC<{
   anchors?: { left: React.RefObject<THREE.Object3D>; right: React.RefObject<THREE.Object3D> };
 }> = ({ lang, screenRef, anchors }) => {
   const maps = useScreens(lang);
+  const site = useScrollingPage(media(`scroll-${lang}-architecture-mobile`, 390), { w: 390, h: 2889 }, SCREEN.w / SCREEN.h);
   const profile = useRef<THREE.MeshBasicMaterial>(null);
   const camera = useRef<THREE.MeshBasicMaterial>(null);
   const scanLine = useRef<THREE.Mesh>(null);
@@ -82,6 +78,7 @@ const PhoneModel: React.FC<{
 
   useFrame(({ camera: cam, clock }) => {
     const p = story.shown;
+    scrollPage(site, clock.elapsedTime, 2.5);
     if (profile.current) profile.current.opacity = profileShown(p);
     const scan = scanShown(p);
     if (camera.current) camera.current.opacity = scan;
@@ -135,7 +132,7 @@ const PhoneModel: React.FC<{
         <meshStandardMaterial color="#2a302e" roughness={0.4} metalness={0.6} />
       </mesh>
       <mesh ref={screenMesh} geometry={screen} position-z={z + 0.0008} renderOrder={1}>
-        {maps ? <meshBasicMaterial key="lock" map={maps.lock} toneMapped={false} /> : <meshBasicMaterial key="off" color="#0a1412" toneMapped={false} />}
+        {site ? <meshBasicMaterial key="site" map={site} toneMapped={false} /> : <meshBasicMaterial key="off" color="#fbfaf6" toneMapped={false} />}
       </mesh>
       {maps && (
         <mesh geometry={screen} position-z={z + 0.0016} renderOrder={2}>

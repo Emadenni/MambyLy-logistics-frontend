@@ -196,6 +196,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       const g = green.current;
       if (g) {
         g.style.visibility = radius > 0.05 || panel > 0.002 ? "visible" : "hidden";
+        // the photo in the green belongs to the hero only
+        g.classList.toggle("is-hero", shown < 0.3);
         if (panel > 0.002 && radius <= 0.05) {
           g.style.setProperty("--fx", "18%");
           g.style.setProperty("--fy", "45%");

@@ -363,8 +363,13 @@ $cover-background:
         inset: 0;
         background: url("/media/mambyly/about-rethink-1200.webp") 30% 40% / cover no-repeat;
         filter: grayscale(1) contrast(1.1);
-        opacity: 0.16;
+        opacity: 0;
         mix-blend-mode: luminosity;
+        transition: opacity 0.5s ease;
+      }
+
+      &.is-hero::after {
+        opacity: 0.16;
       }
     }
 

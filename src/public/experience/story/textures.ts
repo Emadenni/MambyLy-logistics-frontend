@@ -164,36 +164,6 @@ const roundRect = (x: CanvasRenderingContext2D, left: number, top: number, w: nu
   x.roundRect(left, top, w, h, r);
 };
 
-/** Lock screen: time and date on a calm green wallpaper. Drawn with the current time. */
-export const lockTexture = async (lang: Lang) => {
-  await fonts();
-  const [c, x] = canvas(SW, SH);
-  const g = x.createLinearGradient(0, 0, SW * 0.4, SH);
-  g.addColorStop(0, "#2a5a4f");
-  g.addColorStop(0.6, C.green);
-  g.addColorStop(1, "#0a2723");
-  x.fillStyle = g;
-  x.fillRect(0, 0, SW, SH);
-  const glow = x.createRadialGradient(SW * 0.8, SH * 0.85, 0, SW * 0.8, SH * 0.85, SW);
-  glow.addColorStop(0, "rgba(207, 220, 212, 0.28)");
-  glow.addColorStop(1, "rgba(207, 220, 212, 0)");
-  x.fillStyle = glow;
-  x.fillRect(0, 0, SW, SH);
-  const now = new Date();
-  const locale = lang === "en" ? "en-GB" : "sv-SE";
-  x.fillStyle = C.cream;
-  x.textAlign = "center";
-  x.font = `400 ${46}px ${SANS}`;
-  const date = now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
-  x.fillText(date.charAt(0).toUpperCase() + date.slice(1), SW / 2, 300);
-  x.font = `400 ${230}px ${SANS}`;
-  x.fillText(now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }), SW / 2, 520);
-  x.fillStyle = "rgba(246, 244, 238, 0.7)";
-  roundRect(x, SW / 2 - 130, SH - 70, 260, 10, 5);
-  x.fill();
-  return texture(c);
-};
-
 /** The digital profile that opens: green banner, round mark, name, role and three buttons. */
 export const profileTexture = async (lang: Lang, labels: { save: string; email: string; website: string }) => {
   await fonts();
