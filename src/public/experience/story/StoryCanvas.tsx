@@ -1,13 +1,15 @@
 import React, { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Lightformer, RoundedBox } from "@react-three/drei";
+import { Environment, Lightformer } from "@react-three/drei";
 import { easing } from "maath";
 import type { Lang } from "../routes";
-import { CARD, CARD_FRAMES, CARD_GONE, MOBILE, PHONE, PHONE_FRAMES, kf, type Pose } from "./storyTimeline";
+import { CARD, CARD_FRAMES, CARD_GONE, MOBILE, PHONE_FRAMES, kf, seg, type Pose } from "./storyTimeline";
 import { story } from "./progress";
 import CardModel from "./CardModel";
 import PaperCards from "./PaperCards";
+import PhoneModel from "./PhoneModel";
+import NfcRings from "./NfcRings";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
 const LAG = { card: 0.32, phone: 0.24 };
@@ -65,20 +67,30 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
   });
   return (
     <group ref={ref}>
-      <CardModel lang={lang} />
+      <CardModel lang={lang}>
+        <NfcRings />
+      </CardModel>
     </group>
   );
 };
 
-const Phone: React.FC = () => {
+/** The phone is drawn only while it is part of the story (chapters 3 to 5). */
+const PHONE_SHOWN = [0.28, 0.8] as const;
+
+const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
   const ref = usePose(PHONE_FRAMES, LAG.phone, (pose) => {
-    if (story.mobile) pose.x *= MOBILE.phoneX;
+    if (story.mobile) {
+      pose.x *= MOBILE.phoneX;
+      // level with the card, until it moves to the centre for the website (chapter 5)
+      pose.y += MOBILE.cardY * (1 - seg(story.p, 0.69, 0.75));
+    }
+  });
+  useFrame(() => {
+    if (ref.current) ref.current.visible = story.shown > PHONE_SHOWN[0] && story.shown < PHONE_SHOWN[1];
   });
   return (
-    <group ref={ref}>
-      <RoundedBox args={[PHONE.w, PHONE.h, PHONE.d]} radius={0.04} smoothness={4}>
-        <meshPhysicalMaterial color="#1b1f1e" roughness={0.35} metalness={0.2} />
-      </RoundedBox>
+    <group ref={ref} visible={false}>
+      <PhoneModel lang={lang} />
     </group>
   );
 };
@@ -133,7 +145,7 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
       <Fit>
         <Card lang={lang} />
         <PaperCards />
-        <Phone />
+        <Phone lang={lang} />
       </Fit>
     </Canvas>
   </div>

@@ -43,6 +43,9 @@ const fonts = () =>
     document.fonts.load(`600 40px ${SANS}`),
     document.fonts.load(`400 40px ${SANS}`),
     document.fonts.load(`italic 400 40px ${SANS}`),
+    document.fonts.load(`500 40px ${SANS}`),
+    document.fonts.load(`700 40px ${SANS}`),
+    document.fonts.load(`400 40px "MP Newsreader"`),
   ]).then(() => document.fonts.ready));
 
 const image = (src: string) =>
@@ -174,5 +177,124 @@ export const paperTexture = (variant: number) => {
     [228, 252].forEach((y) => bar(40, y, 190, 9, 0.22));
     bar(40, 52, 54, 54, 0.15);
   }
+  return texture(c);
+};
+
+// -------------------------------------------------------------------------------------------------
+// Phone screens (chapter 3)
+// -------------------------------------------------------------------------------------------------
+
+export const SCREEN = { w: 0.92, h: 1.96, r: 0.11 };
+const SW = 900;
+const SH = Math.round((SW * SCREEN.h) / SCREEN.w);
+const SERIF = '"MP Newsreader", Georgia, serif';
+
+const LOCK_HINT: Record<Lang, string> = { sv: "Håll nära ett kort", en: "Hold near a card" };
+
+const roundRect = (x: CanvasRenderingContext2D, left: number, top: number, w: number, h: number, r: number) => {
+  x.beginPath();
+  x.roundRect(left, top, w, h, r);
+};
+
+/** Lock screen: time, date and the hint, on a calm green wallpaper. Drawn with the current time. */
+export const lockTexture = async (lang: Lang) => {
+  await fonts();
+  const [c, x] = canvas(SW, SH);
+  const g = x.createLinearGradient(0, 0, SW * 0.4, SH);
+  g.addColorStop(0, "#2a5a4f");
+  g.addColorStop(0.6, C.green);
+  g.addColorStop(1, "#0a2723");
+  x.fillStyle = g;
+  x.fillRect(0, 0, SW, SH);
+  const glow = x.createRadialGradient(SW * 0.8, SH * 0.85, 0, SW * 0.8, SH * 0.85, SW);
+  glow.addColorStop(0, "rgba(207, 220, 212, 0.28)");
+  glow.addColorStop(1, "rgba(207, 220, 212, 0)");
+  x.fillStyle = glow;
+  x.fillRect(0, 0, SW, SH);
+  const now = new Date();
+  const locale = lang === "en" ? "en-GB" : "sv-SE";
+  x.fillStyle = C.cream;
+  x.textAlign = "center";
+  x.font = `400 ${46}px ${SANS}`;
+  const date = now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" });
+  x.fillText(date.charAt(0).toUpperCase() + date.slice(1), SW / 2, 300);
+  x.font = `400 ${230}px ${SANS}`;
+  x.fillText(now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }), SW / 2, 520);
+  // the hint sits where the card will touch, with a small contactless sign
+  x.strokeStyle = "rgba(246, 244, 238, 0.85)";
+  x.lineWidth = 7;
+  x.lineCap = "round";
+  [28, 52, 76].forEach((r) => {
+    x.beginPath();
+    x.arc(SW / 2 - 40, SH - 420, r, -0.7, 0.7);
+    x.stroke();
+  });
+  x.font = `500 ${48}px ${SANS}`;
+  x.fillText(LOCK_HINT[lang], SW / 2, SH - 270);
+  x.fillStyle = "rgba(246, 244, 238, 0.7)";
+  roundRect(x, SW / 2 - 130, SH - 70, 260, 10, 5);
+  x.fill();
+  return texture(c);
+};
+
+/** The digital profile that opens: green banner, round mark, name, role and three buttons. */
+export const profileTexture = async (lang: Lang, labels: { save: string; email: string; website: string }) => {
+  await fonts();
+  const [c, x] = canvas(SW, SH);
+  const { name, role } = content(lang);
+  x.fillStyle = C.cream;
+  x.fillRect(0, 0, SW, SH);
+  const banner = 560;
+  const g = x.createLinearGradient(0, 0, SW, banner);
+  g.addColorStop(0, "#1d5047");
+  g.addColorStop(1, C.green);
+  x.fillStyle = g;
+  x.fillRect(0, 0, SW, banner);
+  x.strokeStyle = "rgba(246, 244, 238, 0.06)";
+  x.lineWidth = 3;
+  for (let d = -banner; d < SW; d += 60) {
+    x.beginPath();
+    x.moveTo(d, banner);
+    x.lineTo(d + banner, 0);
+    x.stroke();
+  }
+  // avatar: the "m" mark on a cream ring
+  const cx = SW / 2;
+  const cy = banner;
+  x.fillStyle = C.cream;
+  x.beginPath();
+  x.arc(cx, cy, 150, 0, Math.PI * 2);
+  x.fill();
+  x.fillStyle = C.green;
+  x.beginPath();
+  x.arc(cx, cy, 132, 0, Math.PI * 2);
+  x.fill();
+  x.fillStyle = "#eadcb8";
+  x.textAlign = "center";
+  x.font = `700 ${170}px ${SANS}`;
+  x.fillText("m", cx, cy + 58);
+  x.fillStyle = C.green;
+  x.font = `400 ${78}px ${SERIF}`;
+  x.fillText(name, cx, cy + 290);
+  x.fillStyle = C.muted;
+  x.font = `400 ${38}px ${SANS}`;
+  x.fillText(role, cx, cy + 360);
+  const button = (label: string, top: number, solid: boolean) => {
+    roundRect(x, 90, top, SW - 180, 120, 60);
+    if (solid) {
+      x.fillStyle = C.green;
+      x.fill();
+    } else {
+      x.lineWidth = 4;
+      x.strokeStyle = "rgba(16, 59, 53, 0.35)";
+      x.stroke();
+    }
+    x.fillStyle = solid ? C.cream : C.green;
+    x.font = `600 ${42}px ${SANS}`;
+    x.fillText(label, SW / 2, top + 76);
+  };
+  button(labels.save, cy + 470, true);
+  button(labels.email, cy + 620, false);
+  button(labels.website, cy + 770, false);
   return texture(c);
 };

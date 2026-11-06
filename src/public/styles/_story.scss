@@ -227,6 +227,11 @@ $story-desk: 760px;
       max-width: 30rem;
       will-change: opacity, transform;
 
+      // desktop: the text keeps to the left third, clear of the card
+      @include desk {
+        max-width: min(30rem, 36vw);
+      }
+
       &--hero {
         align-self: start;
         justify-self: center;
