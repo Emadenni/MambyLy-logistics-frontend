@@ -1,5 +1,9 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
+import { FiArrowRight } from "react-icons/fi";
+import { publicContact } from "../../contact";
+import { pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
 import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, greenRadius, seg, type ChapterId } from "./storyTimeline";
@@ -21,9 +25,9 @@ const PHONE_RATIO = 390 / 844; // the phone frame's screen
  */
 const windowRect = (vw: number, vh: number) => {
   if (vw >= 760) {
-    const w = Math.min(vw * 0.5, 760);
+    const w = Math.min(vw * 0.46, 720);
     const h = w / DESK_RATIO + BAR;
-    return { x: Math.min(vw * 0.47, vw - w - 48), y: (vh - h) / 2 + 24, w, h };
+    return { x: Math.min(vw * 0.45, vw - w - 110), y: (vh - h) / 2 + 24, w, h };
   }
   const w = vw - 40;
   return { x: 20, y: Math.max(96, vh * 0.13), w, h: w / DESK_RATIO + BAR };
@@ -86,6 +90,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     if (!el) return;
     const captions = CHAPTERS.map((c) => el.querySelector<HTMLElement>(`[data-caption="${c.id}"]`));
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
+    const dots = [...el.querySelectorAll<HTMLElement>("[data-dot]")];
+    let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
     let copied: HTMLCanvasElement | null = null;
@@ -115,12 +121,18 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           node.style.transform = "";
           return;
         }
-        const o = band(p, c.from, c.to, CAPTION_EDGE, { in: c.from > 0, out: c.to < 1 });
+        // the closing panel has its own moment (T.cta); the others fade at their chapter's edges
+        const o = c.id === "start" ? seg(p, T.cta[0], T.cta[1]) : band(p, c.from, c.to, CAPTION_EDGE, { in: c.from > 0, out: c.to < 1 });
         const rise = (1 - seg(p, c.from, c.from + CAPTION_EDGE)) * 30 - seg(p, c.to - CAPTION_EDGE, c.to) * 30;
         node.style.opacity = o.toFixed(3);
         node.style.transform = `translate3d(0, ${(c.from > 0 ? rise : Math.min(0, rise)).toFixed(1)}px, 0)`;
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
+      const here = CHAPTERS.find((c) => p >= c.from && p < c.to)?.id ?? "start";
+      if (here !== current) {
+        current = here;
+        dots.forEach((d) => (d.dataset.dot === here ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current")));
+      }
       if (heroTitle && !reduce) heroTitle.style.opacity = (1 - seg(p, T.heroTitleOut[0], T.heroTitleOut[1])).toFixed(3);
       // Chapter 4: the green opens behind the card, at the moment the scene is showing.
       const shown = story.scene ? story.shown : p;
@@ -176,7 +188,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
             const show = seg(m, 0.55, 1);
             const ph = b.h * (vw >= 760 ? 0.78 : 0.92);
             const pw = ph * PHONE_RATIO;
-            const left = Math.min(b.x + b.w - pw * 0.72, vw - pw - 12);
+            // clear of the chapter dots on the right edge (larger screens)
+            const left = Math.min(b.x + b.w - pw * 0.72, vw - pw - (vw >= 760 ? 52 : 12));
             const top = b.y + b.h - ph * 0.78;
             hand.style.width = `${pw.toFixed(1)}px`;
             hand.style.height = `${ph.toFixed(1)}px`;
@@ -222,6 +235,18 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     window.addEventListener("pointermove", move, { passive: true });
     return () => window.removeEventListener("pointermove", move);
   }, []);
+
+  // Chapter dots: a move to the start of a chapter (its caption fully in).
+  const goTo = (from: number) => {
+    const el = root.current;
+    if (!el) return;
+    const end = el.offsetTop + el.offsetHeight - window.innerHeight;
+    const y = Math.round(el.offsetTop + Math.min(1, from + (from > 0 ? CAPTION_EDGE + 0.01 : 0)) * (end - el.offsetTop));
+    if (story.scrollTo && !reduce) story.scrollTo(y);
+    else window.scrollTo({ top: y, behavior: "auto" });
+  };
+  const contactPath = pathFor("contact", t.lang);
+  const whatsapp = t.lang === "sv" ? publicContact.whatsappGreetingUrl : publicContact.whatsappUrl;
 
   const caption = (id: ChapterId, title: string, text: string) => (
     <div className="mp-tale__caption" data-caption={id}>
@@ -287,13 +312,42 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
             {c.id === "inside" && caption("inside", s.inside.title, s.inside.text)}
             {c.id === "site" && caption("site", s.site.title, s.site.text)}
             {c.id === "start" && (
-              <div className="mp-tale__caption mp-tale__caption--start" data-caption="start">
+              <div className="mp-tale__caption mp-tale__cta" data-caption="start">
                 <h2 className="mp-tale__title">{s.start.title}</h2>
+                <div className="mp-tale__actions">
+                  <Link to={contactPath} state={{ service: "card" }} className="mp-xbtn mp-xbtn--solid">
+                    {s.start.card} <FiArrowRight aria-hidden="true" />
+                  </Link>
+                  <Link to={contactPath} state={{ service: "site" }} className="mp-xbtn">
+                    {s.start.website}
+                  </Link>
+                </div>
+                <p className="mp-tale__write">
+                  {s.start.write} <Link to={contactPath}>{s.start.form}</Link>, <a href={`mailto:${publicContact.email}`}>{s.start.email}</a> {s.start.or}{" "}
+                  <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+                    {s.start.whatsapp}
+                  </a>
+                  .
+                </p>
               </div>
             )}
           </div>
         </section>
       ))}
+
+      {!reduce && (
+        <nav className="mp-tale__dots" aria-label={s.chaptersLabel}>
+          <ol>
+            {CHAPTERS.map((c) => (
+              <li key={c.id}>
+                <button type="button" data-dot={c.id} aria-label={s.dots[c.id]} onClick={() => goTo(c.from)}>
+                  <span aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
 
       {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
     </div>

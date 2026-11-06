@@ -219,6 +219,14 @@ $cover-background:
         background: var(--story-cream);
         color: var(--story-green);
       }
+
+      .mp-tale__dots button span {
+        background: rgba(246, 244, 238, 0.4);
+      }
+
+      .mp-tale__dots button[aria-current] span {
+        background: var(--story-cream);
+      }
     }
   }
 
@@ -438,6 +446,111 @@ $cover-background:
       margin: 14px 0 0;
       color: var(--story-muted);
       font: 400 clamp(16px, 4.2vw, 19px) / 1.5 var(--mp-font);
+    }
+
+    // Chapter 6: a cream glass panel with the two ways in and the written contacts.
+    &__cta {
+      max-width: 34rem;
+      padding: 28px 26px 24px;
+      border: 1px solid rgba(16, 59, 53, 0.08);
+      border-radius: 26px;
+      background: color-mix(in srgb, var(--story-paper) 74%, transparent);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 60px rgba(16, 59, 53, 0.14);
+
+      @include desk {
+        max-width: min(34rem, 38vw);
+        padding: 34px 34px 28px;
+      }
+
+      .mp-tale__title {
+        font-size: clamp(30px, 7vw, 46px);
+      }
+    }
+
+    &__actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+
+      @include desk {
+        justify-content: flex-start;
+      }
+
+      .mp-xbtn {
+        min-height: 48px;
+      }
+    }
+
+    &__write {
+      margin: 18px 0 0;
+      color: var(--story-muted);
+      font: 400 15px / 1.5 var(--mp-font);
+
+      a {
+        color: var(--story-green);
+        font-weight: 500;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+
+    // Chapter dots on the right edge: where you are, and a way to jump.
+    // Phones: no dots (the narrow edge belongs to the pictures; a swipe moves through the story).
+    &__dots {
+      display: none;
+      position: fixed;
+      top: 50%;
+      right: max(10px, env(safe-area-inset-right));
+      z-index: 3;
+      transform: translateY(-50%);
+
+      @include desk {
+        display: block;
+      }
+
+      ol {
+        display: grid;
+        gap: 2px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      button {
+        display: grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+
+        span {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: rgba(16, 59, 53, 0.28);
+          transition:
+            transform 0.3s ease,
+            background-color 0.3s ease;
+        }
+
+        &[aria-current] span {
+          background: var(--story-green);
+          transform: scale(1.45);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--story-green);
+          outline-offset: 1px;
+          border-radius: 50%;
+        }
+      }
     }
 
     &__debug {

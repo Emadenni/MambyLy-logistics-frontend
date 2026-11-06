@@ -27,7 +27,9 @@ export const startScroll = (root: HTMLElement, smooth: boolean) => {
     onUpdate: (self) => (story.p = self.progress),
   });
   story.p = trigger.progress;
+  story.scrollTo = (y) => (lenis ? lenis.scrollTo(y, { duration: 1.4 }) : window.scrollTo({ top: y, behavior: "auto" }));
   return () => {
+    story.scrollTo = null;
     trigger.kill();
     gsap.ticker.remove(raf);
     gsap.ticker.lagSmoothing(500, 33);
