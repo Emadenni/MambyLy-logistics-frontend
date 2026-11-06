@@ -3143,7 +3143,7 @@ $x-wide: 1180px;
 
   // The floating WhatsApp button stays away from the cover, the wizard (which has its own
   // phone/WhatsApp links) and the cards.
-  body:has(.mp-cover:not([aria-hidden="true"])) .whatsapp-icon,
+  body:has(.mp-veil:not([aria-hidden="true"])) .whatsapp-icon,
   body:has(.mp-screen--contact) .whatsapp-icon,
   body:has(.mp-x .mp-cardpage) .whatsapp-icon,
   body:has(.mp-x .mp-concept) .whatsapp-icon {

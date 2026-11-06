@@ -11,6 +11,128 @@ $story-desk: 760px;
 }
 
 @mixin styles {
+  // -----------------------------------------------------------------------------------------------
+  // Home veil (Veil.tsx): an HTML stand-in, then the WebGL silk with the same print
+  // -----------------------------------------------------------------------------------------------
+
+  .mp-veil {
+    --logo-w: clamp(210px, 64vw, 340px);
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    color: var(--x-ink);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    will-change: transform;
+
+    &.is-dragging {
+      cursor: grabbing;
+    }
+
+    // The silk's resting colours (VeilCanvas fragment shader): cream, sage in the lower corners.
+    &__silk {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(58% 47% at 100% 100%, rgba(127, 156, 144, 0.24), rgba(127, 156, 144, 0.16) 33%, rgba(127, 156, 144, 0.05) 67%, transparent),
+        radial-gradient(75% 58% at 0% 100%, rgba(127, 156, 144, 0.34), rgba(127, 156, 144, 0.24) 33%, rgba(127, 156, 144, 0.08) 67%, transparent),
+        var(--x-ivory);
+    }
+
+    // The logo's centre sits at 43% of the height, the tagline below it.
+    &__brand {
+      position: absolute;
+      top: 43%;
+      left: 50%;
+      display: grid;
+      justify-items: center;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    &__logo {
+      margin: calc(var(--logo-w) * -0.1417) 0 0;
+      line-height: 0;
+
+      img {
+        width: var(--logo-w);
+        height: auto;
+        -webkit-user-drag: none;
+      }
+    }
+
+    &__tagline {
+      margin: 18px 0 0 !important;
+      color: var(--x-ink) !important;
+      font: 400 clamp(19px, 5.2vw, 24px) / 1.3 var(--mp-font);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    &__gl {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    &.is-gl {
+      .mp-veil__gl {
+        opacity: 1;
+      }
+
+      // the silk carries the same print; the HTML steps aside once the silk is on screen
+      .mp-veil__silk,
+      .mp-veil__brand {
+        visibility: hidden;
+        transition: visibility 0s 0.4s;
+      }
+    }
+
+    &__lang {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: var(--x-gutter);
+      z-index: 2;
+    }
+
+    &__action {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 0 var(--x-gutter) max(34px, calc(env(safe-area-inset-bottom) + 22px));
+    }
+
+    @media (max-height: 560px) {
+      --logo-w: clamp(150px, 42vh, 230px);
+
+      .mp-cover__handle {
+        width: 76px;
+        height: 76px;
+      }
+
+      .mp-cover__print {
+        width: 32px;
+        height: 32px;
+        margin-top: 8px;
+      }
+
+      .mp-cover__chevron {
+        top: 6px;
+      }
+    }
+  }
+
   .mp-screen--tale {
     --story-cream: #f6f4ee;
     --story-paper: #fbfaf6;
