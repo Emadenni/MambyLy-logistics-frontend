@@ -343,7 +343,7 @@ $cover-background:
       opacity: 0;
     }
 
-    // The same background as the veil, fixed behind the whole story.
+    // The same background as the veil, fixed behind the whole story, with a few soft green accents.
     &__backdrop {
       position: fixed;
       top: 0;
@@ -352,7 +352,11 @@ $cover-background:
       height: 100vh;
       height: 100lvh;
       z-index: 0;
-      background: $cover-background;
+      background:
+        radial-gradient(46% 38% at 6% 16%, rgba(16, 59, 53, 0.3), transparent 72%),
+        radial-gradient(40% 34% at 98% 36%, rgba(36, 123, 103, 0.26), transparent 72%),
+        radial-gradient(38% 30% at 28% 100%, rgba(29, 80, 71, 0.24), transparent 72%),
+        $cover-background;
       pointer-events: none;
     }
 
@@ -527,9 +531,9 @@ $cover-background:
       translate: -50% -50%;
       background: radial-gradient(
         closest-side,
-        rgba(251, 250, 246, 0.62) 0%,
-        rgba(232, 238, 232, 0.4) 28%,
-        rgba(127, 156, 144, 0.18) 58%,
+        rgba(255, 255, 252, 0.82) 0%,
+        rgba(244, 246, 240, 0.58) 30%,
+        rgba(160, 186, 174, 0.26) 60%,
         rgba(127, 156, 144, 0) 100%
       );
       pointer-events: none;
