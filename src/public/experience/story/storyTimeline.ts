@@ -73,12 +73,12 @@ export const CARD_FRAMES: Frame[] = [
   // 3 websites: leaves the picture to the lower right while the website opens
   [0.38, pose(7.5, -5.5, -3.2, 0.25, -0.4, 0.08, 0.42)],
   [0.56, pose(7.5, -5.5, -3.2, 0.25, -0.4, 0.08, 0.42)],
-  // 4 cards: comes to the front (exploded view and the QR follow in step 4 of the work)
+  // 4 cards: comes to the front and opens in layers, then turns to show its QR code
   [0.62, pose(1.0, 0.15, 0, 0.38, -1.1, -0.04, 1)],
   [0.7, pose(1.0, 0.15, 0, 0.38, -1.25, -0.04, 1)],
-  [0.76, pose(0.9, 0, 0, 0.1, -0.4, 0.02, 1)],
-  [0.84, pose(0.9, 0, 0, 0.1, -0.4, 0.02, 1)],
-  [0.9, pose(-2.6, -2.2, -3.5, 0.4, 0.6, 0.15, 0.6)],
+  [0.76, pose(0.9, 0.05, 0, 0.08, -Math.PI - 0.3, 0.02, 0.8)],
+  [0.84, pose(0.9, 0.05, 0, 0.08, -Math.PI - 0.24, 0.02, 0.8)],
+  [0.9, pose(-2.6, -2.2, -3.5, 0.4, -Math.PI + 0.6, 0.15, 0.6)],
 ];
 /** After this the card is out of the picture and is no longer drawn. */
 export const CARD_GONE = 0.93;
@@ -93,11 +93,11 @@ export const PHONE_FRAMES: Frame[] = [
   // 3 websites: leaves the picture to the upper right
   [0.38, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
   [0.56, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
-  // 4 cards: waits aside, then comes to the card (the scan is refined in step 4 of the work)
+  // 4 cards: waits aside, then comes up beside the card and reads its QR code
   [0.66, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
   [0.72, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
-  [0.77, pose(2.6, 0.15, 0.6, 0.02, -0.32, 0.06)],
-  [0.84, pose(2.7, 0.15, 0.6, 0.02, -0.35, 0.06)],
+  [0.76, pose(3.05, 0.1, 0.9, 0.02, -0.42, 0.05)],
+  [0.84, pose(2.95, 0.1, 0.9, 0.02, -0.3, 0.03)],
   // the phone comes to the centre; its screen becomes the website window (HTML)
   [0.88, pose(0, 0, 1.2, 0, 0, 0)],
   [0.92, pose(0, 0, 3.4, 0, 0, 0)],
@@ -157,10 +157,15 @@ const websitesOnPhone = (p: number) => seg(p, 0.35, 0.39) * (1 - seg(p, 0.56, 0.
 const PHONE_SITE: PhonePose = [pose(0, 1.2, 0.4, 0.05, -0.18, 0, 0.84), websitesOnPhone];
 const PHONE_SITE_TURNED: PhonePose = [pose(0.25, 1.25, 0.1, 0.3, -0.7, 0.05, 0.72), (p) => websitesOnPhone(p) * seg(p, 0.4, 0.44) * (1 - seg(p, 0.5, 0.54))];
 
+/** Chapter 4 on phones: the card to the left with its QR code in view, the phone to the right. */
+const scanOnPhone = (p: number) => seg(p, 0.73, 0.76) * (1 - seg(p, 0.85, 0.88));
+const PHONE_SCAN_CARD: PhonePose = [pose(-0.5, 1.3, 0, 0.08, -Math.PI - 0.3, 0.02, 0.6), scanOnPhone];
+const PHONE_SCAN_PHONE: PhonePose = [pose(1.2, 1.32, 0.9, 0.02, -0.35, 0.03, 0.82), scanOnPhone];
+
 /** Every object's own poses on phones. */
 export const PHONE_POSES: Record<"card" | "phone" | "browser", PhonePose[]> = {
-  card: [[PHONE_ROW.card, identityRow]],
-  phone: [[PHONE_ROW.phone, identityRow]],
+  card: [[PHONE_ROW.card, identityRow], PHONE_SCAN_CARD],
+  phone: [[PHONE_ROW.phone, identityRow], PHONE_SCAN_PHONE],
   browser: [[PHONE_ROW.browser, identityRow], PHONE_SITE, PHONE_SITE_TURNED],
 };
 
@@ -190,8 +195,11 @@ export const T = {
   /** the hero opens on deep green, which closes into the objects as chapter 2 begins */
   heroGreen: [0.1, 0.17],
   explode: { in: [0.62, 0.66], out: [0.68, 0.72] },
-  /** chapter 4: the profile opens again after the scan */
+  /** chapter 4: the camera reads the QR code, the profile opens, the contact is saved and shared */
+  scan: { in: [0.73, 0.755], out: [0.775, 0.8] },
   profileIn: [0.77, 0.8],
+  save: [0.8, 0.815, 0.83],
+  share: { in: [0.815, 0.84], out: [0.85, 0.875] },
   /** the phone screen becomes the website window */
   site: [0.9, 0.97],
   siteScroll: [0.93, 1],
@@ -212,6 +220,13 @@ export const profileShown = (p: number) =>
   Math.max(seg(p, T.brandPhone[0], T.brandPhone[1]) * (1 - seg(p, 0.6, 0.64)), seg(p, T.profileIn[0], T.profileIn[1]));
 /** The website shows the MambyLy page in chapter 2, real demos before and after. */
 export const brandSiteShown = (p: number) => seg(p, T.brandSite[0], T.brandSite[1]) * (1 - seg(p, 0.36, 0.4));
+
+/** The phone's camera view (chapter 4). */
+export const scanShown = (p: number) => seg(p, T.scan.in[0], T.scan.in[1]) * (1 - seg(p, T.scan.out[0], T.scan.out[1]));
+/** The light on "Save contact" as it is pressed. */
+export const savePressed = (p: number) => seg(p, T.save[0], T.save[1]) * (1 - seg(p, T.save[1], T.save[2]));
+/** The share sheet sliding up over the profile: 0 = down, 1 = up. */
+export const shareShown = (p: number) => seg(p, T.share.in[0], T.share.in[1]) * (1 - seg(p, T.share.out[0], T.share.out[1]));
 
 /** Exploded website at p: 0 = one page, 1 = its layers apart. */
 export const siteLayers = (p: number) => seg(p, T.siteLayers.in[0], T.siteLayers.in[1]) * (1 - seg(p, T.siteLayers.out[0], T.siteLayers.out[1]));

@@ -391,3 +391,148 @@ export const brandPageTexture = async (lang: Lang) => {
   x.restore();
   return texture(c);
 };
+
+// -------------------------------------------------------------------------------------------------
+// Chapter 4: the camera that reads the card's QR code, and the share sheet
+// -------------------------------------------------------------------------------------------------
+
+const CAMERA_FOUND: Record<Lang, string> = { sv: "Öppna mambylysolutions.se", en: "Open mambylysolutions.se" };
+
+/** The camera: the card's back seen close (cream, the QR code), corner marks, the link found. */
+export const cameraTexture = async (lang: Lang) => {
+  await fonts();
+  const [c, x] = canvas(SW, SH);
+  const g = x.createLinearGradient(0, 0, 0, SH);
+  g.addColorStop(0, "#3b3f3c");
+  g.addColorStop(1, "#1b1e1c");
+  x.fillStyle = g;
+  x.fillRect(0, 0, SW, SH);
+  // the card, close and slightly turned
+  x.save();
+  x.translate(SW / 2, SH * 0.44);
+  x.rotate(-0.05);
+  roundRect(x, -390, -300, 780, 600, 30);
+  x.fillStyle = C.cream;
+  x.fill();
+  const { url } = content(lang);
+  const qr = encodeQr(url);
+  const size = 420;
+  const cell = size / qr.size;
+  x.fillStyle = C.green;
+  qr.modules.forEach((row, rr) =>
+    row.forEach((on, col) => {
+      if (on) x.fillRect(-size / 2 + col * cell, -size / 2 + rr * cell, Math.ceil(cell), Math.ceil(cell));
+    }),
+  );
+  x.restore();
+  // corner marks of the viewfinder
+  x.strokeStyle = "rgba(246, 244, 238, 0.95)";
+  x.lineWidth = 12;
+  x.lineCap = "round";
+  const half = 290;
+  const cy = SH * 0.44;
+  for (const [sx, sy] of [
+    [-1, -1],
+    [1, -1],
+    [1, 1],
+    [-1, 1],
+  ]) {
+    x.beginPath();
+    x.moveTo(SW / 2 + sx * half, cy + sy * (half - 80));
+    x.lineTo(SW / 2 + sx * half, cy + sy * half);
+    x.lineTo(SW / 2 + sx * (half - 80), cy + sy * half);
+    x.stroke();
+  }
+  // the link that was found
+  x.font = `500 ${40}px ${SANS}`;
+  const label = CAMERA_FOUND[lang];
+  const w = x.measureText(label).width + 90;
+  roundRect(x, (SW - w) / 2, SH * 0.74, w, 92, 46);
+  x.fillStyle = "rgba(246, 244, 238, 0.94)";
+  x.fill();
+  x.fillStyle = C.green;
+  x.textAlign = "center";
+  x.fillText(label, SW / 2, SH * 0.74 + 60);
+  return texture(c);
+};
+
+const SHARE: Record<Lang, { title: string; copy: string; mail: string; message: string; more: string }> = {
+  sv: { title: "Dela kontakt", copy: "Kopiera", mail: "E-post", message: "Meddelande", more: "Mer" },
+  en: { title: "Share contact", copy: "Copy", mail: "Email", message: "Message", more: "More" },
+};
+
+/** The share sheet that slides up over the profile: the link, ways to send it, the QR code. */
+export const shareTexture = async (lang: Lang) => {
+  await fonts();
+  const H2 = Math.round(SH * 0.56);
+  const [c, x] = canvas(SW, H2);
+  const t = SHARE[lang];
+  const { url } = content(lang);
+  roundRect(x, 0, 0, SW, H2 + 60, 60);
+  x.fillStyle = "#fbfaf6";
+  x.fill();
+  x.fillStyle = "rgba(16, 59, 53, 0.18)";
+  roundRect(x, SW / 2 - 60, 26, 120, 12, 6);
+  x.fill();
+  x.fillStyle = C.green;
+  x.font = `600 ${46}px ${SANS}`;
+  x.fillText(t.title, 70, 130);
+  // link field
+  roundRect(x, 70, 175, SW - 140, 110, 30);
+  x.fillStyle = "rgba(16, 59, 53, 0.06)";
+  x.fill();
+  x.fillStyle = C.green;
+  x.font = `400 ${34}px ${SANS}`;
+  x.fillText(url.replace(/^https:\/\/(www\.)?/, ""), 105, 243);
+  x.font = `600 ${34}px ${SANS}`;
+  x.textAlign = "right";
+  x.fillText(t.copy, SW - 105, 243);
+  x.textAlign = "center";
+  // ways to send it
+  const items = [t.message, t.mail, t.more];
+  items.forEach((label, i) => {
+    const cx = 190 + i * 260;
+    x.beginPath();
+    x.arc(cx, 400, 62, 0, Math.PI * 2);
+    x.fillStyle = i === 0 ? C.green : "rgba(16, 59, 53, 0.1)";
+    x.fill();
+    x.strokeStyle = i === 0 ? C.cream : C.green;
+    x.lineWidth = 7;
+    x.lineCap = "round";
+    x.lineJoin = "round";
+    x.beginPath();
+    if (i === 0) {
+      x.roundRect(cx - 30, 378, 60, 40, 10);
+      x.moveTo(cx - 12, 418);
+      x.lineTo(cx - 20, 432);
+      x.lineTo(cx, 418);
+    } else if (i === 1) {
+      x.rect(cx - 30, 382, 60, 40);
+      x.moveTo(cx - 30, 384);
+      x.lineTo(cx, 404);
+      x.lineTo(cx + 30, 384);
+    } else {
+      [-20, 0, 20].forEach((dx) => {
+        x.moveTo(cx + dx + 4, 400);
+        x.arc(cx + dx, 400, 4, 0, Math.PI * 2);
+      });
+    }
+    x.stroke();
+    x.fillStyle = C.muted;
+    x.font = `400 ${30}px ${SANS}`;
+    x.fillText(label, cx, 510);
+  });
+  // the QR code to show in person
+  const qr = encodeQr(url);
+  const size = 300;
+  const cell = size / qr.size;
+  const left = (SW - size) / 2;
+  const top = 580;
+  x.fillStyle = C.green;
+  qr.modules.forEach((row, rr) =>
+    row.forEach((on, col) => {
+      if (on) x.fillRect(left + col * cell, top + rr * cell, Math.ceil(cell), Math.ceil(cell));
+    }),
+  );
+  return texture(c);
+};
