@@ -143,6 +143,397 @@ $cover-background:
     }
   }
 
+  // ---------------------------------------------------------------------------------------------
+  // Demos after the 3D part (Demos.tsx): example cards in a 3D carousel, website demos in frames
+  // ---------------------------------------------------------------------------------------------
+
+  .mp-demos {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: clamp(72px, 12svh, 140px);
+    padding: clamp(80px, 14svh, 160px) 0 40px;
+
+    &__block {
+      display: grid;
+      gap: 28px;
+    }
+
+    &__head {
+      width: min(100% - 2 * var(--x-gutter), 46rem);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    &__kicker {
+      margin: 0 0 10px;
+      color: #247b67;
+      font: 600 13px / 1 var(--mp-font);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    &__title {
+      margin: 0;
+      color: var(--x-ink);
+      font: 400 clamp(30px, 6.4vw, 52px) / 1.06 var(--x-serif);
+    }
+
+    &__hint {
+      margin: 12px 0 0;
+      color: #5d6b66;
+      font: 400 clamp(15px, 3.8vw, 17px) / 1.5 var(--mp-font);
+    }
+
+    &__more {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px 22px;
+      margin: 0;
+      padding: 0 var(--x-gutter);
+    }
+
+    &__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      color: var(--x-ink);
+      font: 600 15px / 1 var(--mp-font);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    // ---- cards: a coverflow that scrolls sideways ----
+    &__track {
+      display: flex;
+      gap: 0;
+      margin: 0;
+      padding: 30px calc(50% - min(38vw, 170px)) 20px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      list-style: none;
+      perspective: 1400px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (min-width: 760px) {
+        padding-inline: calc(50% - 190px);
+      }
+    }
+
+    &__card {
+      --d: 0;
+      --ad: max(var(--d), -1 * var(--d));
+      flex: none;
+      width: min(76vw, 340px);
+      // neighbours overlap a little, so they peek in at the sides
+      margin-inline: -9vw;
+      scroll-snap-align: center;
+      transform: rotateY(calc(var(--d) * -32deg)) scale(calc(1 - min(var(--ad), 1.4) * 0.14)) translateZ(calc(var(--ad) * -40px));
+      opacity: calc(1 - min(var(--ad), 1.6) * 0.35);
+      transition: opacity 0.2s linear;
+
+      @media (min-width: 760px) {
+        width: 380px;
+        margin-inline: -40px;
+      }
+    }
+
+    &__card:first-child {
+      margin-left: 0;
+    }
+
+    &__card:last-child {
+      margin-right: 0;
+    }
+
+    &__stage {
+      --mx: 30%;
+      --my: 20%;
+      position: relative;
+      border-radius: 4.5%/7%;
+      cursor: pointer;
+      touch-action: pan-x;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      animation: mp-demos-float 6s ease-in-out infinite;
+
+      .dc--preview {
+        pointer-events: none;
+      }
+
+      &.is-flipped .dc__body {
+        transform: rotateY(180deg);
+      }
+
+      &:focus-visible {
+        outline: 3px solid #247b67;
+        outline-offset: 6px;
+      }
+    }
+
+    &__card:nth-child(2n) &__stage {
+      animation-delay: -2.2s;
+    }
+
+    &__card:nth-child(3n) &__stage {
+      animation-delay: -4.1s;
+    }
+
+    // light on the card: a soft spot that follows the pointer, and a slow silk shimmer across
+    &__sheen {
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      background:
+        radial-gradient(60% 80% at var(--mx) var(--my), rgba(255, 255, 255, 0.26), transparent 60%),
+        linear-gradient(115deg, transparent 30%, rgba(255, 246, 220, 0.22) 46%, rgba(255, 255, 255, 0.08) 52%, transparent 66%);
+      background-size:
+        100% 100%,
+        260% 100%;
+      background-position:
+        0 0,
+        110% 0;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      animation: mp-demos-silk 7s ease-in-out infinite;
+    }
+
+    @keyframes mp-demos-silk {
+      0%,
+      20% {
+        background-position:
+          0 0,
+          110% 0;
+      }
+      70%,
+      100% {
+        background-position:
+          0 0,
+          -10% 0;
+      }
+    }
+
+    @keyframes mp-demos-float {
+      0%,
+      100% {
+        translate: 0 0;
+        rotate: 0deg;
+      }
+      50% {
+        translate: 0 -6px;
+        rotate: -0.6deg;
+      }
+    }
+
+    &__meta {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    &__name {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      color: var(--x-ink);
+      font: 600 16px / 1.2 var(--mp-font);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+    }
+
+    &__share {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(16, 59, 53, 0.2);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--x-ink);
+      cursor: pointer;
+    }
+
+    &__note {
+      min-height: 1.2em;
+      margin: 4px 0 0;
+      color: #247b67;
+      font: 500 13px / 1.2 var(--mp-font);
+      text-align: center;
+    }
+
+    // ---- websites: frames that lean and scroll by themselves ----
+    &__sites {
+      display: flex;
+      gap: 22px;
+      margin: 0;
+      padding: 20px var(--x-gutter) 30px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      list-style: none;
+      perspective: 1200px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      @media (min-width: 960px) {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 44px 34px;
+        width: min(100% - 2 * var(--x-gutter), 1180px);
+        margin: 0 auto;
+        padding: 20px 0 30px;
+        overflow: visible;
+
+        // seven: the last one centred on its own row
+        > :last-child {
+          grid-column: 2;
+        }
+      }
+    }
+
+    &__site {
+      --rx: 0deg;
+      --ry: 0deg;
+      flex: none;
+      width: min(82vw, 380px);
+      scroll-snap-align: center;
+
+      @media (min-width: 960px) {
+        width: auto;
+      }
+    }
+
+    &__frame {
+      display: block;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow:
+        0 1px 2px rgba(16, 59, 53, 0.08),
+        0 28px 60px rgba(16, 59, 53, 0.2);
+      transform: rotateX(var(--rx)) rotateY(var(--ry));
+      transition:
+        transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.3s ease;
+
+      &:hover {
+        box-shadow:
+          0 1px 2px rgba(16, 59, 53, 0.08),
+          0 36px 70px rgba(16, 59, 53, 0.28);
+      }
+
+      &:focus-visible {
+        outline: 3px solid #247b67;
+        outline-offset: 5px;
+      }
+    }
+
+    &__bar {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      height: 24px;
+      padding: 0 11px;
+      background: #f3f2ee;
+
+      i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #c9c8c1;
+      }
+    }
+
+    // the window onto the page; the picture moves up and back while the frame is on screen
+    &__view {
+      display: block;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      container-type: size;
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        animation: mp-demos-scroll 16s ease-in-out infinite alternate;
+        animation-delay: calc(var(--i) * -2.3s);
+        animation-play-state: paused;
+      }
+    }
+
+    &__site.is-on &__view img {
+      animation-play-state: running;
+    }
+
+    @keyframes mp-demos-scroll {
+      0%,
+      12% {
+        transform: translateY(0);
+      }
+      88%,
+      100% {
+        transform: translateY(min(0px, calc(-100% + 100cqh)));
+      }
+    }
+
+    &__label {
+      margin: 16px 2px 0;
+      color: #5d6b66;
+      font: 400 14px / 1.45 var(--mp-font);
+
+      strong {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--x-ink);
+        font: 400 22px / 1.2 var(--x-serif);
+      }
+    }
+
+    // reduced motion / no WebGL: everything still, the cards in a plain row
+    &.is-static {
+      .mp-demos__card {
+        transform: none;
+        opacity: 1;
+      }
+
+      .mp-demos__stage,
+      .mp-demos__sheen,
+      .mp-demos__view img {
+        animation: none;
+      }
+
+      .mp-demos__frame {
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mp-demos__stage,
+      .mp-demos__sheen,
+      .mp-demos__view img {
+        animation: none;
+      }
+    }
+  }
+
   // The contact after the 3D part: an ordinary section over the fixed backdrop.
   .mp-tale-contact {
     position: relative;
@@ -922,6 +1313,7 @@ $cover-background:
       right: max(10px, env(safe-area-inset-right));
       z-index: 3;
       transform: translateY(-50%);
+      transition: opacity 0.3s ease, visibility 0.3s;
 
       @include desk {
         display: block;

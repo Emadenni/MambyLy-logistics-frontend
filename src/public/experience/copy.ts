@@ -96,6 +96,14 @@ const sv = {
     dots: { hero: "Början", identity: "En identitet", websites: "Webbplatser", cards: "Visitkort" },
     cardDemos: "Se exempel på visitkort",
     siteDemos: "Se våra webbplatsdemos",
+    demos: {
+      title: "Exempel och demos",
+      cardHint: "Tryck för att vända kortet, svep uppåt för att dela.",
+      share: "Dela",
+      ourCard: "Vårt eget kort",
+      allCards: "Alla visitkort",
+      allSites: "Alla webbplatsdemos",
+    },
   },
   websites: {
     title: "Varför ska alla webbplatser se likadana ut?",
@@ -556,6 +564,14 @@ const en: Copy = {
     dots: { hero: "Start", identity: "One identity", websites: "Websites", cards: "Business cards" },
     cardDemos: "See example cards",
     siteDemos: "See our website demos",
+    demos: {
+      title: "Examples and demos",
+      cardHint: "Tap to turn the card, swipe up to share.",
+      share: "Share",
+      ourCard: "Our own card",
+      allCards: "All business cards",
+      allSites: "All website demos",
+    },
   },
   websites: {
     title: "Why should every website look the same?",

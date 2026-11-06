@@ -24,6 +24,7 @@ import {
 } from "./storyTimeline";
 import { story } from "./progress";
 import { hasWebGL } from "./webgl";
+import Demos from "./Demos";
 import { CardPreview } from "../../digital-card/DigitalCard";
 import { COMPANY_CARD_SLUG, getCard } from "../../digital-card/registry";
 import { cardStrings } from "../../digital-card/strings";
@@ -125,6 +126,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     const heroFoot = el.querySelector<HTMLElement>("[data-hero-foot]");
     const arch = el.querySelector<HTMLElement>("[data-arch]");
     const dots = [...el.querySelectorAll<HTMLElement>("[data-dot]")];
+    const dotsNav = el.querySelector<HTMLElement>(".mp-tale__dots");
     let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
@@ -168,6 +170,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         node.style.transform = `translate3d(0, ${(c.from > 0 ? rise : Math.min(0, rise)).toFixed(1)}px, 0)`;
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
+      // the chapter dots belong to the 3D part: they leave with it
+      if (dotsNav) {
+        const gone = el.getBoundingClientRect().bottom < window.innerHeight * 0.6;
+        dotsNav.style.opacity = gone ? "0" : "";
+        dotsNav.style.visibility = gone ? "hidden" : "";
+      }
       const here = CHAPTERS.find((c) => p >= c.from && p < c.to)?.id ?? "cards";
       if (here !== current) {
         current = here;
@@ -506,7 +514,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
       </div>
 
-      {/* After the 3D part: the contact, only in writing (form, e-mail, WhatsApp) */}
+      <Demos still={still} />
+
+      {/* After the demos: the contact, only in writing (form, e-mail, WhatsApp) */}
       <section className="mp-tale-contact" aria-labelledby="tale-contact">
         <div className="mp-tale-contact__panel">
           <h2 id="tale-contact" className="mp-tale__title">
