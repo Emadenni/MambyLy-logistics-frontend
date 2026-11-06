@@ -162,7 +162,6 @@ const sv = {
         "Klickbara kontaktvägar: telefon, e-post, webbplats och sociala medier",
         "”Spara kontakt”: en kontaktfil som mottagaren bekräftar i sin telefon",
         "Egen länk och QR-kod, med knapp för att dela eller kopiera länken",
-        "Publicering hos oss, så att innehållet kan uppdateras med samma länk",
       ],
       cta: "Begär ditt visitkort",
     },
@@ -182,7 +181,6 @@ const sv = {
       items: [
         "Pris enligt offert, utifrån det vi kommer överens om.",
         "Målet är ett enkelt upplägg, gärna med engångsbetalning – en årsavgift läggs inte på automatiskt.",
-        "Hur publicering, drift och senare ändringar hanteras står i offerten.",
       ],
       nfc: "Vi experimenterar med delning via NFC på kompatibla enheter. Det ingår inte i tjänsten i dag.",
     },
@@ -617,7 +615,6 @@ const en: Copy = {
         "Clickable contact options: phone, email, website and social media",
         "“Save contact”: a contact file the recipient confirms on their phone",
         "Your own link and QR code, with a button to share or copy the link",
-        "Hosted by us, so the content can be updated under the same link",
       ],
       cta: "Request your business card",
     },
@@ -637,7 +634,6 @@ const en: Copy = {
       items: [
         "Price according to the quote, based on what we agree.",
         "The aim is a simple arrangement, preferably a one-time payment – no annual fee is added automatically.",
-        "How hosting, running costs and later changes are handled is set out in the quote.",
       ],
       nfc: "We are experimenting with sharing via NFC on compatible devices. It is not part of the service today.",
     },
