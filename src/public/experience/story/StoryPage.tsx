@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
 import { publicContact } from "../../contact";
-import { pathFor } from "../routes";
+import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
 import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, greenRadius, seg, type ChapterId } from "./storyTimeline";
 import { story } from "./progress";
+import { hasWebGL } from "./webgl";
+import { CardPreview } from "../../digital-card/DigitalCard";
+import { COMPANY_CARD_SLUG, getCard } from "../../digital-card/registry";
+import { cardStrings } from "../../digital-card/strings";
 
 // The 3D scene is a separate bundle, loaded once the page is on screen.
 const StoryCanvas = lazy(() => import("./StoryCanvas"));
@@ -42,7 +46,10 @@ const showDebug = () => import.meta.env.DEV || new URLSearchParams(window.locati
 const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const t = useCopy();
   const s = t.story;
-  const reduce = useReducedMotion() ?? false;
+  const motion = !(useReducedMotion() ?? false);
+  // Without motion or without WebGL the story is a plain page with the same text and pictures.
+  const [still] = useState(() => !motion || !hasWebGL());
+  const reduce = still;
   const root = useRef<HTMLDivElement>(null);
   const debug = useRef<HTMLDivElement>(null);
   const green = useRef<HTMLDivElement>(null);
@@ -106,6 +113,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       page.style.transform = `translate3d(0, ${(-travel * amount).toFixed(1)}px, 0)`;
     };
     const bar = site.current?.querySelector<HTMLElement>("[data-bar]");
+    const cta = el.querySelector<HTMLElement>(".mp-tale__cta");
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -184,8 +192,16 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           const read = seg(shown, T.siteScroll[0], T.siteScroll[1]);
           scrollPage(webPage, webLayer, read);
           scrollPage(phonePage, hand, read);
+          // When the closing panel comes in where the window is (short screens), the window gives way.
+          let room = 1;
+          if (cta && shown > T.cta[0]) {
+            const panelTop = cta.getBoundingClientRect().top;
+            const windowBottom = b.y + b.h + b.h * 0.25;
+            if (panelTop < windowBottom) room = 1 - seg(shown, T.cta[0], T.cta[0] + 0.03);
+          }
+          box.style.opacity = room.toFixed(3);
           if (hand) {
-            const show = seg(m, 0.55, 1);
+            const show = seg(m, 0.55, 1) * room;
             const ph = b.h * (vw >= 760 ? 0.78 : 0.92);
             const pw = ph * PHONE_RATIO;
             // clear of the chapter dots on the right edge (larger screens)
@@ -218,14 +234,15 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     };
   }, [reduce]);
 
-  // The scene loads after the first paint, when the browser is idle.
+  // The scene loads after the first paint, when the browser is idle, and only once the story is on
+  // screen: under the home veil it waits until the veil starts to open.
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || !active || gl) return;
     const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
     const cancel = window.cancelIdleCallback ?? window.clearTimeout;
     const id = idle(() => setGl(true), { timeout: 1500 });
     return () => cancel(id);
-  }, [reduce]);
+  }, [reduce, active, gl]);
 
   useEffect(() => {
     const move = (e: PointerEvent) => {
@@ -248,17 +265,44 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const contactPath = pathFor("contact", t.lang);
   const whatsapp = t.lang === "sv" ? publicContact.whatsappGreetingUrl : publicContact.whatsappUrl;
 
-  const caption = (id: ChapterId, title: string, text: string) => (
+  const card = getCard(COMPANY_CARD_SLUG, t.lang);
+  const stillCard = still && card && (
+    <div className="mp-tale__still mp-tale__still--card" aria-hidden="true">
+      <CardPreview card={card} t={cardStrings[card.lang ?? t.lang]} />
+    </div>
+  );
+  const stillSite = still && (
+    <div className="mp-tale__still mp-tale__still--site" aria-hidden="true">
+      <div className="mp-tale__still-window">
+        <span className="mp-tale__still-bar">
+          <i />
+          <i />
+          <i />
+        </span>
+        <img src={media(`preview-${t.lang}-architecture-desktop`, 640)} alt="" width={640} height={400} loading="lazy" decoding="async" />
+      </div>
+      <img className="mp-tale__still-phone" src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
+    </div>
+  );
+
+  const caption = (id: ChapterId, title: string, text: string, more?: { to: string; label: string }) => (
     <div className="mp-tale__caption" data-caption={id}>
       <h2 className="mp-tale__title">{title}</h2>
       <p className="mp-tale__text">{text}</p>
+      {more && (
+        <Link to={more.to} className="mp-tale__more">
+          {more.label} <FiArrowRight aria-hidden="true" />
+        </Link>
+      )}
     </div>
   );
+  const cardDemos = { to: PATHS.examples[t.lang], label: s.cardDemos };
+  const siteDemos = { to: PATHS.websites[t.lang], label: s.siteDemos };
 
   return (
     <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
       <div className="mp-tale__backdrop" aria-hidden="true" />
-      <div ref={green} className="mp-tale__green" aria-hidden="true" />
+      {!still && <div ref={green} className="mp-tale__green" aria-hidden="true" />}
       {gl && (
         <Suspense fallback={null}>
           <StoryCanvas lang={t.lang} />
@@ -267,6 +311,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
       {/* chapter 5: the phone screen grows into a browser window with a website, joined by a phone
           with the same website; both scroll (full-page pictures of the architecture demo) */}
+      {!still && (
+        <>
       <div ref={site} className="mp-tale__site" aria-hidden="true">
         <div className="mp-tale__site-bar" data-bar="">
           <i />
@@ -290,6 +336,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
         <img src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
       </div>
+        </>
+      )}
 
       {CHAPTERS.map((c, i) => (
         <section
@@ -305,12 +353,14 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
                 <h2 className="mp-tale__hero" data-hero-title>
                   {s.hero.lead} <em>{s.hero.accent}</em>
                 </h2>
+                {stillCard}
               </div>
             )}
             {c.id === "problem" && caption("problem", s.problem.title, s.problem.text)}
-            {c.id === "tap" && caption("tap", s.tap.title, s.tap.text)}
+            {c.id === "tap" && caption("tap", s.tap.title, s.tap.text, cardDemos)}
             {c.id === "inside" && caption("inside", s.inside.title, s.inside.text)}
-            {c.id === "site" && caption("site", s.site.title, s.site.text)}
+            {c.id === "site" && caption("site", s.site.title, s.site.text, siteDemos)}
+            {c.id === "site" && stillSite}
             {c.id === "start" && (
               <div className="mp-tale__caption mp-tale__cta" data-caption="start">
                 <h2 className="mp-tale__title">{s.start.title}</h2>
@@ -328,6 +378,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
                     {s.start.whatsapp}
                   </a>
                   .
+                </p>
+                <p className="mp-tale__demos">
+                  <Link to={cardDemos.to}>{cardDemos.label}</Link>
+                  <Link to={siteDemos.to}>{siteDemos.label}</Link>
                 </p>
               </div>
             )}

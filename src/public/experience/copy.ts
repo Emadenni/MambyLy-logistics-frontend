@@ -82,6 +82,8 @@ const sv = {
       whatsapp: "WhatsApp",
     },
     dots: { hero: "Början", problem: "Problemet", tap: "Trycket", inside: "Inuti", site: "Webbplatsen", start: "Kom igång" },
+    cardDemos: "Se exempel på visitkort",
+    siteDemos: "Se våra webbplatsdemos",
   },
   websites: {
     title: "Varför ska alla webbplatser se likadana ut?",
@@ -530,6 +532,8 @@ const en: Copy = {
       whatsapp: "WhatsApp",
     },
     dots: { hero: "Start", problem: "The problem", tap: "The tap", inside: "Inside", site: "The website", start: "Get started" },
+    cardDemos: "See example cards",
+    siteDemos: "See our website demos",
   },
   websites: {
     title: "Why should every website look the same?",

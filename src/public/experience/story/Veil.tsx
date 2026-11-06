@@ -5,6 +5,7 @@ import { useCopy } from "../i18n";
 import LangSwitch from "../LangSwitch";
 import { ChevronUp, Fingerprint } from "../icons";
 import { ease, stopVeil, tweenVeil, veil } from "./veilState";
+import { hasWebGL } from "./webgl";
 
 const VeilCanvas = lazy(() => import("./VeilCanvas"));
 
@@ -18,15 +19,6 @@ const LOWER_S = 0.9;
 const REDUCED_S = 0.3;
 /** What of the page underneath zooms in and sharpens while the veil opens (the visible screen). */
 const UNDER = ".mp-under .mp-bar, .mp-under .mp-tale__backdrop, .mp-under .mp-tale__gl, .mp-under .mp-tale__chapter--hero";
-
-const hasWebGL = () => {
-  try {
-    const c = document.createElement("canvas");
-    return !!c.getContext("webgl2");
-  } catch {
-    return false;
-  }
-};
 
 /**
  * The home veil ("/" and "/en"): a cream silk with the logo that rolls up with the finger or the
@@ -46,10 +38,25 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   const [dragging, setDragging] = useState(false);
   const [gone, setGone] = useState(!home);
   const [glReady, setGlReady] = useState(false);
+  const [wanted, setWanted] = useState(false);
   const [glShown, setGlShown] = useState(false);
   const webgl = useRef<boolean | null>(null);
   if (webgl.current === null && typeof window !== "undefined") webgl.current = !reduce && hasWebGL();
-  const useGl = !!webgl.current && !reduce && !gone;
+  const useGl = !!webgl.current && !reduce && !gone && wanted;
+
+  // Until then the HTML veil (the same picture) is on screen: the first paint and the page's own
+  // start are not shared with a 3D engine. A pointer, a touch, a key or 2.5 s bring the silk.
+  useEffect(() => {
+    if (wanted || !webgl.current || reduce) return;
+    const want = () => setWanted(true);
+    const events = ["pointermove", "pointerdown", "touchstart", "wheel", "keydown", "focusin"] as const;
+    events.forEach((e) => window.addEventListener(e, want, { once: true, passive: true }));
+    const timer = window.setTimeout(want, 2500);
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, want));
+      window.clearTimeout(timer);
+    };
+  }, [wanted, reduce]);
 
   // The URL decides where the veil goes; a gesture only moves it there first.
   useEffect(() => {

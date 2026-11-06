@@ -123,7 +123,8 @@ const Warmup: React.FC = () => {
   const scene = useThree((s) => s.scene);
   const camera = useThree((s) => s.camera);
   useEffect(() => {
-    const run = () => {
+    let live = true;
+    const showAll = () => {
       const hidden: THREE.Object3D[] = [];
       scene.traverse((o) => {
         if (!o.visible) {
@@ -131,19 +132,49 @@ const Warmup: React.FC = () => {
           o.visible = true;
         }
       });
-      gl.compile(scene, camera);
+      return () => hidden.forEach((o) => (o.visible = false));
+    };
+    const run = async () => {
+      // the programs are queued at once (the browser compiles them in parallel), then the hidden
+      // objects go back before the next frame is drawn
+      const restore = showAll();
+      const done = gl.compileAsync(scene, camera);
+      restore();
+      await done;
+      if (!live) return;
       // one real frame off screen: the glass (transmission) pass and its shader variants are set up
       // on the first frame that draws it
+      const again = showAll();
       const target = new THREE.WebGLRenderTarget(64, 64);
       gl.setRenderTarget(target);
       gl.render(scene, camera);
       gl.setRenderTarget(null);
       target.dispose();
-      hidden.forEach((o) => (o.visible = false));
+      again();
     };
     const ids = [1200, 3500].map((ms) => window.setTimeout(run, ms));
-    return () => ids.forEach((id) => window.clearTimeout(id));
+    return () => {
+      live = false;
+      ids.forEach((id) => window.clearTimeout(id));
+    };
   }, [gl, scene, camera]);
+  return null;
+};
+
+/** The scene stops drawing while it is not on screen (the home veil is down). */
+const Pause: React.FC = () => {
+  const setFrameloop = useThree((s) => s.setFrameloop);
+  useEffect(() => {
+    let mode = "";
+    const id = window.setInterval(() => {
+      const want = story.active ? "always" : "never";
+      if (want !== mode) {
+        mode = want;
+        setFrameloop(want);
+      }
+    }, 150);
+    return () => window.clearInterval(id);
+  }, [setFrameloop]);
   return null;
 };
 
@@ -151,7 +182,11 @@ const Warmup: React.FC = () => {
 const FIT_WIDTH = CARD.w * 1.18;
 const Fit: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const width = useThree((s) => s.viewport.width);
-  const scale = Math.min(1, width / FIT_WIDTH);
+  const size = useThree((s) => s.size);
+  // short phone screens (browser bars out, landscape-ish): a little smaller still, so the objects
+  // stay between the header and the text
+  const short = size.width < 760 && size.height < 740 ? Math.max(0.72, size.height / 740) : 1;
+  const scale = Math.min(1, width / FIT_WIDTH) * short;
   return <group scale={scale}>{children}</group>;
 };
 
@@ -196,6 +231,7 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
     >
       <Clock />
       <Warmup />
+      <Pause />
       <Studio />
       <Fit>
         <Card lang={lang} />
