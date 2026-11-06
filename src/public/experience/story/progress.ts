@@ -14,4 +14,8 @@ export const story = {
   pointer: { x: 0, y: 0 },
   /** The card on screen, in % of the viewport (written by the scene). */
   focus: { x: 50, y: 50 },
+  /** The phone screen on screen, in px (written by the scene), where the website reveal starts. */
+  screen: { x: 0, y: 0, w: 0, h: 0 },
+  /** The digital profile as drawn on the phone, so the HTML reveal starts with the same picture. */
+  profile: null as HTMLCanvasElement | null,
 };

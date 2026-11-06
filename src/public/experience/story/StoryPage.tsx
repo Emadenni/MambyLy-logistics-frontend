@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { useCopy } from "../i18n";
+import { media } from "../media";
 import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, greenRadius, seg, type ChapterId } from "./storyTimeline";
 import { story } from "./progress";
 
@@ -22,6 +23,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const root = useRef<HTMLDivElement>(null);
   const debug = useRef<HTMLDivElement>(null);
   const green = useRef<HTMLDivElement>(null);
+  const site = useRef<HTMLDivElement>(null);
+  const profile = useRef<HTMLCanvasElement>(null);
   const [gl, setGl] = useState(false);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
@@ -65,6 +68,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
+    let onSite = false;
+    let copied: HTMLCanvasElement | null = null;
+    const layers = site.current ? [...site.current.querySelectorAll<HTMLElement>("[data-layer]")] : [];
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -105,6 +111,37 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         dark = !dark;
         screen?.classList.toggle("is-dark", dark);
       }
+      // Chapter 5: from the phone screen to the whole window. The box starts on the screen's
+      // rectangle (projected by the scene) and grows to the viewport, its corners going square.
+      const box = site.current;
+      if (box) {
+        const m = story.scene ? seg(shown, T.site[0], T.site[1]) : 0;
+        const on = story.scene && shown >= T.site[0] - 0.002 && story.screen.w > 0;
+        box.style.visibility = on ? "visible" : "hidden";
+        if (on) {
+          if (story.profile && copied !== story.profile && profile.current) {
+            copied = story.profile;
+            profile.current.width = copied.width;
+            profile.current.height = copied.height;
+            profile.current.getContext("2d")?.drawImage(copied, 0, 0);
+          }
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          const a = story.screen;
+          const radius = (a.w * 0.11) / 0.92;
+          box.style.left = `${(a.x * (1 - m)).toFixed(1)}px`;
+          box.style.top = `${(a.y * (1 - m)).toFixed(1)}px`;
+          box.style.width = `${(a.w + (vw - a.w) * m).toFixed(1)}px`;
+          box.style.height = `${(a.h + (vh - a.h) * m).toFixed(1)}px`;
+          box.style.borderRadius = `${(radius * (1 - m)).toFixed(1)}px`;
+          if (layers[0]) layers[0].style.opacity = (1 - seg(m, 0.2, 0.6)).toFixed(3);
+          if (layers[1]) layers[1].style.opacity = seg(m, 0.3, 0.85).toFixed(3);
+        }
+        if ((on && m > 0.5) !== onSite) {
+          onSite = !onSite;
+          screen?.classList.toggle("is-site", onSite);
+        }
+      }
       if (debug.current) {
         frames++;
         const now = performance.now();
@@ -120,7 +157,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
-      screen?.classList.remove("is-dark");
+      screen?.classList.remove("is-dark", "is-site");
     };
   }, [reduce]);
 
@@ -158,6 +195,26 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           <StoryCanvas lang={t.lang} />
         </Suspense>
       )}
+
+      {/* chapter 5: the phone screen grows into a website (desktop picture; phones get a phone one) */}
+      <div ref={site} className="mp-tale__site" aria-hidden="true">
+        <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
+        <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
+          <picture>
+            <source media="(max-width: 759px)" srcSet={media(`preview-${t.lang}-restaurant-mobile`, 390)} />
+            <img
+              src={media(`preview-${t.lang}-architecture-desktop`, 1280)}
+              srcSet={`${media(`preview-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`preview-${t.lang}-architecture-desktop`, 1280)} 1280w`}
+              sizes="100vw"
+              alt=""
+              width={1280}
+              height={800}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
+        </div>
+      </div>
 
       {CHAPTERS.map((c, i) => (
         <section

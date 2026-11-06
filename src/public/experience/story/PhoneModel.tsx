@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import { cardStrings } from "../../digital-card/strings";
 import type { Lang } from "../routes";
@@ -17,6 +17,7 @@ const useScreens = (lang: Lang) => {
       const s = cardStrings[lang];
       Promise.all([lockTexture(lang), profileTexture(lang, { save: s.save, email: s.email, website: s.website })]).then(([lock, profile]) => {
         if (!live) return [lock, profile].forEach((t) => t.dispose());
+        story.profile = profile.image as HTMLCanvasElement;
         setMaps((old) => {
           if (old) Object.values(old).forEach((t) => t.dispose());
           return { lock, profile };
@@ -51,11 +52,40 @@ const useScreens = (lang: Lang) => {
 const PhoneModel: React.FC<{ lang: Lang; screenRef?: React.RefObject<THREE.Mesh> }> = ({ lang, screenRef }) => {
   const maps = useScreens(lang);
   const profile = useRef<THREE.MeshBasicMaterial>(null);
+  const ownScreen = useRef<THREE.Mesh>(null);
+  const screenMesh = screenRef ?? ownScreen;
+  const size = useThree((s) => s.size);
+  const corner = useMemo(() => new THREE.Vector3(), []);
   const screen = useMemo(() => faceGeometry(cardShape(SCREEN.w, SCREEN.h, SCREEN.r), SCREEN.w, SCREEN.h), []);
   useEffect(() => () => screen.dispose(), [screen]);
 
-  useFrame(() => {
+  useFrame(({ camera }) => {
     if (profile.current) profile.current.opacity = seg(story.shown, T.profileIn[0], T.profileIn[1]);
+    // the screen's rectangle on the page, for the website reveal of chapter 5
+    const m = screenMesh.current;
+    if (!m) return;
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (const [sx, sy] of [
+      [-1, -1],
+      [1, -1],
+      [1, 1],
+      [-1, 1],
+    ]) {
+      corner.set((sx * SCREEN.w) / 2, (sy * SCREEN.h) / 2, 0).applyMatrix4(m.matrixWorld).project(camera);
+      const px = ((corner.x + 1) / 2) * size.width;
+      const py = ((1 - corner.y) / 2) * size.height;
+      x0 = Math.min(x0, px);
+      x1 = Math.max(x1, px);
+      y0 = Math.min(y0, py);
+      y1 = Math.max(y1, py);
+    }
+    story.screen.x = x0;
+    story.screen.y = y0;
+    story.screen.w = x1 - x0;
+    story.screen.h = y1 - y0;
   });
 
   const z = PHONE.d / 2;
@@ -69,7 +99,7 @@ const PhoneModel: React.FC<{ lang: Lang; screenRef?: React.RefObject<THREE.Mesh>
         <boxGeometry args={[0.012, 0.26, 0.03]} />
         <meshStandardMaterial color="#2a302e" roughness={0.4} metalness={0.6} />
       </mesh>
-      <mesh ref={screenRef} geometry={screen} position-z={z + 0.0008}>
+      <mesh ref={screenMesh} geometry={screen} position-z={z + 0.0008}>
         {maps ? <meshBasicMaterial key="lock" map={maps.lock} toneMapped={false} /> : <meshBasicMaterial key="off" color="#0a1412" toneMapped={false} />}
       </mesh>
       {maps && (

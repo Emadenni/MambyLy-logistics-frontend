@@ -49,8 +49,10 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
   const since = useRef<number | null>(null);
   const ref = usePose(CARD_FRAMES, LAG.card, (pose, time) => {
     if (story.mobile) {
-      pose.x = 0;
-      pose.y += MOBILE.cardY;
+      // centred and high on phones, until it leaves towards the lower left in chapter 5
+      const away = seg(story.p, 0.69, 0.75);
+      pose.x *= away;
+      pose.y += MOBILE.cardY * (1 - away);
     }
     // The pointer tilts the card a little, never more than a few degrees.
     pose.rx += story.pointer.y * 0.06;
