@@ -9,6 +9,25 @@ import { story } from "./progress";
 const StoryCanvas = lazy(() => import("./StoryCanvas"));
 
 const MOBILE_QUERY = "(max-width: 759px)";
+
+/** Height of the browser bar of the website window (chapter 5), px. */
+const BAR = 26;
+const DESK_RATIO = 1280 / 800;
+const PHONE_RATIO = 390 / 844;
+
+/**
+ * Where the website window ends up: right of the text column on larger screens, across the top on
+ * phones (the text sits below), so captions never lie over the website's own text.
+ */
+const windowRect = (vw: number, vh: number) => {
+  if (vw >= 760) {
+    const w = Math.min(vw * 0.5, 760);
+    const h = w / DESK_RATIO + BAR;
+    return { x: Math.min(vw * 0.47, vw - w - 48), y: (vh - h) / 2 + 24, w, h };
+  }
+  const w = vw - 40;
+  return { x: 20, y: Math.max(96, vh * 0.13), w, h: w / DESK_RATIO + BAR };
+};
 const showDebug = () => import.meta.env.DEV || new URLSearchParams(window.location.search).has("debug");
 
 /**
@@ -25,6 +44,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const green = useRef<HTMLDivElement>(null);
   const site = useRef<HTMLDivElement>(null);
   const profile = useRef<HTMLCanvasElement>(null);
+  const phone = useRef<HTMLDivElement>(null);
   const [gl, setGl] = useState(false);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
@@ -68,9 +88,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
-    let onSite = false;
     let copied: HTMLCanvasElement | null = null;
-    const layers = site.current ? [...site.current.querySelectorAll<HTMLElement>("[data-layer]")] : [];
+    const profileLayer = site.current?.querySelector<HTMLElement>("[data-layer=profile]");
+    const webLayer = site.current?.querySelector<HTMLElement>("[data-layer=web]");
+    const bar = site.current?.querySelector<HTMLElement>("[data-bar]");
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -111,9 +132,11 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         dark = !dark;
         screen?.classList.toggle("is-dark", dark);
       }
-      // Chapter 5: from the phone screen to the whole window. The box starts on the screen's
-      // rectangle (projected by the scene) and grows to the viewport, its corners going square.
+      // Chapter 5: the phone screen grows into a browser window. The box starts on the screen's
+      // rectangle (projected by the scene) and moves to the window's place; a phone with the
+      // mobile version joins it at the lower right.
       const box = site.current;
+      const hand = phone.current;
       if (box) {
         const m = story.scene ? seg(shown, T.site[0], T.site[1]) : 0;
         const on = story.scene && shown >= T.site[0] - 0.002 && story.screen.w > 0;
@@ -128,19 +151,29 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           const vw = window.innerWidth;
           const vh = window.innerHeight;
           const a = story.screen;
-          const radius = (a.w * 0.11) / 0.92;
-          box.style.left = `${(a.x * (1 - m)).toFixed(1)}px`;
-          box.style.top = `${(a.y * (1 - m)).toFixed(1)}px`;
-          box.style.width = `${(a.w + (vw - a.w) * m).toFixed(1)}px`;
-          box.style.height = `${(a.h + (vh - a.h) * m).toFixed(1)}px`;
-          box.style.borderRadius = `${(radius * (1 - m)).toFixed(1)}px`;
-          if (layers[0]) layers[0].style.opacity = (1 - seg(m, 0.2, 0.6)).toFixed(3);
-          if (layers[1]) layers[1].style.opacity = seg(m, 0.3, 0.85).toFixed(3);
+          const b = windowRect(vw, vh);
+          const mix = (from: number, to: number) => (from + (to - from) * m).toFixed(1);
+          box.style.left = `${mix(a.x, b.x)}px`;
+          box.style.top = `${mix(a.y, b.y)}px`;
+          box.style.width = `${mix(a.w, b.w)}px`;
+          box.style.height = `${mix(a.h, b.h)}px`;
+          box.style.borderRadius = `${mix((a.w * 0.11) / 0.92, 14)}px`;
+          if (profileLayer) profileLayer.style.opacity = (1 - seg(m, 0.2, 0.6)).toFixed(3);
+          if (webLayer) webLayer.style.opacity = seg(m, 0.3, 0.85).toFixed(3);
+          if (bar) bar.style.opacity = seg(m, 0.4, 0.9).toFixed(3);
+          if (hand) {
+            const show = seg(m, 0.55, 1);
+            const ph = b.h * (vw >= 760 ? 0.78 : 0.92);
+            const pw = ph * PHONE_RATIO;
+            const left = Math.min(b.x + b.w - pw * 0.72, vw - pw - 12);
+            const top = b.y + b.h - ph * 0.78;
+            hand.style.width = `${pw.toFixed(1)}px`;
+            hand.style.height = `${ph.toFixed(1)}px`;
+            hand.style.transform = `translate3d(${left.toFixed(1)}px, ${(top + (1 - show) * 40).toFixed(1)}px, 0)`;
+            hand.style.opacity = show.toFixed(3);
+          }
         }
-        if ((on && m > 0.5) !== onSite) {
-          onSite = !onSite;
-          screen?.classList.toggle("is-site", onSite);
-        }
+        if (hand) hand.style.visibility = on ? "visible" : "hidden";
       }
       if (debug.current) {
         frames++;
@@ -157,7 +190,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
-      screen?.classList.remove("is-dark", "is-site");
+      screen?.classList.remove("is-dark");
     };
   }, [reduce]);
 
@@ -196,24 +229,29 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         </Suspense>
       )}
 
-      {/* chapter 5: the phone screen grows into a website (desktop picture; phones get a phone one) */}
+      {/* chapter 5: the phone screen grows into a browser window with a website, joined by a phone */}
       <div ref={site} className="mp-tale__site" aria-hidden="true">
-        <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
-        <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
-          <picture>
-            <source media="(max-width: 759px)" srcSet={media(`preview-${t.lang}-restaurant-mobile`, 390)} />
-            <img
-              src={media(`preview-${t.lang}-architecture-desktop`, 1280)}
-              srcSet={`${media(`preview-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`preview-${t.lang}-architecture-desktop`, 1280)} 1280w`}
-              sizes="100vw"
-              alt=""
-              width={1280}
-              height={800}
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+        <div className="mp-tale__site-bar" data-bar="">
+          <i />
+          <i />
+          <i />
         </div>
+        <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
+          <img
+            src={media(`preview-${t.lang}-architecture-desktop`, 1280)}
+            srcSet={`${media(`preview-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`preview-${t.lang}-architecture-desktop`, 1280)} 1280w`}
+            sizes="(min-width: 760px) 50vw, 100vw"
+            alt=""
+            width={1280}
+            height={800}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
+      </div>
+      <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
+        <img src={media(`preview-${t.lang}-restaurant-mobile`, 390)} alt="" width={390} height={844} loading="lazy" decoding="async" />
       </div>
 
       {CHAPTERS.map((c, i) => (

@@ -178,17 +178,6 @@ $cover-background:
         filter 0.45s ease;
     }
 
-    // Over the website of chapters 5 and 6 the header gets a quiet paper band.
-    &.is-site .mp-bar {
-      background: color-mix(in srgb, var(--story-paper) 86%, transparent);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
-    }
-
-    .mp-bar {
-      transition: background-color 0.45s ease;
-    }
-
     .mp-sfoot {
       background: var(--story-cream);
     }
@@ -313,7 +302,28 @@ $cover-background:
       object-fit: cover;
     }
 
+    &__site-bar {
+      position: absolute;
+      inset: 0 0 auto;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      height: 26px;
+      padding: 0 12px;
+      background: #f3f2ee;
+      opacity: 0;
+
+      i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #c9c8c1;
+      }
+    }
+
     &__site-web {
+      top: 26px;
+      height: calc(100% - 26px);
       opacity: 0;
 
       img {
@@ -322,6 +332,31 @@ $cover-background:
         height: 100%;
         object-fit: cover;
         object-position: top center;
+      }
+    }
+
+    // The mobile version of a website, in a slim phone frame at the window's lower right.
+    &__site-phone {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 0;
+      overflow: hidden;
+      border: 5px solid #1d2321;
+      border-radius: 18px;
+      background: #1d2321;
+      box-shadow: 0 24px 50px rgba(16, 59, 53, 0.28);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        border-radius: 13px;
       }
     }
 
@@ -380,10 +415,6 @@ $cover-background:
         }
       }
 
-      &--start {
-        justify-self: center;
-        text-align: center;
-      }
     }
 
     &__hero {
