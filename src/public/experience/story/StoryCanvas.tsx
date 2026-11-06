@@ -12,8 +12,9 @@ import {
   CARD_GONE,
   EXPLODE_GAP,
   PHONE_FRAMES,
-  PHONE_ROW,
+  PHONE_POSES,
   PHONE_SHOWN,
+  type PhonePose,
   explode,
   kf,
   toPhone,
@@ -35,10 +36,10 @@ const INTRO = { s: 1.6, drop: 2.8 };
  * What every object does on top of its keyframes: the phone layout, a slow float of its own, a
  * small tilt towards the pointer, and the rise from below when the story first shows.
  */
-const live = (phase: number, row: Pose) => {
+const live = (phase: number, phone: PhonePose[]) => {
   let since: number | null = null;
   return (pose: Pose, time: number) => {
-    if (story.mobile) toPhone(pose, row, story.p);
+    if (story.mobile) toPhone(pose, phone, story.p);
     pose.rx += story.pointer.y * 0.06;
     pose.ry += story.pointer.x * 0.1;
     pose.y += Math.sin(time * 0.8 + phase) * 0.035;
@@ -79,7 +80,7 @@ const usePose = (frames: typeof CARD_FRAMES, lag: number, adjust: (pose: Pose, t
 };
 
 const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(CARD_FRAMES, LAG.card, useMemo(() => live(2, PHONE_ROW.card), []));
+  const ref = usePose(CARD_FRAMES, LAG.card, useMemo(() => live(2, PHONE_POSES.card), []));
   const front = useRef<THREE.Group>(null);
   const back = useRef<THREE.Group>(null);
   const at = useMemo(() => new THREE.Vector3(), []);
@@ -106,7 +107,7 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
 };
 
 const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(PHONE_FRAMES, LAG.phone, useMemo(() => live(1, PHONE_ROW.phone), []));
+  const ref = usePose(PHONE_FRAMES, LAG.phone, useMemo(() => live(1, PHONE_POSES.phone), []));
   useFrame(() => {
     if (ref.current) ref.current.visible = story.shown >= PHONE_SHOWN[0] && story.shown < PHONE_SHOWN[1];
   });
@@ -118,7 +119,7 @@ const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
 };
 
 const Browser: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(BROWSER_FRAMES, LAG.browser, useMemo(() => live(0, PHONE_ROW.browser), []));
+  const ref = usePose(BROWSER_FRAMES, LAG.browser, useMemo(() => live(0, PHONE_POSES.browser), []));
   useFrame(() => {
     if (ref.current) ref.current.visible = story.shown < BROWSER_GONE;
   });

@@ -71,8 +71,8 @@ export const CARD_FRAMES: Frame[] = [
   [0.2, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
   [0.32, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
   // 3 websites: leaves the picture to the lower right while the website opens
-  [0.38, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
-  [0.56, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
+  [0.38, pose(7.5, -5.5, -3.2, 0.25, -0.4, 0.08, 0.42)],
+  [0.56, pose(7.5, -5.5, -3.2, 0.25, -0.4, 0.08, 0.42)],
   // 4 cards: comes to the front (exploded view and the QR follow in step 4 of the work)
   [0.62, pose(1.0, 0.15, 0, 0.38, -1.1, -0.04, 1)],
   [0.7, pose(1.0, 0.15, 0, 0.38, -1.25, -0.04, 1)],
@@ -112,8 +112,11 @@ export const BROWSER_FRAMES: Frame[] = [
   // 2 identity: last in the row
   [0.2, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
   [0.32, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
-  // 3 websites: in front, right of the text
+  // 3 websites: in front, right of the text; turns to show its layers, then faces you again
   [0.38, pose(1.45, 0.0, 0.6, 0.05, -0.2, 0, 1.0)],
+  [0.44, pose(1.35, 0.05, 0.2, 0.32, -0.72, 0.06, 0.92)],
+  [0.5, pose(1.35, 0.05, 0.2, 0.3, -0.8, 0.06, 0.92)],
+  [0.54, pose(1.45, 0.0, 0.6, 0.04, -0.14, 0, 1.0)],
   [0.56, pose(1.45, 0.0, 0.6, 0.04, -0.14, 0, 1.0)],
   // 4 cards: leaves backwards and up
   [0.62, pose(-3.8, 2.4, -4.5, 0.2, 0.5, -0.05, 0.6)],
@@ -124,13 +127,17 @@ export const BROWSER_GONE = 0.64;
  * Phones: objects higher (the text sits below) and closer together. Keyframes stay the desktop
  * ones; this moves them for narrow screens. In chapter 2 the row gets its own compact layout.
  */
-export const toPhone = (p: Pose, row?: Pose, at = 0) => {
+export const toPhone = (p: Pose, overrides: PhonePose[] = [], at = 0) => {
   p.x *= 0.42;
   p.y = p.y * 0.75 + 1.05;
-  const w = row ? identityRow(at) : 0;
-  if (row && w > 0) for (const k of KEYS) p[k] += (row[k] - p[k]) * w;
+  for (const [pose, weight] of overrides) {
+    const w = weight(at);
+    if (w > 0) for (const k of KEYS) p[k] += (pose[k] - p[k]) * w;
+  }
   return p;
 };
+/** A pose of its own on phones, and how much of it applies at p. */
+export type PhonePose = [Pose, (p: number) => number];
 
 /** Chapter 2 on phones: card, phone and website side by side, small, above the text. */
 export const PHONE_ROW = {
@@ -140,6 +147,18 @@ export const PHONE_ROW = {
 };
 /** How much of the phone row applies at p (in for chapter 2, out after it). */
 export const identityRow = (p: number) => seg(p, 0.16, 0.21) * (1 - seg(p, 0.33, 0.37));
+
+/** Chapter 3 on phones: the website centred above the text (turned for its layers in between). */
+const websitesOnPhone = (p: number) => seg(p, 0.35, 0.39) * (1 - seg(p, 0.56, 0.6));
+const PHONE_SITE: PhonePose = [pose(0, 1.2, 0.4, 0.05, -0.18, 0, 0.84), websitesOnPhone];
+const PHONE_SITE_TURNED: PhonePose = [pose(0.25, 1.25, 0.1, 0.3, -0.7, 0.05, 0.72), (p) => websitesOnPhone(p) * seg(p, 0.4, 0.44) * (1 - seg(p, 0.5, 0.54))];
+
+/** Every object's own poses on phones. */
+export const PHONE_POSES: Record<"card" | "phone" | "browser", PhonePose[]> = {
+  card: [[PHONE_ROW.card, identityRow]],
+  phone: [[PHONE_ROW.phone, identityRow]],
+  browser: [[PHONE_ROW.browser, identityRow], PHONE_SITE, PHONE_SITE_TURNED],
+};
 
 // -------------------------------------------------------------------------------------------------
 // Effects, by moment
@@ -158,8 +177,10 @@ export const T = {
   /** the phone shows MambyLy's profile; the website shows a MambyLy page */
   brandPhone: [0.255, 0.28],
   brandSite: [0.295, 0.32],
-  /** chapter 3: glass tokens around the website */
+  /** chapter 3: the website comes apart in layers, glass tokens around it, then real demos */
+  siteLayers: { in: [0.41, 0.46], out: [0.49, 0.53] },
   floaters: { in: [0.4, 0.46], out: [0.52, 0.57] },
+  demos: [0.52, 0.58],
   /** chapter 4 */
   green: { in: [0.58, 0.64], out: [0.84, 0.9], creamAbove: 55 },
   explode: { in: [0.62, 0.66], out: [0.68, 0.72] },
@@ -186,6 +207,13 @@ export const profileShown = (p: number) =>
 /** The website shows the MambyLy page in chapter 2, real demos before and after. */
 export const brandSiteShown = (p: number) => seg(p, T.brandSite[0], T.brandSite[1]) * (1 - seg(p, 0.36, 0.4));
 
+/** Exploded website at p: 0 = one page, 1 = its layers apart. */
+export const siteLayers = (p: number) => seg(p, T.siteLayers.in[0], T.siteLayers.in[1]) * (1 - seg(p, T.siteLayers.out[0], T.siteLayers.out[1]));
+/** The real demos the website shows one after the other at the end of chapter 3. */
+export const SITE_DEMOS = ["architecture", "restaurant", "lighting", "photographer"] as const;
+/** Which demo the website shows at p, as a position in SITE_DEMOS (fractions are crossfades). */
+export const siteDemoAt = (p: number) => clamp((p - T.demos[0]) / (T.demos[1] - T.demos[0])) * (SITE_DEMOS.length - 1);
+
 /** Exploded card at p: 0 = one card, 1 = three layers apart. */
 export const explode = (p: number) => seg(p, T.explode.in[0], T.explode.in[1]) * (1 - seg(p, T.explode.out[0], T.explode.out[1]));
 /** Radius of the green background, in % of the viewport diagonal circle. */
@@ -194,7 +222,8 @@ export const greenRadius = (p: number) => seg(p, T.green.in[0], T.green.in[1]) *
 /** Exploded view (chapter 4): how far front and back sheets move from the core, in world units. */
 export const EXPLODE_GAP = 0.95;
 
-/** Chapter 3 floaters around the website: [x, y, z] from its centre. Glass is desktop only. */
+/** Chapter 3 floaters around the website: [x, y, z] from its centre: glass tokens with an icon of
+ * what a website gathers, and small glass cubes (larger screens only). */
 export const TOKENS: { icon: "phone" | "mail" | "pin" | "web" | "link"; at: [number, number, number] }[] = [
   { icon: "phone", at: [-2.4, 1.35, -0.6] },
   { icon: "mail", at: [2.25, 1.55, 0.4] },

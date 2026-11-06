@@ -257,7 +257,7 @@ export const profileTexture = async (lang: Lang, labels: { save: string; email: 
 };
 
 // -------------------------------------------------------------------------------------------------
-// Token icons (chapter 4): thin green line icons on sage
+// Token icons (chapter 3): thin green line icons, on clear (inside glass tokens)
 // -------------------------------------------------------------------------------------------------
 
 export type TokenIcon = "phone" | "mail" | "pin" | "web" | "link";
@@ -265,8 +265,6 @@ export type TokenIcon = "phone" | "mail" | "pin" | "web" | "link";
 export const iconTexture = (icon: TokenIcon) => {
   const S = 256;
   const [c, x] = canvas(S, S);
-  x.fillStyle = "#cfdcd4";
-  x.fillRect(0, 0, S, S);
   x.strokeStyle = C.green;
   x.fillStyle = C.green;
   x.lineWidth = 12;

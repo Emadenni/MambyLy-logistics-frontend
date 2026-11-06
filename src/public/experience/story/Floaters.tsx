@@ -14,14 +14,32 @@ const LAG = 0.2;
 const amountAt = (p: number) => seg(p, T.floaters.in[0], T.floaters.in[1]) * (1 - seg(p, T.floaters.out[0], T.floaters.out[1]));
 
 /**
- * Chapter 3: five sage tokens with the icons of what a website gathers and, on larger screens,
+ * Chapter 3: five glass tokens with the icons of what a website gathers and, on larger screens,
  * three small rounded glass cubes drift around the opened website, then gather back into it.
+ * The glass is clear and reflective (the page's background shows through the canvas), not a
+ * transmission material: that would only see the 3D scene, which is empty behind it.
  */
 const Floaters: React.FC = () => {
   const items = useRef<(THREE.Group | null)[]>([]);
   const icons = useMemo(() => TOKENS.map((t) => iconTexture(t.icon)), []);
   const disc = useMemo(() => new THREE.CylinderGeometry(0.34, 0.34, 0.07, 48).rotateX(Math.PI / 2), []);
-  const face = useMemo(() => new THREE.CircleGeometry(0.3, 48), []);
+  const face = useMemo(() => new THREE.CircleGeometry(0.24, 48), []);
+  const glass = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: "#e9f1ec",
+        roughness: 0.12,
+        metalness: 0,
+        clearcoat: 1,
+        clearcoatRoughness: 0.05,
+        envMapIntensity: 2.2,
+        transparent: true,
+        opacity: 0.32,
+        depthWrite: false,
+      }),
+    [],
+  );
+  useEffect(() => () => glass.dispose(), [glass]);
   useEffect(
     () => () => {
       icons.forEach((t) => t.dispose());
@@ -60,21 +78,18 @@ const Floaters: React.FC = () => {
     <>
       {TOKENS.map((token, i) => (
         <group key={token.icon} ref={(g) => (items.current[i] = g)} visible={false}>
+          <mesh geometry={face} position-z={0.001}>
+            <meshBasicMaterial map={icons[i]} transparent toneMapped={false} depthWrite={false} />
+          </mesh>
           <mesh geometry={disc}>
-            <meshStandardMaterial color="#7f9c90" roughness={0.55} />
-          </mesh>
-          <mesh geometry={face} position-z={0.0355}>
-            <meshStandardMaterial map={icons[i]} roughness={0.6} />
-          </mesh>
-          <mesh geometry={face} position-z={-0.0355} rotation-y={Math.PI}>
-            <meshStandardMaterial map={icons[i]} roughness={0.6} />
+            <primitive object={glass} attach="material" />
           </mesh>
         </group>
       ))}
       {GLASS.map((_, i) => (
         <group key={`glass-${i}`} ref={(g) => (items.current[TOKENS.length + i] = g)} visible={false}>
           <RoundedBox args={[0.46, 0.46, 0.46]} radius={0.08} smoothness={4}>
-            <meshPhysicalMaterial transmission={1} roughness={0.12} thickness={0.4} ior={1.4} color="#ffffff" attenuationColor="#cfdcd4" attenuationDistance={1.2} />
+            <primitive object={glass} attach="material" />
           </RoundedBox>
         </group>
       ))}
