@@ -514,34 +514,31 @@ $cover-background:
 
     }
 
-    // Hero: a cream opening in the green, behind the objects (the green card reads on cream).
+    // Hero: a soft cream light in the green, behind the objects, like a studio lamp (no edge).
     // Fixed like the green, under the canvas.
     &__arch {
       position: fixed;
       left: 50%;
-      top: calc(96px + 10.5svh);
+      top: calc(96px + 28svh);
       z-index: 0;
-      width: min(88vw, 420px);
-      height: min(40svh, 380px);
-      margin-left: max(-44vw, -210px);
-      border-radius: 999px 999px 32px 32px;
-      background:
-        radial-gradient(90% 70% at 50% 100%, rgba(127, 156, 144, 0.32), transparent 70%),
-        linear-gradient(180deg, #fbfaf6 0%, #f3efe4 100%);
-      box-shadow:
-        0 30px 80px rgba(5, 25, 22, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
-      transform-origin: 50% 60%;
+      width: 150vw;
+      height: 70svh;
+      transform-origin: 50% 50%;
+      translate: -50% -50%;
+      background: radial-gradient(
+        closest-side,
+        rgba(251, 250, 246, 0.62) 0%,
+        rgba(232, 238, 232, 0.4) 28%,
+        rgba(127, 156, 144, 0.18) 58%,
+        rgba(127, 156, 144, 0) 100%
+      );
       pointer-events: none;
 
       @include desk {
-        left: auto;
-        right: max(var(--x-gutter), calc((100vw - 1180px) / 2));
-        top: 50%;
-        width: min(52vw, 640px);
-        height: min(66svh, 560px);
-        margin: calc(min(66svh, 560px) / -2 + 30px) 0 0;
-        border-radius: 999px 999px 40px 40px;
+        left: 68%;
+        top: 52%;
+        width: 78vw;
+        height: 105svh;
       }
     }
 
