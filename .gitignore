@@ -31,3 +31,7 @@ MambyLy_Claude_Pack/
 MambyLy_Demo_Assets_v2/
 MambyLy_Claudio_Final/
 MambyLy_Corrections_Menu/
+
+# Video studio output (frames, videos); local only
+studio/out/
+studio/reel/public/

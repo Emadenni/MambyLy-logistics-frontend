@@ -1,0 +1,571 @@
+{
+  "id": "reel-storia",
+  "output": {
+    "video": "reel-storia.mp4",
+    "cover": "cover.png"
+  },
+  "site": "https://www.mambylysolutions.se",
+  "bpm": 120,
+  "fps": 30,
+  "beats": 68,
+  "coverBeat": 1.5,
+  "takes": [
+    {
+      "id": "main",
+      "start": "/exempel/sam-berg",
+      "beats": 12,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        },
+        {
+          "id": "flip",
+          "beat": 1,
+          "do": "swipe",
+          "target": ".dc__stage",
+          "dx": -230,
+          "beats": 1
+        },
+        {
+          "id": "flip-back",
+          "beat": 4,
+          "do": "tap",
+          "target": ".dc__stage"
+        },
+        {
+          "id": "share",
+          "beat": 4.5,
+          "do": "measure",
+          "target": ".dc-actions .dc-iconbtn"
+        },
+        {
+          "id": "qr-button",
+          "beat": 6.5,
+          "do": "measure",
+          "target": ".dc-actions [aria-haspopup='dialog']"
+        },
+        {
+          "id": "qr-open",
+          "beat": 7,
+          "do": "tap",
+          "target": ".dc-actions [aria-haspopup='dialog']",
+          "wait": ".dc-qr__code"
+        },
+        {
+          "id": "qr",
+          "beat": 8,
+          "do": "measure",
+          "target": ".dc-qr__code"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.5,
+          "now": true
+        },
+        {
+          "beat": 4.5,
+          "on": "share",
+          "zoom": 1.6
+        },
+        {
+          "beat": 6.3,
+          "on": "qr-button",
+          "zoom": 1.6
+        },
+        {
+          "beat": 7.6,
+          "on": "qr",
+          "zoom": 1.08
+        }
+      ],
+      "notes": [
+        {
+          "from": 5,
+          "to": 6.5,
+          "kind": "spot",
+          "on": "share",
+          "color": "#f2cc58"
+        },
+        {
+          "from": 5,
+          "to": 6.5,
+          "kind": "circle",
+          "on": "share",
+          "color": "#f2cc58"
+        },
+        {
+          "from": 10,
+          "to": 12,
+          "kind": "scan",
+          "on": "qr",
+          "color": "#247b67"
+        }
+      ]
+    },
+    {
+      "id": "opened",
+      "start": "/exempel/sam-berg",
+      "beats": 16,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        },
+        {
+          "id": "save",
+          "beat": 3,
+          "do": "measure",
+          "target": ".dc-save"
+        },
+        {
+          "id": "save-tap",
+          "beat": 4.5,
+          "do": "tap",
+          "target": ".dc-save"
+        },
+        {
+          "id": "services",
+          "beat": 11,
+          "do": "tap",
+          "target": ".dc-sitenav button",
+          "wait": ".dc-panel"
+        },
+        {
+          "id": "panel",
+          "beat": 12,
+          "do": "measure",
+          "target": ".dc-panel"
+        },
+        {
+          "id": "panel-title",
+          "beat": 12,
+          "do": "measure",
+          "target": ".dc-panel h2"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0.2,
+          "on": "card",
+          "zoom": 1.15
+        },
+        {
+          "beat": 2.5,
+          "on": "save",
+          "zoom": 1.6
+        },
+        {
+          "beat": 6,
+          "on": "card",
+          "zoom": 1.15
+        },
+        {
+          "beat": 9.8,
+          "zoom": 1
+        },
+        {
+          "beat": 10.4,
+          "on": "services",
+          "zoom": 1.5
+        },
+        {
+          "beat": 11.6,
+          "on": "panel",
+          "zoom": 1.2
+        }
+      ],
+      "notes": [
+        {
+          "from": 3,
+          "to": 5.2,
+          "kind": "spot",
+          "on": "save",
+          "color": "#f2cc58"
+        },
+        {
+          "from": 3.2,
+          "to": 5.2,
+          "kind": "circle",
+          "on": "save",
+          "color": "#f2cc58"
+        },
+        {
+          "from": 12.5,
+          "to": 16,
+          "kind": "underline",
+          "on": "panel-title",
+          "color": "#247b67"
+        }
+      ],
+      "css": ".dc-status { display: none !important; }"
+    },
+    {
+      "id": "alex",
+      "start": "/exempel/alex-lind",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.3,
+          "now": true
+        }
+      ]
+    },
+    {
+      "id": "kim",
+      "start": "/exempel/kim-dahl",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.3,
+          "now": true
+        }
+      ]
+    },
+    {
+      "id": "robin",
+      "start": "/exempel/robin-ek",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.3,
+          "now": true
+        }
+      ]
+    },
+    {
+      "id": "charlie",
+      "start": "/exempel/charlie-holm",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.3,
+          "now": true
+        }
+      ]
+    },
+    {
+      "id": "jamie",
+      "start": "/exempel/jamie-lund",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "card",
+          "beat": 0,
+          "do": "measure",
+          "target": ".dc__stage"
+        }
+      ],
+      "camera": [
+        {
+          "beat": 0,
+          "on": "card",
+          "zoom": 1.3,
+          "now": true
+        }
+      ]
+    },
+    {
+      "id": "gallery",
+      "start": "/exempel",
+      "beats": 3
+    },
+    {
+      "id": "web-gallery",
+      "start": "/webbplatser",
+      "beats": 3,
+      "actions": [
+        {
+          "id": "scroll",
+          "beat": 0,
+          "do": "scroll",
+          "dy": 250,
+          "beats": 2
+        }
+      ]
+    },
+    {
+      "id": "web-restaurant",
+      "start": "/webbplatser/koncept/restaurang",
+      "beats": 3
+    },
+    {
+      "id": "web-architecture",
+      "start": "/webbplatser/koncept/arkitektur",
+      "beats": 4,
+      "actions": [
+        {
+          "id": "scroll",
+          "beat": 0,
+          "do": "scroll",
+          "dy": 620,
+          "beats": 3
+        }
+      ]
+    },
+    {
+      "id": "web-lighting",
+      "start": "/webbplatser/koncept/belysning",
+      "beats": 4,
+      "actions": [
+        {
+          "id": "light",
+          "beat": 1,
+          "do": "tap",
+          "target": "button:has-text('Tänd')"
+        }
+      ]
+    }
+  ],
+  "scenes": [
+    {
+      "type": "hook",
+      "from": 0,
+      "to": 6
+    },
+    {
+      "type": "problem",
+      "from": 6,
+      "to": 12
+    },
+    {
+      "type": "phone",
+      "take": "main",
+      "from": 12,
+      "to": 24,
+      "takeFrom": 0,
+      "enter": "match"
+    },
+    {
+      "type": "phone",
+      "take": "opened",
+      "from": 24,
+      "to": 40,
+      "takeFrom": 0,
+      "enter": "scale"
+    },
+    {
+      "type": "phone",
+      "take": "alex",
+      "from": 40,
+      "to": 42,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "kim",
+      "from": 42,
+      "to": 44,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "robin",
+      "from": 44,
+      "to": 46,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "charlie",
+      "from": 46,
+      "to": 48,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "jamie",
+      "from": 48,
+      "to": 50,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "gallery",
+      "from": 50,
+      "to": 52,
+      "enter": "whip",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "web-gallery",
+      "from": 52,
+      "to": 54,
+      "enter": "scale",
+      "label": "Koncept"
+    },
+    {
+      "type": "phone",
+      "take": "web-restaurant",
+      "from": 54,
+      "to": 56,
+      "enter": "whip",
+      "label": "Koncept",
+      "drift": true
+    },
+    {
+      "type": "phone",
+      "take": "web-architecture",
+      "from": 56,
+      "to": 59,
+      "enter": "whip",
+      "label": "Koncept"
+    },
+    {
+      "type": "phone",
+      "take": "web-lighting",
+      "from": 59,
+      "to": 62,
+      "enter": "whip",
+      "label": "Koncept"
+    },
+    {
+      "type": "close",
+      "from": 62,
+      "to": 68,
+      "enter": "scale"
+    }
+  ],
+  "captions": [
+    {
+      "from": 0,
+      "to": 3,
+      "text": "Du fick ett\n*visitkort* i går.",
+      "instant": true
+    },
+    {
+      "from": 3,
+      "to": 6,
+      "text": "Var är det *nu?*"
+    },
+    {
+      "from": 6,
+      "to": 9,
+      "text": "Papperskort\n*kommer bort.*"
+    },
+    {
+      "from": 9,
+      "to": 10.5,
+      "text": "Och kontakten\n*med dem.*"
+    },
+    {
+      "from": 10.5,
+      "to": 12,
+      "text": "Det går\n*enklare.*"
+    },
+    {
+      "from": 12,
+      "to": 17,
+      "text": "Ditt kort.\n*Digitalt.*"
+    },
+    {
+      "from": 17,
+      "to": 19,
+      "text": "*Dela*\nlänken."
+    },
+    {
+      "from": 19,
+      "to": 22,
+      "text": "Visa\n*QR-koden.*"
+    },
+    {
+      "from": 22,
+      "to": 24,
+      "text": "Kunden\n*skannar.*"
+    },
+    {
+      "from": 24,
+      "to": 27,
+      "text": "Kortet\n*öppnas.*"
+    },
+    {
+      "from": 27,
+      "to": 30,
+      "text": "Ett tryck:\n*Spara kontakt.*"
+    },
+    {
+      "from": 30,
+      "to": 34.5,
+      "text": "Lätt att hitta\nnär *behovet uppstår.*",
+      "size": 92
+    },
+    {
+      "from": 34.5,
+      "to": 40,
+      "text": "Inte bara\nen *bild.*"
+    },
+    {
+      "from": 40,
+      "to": 52,
+      "text": "Ett uttryck för\n*varje företag.*"
+    },
+    {
+      "from": 52,
+      "to": 62,
+      "text": "Och hemsidor som\ngör *samma intryck.*"
+    },
+    {
+      "from": 67.4,
+      "to": 68,
+      "text": "Du fick ett\n*visitkort* i går.",
+      "stagger": 1,
+      "hold": true
+    }
+  ],
+  "close": {
+    "text": "*Testa våra exempel*\n– länk i bio"
+  }
+}

@@ -1,0 +1,154 @@
+// Studio only (never part of the site): the scenes of the social images. See social.tsx.
+
+$tilt: perspective(1700px) rotateX(9deg) rotateY(-17deg) rotateZ(2.5deg);
+
+html,
+body {
+  margin: 0;
+  background: transparent !important;
+}
+
+.mambyly-public.sc-scene {
+  display: block;
+  min-height: 0;
+  background: transparent;
+}
+
+.mambyly-public .sc-back-badge {
+  color: var(--dc-back-accent);
+}
+
+// Only the card: 400 CSS px, captured at device scale factor 4. A shadow would be cut by the crop.
+.mambyly-public.sc-scene--card {
+  width: 400px;
+
+  .dc__face {
+    box-shadow: none;
+  }
+
+  .dc-experience > :not(.dc) {
+    display: none;
+  }
+}
+
+// In perspective: a separate soft shadow, on a plane of its own behind the card. The card is
+// 600 px by zoom, not by a scale: a layer in perspective is not re-rasterised for its scale.
+.mambyly-public.sc-scene--tilt {
+  position: relative;
+  width: 800px;
+  height: 550px;
+  overflow: hidden;
+
+  .dc__face {
+    box-shadow: none;
+  }
+
+  .dc-experience > :not(.dc) {
+    display: none;
+  }
+
+  .sc-tilt__card,
+  .sc-tilt__shadow {
+    position: absolute;
+    left: 100px;
+    top: 81px;
+    width: 600px;
+  }
+
+  .sc-tilt__card {
+    transform: $tilt;
+
+    > div {
+      width: 400px;
+      zoom: 1.5;
+    }
+  }
+
+  .sc-tilt__shadow {
+    height: calc(600px * 55 / 85);
+    border-radius: 27px;
+    background: rgba(16, 33, 30, 0.42);
+    filter: blur(26px);
+    transform: translate(10px, 34px) $tilt scale(0.96);
+  }
+}
+
+// The screen scene covers the iframe's own viewport with the real fullscreen view.
+.mambyly-public.sc-scene--full {
+  min-height: 100vh;
+}
+
+// Phone: 1080 × 1350 at scale 1, a 390 × 844 screen drawn at 1.4.
+.sc-mock {
+  display: grid;
+  place-items: center;
+  width: 1080px;
+  height: 1350px;
+  overflow: hidden;
+}
+
+.sc-phone {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(390px * 1.4 + 32px);
+  height: calc(844px * 1.4 + 32px);
+  padding: 16px;
+  border-radius: 92px;
+  background: #101312;
+  box-shadow:
+    inset 0 0 0 3px #4b504e,
+    inset 0 0 0 6px #191c1b,
+    0 18px 30px -12px rgba(5, 20, 18, 0.38),
+    0 56px 90px -30px rgba(5, 20, 18, 0.55);
+}
+
+.sc-phone__screen {
+  width: calc(390px * 1.4);
+  height: calc(844px * 1.4);
+  overflow: hidden;
+  border-radius: 76px;
+  background: #121413;
+
+  iframe {
+    display: block;
+    border: 0;
+    transform: scale(1.4);
+    transform-origin: 0 0;
+  }
+}
+
+.sc-phone__island {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  width: 156px;
+  height: 44px;
+  border-radius: 22px;
+  background: #050606;
+  transform: translateX(-50%);
+}
+
+.sc-phone__key {
+  position: absolute;
+  width: 5px;
+  border-radius: 3px;
+  background: #2b2f2d;
+
+  &--power {
+    right: -4px;
+    top: 310px;
+    height: 150px;
+  }
+
+  &--up {
+    left: -4px;
+    top: 270px;
+    height: 88px;
+  }
+
+  &--down {
+    left: -4px;
+    top: 378px;
+    height: 88px;
+  }
+}

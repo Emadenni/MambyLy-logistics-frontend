@@ -1,0 +1,103 @@
+{
+  "id": "reel-storia-15s",
+  "recording": "reel-storia",
+  "output": {
+    "video": "reel-storia-15s.mp4",
+    "cover": "reel-storia-15s-cover.png"
+  },
+  "bpm": 120,
+  "fps": 30,
+  "beats": 30,
+  "coverBeat": 1.5,
+  "scenes": [
+    {
+      "type": "hook",
+      "from": 0,
+      "to": 6
+    },
+    {
+      "type": "phone",
+      "take": "main",
+      "from": 6,
+      "to": 9,
+      "takeFrom": 0,
+      "enter": "scale"
+    },
+    {
+      "type": "phone",
+      "take": "main",
+      "from": 9,
+      "to": 13.5,
+      "takeFrom": 7.5,
+      "enter": "whip"
+    },
+    {
+      "type": "phone",
+      "take": "opened",
+      "from": 13.5,
+      "to": 24,
+      "takeFrom": 0,
+      "enter": "scale"
+    },
+    {
+      "type": "close",
+      "from": 24,
+      "to": 30,
+      "enter": "scale"
+    }
+  ],
+  "captions": [
+    {
+      "from": 0,
+      "to": 3,
+      "text": "Du fick ett\n*visitkort* i går.",
+      "instant": true
+    },
+    {
+      "from": 3,
+      "to": 6,
+      "text": "Var är det *nu?*"
+    },
+    {
+      "from": 6,
+      "to": 9,
+      "text": "Ditt kort.\n*Digitalt.*"
+    },
+    {
+      "from": 9,
+      "to": 11,
+      "text": "Visa\n*QR-koden.*"
+    },
+    {
+      "from": 11,
+      "to": 13.5,
+      "text": "Kunden\n*skannar.*"
+    },
+    {
+      "from": 13.5,
+      "to": 16.5,
+      "text": "Kortet\n*öppnas.*"
+    },
+    {
+      "from": 16.5,
+      "to": 20,
+      "text": "Ett tryck:\n*Spara kontakt.*"
+    },
+    {
+      "from": 20,
+      "to": 24,
+      "text": "Lätt att hitta\nnär *behovet uppstår.*",
+      "size": 92
+    },
+    {
+      "from": 29.4,
+      "to": 30,
+      "text": "Du fick ett\n*visitkort* i går.",
+      "stagger": 1,
+      "hold": true
+    }
+  ],
+  "close": {
+    "text": "*Testa våra exempel*\n– länk i bio"
+  }
+}

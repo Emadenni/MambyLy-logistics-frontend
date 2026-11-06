@@ -1,0 +1,59 @@
+{
+  "id": "reel-navigazione",
+  "output": { "video": "reel-navigazione.mp4", "cover": "cover.png" },
+  "site": "https://www.mambylysolutions.se",
+  "start": "/exempel",
+  "warm": ["/exempel/sam-berg"],
+  "bar": "mambylysolutions.se",
+  "bpm": 120,
+  "fps": 30,
+  "beats": 36,
+  "coverBeat": 1.5,
+
+  "actions": [
+    { "id": "open", "beat": 4, "do": "tap", "target": "a[href*='/exempel/sam-berg']", "wait": ".dc__stage" },
+    { "id": "card", "beat": 6, "do": "measure", "target": ".dc__stage" },
+    { "id": "flip", "beat": 8, "do": "swipe", "target": ".dc__stage", "dx": -230, "beats": 1 },
+    { "id": "flip-back", "beat": 12, "do": "tap", "target": ".dc__stage" },
+    { "id": "services", "beat": 15, "do": "tap", "target": ".dc-sitenav button", "wait": ".dc-panel" },
+    { "id": "panel", "beat": 16.5, "do": "measure", "target": ".dc-panel" },
+    { "id": "panel-title", "beat": 16.5, "do": "measure", "target": ".dc-panel h2" },
+    { "id": "close", "beat": 20, "do": "tap", "target": ".dc-panel__back", "cut": ".dc-panel" },
+    { "id": "save", "beat": 23, "do": "measure", "target": ".dc-save" }
+  ],
+
+  "barColors": [
+    { "beat": 0, "color": "#f6f4ee", "ink": "#103b35" },
+    { "beat": 4.3, "color": "#1b1a17", "ink": "#f6f4ee" }
+  ],
+
+  "camera": [
+    { "beat": 3, "on": "open", "zoom": 1.4 },
+    { "beat": 5, "zoom": 1 },
+    { "beat": 7, "on": "card", "zoom": 1.45 },
+    { "beat": 13, "zoom": 1 },
+    { "beat": 14, "on": "services", "zoom": 1.5 },
+    { "beat": 16, "on": "panel", "zoom": 1.2 },
+    { "beat": 19, "on": "close", "zoom": 1.45 },
+    { "beat": 21, "zoom": 1 },
+    { "beat": 22, "on": "save", "zoom": 1.6 },
+    { "beat": 27, "zoom": 1 }
+  ],
+
+  "captions": [
+    { "from": 0, "to": 3, "text": "Ditt visitkort\nbehöver inte vara\nav *papper.*", "instant": true },
+    { "from": 3, "to": 7, "text": "Öppna\n*ett kort.*" },
+    { "from": 7, "to": 14, "text": "Vänd på det\nmed *fingret.*" },
+    { "from": 14, "to": 21, "text": "Visa vad du\n*erbjuder.*" },
+    { "from": 22, "to": 28, "text": "Ett tryck till\n*Spara kontakt.*" }
+  ],
+
+  "notes": [
+    { "from": 3, "to": 4.2, "kind": "underline", "on": "open", "color": "#247b67" },
+    { "from": 17, "to": 19, "kind": "underline", "on": "panel-title", "color": "#f2cc58" },
+    { "from": 23, "to": 27, "kind": "circle", "on": "save", "color": "#f2cc58" },
+    { "from": 23.5, "to": 27, "kind": "arrow", "on": "save", "color": "#f2cc58", "tail": [-14, 92] }
+  ],
+
+  "outro": { "beat": 28, "text": "*Testa demon* – länk i bio" }
+}
