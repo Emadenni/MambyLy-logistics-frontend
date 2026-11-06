@@ -16,6 +16,8 @@ import {
   PHONE_SHOWN,
   type PhonePose,
   explode,
+  heroDeskScale,
+  heroDeskShift,
   kf,
   toPhone,
   type Pose,
@@ -40,6 +42,12 @@ const live = (phase: number, phone: PhonePose[]) => {
   let since: number | null = null;
   return (pose: Pose, time: number) => {
     if (story.mobile) toPhone(pose, phone, story.p);
+    else {
+      const k = heroDeskScale(story.p);
+      pose.x = pose.x * k + heroDeskShift(story.p);
+      pose.y *= k;
+      pose.s *= k;
+    }
     pose.rx += story.pointer.y * 0.06;
     pose.ry += story.pointer.x * 0.1;
     pose.y += Math.sin(time * 0.8 + phase) * 0.035;

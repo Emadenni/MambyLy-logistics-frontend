@@ -259,6 +259,10 @@ $cover-background:
         color: var(--story-cream);
       }
 
+      .mp-tale__hero {
+        color: var(--story-cream);
+      }
+
       .mp-tale__dots button[aria-current] span {
         background: var(--story-cream);
       }
@@ -499,17 +503,129 @@ $cover-background:
         padding-top: 2svh;
         text-align: center;
 
+        // larger screens: title and text on the left, the objects on the right
         @include desk {
-          padding-top: 4svh;
+          justify-self: start;
+          max-width: min(46vw, 40rem);
+          padding-top: 12svh;
+          text-align: left;
         }
       }
 
+    }
+
+    // Under the objects: what MambyLy does, the two ways in, and an invitation to scroll.
+    &__hero-foot {
+      position: absolute;
+      left: var(--x-gutter);
+      right: var(--x-gutter);
+      bottom: max(5svh, 28px);
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+      text-align: center;
+      pointer-events: auto;
+      will-change: opacity, transform;
+
+      @include desk {
+        left: max(var(--x-gutter), calc((100vw - 1180px) / 2));
+        right: auto;
+        bottom: max(9svh, 48px);
+        max-width: min(34vw, 27rem);
+        justify-items: start;
+        text-align: left;
+      }
+    }
+
+    &__hero-sub {
+      max-width: 26rem;
+      margin: 0;
+      color: rgba(246, 244, 238, 0.86);
+      font: 400 clamp(16px, 4.2vw, 19px) / 1.5 var(--mp-font);
+    }
+
+    &__hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+
+      @include desk {
+        justify-content: flex-start;
+      }
+    }
+
+    &__chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 20px;
+      border: 1px solid rgba(246, 244, 238, 0.45);
+      border-radius: 999px;
+      background: rgba(246, 244, 238, 0.08);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      color: var(--story-cream);
+      font: 500 15px / 1 var(--mp-font);
+      text-decoration: none;
+      transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease;
+
+      &:hover {
+        border-color: var(--story-cream);
+        background: rgba(246, 244, 238, 0.16);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--story-cream);
+        outline-offset: 3px;
+      }
+    }
+
+    &__scroll {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      color: rgba(246, 244, 238, 0.6);
+      font: 500 11px / 1 var(--mp-font);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+
+      i {
+        width: 1px;
+        height: 34px;
+        background: linear-gradient(rgba(246, 244, 238, 0.7), transparent);
+        transform-origin: top;
+        animation: mp-tale-scroll 2.4s var(--x-ease) infinite;
+      }
+    }
+
+    @keyframes mp-tale-scroll {
+      0% {
+        transform: scaleY(0);
+        opacity: 1;
+      }
+      60% {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scaleY(1);
+        opacity: 0;
+      }
     }
 
     &__hero {
       margin: 0;
       color: var(--story-green);
       font: 400 clamp(52px, 13vw, 132px) / 0.95 var(--x-serif);
+
+      @include desk {
+        font-size: clamp(64px, 8.4vw, 124px);
+      }
       letter-spacing: -0.02em;
 
       em {
@@ -707,8 +823,21 @@ $cover-background:
         align-items: center;
       }
 
-      .mp-tale__chapter--hero .mp-tale__sticky {
-        padding-top: 120px;
+      .mp-tale__chapter--hero {
+        background: radial-gradient(circle at 55% 55%, #22584d 0, var(--story-green) 55%, #0a2723 100%);
+
+        .mp-tale__sticky {
+          padding-top: 120px;
+          gap: 32px;
+        }
+
+        .mp-tale__hero {
+          color: var(--story-cream);
+        }
+
+        .mp-tale__hero-foot {
+          position: static;
+        }
       }
 
       .mp-tale__chapter--inside {

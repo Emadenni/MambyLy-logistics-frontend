@@ -107,6 +107,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     if (!el) return;
     const captions = CHAPTERS.map((c) => el.querySelector<HTMLElement>(`[data-caption="${c.id}"]`));
     const heroTitle = el.querySelector<HTMLElement>("[data-hero-title]");
+    const heroFoot = el.querySelector<HTMLElement>("[data-hero-foot]");
     const dots = [...el.querySelectorAll<HTMLElement>("[data-dot]")];
     let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
@@ -156,6 +157,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         dots.forEach((d) => (d.dataset.dot === here ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current")));
       }
       if (heroTitle && !reduce) heroTitle.style.opacity = (1 - seg(p, T.heroTitleOut[0], T.heroTitleOut[1])).toFixed(3);
+      if (heroFoot && !reduce) {
+        const out = seg(p, 0.02, 0.08);
+        heroFoot.style.opacity = (1 - out).toFixed(3);
+        heroFoot.style.transform = `translate3d(0, ${(out * 24).toFixed(1)}px, 0)`;
+        heroFoot.style.visibility = out > 0.99 ? "hidden" : "";
+      }
       // Chapter 4: the green opens behind the card, at the moment the scene is showing.
       const shown = story.scene ? story.shown : p;
       const radius = reduce ? 0 : greenRadius(shown);
@@ -163,8 +170,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       if (g) {
         g.style.visibility = radius > 0.05 ? "visible" : "hidden";
         if (radius > 0.05) {
-          const fx = story.scene ? story.focus.x.toFixed(1) : "62";
-          const fy = story.scene ? story.focus.y.toFixed(1) : "45";
+          const early = shown < 0.3;
+          const fx = story.scene ? story.focus.x.toFixed(1) : early ? "55" : "62";
+          const fy = story.scene ? story.focus.y.toFixed(1) : early ? "55" : "45";
           g.style.setProperty("--fx", `${fx}%`);
           g.style.setProperty("--fy", `${fy}%`);
           g.style.clipPath = `circle(${radius.toFixed(2)}% at ${fx}% ${fy}%)`;
@@ -413,6 +421,25 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
                     {s.hero.lead} <em>{s.hero.accent}</em>
                   </h2>
                   {stillCard}
+                </div>
+              )}
+              {c.id === "hero" && (
+                <div className="mp-tale__hero-foot" data-hero-foot="">
+                  <p className="mp-tale__hero-sub">{s.hero.sub}</p>
+                  <div className="mp-tale__hero-links">
+                    <Link to={PATHS.websites[t.lang]} className="mp-tale__chip">
+                      {s.hero.websites} <FiArrowRight aria-hidden="true" />
+                    </Link>
+                    <Link to={PATHS.cards[t.lang]} className="mp-tale__chip">
+                      {s.hero.cards} <FiArrowRight aria-hidden="true" />
+                    </Link>
+                  </div>
+                  {!reduce && (
+                    <span className="mp-tale__scroll" aria-hidden="true">
+                      {s.hero.scroll}
+                      <i />
+                    </span>
+                  )}
                 </div>
               )}
               {c.id === "identity" && caption("identity", s.identity.title, s.identity.text)}

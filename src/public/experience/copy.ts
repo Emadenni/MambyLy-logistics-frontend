@@ -66,7 +66,14 @@ const sv = {
   },
   story: {
     chaptersLabel: "Kapitel",
-    hero: { lead: "Enklare", accent: "digitalt." },
+    hero: {
+      lead: "Enklare",
+      accent: "digitalt.",
+      sub: "Webbplatser och digitala visitkort för ditt företag, i samma stil.",
+      websites: "Webbplatser",
+      cards: "Digitala visitkort",
+      scroll: "Scrolla för att utforska",
+    },
     identity: {
       title: "Allt ditt företag behöver online. Ett ställe, en stil.",
       text: "Webbplats, digitalt visitkort och profil hör ihop: samma färger, samma logotyp, samma känsla.",
@@ -519,7 +526,14 @@ const en: Copy = {
   },
   story: {
     chaptersLabel: "Chapters",
-    hero: { lead: "Simpler", accent: "digital." },
+    hero: {
+      lead: "Simpler",
+      accent: "digital.",
+      sub: "Websites and digital business cards for your business, in one style.",
+      websites: "Websites",
+      cards: "Digital business cards",
+      scroll: "Scroll to explore",
+    },
     identity: {
       title: "Everything your business needs online. One place, one style.",
       text: "Website, digital business card and profile belong together: the same colours, the same logo, the same feel.",

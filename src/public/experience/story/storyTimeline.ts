@@ -123,6 +123,10 @@ export const BROWSER_FRAMES: Frame[] = [
 ];
 export const BROWSER_GONE = 0.64;
 
+/** Larger screens: in the hero the objects stand right of the title and its text. */
+export const heroDeskShift = (p: number) => 1.05 * (1 - seg(p, 0.1, 0.2));
+export const heroDeskScale = (p: number) => 1 - 0.2 * (1 - seg(p, 0.1, 0.2));
+
 /**
  * Phones: objects higher (the text sits below) and closer together. Keyframes stay the desktop
  * ones; this moves them for narrow screens. In chapter 2 the row gets its own compact layout.
@@ -182,7 +186,9 @@ export const T = {
   floaters: { in: [0.4, 0.46], out: [0.52, 0.57] },
   demos: [0.52, 0.58],
   /** chapter 4 */
-  green: { in: [0.58, 0.64], out: [0.84, 0.9], creamAbove: 55 },
+  green: { in: [0.58, 0.64], out: [0.84, 0.9], creamAbove: 85 },
+  /** the hero opens on deep green, which closes into the objects as chapter 2 begins */
+  heroGreen: [0.1, 0.17],
   explode: { in: [0.62, 0.66], out: [0.68, 0.72] },
   /** chapter 4: the profile opens again after the scan */
   profileIn: [0.77, 0.8],
@@ -217,7 +223,8 @@ export const siteDemoAt = (p: number) => clamp((p - T.demos[0]) / (T.demos[1] - 
 /** Exploded card at p: 0 = one card, 1 = three layers apart. */
 export const explode = (p: number) => seg(p, T.explode.in[0], T.explode.in[1]) * (1 - seg(p, T.explode.out[0], T.explode.out[1]));
 /** Radius of the green background, in % of the viewport diagonal circle. */
-export const greenRadius = (p: number) => seg(p, T.green.in[0], T.green.in[1]) * (1 - seg(p, T.green.out[0], T.green.out[1])) * 150;
+export const greenRadius = (p: number) =>
+  Math.max(1 - seg(p, T.heroGreen[0], T.heroGreen[1]), seg(p, T.green.in[0], T.green.in[1]) * (1 - seg(p, T.green.out[0], T.green.out[1]))) * 150;
 
 /** Exploded view (chapter 4): how far front and back sheets move from the core, in world units. */
 export const EXPLODE_GAP = 0.95;
