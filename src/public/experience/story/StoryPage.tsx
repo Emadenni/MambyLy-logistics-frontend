@@ -13,7 +13,7 @@ const MOBILE_QUERY = "(max-width: 759px)";
 /** Height of the browser bar of the website window (chapter 5), px. */
 const BAR = 26;
 const DESK_RATIO = 1280 / 800;
-const PHONE_RATIO = 390 / 844;
+const PHONE_RATIO = 390 / 844; // the phone frame's screen
 
 /**
  * Where the website window ends up: right of the text column on larger screens, across the top on
@@ -91,6 +91,14 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     let copied: HTMLCanvasElement | null = null;
     const profileLayer = site.current?.querySelector<HTMLElement>("[data-layer=profile]");
     const webLayer = site.current?.querySelector<HTMLElement>("[data-layer=web]");
+    const webPage = webLayer?.querySelector<HTMLElement>("img");
+    const phonePage = phone.current?.querySelector<HTMLElement>("img");
+    // a full-page picture moved up inside its frame, as if someone were scrolling the website
+    const scrollPage = (page: HTMLElement | null | undefined, frame: HTMLElement | null | undefined, amount: number) => {
+      if (!page || !frame) return;
+      const travel = Math.max(0, page.offsetHeight - frame.clientHeight);
+      page.style.transform = `translate3d(0, ${(-travel * amount).toFixed(1)}px, 0)`;
+    };
     const bar = site.current?.querySelector<HTMLElement>("[data-bar]");
     let frames = 0;
     let since = performance.now();
@@ -161,6 +169,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           if (profileLayer) profileLayer.style.opacity = (1 - seg(m, 0.2, 0.6)).toFixed(3);
           if (webLayer) webLayer.style.opacity = seg(m, 0.3, 0.85).toFixed(3);
           if (bar) bar.style.opacity = seg(m, 0.4, 0.9).toFixed(3);
+          const read = seg(shown, T.siteScroll[0], T.siteScroll[1]);
+          scrollPage(webPage, webLayer, read);
+          scrollPage(phonePage, hand, read);
           if (hand) {
             const show = seg(m, 0.55, 1);
             const ph = b.h * (vw >= 760 ? 0.78 : 0.92);
@@ -229,7 +240,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         </Suspense>
       )}
 
-      {/* chapter 5: the phone screen grows into a browser window with a website, joined by a phone */}
+      {/* chapter 5: the phone screen grows into a browser window with a website, joined by a phone
+          with the same website; both scroll (full-page pictures of the architecture demo) */}
       <div ref={site} className="mp-tale__site" aria-hidden="true">
         <div className="mp-tale__site-bar" data-bar="">
           <i />
@@ -238,12 +250,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         </div>
         <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
           <img
-            src={media(`preview-${t.lang}-architecture-desktop`, 1280)}
-            srcSet={`${media(`preview-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`preview-${t.lang}-architecture-desktop`, 1280)} 1280w`}
+            src={media(`scroll-${t.lang}-architecture-desktop`, 1280)}
+            srcSet={`${media(`scroll-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`scroll-${t.lang}-architecture-desktop`, 1280)} 1280w`}
             sizes="(min-width: 760px) 50vw, 100vw"
             alt=""
             width={1280}
-            height={800}
+            height={2233}
             loading="lazy"
             decoding="async"
           />
@@ -251,7 +263,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
       </div>
       <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
-        <img src={media(`preview-${t.lang}-restaurant-mobile`, 390)} alt="" width={390} height={844} loading="lazy" decoding="async" />
+        <img src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
       </div>
 
       {CHAPTERS.map((c, i) => (

@@ -80,6 +80,8 @@ export const T = {
   floaters: { in: [0.52, 0.58], out: [0.64, 0.7] },
   green: { in: [0.46, 0.53], out: [0.66, 0.73], creamAbove: 55 },
   site: [0.8, 0.88],
+  /** The website scrolls inside the window and the phone. */
+  siteScroll: [0.84, 0.99],
   cta: [0.91, 0.97],
 } as const;
 
