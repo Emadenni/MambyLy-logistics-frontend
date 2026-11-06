@@ -1,7 +1,11 @@
 /**
- * Utforska as one scroll story: every timing of the page lives here, as a share of the whole story
- * (0 = top of the page, 1 = end of the last chapter). Components only read these values, so the
- * story can be retimed without touching them. World units: camera fov 30 at z 10.
+ * Utforska as one scroll story: every timing of the 3D part of the page lives here, as a share of
+ * that part (0 = top of the page, 1 = end of the last 3D chapter; demos, steps and contact follow
+ * as ordinary sections). Components only read these values, so the story can be retimed without
+ * touching them. World units: camera fov 30 at z 10.
+ *
+ * The story: website, phone and card float together as one ecosystem (hero), join into one
+ * identity, then each shows what it is made of: the website (chapter 3), the card (chapter 4).
  */
 
 export const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -34,55 +38,113 @@ export const kf = (p: number, frames: Frame[], out: Pose): Pose => {
 
 const pose = (x: number, y: number, z: number, rx: number, ry: number, rz: number, s = 1): Pose => ({ x, y, z, rx, ry, rz, s });
 
-/** The card: 3.4 x 2.14 world units, corner radius 0.16. On phones x = 0 and y + 1.1. */
+export type ChapterId = "hero" | "identity" | "websites" | "cards";
+
+/** Chapters as consecutive ranges of the 3D part; the HTML sections take their height from them. */
+export const CHAPTERS: { id: ChapterId; from: number; to: number }[] = [
+  { id: "hero", from: 0, to: 0.14 },
+  { id: "identity", from: 0.14, to: 0.34 },
+  { id: "websites", from: 0.34, to: 0.58 },
+  { id: "cards", from: 0.58, to: 1 },
+];
+
+/** Scroll length of the 3D part, in viewport heights (the part is this plus one screen). */
+export const STORY_SCREENS = 8;
+export const CAPTION_EDGE = 0.04;
+
+// -------------------------------------------------------------------------------------------------
+// Objects and their keyframes (desktop). Phones: see toPhone().
+// -------------------------------------------------------------------------------------------------
+
+/** The card: 3.4 x 2.14 world units, corner radius 0.16. */
 export const CARD = { w: 3.4, h: 2.14, r: 0.16, chip: [0.95, 0.15] as const };
+/** The phone: body 1.0 x 2.06 x 0.09. */
+export const PHONE = { w: 1.0, h: 2.06, d: 0.09 };
+/** The browser window: 3.2 x 2.16 (bar 0.16 included), 0.06 deep. */
+export const BROWSER = { w: 3.2, h: 2.16, d: 0.06, bar: 0.16, r: 0.07 };
+
 export const CARD_FRAMES: Frame[] = [
-  [0.0, pose(0, -0.55, 0, 0.18, -0.35, 0.04)],
-  [0.09, pose(0.15, -0.45, 0, 0.14, -0.55, 0.04)],
-  [0.18, pose(1.55, 0, 0, 0.1, -0.5, 0.03)],
-  [0.29, pose(1.55, 0, 0, 0.1, -0.45, 0.03)],
-  [0.35, pose(0.75, 0.1, 0, 0.04, -0.12, 0)],
-  [0.47, pose(0.75, 0.1, 0, 0.04, -0.12, 0)],
-  [0.53, pose(1.0, 0.15, 0, 0.38, -1.1, -0.04)],
-  [0.64, pose(1.0, 0.15, 0, 0.38, -1.25, -0.04)],
-  [0.7, pose(0.9, 0, 0, 0.1, -0.4, 0.02)],
-  [0.77, pose(-1.8, -1.4, -2.5, 0.3, 0.4, 0.1, 0.7)],
-  [0.84, pose(-4.5, -3.2, -5, 0.5, 0.8, 0.2, 0.5)],
+  // 1 hero: in front, a little left of centre, the smallest of the three
+  [0.0, pose(0.45, -1.3, 0.9, 0.22, -0.32, 0.05, 0.62)],
+  [0.12, pose(0.4, -1.2, 0.9, 0.2, -0.38, 0.05, 0.62)],
+  // 2 identity: first in the row card -> phone -> website
+  [0.2, pose(0.1, -0.15, 0, 0.06, 0.22, 0, 0.5)],
+  [0.32, pose(0.1, -0.15, 0, 0.06, 0.22, 0, 0.5)],
+  // 3 websites: leaves the picture to the lower right while the website opens
+  [0.38, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
+  [0.56, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
+  // 4 cards: comes to the front (exploded view and the QR follow in step 4 of the work)
+  [0.62, pose(1.0, 0.15, 0, 0.38, -1.1, -0.04, 1)],
+  [0.7, pose(1.0, 0.15, 0, 0.38, -1.25, -0.04, 1)],
+  [0.76, pose(0.9, 0, 0, 0.1, -0.4, 0.02, 1)],
+  [0.84, pose(0.9, 0, 0, 0.1, -0.4, 0.02, 1)],
+  [0.9, pose(-2.6, -2.2, -3.5, 0.4, 0.6, 0.15, 0.6)],
 ];
 /** After this the card is out of the picture and is no longer drawn. */
-export const CARD_GONE = 0.86;
+export const CARD_GONE = 0.93;
 
-/** The phone: body 1.0 x 2.06 x 0.09. On phones x * 0.45. */
-export const PHONE = { w: 1.0, h: 2.06, d: 0.09 };
 export const PHONE_FRAMES: Frame[] = [
-  [0.0, pose(6, 0.3, 0.6, 0.05, -0.55, 0.12)],
-  [0.29, pose(6, 0.3, 0.6, 0.05, -0.55, 0.12)],
-  [0.35, pose(3.1, 0.2, 0.7, 0.03, -0.45, 0.14)],
-  [0.39, pose(2.05, 0.18, 0.32, 0.02, -0.3, 0.08)], // touches the chip
-  [0.44, pose(2.55, 0.15, 0.55, 0.02, -0.32, 0.06)],
-  [0.48, pose(2.7, 0.15, 0.6, 0.02, -0.35, 0.06)],
-  [0.53, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
-  [0.69, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
-  [0.75, pose(0, 0, 1.2, 0, 0, 0)],
-  [0.8, pose(0, 0, 3.4, 0, 0, 0)],
+  // 1 hero: right of centre
+  [0.0, pose(2.35, -0.55, 0.35, 0.05, -0.36, 0.07)],
+  [0.12, pose(2.3, -0.5, 0.35, 0.05, -0.42, 0.07)],
+  // 2 identity: the middle of the row
+  [0.2, pose(1.55, -0.05, 0.25, 0.02, -0.06, 0, 0.8)],
+  [0.32, pose(1.55, -0.05, 0.25, 0.02, -0.06, 0, 0.8)],
+  // 3 websites: leaves the picture to the upper right
+  [0.38, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
+  [0.56, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
+  // 4 cards: waits aside, then comes to the card (the scan is refined in step 4 of the work)
+  [0.66, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
+  [0.72, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
+  [0.77, pose(2.6, 0.15, 0.6, 0.02, -0.32, 0.06)],
+  [0.84, pose(2.7, 0.15, 0.6, 0.02, -0.35, 0.06)],
+  // the phone comes to the centre; its screen becomes the website window (HTML)
+  [0.88, pose(0, 0, 1.2, 0, 0, 0)],
+  [0.92, pose(0, 0, 3.4, 0, 0, 0)],
 ];
+/** The phone is drawn only between these moments. */
+export const PHONE_SHOWN = [0, 0.92] as const;
 
-/** Phone layout: the object sits higher, the text below it. */
-export const MOBILE = { cardY: 1.1, phoneX: 0.45 };
+export const BROWSER_FRAMES: Frame[] = [
+  // 1 hero: left and behind, the largest
+  [0.0, pose(-1.55, -0.6, -0.7, 0.05, 0.34, -0.02, 0.86)],
+  [0.12, pose(-1.5, -0.55, -0.7, 0.05, 0.3, -0.02, 0.86)],
+  // 2 identity: last in the row
+  [0.2, pose(3.1, 0.05, -0.2, 0.02, -0.26, 0, 0.55)],
+  [0.32, pose(3.1, 0.05, -0.2, 0.02, -0.26, 0, 0.55)],
+  // 3 websites: in front, right of the text
+  [0.38, pose(1.45, 0.0, 0.6, 0.05, -0.2, 0, 1.0)],
+  [0.56, pose(1.45, 0.0, 0.6, 0.04, -0.14, 0, 1.0)],
+  // 4 cards: leaves backwards and up
+  [0.62, pose(-3.8, 2.4, -4.5, 0.2, 0.5, -0.05, 0.6)],
+];
+export const BROWSER_GONE = 0.64;
+
+/**
+ * Phones: objects higher (the text sits below) and closer together. Keyframes stay the desktop
+ * ones; this moves them for narrow screens.
+ */
+export const toPhone = (p: Pose) => {
+  p.x *= 0.42;
+  p.y = p.y * 0.75 + 1.05;
+  return p;
+};
+
+// -------------------------------------------------------------------------------------------------
+// Effects, by moment
+// -------------------------------------------------------------------------------------------------
 
 export const T = {
-  heroTitleOut: [0.03, 0.08],
-  paperIn: [0.09, 0.17],
-  paperFall: [0.21, 0.3],
-  tapRings: { in: [0.37, 0.39], out: [0.44, 0.47] },
-  profileIn: [0.385, 0.41],
-  explode: { in: [0.5, 0.56], out: [0.64, 0.7] },
-  floaters: { in: [0.52, 0.58], out: [0.64, 0.7] },
-  green: { in: [0.46, 0.53], out: [0.66, 0.73], creamAbove: 55 },
-  site: [0.8, 0.88],
-  /** The website scrolls inside the window and the phone. */
-  siteScroll: [0.84, 0.99],
-  cta: [0.91, 0.97],
+  heroTitleOut: [0.09, 0.14],
+  /** chapter 3: glass tokens around the website */
+  floaters: { in: [0.4, 0.46], out: [0.52, 0.57] },
+  /** chapter 4 */
+  green: { in: [0.58, 0.64], out: [0.84, 0.9], creamAbove: 55 },
+  explode: { in: [0.62, 0.66], out: [0.68, 0.72] },
+  profileIn: [0.77, 0.8],
+  /** the phone screen becomes the website window */
+  site: [0.9, 0.97],
+  siteScroll: [0.93, 1],
 } as const;
 
 /** Exploded card at p: 0 = one card, 1 = three layers apart. */
@@ -90,35 +152,19 @@ export const explode = (p: number) => seg(p, T.explode.in[0], T.explode.in[1]) *
 /** Radius of the green background, in % of the viewport diagonal circle. */
 export const greenRadius = (p: number) => seg(p, T.green.in[0], T.green.in[1]) * (1 - seg(p, T.green.out[0], T.green.out[1])) * 150;
 
-export type ChapterId = "hero" | "problem" | "tap" | "inside" | "site" | "start";
-
-/** Chapters as consecutive ranges of the story; the HTML sections take their height from them. */
-export const CHAPTERS: { id: ChapterId; from: number; to: number }[] = [
-  { id: "hero", from: 0, to: 0.1 },
-  { id: "problem", from: 0.1, to: 0.3 },
-  { id: "tap", from: 0.3, to: 0.485 },
-  { id: "inside", from: 0.485, to: 0.685 },
-  { id: "site", from: 0.685, to: 0.88 },
-  { id: "start", from: 0.88, to: 1 },
-];
-
-/** Scroll length of the whole story, in viewport heights (the page is this plus one screen). */
-export const STORY_SCREENS = 10;
-export const CAPTION_EDGE = 0.04;
-
 /** Exploded view (chapter 4): how far front and back sheets move from the core, in world units. */
 export const EXPLODE_GAP = 0.95;
 
-/** Chapter 4 floaters around the card centre: [x, y, z]. Tokens carry an icon; glass is desktop only. */
+/** Chapter 3 floaters around the website: [x, y, z] from its centre. Glass is desktop only. */
 export const TOKENS: { icon: "phone" | "mail" | "pin" | "web" | "link"; at: [number, number, number] }[] = [
-  { icon: "phone", at: [-2.7, 1.25, -0.6] },
-  { icon: "mail", at: [2.55, 1.55, 0.4] },
-  { icon: "pin", at: [2.95, -0.85, -1.2] },
-  { icon: "web", at: [-2.35, -1.45, 0.8] },
-  { icon: "link", at: [0.35, -2.05, -1.8] },
+  { icon: "phone", at: [-2.4, 1.35, -0.6] },
+  { icon: "mail", at: [2.25, 1.55, 0.4] },
+  { icon: "pin", at: [2.6, -0.95, -1.2] },
+  { icon: "web", at: [-2.2, -1.4, 0.8] },
+  { icon: "link", at: [0.35, -1.85, -1.8] },
 ];
 export const GLASS: [number, number, number][] = [
-  [-1.35, 2.0, -1.6],
-  [1.55, -1.95, 0.9],
-  [3.3, 0.55, -0.4],
+  [-1.35, 1.85, -1.6],
+  [1.55, -1.75, 0.9],
+  [3.0, 0.55, -0.4],
 ];

@@ -4,19 +4,51 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { easing } from "maath";
 import type { Lang } from "../routes";
-import { CARD, CARD_FRAMES, CARD_GONE, EXPLODE_GAP, MOBILE, PHONE_FRAMES, explode, kf, seg, type Pose } from "./storyTimeline";
+import {
+  BROWSER_FRAMES,
+  BROWSER_GONE,
+  CARD,
+  CARD_FRAMES,
+  CARD_GONE,
+  EXPLODE_GAP,
+  PHONE_FRAMES,
+  PHONE_SHOWN,
+  explode,
+  kf,
+  toPhone,
+  type Pose,
+} from "./storyTimeline";
 import { story } from "./progress";
 import CardModel from "./CardModel";
-import PaperCards from "./PaperCards";
 import PhoneModel from "./PhoneModel";
-import NfcRings from "./NfcRings";
+import BrowserModel from "./BrowserModel";
 import CardCore from "./CardCore";
 import Floaters from "./Floaters";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
-const LAG = { card: 0.16, phone: 0.13 };
-/** The card floats up from below when the story first shows (after the veil, or on arrival). */
+const LAG = { card: 0.16, phone: 0.13, browser: 0.16 };
+/** The objects float up from below when the story first shows (after the veil, or on arrival). */
 const INTRO = { s: 1.6, drop: 2.8 };
+
+/**
+ * What every object does on top of its keyframes: the phone layout, a slow float of its own, a
+ * small tilt towards the pointer, and the rise from below when the story first shows.
+ */
+const live = (phase: number) => {
+  let since: number | null = null;
+  return (pose: Pose, time: number) => {
+    if (story.mobile) toPhone(pose);
+    pose.rx += story.pointer.y * 0.06;
+    pose.ry += story.pointer.x * 0.1;
+    pose.y += Math.sin(time * 0.8 + phase) * 0.035;
+    pose.rz += Math.sin(time * 0.55 + 1 + phase) * 0.012;
+    if (since === null && story.active) since = time + phase * 0.12;
+    const rise = since === null ? 0 : Math.min(1, Math.max(0, (time - since) / INTRO.s));
+    const left = Math.pow(1 - rise, 3);
+    pose.y -= left * INTRO.drop;
+    pose.rx += left * 0.5;
+  };
+};
 
 const target = (): Pose => ({ x: 0, y: 0, z: 0, rx: 0, ry: 0, rz: 0, s: 1 });
 
@@ -46,26 +78,7 @@ const usePose = (frames: typeof CARD_FRAMES, lag: number, adjust: (pose: Pose, t
 };
 
 const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const since = useRef<number | null>(null);
-  const ref = usePose(CARD_FRAMES, LAG.card, (pose, time) => {
-    if (story.mobile) {
-      // centred and high on phones, until it leaves towards the lower left in chapter 5
-      const away = seg(story.p, 0.69, 0.75);
-      pose.x *= away;
-      pose.y += MOBILE.cardY * (1 - away);
-    }
-    // The pointer tilts the card a little, never more than a few degrees.
-    pose.rx += story.pointer.y * 0.06;
-    pose.ry += story.pointer.x * 0.1;
-    // A slow float, as if the card were held by the air.
-    pose.y += Math.sin(time * 0.8) * 0.035;
-    pose.rz += Math.sin(time * 0.55 + 1) * 0.012;
-    if (since.current === null && story.active) since.current = time;
-    const rise = since.current === null ? 0 : Math.min(1, (time - since.current) / INTRO.s);
-    const left = 1 - (1 - Math.pow(1 - rise, 3));
-    pose.y -= left * INTRO.drop;
-    pose.rx += left * 0.5;
-  });
+  const ref = usePose(CARD_FRAMES, LAG.card, useMemo(() => live(2), []));
   const front = useRef<THREE.Group>(null);
   const back = useRef<THREE.Group>(null);
   const at = useMemo(() => new THREE.Vector3(), []);
@@ -85,30 +98,32 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
   return (
     <group ref={ref}>
       <CardModel lang={lang} frontRef={front} backRef={back}>
-        <NfcRings />
         <CardCore />
       </CardModel>
     </group>
   );
 };
 
-/** The phone is drawn only while it is part of the story (chapters 3 to 5). */
-const PHONE_SHOWN = [0.28, 0.8] as const;
-
 const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(PHONE_FRAMES, LAG.phone, (pose) => {
-    if (story.mobile) {
-      pose.x *= MOBILE.phoneX;
-      // level with the card, until it moves to the centre for the website (chapter 5)
-      pose.y += MOBILE.cardY * (1 - seg(story.p, 0.69, 0.75));
-    }
-  });
+  const ref = usePose(PHONE_FRAMES, LAG.phone, useMemo(() => live(1), []));
   useFrame(() => {
-    if (ref.current) ref.current.visible = story.shown > PHONE_SHOWN[0] && story.shown < PHONE_SHOWN[1];
+    if (ref.current) ref.current.visible = story.shown >= PHONE_SHOWN[0] && story.shown < PHONE_SHOWN[1];
   });
   return (
     <group ref={ref} visible={false}>
       <PhoneModel lang={lang} />
+    </group>
+  );
+};
+
+const Browser: React.FC<{ lang: Lang }> = ({ lang }) => {
+  const ref = usePose(BROWSER_FRAMES, LAG.browser, useMemo(() => live(0), []));
+  useFrame(() => {
+    if (ref.current) ref.current.visible = story.shown < BROWSER_GONE;
+  });
+  return (
+    <group ref={ref}>
+      <BrowserModel lang={lang} />
     </group>
   );
 };
@@ -234,10 +249,10 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
       <Pause />
       <Studio />
       <Fit>
+        <Browser lang={lang} />
         <Card lang={lang} />
-        <PaperCards />
-        <Floaters />
         <Phone lang={lang} />
+        <Floaters />
       </Fit>
     </Canvas>
   </div>

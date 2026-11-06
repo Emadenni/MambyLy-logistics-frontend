@@ -149,39 +149,8 @@ export const backTexture = async (lang: Lang) => {
   return texture(c);
 };
 
-/** Generic white paper cards for chapter 2: grey bars where a name and lines would be. */
-export const paperTexture = (variant: number) => {
-  const w = 512;
-  const h = Math.round((w * CARD.h) / CARD.w);
-  const [c, x] = canvas(w, h);
-  x.fillStyle = "#fdfdfb";
-  x.fillRect(0, 0, w, h);
-  const bar = (bx: number, by: number, bw: number, bh: number, a: number) => {
-    x.fillStyle = `rgba(60, 64, 62, ${a})`;
-    x.fillRect(bx, by, bw, bh);
-  };
-  if (variant === 0) {
-    bar(40, 52, 210, 22, 0.55);
-    bar(40, 88, 140, 12, 0.28);
-    [220, 244, 268].forEach((y, i) => bar(40, y, 170 - i * 24, 9, 0.22));
-  } else if (variant === 1) {
-    x.fillStyle = "rgba(60, 64, 62, 0.18)";
-    x.beginPath();
-    x.arc(w / 2, 110, 38, 0, Math.PI * 2);
-    x.fill();
-    bar(w / 2 - 110, 172, 220, 18, 0.5);
-    bar(w / 2 - 70, 204, 140, 10, 0.25);
-  } else {
-    bar(w - 260, 60, 220, 20, 0.5);
-    bar(w - 180, 94, 140, 10, 0.26);
-    [228, 252].forEach((y) => bar(40, y, 190, 9, 0.22));
-    bar(40, 52, 54, 54, 0.15);
-  }
-  return texture(c);
-};
-
 // -------------------------------------------------------------------------------------------------
-// Phone screens (chapter 3)
+// Phone screens
 // -------------------------------------------------------------------------------------------------
 
 export const SCREEN = { w: 0.92, h: 1.96, r: 0.11 };
@@ -189,14 +158,12 @@ const SW = 900;
 const SH = Math.round((SW * SCREEN.h) / SCREEN.w);
 const SERIF = '"MP Newsreader", Georgia, serif';
 
-const LOCK_HINT: Record<Lang, string> = { sv: "Håll nära ett kort", en: "Hold near a card" };
-
 const roundRect = (x: CanvasRenderingContext2D, left: number, top: number, w: number, h: number, r: number) => {
   x.beginPath();
   x.roundRect(left, top, w, h, r);
 };
 
-/** Lock screen: time, date and the hint, on a calm green wallpaper. Drawn with the current time. */
+/** Lock screen: time and date on a calm green wallpaper. Drawn with the current time. */
 export const lockTexture = async (lang: Lang) => {
   await fonts();
   const [c, x] = canvas(SW, SH);
@@ -220,17 +187,6 @@ export const lockTexture = async (lang: Lang) => {
   x.fillText(date.charAt(0).toUpperCase() + date.slice(1), SW / 2, 300);
   x.font = `400 ${230}px ${SANS}`;
   x.fillText(now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" }), SW / 2, 520);
-  // the hint sits where the card will touch, with a small contactless sign
-  x.strokeStyle = "rgba(246, 244, 238, 0.85)";
-  x.lineWidth = 7;
-  x.lineCap = "round";
-  [28, 52, 76].forEach((r) => {
-    x.beginPath();
-    x.arc(SW / 2 - 40, SH - 420, r, -0.7, 0.7);
-    x.stroke();
-  });
-  x.font = `500 ${48}px ${SANS}`;
-  x.fillText(LOCK_HINT[lang], SW / 2, SH - 270);
   x.fillStyle = "rgba(246, 244, 238, 0.7)";
   roundRect(x, SW / 2 - 130, SH - 70, 260, 10, 5);
   x.fill();

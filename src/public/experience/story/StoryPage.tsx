@@ -6,7 +6,7 @@ import { publicContact } from "../../contact";
 import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
-import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, greenRadius, seg, type ChapterId } from "./storyTimeline";
+import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, clamp, greenRadius, seg, type ChapterId } from "./storyTimeline";
 import { story } from "./progress";
 import { hasWebGL } from "./webgl";
 import { CardPreview } from "../../digital-card/DigitalCard";
@@ -39,9 +39,10 @@ const windowRect = (vw: number, vh: number) => {
 const showDebug = () => import.meta.env.DEV || new URLSearchParams(window.location.search).has("debug");
 
 /**
- * Utforska: the card's story, told while scrolling. The text is ordinary HTML in the page flow (one
- * section per chapter, as tall as its share of the story); the 3D scene sits fixed behind it and
- * follows the same progress. `active` is false while the home cover lies on top.
+ * Utforska: MambyLy's digital world told while scrolling – website, digital business card and
+ * profile as one. The 3D part is ordinary HTML text in the page flow (one section per chapter, as
+ * tall as its share of the story) over a fixed scene that follows the same progress; the contact
+ * section follows as an ordinary section. `active` is false while the home cover lies on top.
  */
 const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const t = useCopy();
@@ -113,7 +114,6 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       page.style.transform = `translate3d(0, ${(-travel * amount).toFixed(1)}px, 0)`;
     };
     const bar = site.current?.querySelector<HTMLElement>("[data-bar]");
-    const cta = el.querySelector<HTMLElement>(".mp-tale__cta");
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -129,14 +129,13 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           node.style.transform = "";
           return;
         }
-        // the closing panel has its own moment (T.cta); the others fade at their chapter's edges
-        const o = c.id === "start" ? seg(p, T.cta[0], T.cta[1]) : band(p, c.from, c.to, CAPTION_EDGE, { in: c.from > 0, out: c.to < 1 });
+        const o = band(p, c.from, c.to, CAPTION_EDGE, { in: c.from > 0, out: c.to < 1 });
         const rise = (1 - seg(p, c.from, c.from + CAPTION_EDGE)) * 30 - seg(p, c.to - CAPTION_EDGE, c.to) * 30;
         node.style.opacity = o.toFixed(3);
         node.style.transform = `translate3d(0, ${(c.from > 0 ? rise : Math.min(0, rise)).toFixed(1)}px, 0)`;
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
-      const here = CHAPTERS.find((c) => p >= c.from && p < c.to)?.id ?? "start";
+      const here = CHAPTERS.find((c) => p >= c.from && p < c.to)?.id ?? "cards";
       if (here !== current) {
         current = here;
         dots.forEach((d) => (d.dataset.dot === here ? d.setAttribute("aria-current", "step") : d.removeAttribute("aria-current")));
@@ -160,7 +159,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         dark = !dark;
         screen?.classList.toggle("is-dark", dark);
       }
-      // Chapter 5: the phone screen grows into a browser window. The box starts on the screen's
+      // End of chapter 4: the phone screen grows into a browser window. The box starts on the screen's
       // rectangle (projected by the scene) and moves to the window's place; a phone with the
       // mobile version joins it at the lower right.
       const box = site.current;
@@ -192,14 +191,11 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           const read = seg(shown, T.siteScroll[0], T.siteScroll[1]);
           scrollPage(webPage, webLayer, read);
           scrollPage(phonePage, hand, read);
-          // When the closing panel comes in where the window is (short screens), the window gives way.
-          let room = 1;
-          if (cta && shown > T.cta[0]) {
-            const panelTop = cta.getBoundingClientRect().top;
-            const windowBottom = b.y + b.h + b.h * 0.25;
-            if (panelTop < windowBottom) room = 1 - seg(shown, T.cta[0], T.cta[0] + 0.03);
-          }
+          // Past the end of the 3D part the window leaves with the page (the next sections follow).
+          const past = clamp((vh - el.getBoundingClientRect().bottom) / (vh * 0.6));
+          const room = 1 - past;
           box.style.opacity = room.toFixed(3);
+          box.style.translate = `0 ${(-past * vh * 0.25).toFixed(1)}px`;
           if (hand) {
             const show = seg(m, 0.55, 1) * room;
             const ph = b.h * (vw >= 760 ? 0.78 : 0.92);
@@ -209,7 +205,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
             const top = b.y + b.h - ph * 0.78;
             hand.style.width = `${pw.toFixed(1)}px`;
             hand.style.height = `${ph.toFixed(1)}px`;
-            hand.style.transform = `translate3d(${left.toFixed(1)}px, ${(top + (1 - show) * 40).toFixed(1)}px, 0)`;
+            hand.style.transform = `translate3d(${left.toFixed(1)}px, ${(top + (1 - show) * 40 - past * vh * 0.25).toFixed(1)}px, 0)`;
             hand.style.opacity = show.toFixed(3);
           }
         }
@@ -300,111 +296,112 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const siteDemos = { to: PATHS.websites[t.lang], label: s.siteDemos };
 
   return (
-    <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
-      <div className="mp-tale__backdrop" aria-hidden="true" />
-      {!still && <div ref={green} className="mp-tale__green" aria-hidden="true" />}
-      {gl && (
-        <Suspense fallback={null}>
-          <StoryCanvas lang={t.lang} />
-        </Suspense>
-      )}
+    <>
+      <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
+        <div className="mp-tale__backdrop" aria-hidden="true" />
+        {!still && <div ref={green} className="mp-tale__green" aria-hidden="true" />}
+        {gl && (
+          <Suspense fallback={null}>
+            <StoryCanvas lang={t.lang} />
+          </Suspense>
+        )}
 
-      {/* chapter 5: the phone screen grows into a browser window with a website, joined by a phone
-          with the same website; both scroll (full-page pictures of the architecture demo) */}
-      {!still && (
-        <>
-      <div ref={site} className="mp-tale__site" aria-hidden="true">
-        <div className="mp-tale__site-bar" data-bar="">
-          <i />
-          <i />
-          <i />
-        </div>
-        <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
-          <img
-            src={media(`scroll-${t.lang}-architecture-desktop`, 1280)}
-            srcSet={`${media(`scroll-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`scroll-${t.lang}-architecture-desktop`, 1280)} 1280w`}
-            sizes="(min-width: 760px) 50vw, 100vw"
-            alt=""
-            width={1280}
-            height={2233}
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-        <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
-      </div>
-      <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
-        <img src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
-      </div>
-        </>
-      )}
-
-      {CHAPTERS.map((c, i) => (
-        <section
-          key={c.id}
-          id={`kapitel-${c.id}`}
-          className={`mp-tale__chapter mp-tale__chapter--${c.id}`}
-          aria-label={s.dots[c.id]}
-          style={{ "--share": c.to - c.from, "--extra": i === CHAPTERS.length - 1 ? 1 : 0 } as React.CSSProperties}
-        >
-          <div className="mp-tale__sticky">
-            {c.id === "hero" && (
-              <div className="mp-tale__caption mp-tale__caption--hero" data-caption="hero">
-                <h2 className="mp-tale__hero" data-hero-title>
-                  {s.hero.lead} <em>{s.hero.accent}</em>
-                </h2>
-                {stillCard}
+        {/* end of chapter 4: the phone screen grows into a browser window with a website, joined by a
+            phone with the same website; both scroll (full-page pictures of the architecture demo) */}
+        {!still && (
+          <>
+            <div ref={site} className="mp-tale__site" aria-hidden="true">
+              <div className="mp-tale__site-bar" data-bar="">
+                <i />
+                <i />
+                <i />
               </div>
-            )}
-            {c.id === "problem" && caption("problem", s.problem.title, s.problem.text)}
-            {c.id === "tap" && caption("tap", s.tap.title, s.tap.text, cardDemos)}
-            {c.id === "inside" && caption("inside", s.inside.title, s.inside.text)}
-            {c.id === "site" && caption("site", s.site.title, s.site.text, siteDemos)}
-            {c.id === "site" && stillSite}
-            {c.id === "start" && (
-              <div className="mp-tale__caption mp-tale__cta" data-caption="start">
-                <h2 className="mp-tale__title">{s.start.title}</h2>
-                <div className="mp-tale__actions">
-                  <Link to={contactPath} state={{ service: "card" }} className="mp-xbtn mp-xbtn--solid">
-                    {s.start.card} <FiArrowRight aria-hidden="true" />
-                  </Link>
-                  <Link to={contactPath} state={{ service: "site" }} className="mp-xbtn">
-                    {s.start.website}
-                  </Link>
+              <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
+                <img
+                  src={media(`scroll-${t.lang}-architecture-desktop`, 1280)}
+                  srcSet={`${media(`scroll-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`scroll-${t.lang}-architecture-desktop`, 1280)} 1280w`}
+                  sizes="(min-width: 760px) 50vw, 100vw"
+                  alt=""
+                  width={1280}
+                  height={2233}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
+            </div>
+            <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
+              <img src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
+            </div>
+          </>
+        )}
+
+        {CHAPTERS.map((c, i) => (
+          <section
+            key={c.id}
+            id={`kapitel-${c.id}`}
+            className={`mp-tale__chapter mp-tale__chapter--${c.id}`}
+            aria-label={s.dots[c.id]}
+            style={{ "--share": c.to - c.from, "--extra": i === CHAPTERS.length - 1 ? 1 : 0 } as React.CSSProperties}
+          >
+            <div className="mp-tale__sticky">
+              {c.id === "hero" && (
+                <div className="mp-tale__caption mp-tale__caption--hero" data-caption="hero">
+                  <h2 className="mp-tale__hero" data-hero-title>
+                    {s.hero.lead} <em>{s.hero.accent}</em>
+                  </h2>
+                  {stillCard}
                 </div>
-                <p className="mp-tale__write">
-                  {s.start.write} <Link to={contactPath}>{s.start.form}</Link>, <a href={`mailto:${publicContact.email}`}>{s.start.email}</a> {s.start.or}{" "}
-                  <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-                    {s.start.whatsapp}
-                  </a>
-                  .
-                </p>
-                <p className="mp-tale__demos">
-                  <Link to={cardDemos.to}>{cardDemos.label}</Link>
-                  <Link to={siteDemos.to}>{siteDemos.label}</Link>
-                </p>
-              </div>
-            )}
+              )}
+              {c.id === "identity" && caption("identity", s.identity.title, s.identity.text)}
+              {c.id === "websites" && caption("websites", s.websites.title, s.websites.text, siteDemos)}
+              {c.id === "websites" && stillSite}
+              {c.id === "cards" && caption("cards", s.cards.title, s.cards.text, cardDemos)}
+            </div>
+          </section>
+        ))}
+
+        {!reduce && (
+          <nav className="mp-tale__dots" aria-label={s.chaptersLabel}>
+            <ol>
+              {CHAPTERS.map((c) => (
+                <li key={c.id}>
+                  <button type="button" data-dot={c.id} aria-label={s.dots[c.id]} onClick={() => goTo(c.from)}>
+                    <span aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
+        {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
+      </div>
+
+      {/* After the 3D part: the contact, only in writing (form, e-mail, WhatsApp) */}
+      <section className="mp-tale-contact" aria-labelledby="tale-contact">
+        <div className="mp-tale-contact__panel">
+          <h2 id="tale-contact" className="mp-tale__title">
+            {s.contact.title}
+          </h2>
+          <div className="mp-tale__actions">
+            <Link to={contactPath} state={{ service: "site" }} className="mp-xbtn mp-xbtn--solid">
+              {s.contact.website} <FiArrowRight aria-hidden="true" />
+            </Link>
+            <Link to={contactPath} state={{ service: "card" }} className="mp-xbtn mp-xbtn--solid">
+              {s.contact.card} <FiArrowRight aria-hidden="true" />
+            </Link>
           </div>
-        </section>
-      ))}
-
-      {!reduce && (
-        <nav className="mp-tale__dots" aria-label={s.chaptersLabel}>
-          <ol>
-            {CHAPTERS.map((c) => (
-              <li key={c.id}>
-                <button type="button" data-dot={c.id} aria-label={s.dots[c.id]} onClick={() => goTo(c.from)}>
-                  <span aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      )}
-
-      {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
-    </div>
+          <p className="mp-tale__write">
+            {s.contact.write} <Link to={contactPath}>{s.contact.form}</Link>, <a href={`mailto:${publicContact.email}`}>{s.contact.email}</a> {s.contact.or}{" "}
+            <a href={whatsapp} target="_blank" rel="noopener noreferrer">
+              {s.contact.whatsapp}
+            </a>
+            .
+          </p>
+        </div>
+      </section>
+    </>
   );
 };
 

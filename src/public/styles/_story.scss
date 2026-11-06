@@ -136,6 +136,37 @@ $cover-background:
     }
   }
 
+  // The contact after the 3D part: an ordinary section over the fixed backdrop.
+  .mp-tale-contact {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    min-height: 80vh;
+    min-height: 80svh;
+    padding: 64px var(--x-gutter) 80px;
+
+    &__panel {
+      width: min(100%, 40rem);
+      padding: 30px 26px 26px;
+      border: 1px solid rgba(16, 59, 53, 0.08);
+      border-radius: 26px;
+      background: color-mix(in srgb, #fbfaf6 74%, transparent);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 24px 60px rgba(16, 59, 53, 0.14);
+      text-align: center;
+
+      @include desk {
+        padding: 40px 40px 32px;
+      }
+
+      .mp-tale__actions {
+        justify-content: center;
+      }
+    }
+  }
+
   .mp-screen--tale {
     --story-cream: #f6f4ee;
     --story-paper: #fbfaf6;
@@ -222,6 +253,10 @@ $cover-background:
 
       .mp-tale__dots button span {
         background: rgba(246, 244, 238, 0.4);
+      }
+
+      .mp-tale__more {
+        color: var(--story-cream);
       }
 
       .mp-tale__dots button[aria-current] span {

@@ -7,15 +7,15 @@ import { GLASS, T, TOKENS, seg } from "./storyTimeline";
 import { story } from "./progress";
 import { iconTexture } from "./textures";
 
-/** Where the card is in chapter 4 (CARD_FRAMES 0.53–0.64), desktop and phones. */
-const CENTER = { desk: [1.0, 0.15], phone: [0, 1.25] } as const;
+/** Where the website is in chapter 3 (BROWSER_FRAMES 0.38–0.56), desktop and phones (toPhone). */
+const CENTER = { desk: [1.45, 0], phone: [0.61, 1.05] } as const;
 const LAG = 0.2;
 
 const amountAt = (p: number) => seg(p, T.floaters.in[0], T.floaters.in[1]) * (1 - seg(p, T.floaters.out[0], T.floaters.out[1]));
 
 /**
- * Chapter 4: five sage tokens with the card's contact icons and, on larger screens, three small
- * rounded glass cubes drift around the opened card, then gather back into it.
+ * Chapter 3: five sage tokens with the icons of what a website gathers and, on larger screens,
+ * three small rounded glass cubes drift around the opened website, then gather back into it.
  */
 const Floaters: React.FC = () => {
   const items = useRef<(THREE.Group | null)[]>([]);
