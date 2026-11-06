@@ -465,10 +465,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
                   <p className="mp-tale__hero-sub">{s.hero.sub}</p>
                   <div className="mp-tale__hero-links">
                     <Link to={PATHS.websites[t.lang]} className="mp-tale__chip">
-                      {s.hero.websites} <FiArrowRight aria-hidden="true" />
+                      <span>{s.hero.websites}</span> <FiArrowRight aria-hidden="true" />
                     </Link>
                     <Link to={PATHS.cards[t.lang]} className="mp-tale__chip">
-                      {s.hero.cards} <FiArrowRight aria-hidden="true" />
+                      <span>{s.hero.cards}</span> <FiArrowRight aria-hidden="true" />
                     </Link>
                   </div>
                   {!reduce && (

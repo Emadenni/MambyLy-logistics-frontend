@@ -356,14 +356,15 @@ $cover-background:
       visibility: hidden;
       pointer-events: none;
 
-      // the cover's glass waves, very light, so the green is not one flat surface
+      // a photo of the same website on a phone and a laptop, toned into the green, very light
       &::after {
         content: "";
         position: absolute;
         inset: 0;
-        background: url("/media/mambyly/hero-glass-1024.webp") center / cover no-repeat;
-        opacity: 0.22;
-        mix-blend-mode: soft-light;
+        background: url("/media/mambyly/about-rethink-1200.webp") 30% 40% / cover no-repeat;
+        filter: grayscale(1) contrast(1.1);
+        opacity: 0.16;
+        mix-blend-mode: luminosity;
       }
     }
 
@@ -541,7 +542,8 @@ $cover-background:
       position: absolute;
       left: var(--x-gutter);
       right: var(--x-gutter);
-      bottom: max(3.5svh, 20px);
+      // phones: right under the objects (they end at about 60 % of the screen)
+      top: 62svh;
       display: grid;
       justify-items: center;
       gap: 12px;
@@ -583,7 +585,100 @@ $cover-background:
       }
     }
 
+    // The two ways in arrive a moment after the page, rising one after the other; the first fills
+    // like a "next episode" countdown, then a light passes over them now and then.
+    &__hero-links .mp-tale__chip {
+      opacity: 0;
+      transform: translateY(18px) scale(0.96);
+      animation: mp-tale-chip-in 0.7s var(--x-ease) forwards;
+
+      &:nth-child(1) {
+        animation-delay: 0.9s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 1.05s;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: rgba(127, 156, 144, 0.45);
+        transform: scaleX(0);
+        transform-origin: left;
+        pointer-events: none;
+      }
+
+      &:nth-child(1)::before {
+        animation: mp-tale-chip-fill 2.6s linear 1.6s forwards;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.85) 50%, transparent 65%);
+        background-size: 250% 100%;
+        background-position: 120% 0;
+        mix-blend-mode: soft-light;
+        animation: mp-tale-chip-shine 5s ease-in-out 4.4s infinite;
+        pointer-events: none;
+      }
+
+      > * {
+        position: relative;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: none;
+        animation: none;
+
+        &::before,
+        &::after {
+          animation: none;
+        }
+      }
+    }
+
+    @keyframes mp-tale-chip-in {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes mp-tale-chip-fill {
+      0% {
+        transform: scaleX(0);
+        opacity: 1;
+      }
+      92% {
+        transform: scaleX(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scaleX(1);
+        opacity: 0;
+      }
+    }
+
+    @keyframes mp-tale-chip-shine {
+      0%,
+      70% {
+        background-position: 120% 0;
+      }
+      100% {
+        background-position: -20% 0;
+      }
+    }
+
     &__chip {
+      position: relative;
+      overflow: hidden;
       display: inline-flex;
       align-items: center;
       gap: 6px;
