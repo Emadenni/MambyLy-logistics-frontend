@@ -12,6 +12,7 @@ import {
   CARD_GONE,
   EXPLODE_GAP,
   PHONE_FRAMES,
+  PHONE_ROW,
   PHONE_SHOWN,
   explode,
   kf,
@@ -34,10 +35,10 @@ const INTRO = { s: 1.6, drop: 2.8 };
  * What every object does on top of its keyframes: the phone layout, a slow float of its own, a
  * small tilt towards the pointer, and the rise from below when the story first shows.
  */
-const live = (phase: number) => {
+const live = (phase: number, row: Pose) => {
   let since: number | null = null;
   return (pose: Pose, time: number) => {
-    if (story.mobile) toPhone(pose);
+    if (story.mobile) toPhone(pose, row, story.p);
     pose.rx += story.pointer.y * 0.06;
     pose.ry += story.pointer.x * 0.1;
     pose.y += Math.sin(time * 0.8 + phase) * 0.035;
@@ -78,7 +79,7 @@ const usePose = (frames: typeof CARD_FRAMES, lag: number, adjust: (pose: Pose, t
 };
 
 const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(CARD_FRAMES, LAG.card, useMemo(() => live(2), []));
+  const ref = usePose(CARD_FRAMES, LAG.card, useMemo(() => live(2, PHONE_ROW.card), []));
   const front = useRef<THREE.Group>(null);
   const back = useRef<THREE.Group>(null);
   const at = useMemo(() => new THREE.Vector3(), []);
@@ -97,7 +98,7 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
   });
   return (
     <group ref={ref}>
-      <CardModel lang={lang} frontRef={front} backRef={back}>
+      <CardModel lang={lang} frontRef={front} backRef={back} anchor={anchors.card}>
         <CardCore />
       </CardModel>
     </group>
@@ -105,27 +106,52 @@ const Card: React.FC<{ lang: Lang }> = ({ lang }) => {
 };
 
 const Phone: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(PHONE_FRAMES, LAG.phone, useMemo(() => live(1), []));
+  const ref = usePose(PHONE_FRAMES, LAG.phone, useMemo(() => live(1, PHONE_ROW.phone), []));
   useFrame(() => {
     if (ref.current) ref.current.visible = story.shown >= PHONE_SHOWN[0] && story.shown < PHONE_SHOWN[1];
   });
   return (
     <group ref={ref} visible={false}>
-      <PhoneModel lang={lang} />
+      <PhoneModel lang={lang} anchors={{ left: anchors.phoneLeft, right: anchors.phoneRight }} />
     </group>
   );
 };
 
 const Browser: React.FC<{ lang: Lang }> = ({ lang }) => {
-  const ref = usePose(BROWSER_FRAMES, LAG.browser, useMemo(() => live(0), []));
+  const ref = usePose(BROWSER_FRAMES, LAG.browser, useMemo(() => live(0, PHONE_ROW.browser), []));
   useFrame(() => {
     if (ref.current) ref.current.visible = story.shown < BROWSER_GONE;
   });
   return (
     <group ref={ref}>
-      <BrowserModel lang={lang} />
+      <BrowserModel lang={lang} anchor={anchors.site} />
     </group>
   );
+};
+
+/** Ends of the chapter 2 lines on the objects; projected to page pixels for the HTML overlay. */
+const anchors = {
+  card: React.createRef<THREE.Object3D>(),
+  phoneLeft: React.createRef<THREE.Object3D>(),
+  phoneRight: React.createRef<THREE.Object3D>(),
+  site: React.createRef<THREE.Object3D>(),
+};
+const Links: React.FC = () => {
+  const v = useMemo(() => new THREE.Vector3(), []);
+  const size = useThree((s) => s.size);
+  useFrame(({ camera }) => {
+    const put = (ref: React.RefObject<THREE.Object3D>, out: { x: number; y: number }) => {
+      if (!ref.current) return;
+      ref.current.getWorldPosition(v).project(camera);
+      out.x = ((v.x + 1) / 2) * size.width;
+      out.y = ((1 - v.y) / 2) * size.height;
+    };
+    put(anchors.card, story.links.card);
+    put(anchors.phoneLeft, story.links.phoneLeft);
+    put(anchors.phoneRight, story.links.phoneRight);
+    put(anchors.site, story.links.site);
+  });
+  return null;
 };
 
 /**
@@ -245,6 +271,7 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
       }}
     >
       <Clock />
+      <Links />
       <Warmup />
       <Pause />
       <Studio />

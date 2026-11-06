@@ -6,7 +6,7 @@ import { publicContact } from "../../contact";
 import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
-import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, clamp, greenRadius, seg, type ChapterId } from "./storyTimeline";
+import { CAPTION_EDGE, CHAPTERS, STORY_SCREENS, T, band, clamp, greenRadius, linkDraw, linkPulse, linksOpacity, seg, type ChapterId } from "./storyTimeline";
 import { story } from "./progress";
 import { hasWebGL } from "./webgl";
 import { CardPreview } from "../../digital-card/DigitalCard";
@@ -36,6 +36,14 @@ const windowRect = (vw: number, vh: number) => {
   const w = vw - 40;
   return { x: 20, y: Math.max(96, vh * 0.13), w, h: w / DESK_RATIO + BAR };
 };
+/** A soft arc between two points of the page (the chapter 2 lines). */
+const arc = (a: { x: number; y: number }, b: { x: number; y: number }) => {
+  const mx = (a.x + b.x) / 2;
+  const my = (a.y + b.y) / 2 - Math.hypot(b.x - a.x, b.y - a.y) * 0.18;
+  return `M${a.x.toFixed(1)} ${a.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+};
+const PULSE = 0.08; // length of the light that runs along a line, as a share of it
+
 const showDebug = () => import.meta.env.DEV || new URLSearchParams(window.location.search).has("debug");
 
 /**
@@ -57,6 +65,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const site = useRef<HTMLDivElement>(null);
   const profile = useRef<HTMLCanvasElement>(null);
   const phone = useRef<HTMLDivElement>(null);
+  const links = useRef<SVGSVGElement>(null);
   const [gl, setGl] = useState(false);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
@@ -114,6 +123,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       page.style.transform = `translate3d(0, ${(-travel * amount).toFixed(1)}px, 0)`;
     };
     const bar = site.current?.querySelector<HTMLElement>("[data-bar]");
+    const lines = (["cardPhone", "phoneSite"] as const).map((id) => ({
+      id,
+      paths: [...(links.current?.querySelectorAll<SVGPathElement>(`[data-link="${id}"]`) ?? [])],
+      pulse: links.current?.querySelector<SVGPathElement>(`[data-pulse="${id}"]`),
+      nodes: [...(links.current?.querySelectorAll<SVGCircleElement>(`[data-node="${id}"]`) ?? [])],
+    }));
     let frames = 0;
     let since = performance.now();
     let fps = 0;
@@ -158,6 +173,38 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       if (radius > T.green.creamAbove !== dark) {
         dark = !dark;
         screen?.classList.toggle("is-dark", dark);
+      }
+      // Chapter 2: thin lines join card -> phone -> website; a light runs along each, and the brand
+      // follows it (the scene switches the screens at the same moments).
+      const svg = links.current;
+      if (svg) {
+        const o = story.scene ? linksOpacity(shown) : 0;
+        svg.style.opacity = o.toFixed(3);
+        svg.style.visibility = o > 0.01 ? "visible" : "hidden";
+        if (o > 0.01) {
+          const ends = { cardPhone: [story.links.card, story.links.phoneLeft], phoneSite: [story.links.phoneRight, story.links.site] } as const;
+          lines.forEach(({ id, paths, pulse, nodes }) => {
+            const [a, b] = ends[id];
+            const d = arc(a, b);
+            const drawn = linkDraw(shown, id);
+            paths.forEach((path) => {
+              path.setAttribute("d", d);
+              path.style.strokeDashoffset = (1 - drawn).toFixed(4);
+            });
+            if (pulse) {
+              const at = linkPulse(shown, id);
+              pulse.setAttribute("d", d);
+              pulse.style.opacity = at < 0 ? "0" : Math.min(1, Math.min(at, 1 - at) * 8).toFixed(3);
+              pulse.style.strokeDashoffset = (PULSE - at * (1 + PULSE)).toFixed(4);
+            }
+            nodes.forEach((node, i) => {
+              const at = i === 0 ? a : b;
+              node.setAttribute("cx", at.x.toFixed(1));
+              node.setAttribute("cy", at.y.toFixed(1));
+              node.style.opacity = (i === 0 ? Math.min(1, drawn * 4) : seg(drawn, 0.85, 1)).toFixed(3);
+            });
+          });
+        }
       }
       // End of chapter 4: the phone screen grows into a browser window. The box starts on the screen's
       // rectangle (projected by the scene) and moves to the window's place; a phone with the
@@ -304,6 +351,21 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
           <Suspense fallback={null}>
             <StoryCanvas lang={t.lang} />
           </Suspense>
+        )}
+
+        {/* chapter 2: the lines that join card, phone and website (ends projected by the scene) */}
+        {!still && (
+          <svg ref={links} className="mp-tale__links" aria-hidden="true">
+            {(["cardPhone", "phoneSite"] as const).map((id) => (
+              <g key={id}>
+                <path data-link={id} className="mp-tale__link-glow" pathLength={1} />
+                <path data-link={id} className="mp-tale__link" pathLength={1} />
+                <path data-pulse={id} className="mp-tale__link-pulse" pathLength={1} strokeDasharray={`${PULSE} 2`} />
+                <circle data-node={id} className="mp-tale__link-node" r={3.5} />
+                <circle data-node={id} className="mp-tale__link-node" r={3.5} />
+              </g>
+            ))}
+          </svg>
         )}
 
         {/* end of chapter 4: the phone screen grows into a browser window with a website, joined by a

@@ -4,7 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import { cardStrings } from "../../digital-card/strings";
 import type { Lang } from "../routes";
-import { PHONE, T, seg } from "./storyTimeline";
+import { PHONE, profileShown } from "./storyTimeline";
 import { story } from "./progress";
 import { cardShape, faceGeometry } from "./CardModel";
 import { SCREEN, lockTexture, profileTexture } from "./textures";
@@ -46,10 +46,14 @@ const useScreens = (lang: Lang) => {
 
 /**
  * A plain modern phone: graphite body, a screen that is lit (not shaded by the scene). The lock
- * screen fades into the digital profile once the phone has touched the card (chapter 3).
+ * screen fades into MambyLy's digital profile in chapter 2, and again after the scan in chapter 4.
  * `screenRef` exposes the screen for the website reveal of chapter 5.
  */
-const PhoneModel: React.FC<{ lang: Lang; screenRef?: React.RefObject<THREE.Mesh> }> = ({ lang, screenRef }) => {
+const PhoneModel: React.FC<{
+  lang: Lang;
+  screenRef?: React.RefObject<THREE.Mesh>;
+  anchors?: { left: React.RefObject<THREE.Object3D>; right: React.RefObject<THREE.Object3D> };
+}> = ({ lang, screenRef, anchors }) => {
   const maps = useScreens(lang);
   const profile = useRef<THREE.MeshBasicMaterial>(null);
   const ownScreen = useRef<THREE.Mesh>(null);
@@ -60,7 +64,7 @@ const PhoneModel: React.FC<{ lang: Lang; screenRef?: React.RefObject<THREE.Mesh>
   useEffect(() => () => screen.dispose(), [screen]);
 
   useFrame(({ camera }) => {
-    if (profile.current) profile.current.opacity = seg(story.shown, T.profileIn[0], T.profileIn[1]);
+    if (profile.current) profile.current.opacity = profileShown(story.shown);
     // the screen's rectangle on the page, for the website reveal of chapter 5
     const m = screenMesh.current;
     if (!m) return;
@@ -107,6 +111,8 @@ const PhoneModel: React.FC<{ lang: Lang; screenRef?: React.RefObject<THREE.Mesh>
           <meshBasicMaterial ref={profile} map={maps.profile} toneMapped={false} transparent opacity={0} depthWrite={false} />
         </mesh>
       )}
+      <object3D ref={anchors?.left} position={[-PHONE.w / 2, 0, z]} />
+      <object3D ref={anchors?.right} position={[PHONE.w / 2, 0, z]} />
       {/* a faint glass reflection over the screen */}
       <mesh geometry={screen} position-z={z + 0.0024}>
         <meshPhysicalMaterial color="#ffffff" transparent opacity={0.06} roughness={0.08} metalness={0} depthWrite={false} />

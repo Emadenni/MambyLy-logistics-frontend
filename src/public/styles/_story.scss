@@ -292,6 +292,53 @@ $cover-background:
     // One screen taller than its share, minus one screen of margin: the chapter still starts at its
     // place in the story, and its sticky caption stays on screen for the whole chapter (consecutive
     // chapters overlap by one screen, where one caption fades out and the next fades in).
+    // Chapter 2: the thin lines between card, phone and website, over the scene.
+    &__links {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    &__link,
+    &__link-glow {
+      fill: none;
+      stroke-dasharray: 1 1;
+      stroke-dashoffset: 1;
+      stroke-linecap: round;
+    }
+
+    &__link {
+      stroke: rgba(29, 80, 71, 0.6);
+      stroke-width: 1.25;
+    }
+
+    &__link-glow {
+      stroke: rgba(127, 156, 144, 0.35);
+      stroke-width: 6;
+      filter: blur(3px);
+    }
+
+    &__link-pulse {
+      fill: none;
+      stroke: #e4c98a;
+      stroke-width: 3;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 4px rgba(242, 204, 88, 0.85)) drop-shadow(0 0 10px rgba(242, 204, 88, 0.45));
+      opacity: 0;
+    }
+
+    &__link-node {
+      fill: #f6f4ee;
+      stroke: #1d5047;
+      stroke-width: 1.25;
+      opacity: 0;
+    }
+
     // The same background as the veil, fixed behind the whole story.
     &__backdrop {
       position: fixed;

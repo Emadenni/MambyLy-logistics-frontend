@@ -68,8 +68,8 @@ export const CARD_FRAMES: Frame[] = [
   [0.0, pose(0.45, -1.3, 0.9, 0.22, -0.32, 0.05, 0.62)],
   [0.12, pose(0.4, -1.2, 0.9, 0.2, -0.38, 0.05, 0.62)],
   // 2 identity: first in the row card -> phone -> website
-  [0.2, pose(0.1, -0.15, 0, 0.06, 0.22, 0, 0.5)],
-  [0.32, pose(0.1, -0.15, 0, 0.06, 0.22, 0, 0.5)],
+  [0.2, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
+  [0.32, pose(-0.05, -0.4, 0, 0.06, 0.22, 0, 0.42)],
   // 3 websites: leaves the picture to the lower right while the website opens
   [0.38, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
   [0.56, pose(6.2, -3.6, -3.2, 0.25, -0.4, 0.08, 0.42)],
@@ -88,8 +88,8 @@ export const PHONE_FRAMES: Frame[] = [
   [0.0, pose(2.35, -0.55, 0.35, 0.05, -0.36, 0.07)],
   [0.12, pose(2.3, -0.5, 0.35, 0.05, -0.42, 0.07)],
   // 2 identity: the middle of the row
-  [0.2, pose(1.55, -0.05, 0.25, 0.02, -0.06, 0, 0.8)],
-  [0.32, pose(1.55, -0.05, 0.25, 0.02, -0.06, 0, 0.8)],
+  [0.2, pose(1.45, 0.05, 0.25, 0.02, -0.06, 0, 0.72)],
+  [0.32, pose(1.45, 0.05, 0.25, 0.02, -0.06, 0, 0.72)],
   // 3 websites: leaves the picture to the upper right
   [0.38, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
   [0.56, pose(7.0, 3.2, -3.0, 0.05, -0.5, 0.1, 0.6)],
@@ -110,8 +110,8 @@ export const BROWSER_FRAMES: Frame[] = [
   [0.0, pose(-1.55, -0.6, -0.7, 0.05, 0.34, -0.02, 0.86)],
   [0.12, pose(-1.5, -0.55, -0.7, 0.05, 0.3, -0.02, 0.86)],
   // 2 identity: last in the row
-  [0.2, pose(3.1, 0.05, -0.2, 0.02, -0.26, 0, 0.55)],
-  [0.32, pose(3.1, 0.05, -0.2, 0.02, -0.26, 0, 0.55)],
+  [0.2, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
+  [0.32, pose(3.25, 0.3, -0.2, 0.02, -0.26, 0, 0.48)],
   // 3 websites: in front, right of the text
   [0.38, pose(1.45, 0.0, 0.6, 0.05, -0.2, 0, 1.0)],
   [0.56, pose(1.45, 0.0, 0.6, 0.04, -0.14, 0, 1.0)],
@@ -122,13 +122,24 @@ export const BROWSER_GONE = 0.64;
 
 /**
  * Phones: objects higher (the text sits below) and closer together. Keyframes stay the desktop
- * ones; this moves them for narrow screens.
+ * ones; this moves them for narrow screens. In chapter 2 the row gets its own compact layout.
  */
-export const toPhone = (p: Pose) => {
+export const toPhone = (p: Pose, row?: Pose, at = 0) => {
   p.x *= 0.42;
   p.y = p.y * 0.75 + 1.05;
+  const w = row ? identityRow(at) : 0;
+  if (row && w > 0) for (const k of KEYS) p[k] += (row[k] - p[k]) * w;
   return p;
 };
+
+/** Chapter 2 on phones: card, phone and website side by side, small, above the text. */
+export const PHONE_ROW = {
+  card: pose(-1.3, 1.35, 0, 0.05, 0.25, 0, 0.36),
+  phone: pose(0, 1.3, 0.3, 0.02, 0, 0, 0.62),
+  browser: pose(1.32, 1.35, -0.1, 0.02, -0.25, 0, 0.4),
+};
+/** How much of the phone row applies at p (in for chapter 2, out after it). */
+export const identityRow = (p: number) => seg(p, 0.16, 0.21) * (1 - seg(p, 0.33, 0.37));
 
 // -------------------------------------------------------------------------------------------------
 // Effects, by moment
@@ -136,16 +147,44 @@ export const toPhone = (p: Pose) => {
 
 export const T = {
   heroTitleOut: [0.09, 0.14],
+  /** chapter 2: one identity. Lines draw on, a light runs along them, the brand follows it. */
+  links: {
+    cardPhone: { draw: [0.2, 0.24], pulse: [0.225, 0.27] },
+    phoneSite: { draw: [0.24, 0.28], pulse: [0.265, 0.31] },
+    out: [0.32, 0.35],
+  },
+  /** the gold foil of the card catches the light as the brand sets off */
+  glint: [0.205, 0.225, 0.26],
+  /** the phone shows MambyLy's profile; the website shows a MambyLy page */
+  brandPhone: [0.255, 0.28],
+  brandSite: [0.295, 0.32],
   /** chapter 3: glass tokens around the website */
   floaters: { in: [0.4, 0.46], out: [0.52, 0.57] },
   /** chapter 4 */
   green: { in: [0.58, 0.64], out: [0.84, 0.9], creamAbove: 55 },
   explode: { in: [0.62, 0.66], out: [0.68, 0.72] },
+  /** chapter 4: the profile opens again after the scan */
   profileIn: [0.77, 0.8],
   /** the phone screen becomes the website window */
   site: [0.9, 0.97],
   siteScroll: [0.93, 1],
 } as const;
+
+/** How much of a line is drawn (0..1), and its opacity, at p. */
+export const linkDraw = (p: number, which: "cardPhone" | "phoneSite") => seg(p, T.links[which].draw[0], T.links[which].draw[1]);
+export const linksOpacity = (p: number) => seg(p, T.links.cardPhone.draw[0], T.links.cardPhone.draw[0] + 0.02) * (1 - seg(p, T.links.out[0], T.links.out[1]));
+/** Where the light is along a line (0..1), or -1 when it is not running. */
+export const linkPulse = (p: number, which: "cardPhone" | "phoneSite") => {
+  const [a, b] = T.links[which].pulse;
+  return p < a || p > b ? -1 : (p - a) / (b - a);
+};
+/** Glint of the card's foil (0..1). */
+export const glint = (p: number) => seg(p, T.glint[0], T.glint[1]) * (1 - seg(p, T.glint[1], T.glint[2]));
+/** The phone shows the profile (MambyLy's brand) in chapter 2 and after the scan in chapter 4. */
+export const profileShown = (p: number) =>
+  Math.max(seg(p, T.brandPhone[0], T.brandPhone[1]) * (1 - seg(p, 0.6, 0.64)), seg(p, T.profileIn[0], T.profileIn[1]));
+/** The website shows the MambyLy page in chapter 2, real demos before and after. */
+export const brandSiteShown = (p: number) => seg(p, T.brandSite[0], T.brandSite[1]) * (1 - seg(p, 0.36, 0.4));
 
 /** Exploded card at p: 0 = one card, 1 = three layers apart. */
 export const explode = (p: number) => seg(p, T.explode.in[0], T.explode.in[1]) * (1 - seg(p, T.explode.out[0], T.explode.out[1]));

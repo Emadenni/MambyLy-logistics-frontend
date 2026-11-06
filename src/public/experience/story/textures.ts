@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import logoLight from "../../assets/logo-light.svg";
+import logoDark from "../../assets/logo-dark.svg";
 import { encodeQr } from "../../digital-card/qr";
 import { getCard, COMPANY_CARD_SLUG } from "../../digital-card/registry";
 import type { Lang } from "../routes";
@@ -307,5 +308,88 @@ export const iconTexture = (icon: TokenIcon) => {
     x.roundRect(-4, -20, 64, 40, 20);
   }
   x.stroke();
+  return texture(c);
+};
+
+// -------------------------------------------------------------------------------------------------
+// The MambyLy page on the website screen (chapter 2: one style on every surface)
+// -------------------------------------------------------------------------------------------------
+
+const BRAND_PAGE: Record<Lang, { nav: string[]; title: string; lead: string; button: string }> = {
+  sv: {
+    nav: ["Webbplatser", "Visitkort", "Om oss", "Kontakt"],
+    title: "Enklare digitalt.",
+    lead: "Webbplatser och digitala visitkort, i samma stil.",
+    button: "Kontakta oss",
+  },
+  en: {
+    nav: ["Websites", "Business cards", "About", "Contact"],
+    title: "Simpler digital.",
+    lead: "Websites and digital business cards, in one style.",
+    button: "Contact us",
+  },
+};
+
+/** A website page in MambyLy's own look: cream, the logo, a serif headline, the card in green. */
+export const brandPageTexture = async (lang: Lang) => {
+  await fonts();
+  const PW = 1280;
+  const PH = 800;
+  const [c, x] = canvas(PW, PH);
+  const page = BRAND_PAGE[lang];
+  x.fillStyle = C.cream;
+  x.fillRect(0, 0, PW, PH);
+  const glow = x.createRadialGradient(PW * 0.78, PH * 1.05, 0, PW * 0.78, PH * 1.05, PW * 0.7);
+  glow.addColorStop(0, "rgba(36, 123, 103, 0.22)");
+  glow.addColorStop(1, "rgba(36, 123, 103, 0)");
+  x.fillStyle = glow;
+  x.fillRect(0, 0, PW, PH);
+
+  const logo = await image(logoDark);
+  x.drawImage(logo, 64, 34, 150, (150 * 125) / 440);
+  x.fillStyle = C.green;
+  x.font = `500 19px ${SANS}`;
+  x.textAlign = "right";
+  let right = PW - 64;
+  for (const item of [...page.nav].reverse()) {
+    x.fillText(item, right, 64);
+    right -= x.measureText(item).width + 40;
+  }
+  x.textAlign = "left";
+  x.fillStyle = "rgba(16, 59, 53, 0.12)";
+  x.fillRect(64, 108, PW - 128, 1.5);
+
+  x.fillStyle = C.green;
+  x.font = `400 96px ${SERIF}`;
+  x.fillText(page.title, 64, 330);
+  x.fillStyle = C.muted;
+  x.font = `400 26px ${SANS}`;
+  x.fillText(page.lead, 66, 390);
+  roundRect(x, 64, 440, x.measureText(page.button).width + 120, 64, 32);
+  x.fillStyle = C.green;
+  x.fill();
+  x.fillStyle = C.cream;
+  x.font = `600 22px ${SANS}`;
+  x.fillText(page.button, 104, 480);
+
+  // the card, as on every MambyLy surface
+  x.save();
+  x.translate(980, 470);
+  x.rotate(-0.12);
+  x.shadowColor = "rgba(16, 59, 53, 0.28)";
+  x.shadowBlur = 40;
+  x.shadowOffsetY = 18;
+  roundRect(x, -210, -132, 420, 264, 22);
+  const g = x.createLinearGradient(-210, -132, 210, 132);
+  g.addColorStop(0, "#1d5047");
+  g.addColorStop(1, "#0c312c");
+  x.fillStyle = g;
+  x.fill();
+  x.shadowColor = "transparent";
+  const light = await image(logoLight);
+  x.filter = "sepia(1) saturate(0.6) brightness(1.05)";
+  x.drawImage(light, -176, -100, 170, (170 * 125) / 440);
+  x.filter = "none";
+  x.restore();
   return texture(c);
 };

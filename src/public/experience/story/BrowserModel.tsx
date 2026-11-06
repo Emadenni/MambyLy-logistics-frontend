@@ -1,9 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import type { Lang } from "../routes";
 import { media } from "../media";
-import { BROWSER } from "./storyTimeline";
+import { BROWSER, brandSiteShown } from "./storyTimeline";
+import { story } from "./progress";
+import { brandPageTexture } from "./textures";
 import { cardShape, faceGeometry } from "./CardModel";
 
 /** A website picture as a lit screen texture (the browser shows real MambyLy demos). */
@@ -28,14 +31,40 @@ const useScreenTexture = (src: string) => {
   return map;
 };
 
+/** The MambyLy page, drawn once per language. */
+const useBrandPage = (lang: Lang) => {
+  const [map, setMap] = useState<THREE.Texture | null>(null);
+  useEffect(() => {
+    let live = true;
+    brandPageTexture(lang).then((t) => {
+      if (!live) return t.dispose();
+      setMap((old) => {
+        old?.dispose();
+        return t;
+      });
+    });
+    return () => {
+      live = false;
+    };
+  }, [lang]);
+  useEffect(() => () => map?.dispose(), [map]);
+  return map;
+};
+
 const DOT = new THREE.CircleGeometry(0.028, 24);
 
 /**
  * A desktop browser window: paper-white frame, a quiet bar with three dots, the website as a lit
- * screen (not shaded by the scene, like the phone's).
+ * screen (not shaded by the scene, like the phone's). In chapter 2 a MambyLy page fades in over
+ * the demo: the same brand as on the card and the phone. `anchor` marks its left edge.
  */
-const BrowserModel: React.FC<{ lang: Lang }> = ({ lang }) => {
+const BrowserModel: React.FC<{ lang: Lang; anchor?: React.RefObject<THREE.Object3D> }> = ({ lang, anchor }) => {
   const map = useScreenTexture(media(`preview-${lang}-architecture-desktop`, 1280));
+  const brand = useBrandPage(lang);
+  const brandLayer = useRef<THREE.MeshBasicMaterial>(null);
+  useFrame(() => {
+    if (brandLayer.current) brandLayer.current.opacity = brandSiteShown(story.shown);
+  });
   const inset = 0.05;
   const screenW = BROWSER.w - inset * 2;
   const screenH = BROWSER.h - BROWSER.bar - inset;
@@ -58,6 +87,12 @@ const BrowserModel: React.FC<{ lang: Lang }> = ({ lang }) => {
       <mesh geometry={screen} position={[0, screenY, z + 0.001]}>
         {map ? <meshBasicMaterial key="site" map={map} toneMapped={false} /> : <meshBasicMaterial key="blank" color="#fbfaf6" toneMapped={false} />}
       </mesh>
+      {brand && (
+        <mesh geometry={screen} position={[0, screenY, z + 0.002]}>
+          <meshBasicMaterial ref={brandLayer} map={brand} toneMapped={false} transparent opacity={0} depthWrite={false} />
+        </mesh>
+      )}
+      <object3D ref={anchor} position={[-BROWSER.w / 2, 0, z]} />
     </group>
   );
 };

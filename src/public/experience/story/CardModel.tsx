@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 import type { Lang } from "../routes";
-import { CARD } from "./storyTimeline";
+import { CARD, glint } from "./storyTimeline";
+import { story } from "./progress";
 import { backTexture, foilMask, frontTexture } from "./textures";
 
 /** Rounded rectangle outline of a card, centred on the origin. */
@@ -70,8 +72,15 @@ const CardModel: React.FC<{
   lang: Lang;
   frontRef?: React.RefObject<THREE.Group>;
   backRef?: React.RefObject<THREE.Group>;
+  /** right edge of the card, where the line to the phone starts (chapter 2) */
+  anchor?: React.RefObject<THREE.Object3D>;
   children?: React.ReactNode;
-}> = ({ lang, frontRef, backRef, children }) => {
+}> = ({ lang, frontRef, backRef, anchor, children }) => {
+  const foil = useRef<THREE.MeshPhysicalMaterial>(null);
+  // chapter 2: the gold foil catches the light as the brand sets off towards the phone
+  useFrame(() => {
+    if (foil.current) foil.current.emissiveIntensity = glint(story.shown) * 0.55;
+  });
   const maps = useTextures(lang);
   const ownFront = useRef<THREE.Group>(null);
   const ownBack = useRef<THREE.Group>(null);
@@ -104,7 +113,18 @@ const CardModel: React.FC<{
         </mesh>
         {maps && (
           <mesh geometry={face} position-z={SHEET + LIFT * 2}>
-            <meshPhysicalMaterial color="#eadcb8" metalness={1} roughness={0.22} envMapIntensity={1.25} alphaMap={maps.foil} transparent depthWrite={false} />
+            <meshPhysicalMaterial
+              ref={foil}
+              color="#eadcb8"
+              metalness={1}
+              roughness={0.22}
+              envMapIntensity={1.25}
+              emissive="#f2cc58"
+              emissiveIntensity={0}
+              alphaMap={maps.foil}
+              transparent
+              depthWrite={false}
+            />
           </mesh>
         )}
       </group>
@@ -116,6 +136,7 @@ const CardModel: React.FC<{
           {maps ? <meshStandardMaterial key="print" map={maps.back} roughness={0.68} /> : <meshStandardMaterial key="plain" color="#f6f4ee" roughness={0.68} />}
         </mesh>
       </group>
+      <object3D ref={anchor} position={[CARD.w / 2, 0, SHEET]} />
       {children}
     </group>
   );
