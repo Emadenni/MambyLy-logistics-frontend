@@ -9,6 +9,7 @@
 
 @use "./digital-card" as dc;
 @use "./experience" as x;
+@use "./story" as story;
 @use "./concepts" as cx;
 @use "./demos" as demos;
 @use "./card-designs" as cd;
@@ -2103,6 +2104,7 @@ body:has(.mambyly-public) {
 
   @include dc.styles;
   @include x.styles;
+  @include story.styles;
   @include cx.styles;
   @include demos.styles;
   @include cd.styles;

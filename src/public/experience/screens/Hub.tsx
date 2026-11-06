@@ -1,18 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useTransform } from "framer-motion";
-import { FiArrowRight, FiArrowUpRight } from "react-icons/fi";
 import logoDark from "../../assets/logo-dark.svg";
-import { CardPreview } from "../../digital-card/DigitalCard";
-import { COMPANY_CARD_SLUG, getCard } from "../../digital-card/registry";
-import { cardStrings } from "../../digital-card/strings";
 import { useCopy } from "../i18n";
 import LangSwitch from "../LangSwitch";
 import Screen, { ScreenHead, TopBar } from "../Screen";
-import { PATHS, pathFor, resolvePath } from "../routes";
+import { pathFor, resolvePath } from "../routes";
 import { useUi } from "../ui";
 import { ChevronUp, Fingerprint, LinkMark } from "../icons";
-import { media } from "../media";
+import StoryPage from "../story/StoryPage";
 
 const EASE = [0.22, 0.75, 0.18, 1] as const;
 /** Lifted further than this share of the screen (or flicked) = open. */
@@ -181,9 +177,6 @@ const Hub: React.FC = () => {
   };
 
 
-  const card = getCard(COMPANY_CARD_SLUG, t.lang);
-  const cs = cardStrings[card?.lang ?? t.lang];
-
   return (
     <>
       <motion.div
@@ -242,6 +235,7 @@ const Hub: React.FC = () => {
       >
         <Screen
           id="explore"
+          className="mp-screen--tale"
           head={isHome ? null : <ScreenHead lang={t.lang} title={t.meta.explore.title} description={t.meta.explore.description} screen="explore" />}
           bar={<TopBar crumbs={[{ label: t.nav.explore }]} logoTo={homePath} />}
           withAdmin
@@ -249,82 +243,7 @@ const Hub: React.FC = () => {
           <h1 className="mp-sr" ref={exploreTitle} tabIndex={-1} data-focus={isHome ? undefined : ""}>
             {t.explore.title}
           </h1>
-          <div className="mp-hub">
-            <article className="mp-hub__panel mp-hub__panel--web">
-              <h2 className="mp-hub__title">
-                <Link to={PATHS.websites[t.lang]} className="mp-stretch">
-                  {t.nav.websites} <FiArrowRight aria-hidden="true" className="mp-hub__arrow" />
-                </Link>
-              </h2>
-              <div className="mp-hub__copy">
-                <p className="mp-hub__lead">{t.explore.websitesLead}</p>
-                <p className="mp-hub__text mp-hub__text--wide">{t.explore.websitesText}</p>
-                <span className="mp-xbtn mp-xbtn--solid mp-hub__more" aria-hidden="true">
-                  {t.explore.more} <FiArrowRight />
-                </span>
-              </div>
-              {/* Real screenshots of the editorial design concept (desktop and phone). */}
-              <div className="mp-hub__visual mp-hub__visual--web" aria-hidden="true">
-                <div className="mp-browser mp-hub__desk">
-                  <span className="mp-browser__dots">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
-                  <img
-                    src={media(`preview-${t.lang}-architecture-desktop`, 640)}
-                    srcSet={`${media(`preview-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`preview-${t.lang}-architecture-desktop`, 1280)} 1280w`}
-                    sizes="(min-width: 960px) 400px, 45vw"
-                    alt=""
-                    width={640}
-                    height={400}
-                    loading={isHome ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                </div>
-                <img className="mp-hub__phone" src={media(`preview-${t.lang}-restaurant-mobile`, 390)} alt="" width={390} height={844} loading={isHome ? "eager" : "lazy"} decoding="async" />
-              </div>
-            </article>
-
-            <article className="mp-hub__panel mp-hub__panel--cards">
-              <h2 className="mp-hub__title">
-                <Link to={PATHS.cards[t.lang]} className="mp-stretch">
-                  {t.nav.cards} <FiArrowRight aria-hidden="true" className="mp-hub__arrow" />
-                </Link>
-              </h2>
-              <div className="mp-hub__copy">
-                <p className="mp-hub__text">{t.explore.cardsText}</p>
-                <span className="mp-xbtn mp-xbtn--solid mp-hub__more" aria-hidden="true">
-                  {t.explore.more} <FiArrowRight />
-                </span>
-              </div>
-              {card && (
-                <div className="mp-hub__visual mp-hub__visual--cards" aria-hidden="true">
-                  <div className="mp-hub__card mp-hub__card--back">
-                    <CardPreview card={card} t={cs} />
-                  </div>
-                  <div className="mp-hub__card mp-hub__card--front">
-                    <CardPreview card={card} t={cs} />
-                  </div>
-                </div>
-              )}
-            </article>
-          </div>
-
-          <div className="mp-hub__foot">
-            <img
-              className="mp-hub__people"
-              src={media("people-collaboration", 720)}
-              alt=""
-              width={720}
-              height={480}
-              loading="lazy"
-              decoding="async"
-            />
-            <Link to={PATHS.about[t.lang]} className="mp-hub__about">
-              {t.explore.aboutLink} <FiArrowUpRight aria-hidden="true" />
-            </Link>
-          </div>
+          <StoryPage active={!isHome} />
         </Screen>
       </div>
     </>
