@@ -531,7 +531,7 @@ const en: Copy = {
       accent: "digital.",
       sub: "Websites and digital business cards for your business, in one style.",
       websites: "Websites",
-      cards: "Digital business cards",
+      cards: "Digital cards",
       scroll: "Scroll to explore",
     },
     identity: {

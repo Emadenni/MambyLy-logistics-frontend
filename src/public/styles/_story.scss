@@ -355,6 +355,16 @@ $cover-background:
       clip-path: circle(0% at 50% 50%);
       visibility: hidden;
       pointer-events: none;
+
+      // the cover's glass waves, very light, so the green is not one flat surface
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("/media/mambyly/hero-glass-1024.webp") center / cover no-repeat;
+        opacity: 0.22;
+        mix-blend-mode: soft-light;
+      }
     }
 
     // Chapter 5: the website that grows out of the phone screen (StoryPage sets the box each frame).
@@ -492,7 +502,9 @@ $cover-background:
         @include desk {
           justify-self: start;
           max-width: min(36vw, 40rem);
-          padding-top: 14svh;
+          align-self: center;
+          padding-top: 0;
+          margin-top: -16svh;
           text-align: left;
         }
       }
@@ -537,10 +549,12 @@ $cover-background:
       pointer-events: auto;
       will-change: opacity, transform;
 
+      // larger screens: right under the title, one block with it on the green panel
       @include desk {
         left: max(var(--x-gutter), calc((100vw - 1180px) / 2));
         right: auto;
-        bottom: max(9svh, 48px);
+        top: calc(50svh + 64px);
+        bottom: auto;
         max-width: min(34vw, 27rem, 42vw - 2 * var(--x-gutter));
         justify-items: start;
         text-align: left;
@@ -575,13 +589,15 @@ $cover-background:
       gap: 6px;
       min-height: 44px;
       padding: 0 16px;
-      border: 1px solid rgba(246, 244, 238, 0.45);
+      border: 1px solid #ffffff;
       border-radius: 999px;
-      background: rgba(246, 244, 238, 0.08);
+      background: #ffffff;
+      box-shadow: 0 10px 28px rgba(5, 25, 22, 0.28);
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
-      color: var(--story-cream);
-      font: 500 14px / 1 var(--mp-font);
+      color: var(--story-green);
+      font: 600 14px / 1 var(--mp-font);
+      white-space: nowrap;
       text-decoration: none;
 
       @include desk {
@@ -596,7 +612,7 @@ $cover-background:
 
       &:hover {
         border-color: var(--story-cream);
-        background: rgba(246, 244, 238, 0.16);
+        background: var(--story-cream);
       }
 
       &:focus-visible {
