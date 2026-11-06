@@ -5,6 +5,8 @@
  */
 export const story = {
   p: 0,
+  /** The story is on screen (false while the home veil is down). */
+  active: false,
   shown: 0,
   mobile: false,
   pointer: { x: 0, y: 0 },

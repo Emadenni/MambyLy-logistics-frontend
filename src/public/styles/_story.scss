@@ -186,11 +186,21 @@ $story-desk: 760px;
       }
     }
 
+    // One screen taller than its share, minus one screen of margin: the chapter still starts at its
+    // place in the story, and its sticky caption stays on screen for the whole chapter (consecutive
+    // chapters overlap by one screen, where one caption fades out and the next fades in).
     &__chapter {
       position: relative;
       z-index: 1;
-      height: calc(var(--share) * var(--story-screens) * 100vh + var(--extra) * 100vh);
-      height: calc(var(--share) * var(--story-screens) * 100svh + var(--extra) * 100svh);
+      height: calc(var(--share) * var(--story-screens) * 100vh + 100vh);
+      height: calc(var(--share) * var(--story-screens) * 100svh + 100svh);
+      margin-bottom: calc((var(--extra) - 1) * 100vh);
+      margin-bottom: calc((var(--extra) - 1) * 100svh);
+      pointer-events: none;
+    }
+
+    &__caption {
+      pointer-events: auto;
     }
 
     &__sticky {
@@ -277,6 +287,7 @@ $story-desk: 760px;
     &.is-static {
       .mp-tale__chapter {
         height: auto;
+        margin-bottom: 0;
       }
 
       .mp-tale__sticky {

@@ -26,6 +26,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
   useEffect(() => {
     const el = root.current;
+    story.active = active;
     if (!active || !el) return;
     let stop: (() => void) | undefined;
     let cancelled = false;
@@ -128,7 +129,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
       {gl && (
         <Suspense fallback={null}>
-          <StoryCanvas />
+          <StoryCanvas lang={t.lang} />
         </Suspense>
       )}
 
