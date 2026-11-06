@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiShare2 } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiShare2 } from "react-icons/fi";
 import { CardPreview } from "../../digital-card/DigitalCard";
 import { COMPANY_CARD_SLUG, examplePath, getCard, getExamples } from "../../digital-card/registry";
 import { cardStrings } from "../../digital-card/strings";
@@ -21,14 +21,16 @@ const absolute = (path: string) => `${SITE}${encodeURI(path)}`;
  * One card of the carousel: the real card design, front and back. A tap turns it, a swipe up
  * shares it (as on the real card), the light follows the pointer. The name below opens the page.
  */
-const DemoCard: React.FC<{ card: CardConfig; href: string; label: string; hint: string; shareLabel: string; copied: string }> = ({
-  card,
-  href,
-  label,
-  hint,
-  shareLabel,
-  copied,
-}) => {
+const DemoCard: React.FC<{
+  card: CardConfig;
+  href: string;
+  label: string;
+  hint: string;
+  shareLabel: string;
+  copied: string;
+  /** a press on a card beside the centre brings it to the centre instead of turning it */
+  onSide: (el: HTMLElement) => boolean;
+}> = ({ card, href, label, hint, shareLabel, copied, onSide }) => {
   const [flipped, setFlipped] = useState(false);
   const [note, setNote] = useState("");
   const stage = useRef<HTMLDivElement>(null);
@@ -59,7 +61,10 @@ const DemoCard: React.FC<{ card: CardConfig; href: string; label: string; hint: 
     const dx = e.clientX - p.x;
     const dy = e.clientY - p.y;
     if (dy < -SWIPE && Math.abs(dx) < SWIPE) void share();
-    else if (Math.abs(dx) < TAP && Math.abs(dy) < TAP) setFlipped((f) => !f);
+    else if (Math.abs(dx) < TAP && Math.abs(dy) < TAP) {
+      if (stage.current && onSide(stage.current)) return;
+      setFlipped((f) => !f);
+    }
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const el = stage.current;
@@ -107,6 +112,49 @@ const DemoCard: React.FC<{ card: CardConfig; href: string; label: string; hint: 
   );
 };
 
+/** Arrows and dots under a sideways list; `at` is the item in the centre. */
+const Pager: React.FC<{ count: number; at: number; go: (i: number) => void; prev: string; next: string; label: string }> = ({ count, at, go, prev, next, label }) => (
+  <div className="mp-demos__pager">
+    <button type="button" className="mp-demos__arrow" onClick={() => go(at - 1)} disabled={at <= 0} aria-label={prev}>
+      <FiArrowLeft aria-hidden="true" />
+    </button>
+    <ol className="mp-demos__dots" aria-label={label}>
+      {Array.from({ length: count }, (_, i) => (
+        <li key={i}>
+          <button type="button" aria-label={`${i + 1} / ${count}`} aria-current={i === at ? "true" : undefined} onClick={() => go(i)} />
+        </li>
+      ))}
+    </ol>
+    <button type="button" className="mp-demos__arrow" onClick={() => go(at + 1)} disabled={at >= count - 1} aria-label={next}>
+      <FiArrowRight aria-hidden="true" />
+    </button>
+  </div>
+);
+
+/** Scrolls a sideways list so item i is in its centre. */
+const centre = (list: HTMLElement | null, i: number, smooth = true) => {
+  const item = list?.children[i] as HTMLElement | undefined;
+  if (!list || !item) return;
+  list.scrollTo({ left: item.offsetLeft - (list.clientWidth - item.offsetWidth) / 2, behavior: smooth ? "smooth" : "auto" });
+};
+
+/** Which item of a sideways list is nearest its centre. */
+const nearest = (list: HTMLElement) => {
+  const box = list.getBoundingClientRect();
+  const mid = box.left + box.width / 2;
+  let best = 0;
+  let dist = Infinity;
+  [...list.children].forEach((c, i) => {
+    const r = c.getBoundingClientRect();
+    const d = Math.abs(r.left + r.width / 2 - mid);
+    if (d < dist) {
+      dist = d;
+      best = i;
+    }
+  });
+  return best;
+};
+
 /**
  * After the 3D story: the demos of both services, with the same weight. Example cards in a 3D
  * carousel (turn, light, share), website demos in frames that tilt and scroll by themselves. Every
@@ -119,20 +167,27 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
   const examples = getExamples(t.lang).filter((c) => c.design);
   const track = useRef<HTMLOListElement>(null);
   const sites = useRef<HTMLUListElement>(null);
+  const [cardAt, setCardAt] = useState(0);
+  const [siteAt, setSiteAt] = useState(0);
 
   // Cards: a coverflow. Each card turns and steps back with its distance from the centre.
   useEffect(() => {
     const el = track.current;
-    if (!el || still) return;
+    if (!el) return;
+    // start on the card in the middle, so there are cards on both sides
+    centre(el, Math.floor(el.children.length / 2), false);
     let frame = 0;
     const update = () => {
       frame = 0;
+      setCardAt(nearest(el));
+      if (still) return;
       const box = el.getBoundingClientRect();
       const centre = box.left + box.width / 2;
       el.querySelectorAll<HTMLElement>(".mp-demos__card").forEach((item) => {
         const r = item.getBoundingClientRect();
         const dist = (r.left + r.width / 2 - centre) / r.width;
         item.style.setProperty("--d", Math.max(-2, Math.min(2, dist)).toFixed(3));
+        item.style.setProperty("--meta-v", Math.abs(dist) > 0.4 ? "hidden" : "visible");
       });
     };
     const ask = () => (frame ||= requestAnimationFrame(update));
@@ -151,10 +206,16 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
   useEffect(() => {
     const el = sites.current;
     if (!el) return;
+    const onScroll = () => setSiteAt(nearest(el));
+    el.addEventListener("scroll", onScroll, { passive: true });
     const frames = [...el.querySelectorAll<HTMLElement>(".mp-demos__site")];
     const seen = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle("is-on", e.isIntersecting)), { rootMargin: "10% 0px" });
     frames.forEach((f) => seen.observe(f));
-    if (still) return () => seen.disconnect();
+    if (still)
+      return () => {
+        seen.disconnect();
+        el.removeEventListener("scroll", onScroll);
+      };
     const pointer = { x: 0, y: 0, on: false };
     let frame = 0;
     const update = () => {
@@ -192,12 +253,22 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
       window.removeEventListener("scroll", ask);
       window.removeEventListener("pointermove", move);
       el.removeEventListener("scroll", ask);
+      el.removeEventListener("scroll", onScroll);
     };
   }, [still]);
 
   const cardLabel = (c: CardConfig) => (c.slug === COMPANY_CARD_SLUG ? d.ourCard : c.example?.sector ?? c.name);
   const cardHref = (c: CardConfig) => (c.slug === COMPANY_CARD_SLUG ? CARD_PATH[t.lang] : examplePath(c.slug, t.lang));
   const cards = [...(company ? [company] : []), ...examples];
+  const onSide = (stageEl: HTMLElement) => {
+    const item = stageEl.closest("li");
+    const list = track.current;
+    if (!item || !list) return false;
+    const i = [...list.children].indexOf(item);
+    if (i === nearest(list)) return false;
+    centre(list, i);
+    return true;
+  };
 
   return (
     <section className={`mp-demos${still ? " is-static" : ""}`} aria-labelledby="demos-title">
@@ -213,9 +284,19 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
         </header>
         <ol ref={track} className="mp-demos__track" aria-label={t.nav.cards}>
           {cards.map((c) => (
-            <DemoCard key={c.slug} card={c} href={cardHref(c)} label={cardLabel(c)} hint={d.cardHint} shareLabel={t.story.demos.share} copied={cardStrings[t.lang].copied} />
+            <DemoCard
+              key={c.slug}
+              card={c}
+              href={cardHref(c)}
+              label={cardLabel(c)}
+              hint={d.cardHint}
+              shareLabel={t.story.demos.share}
+              copied={cardStrings[t.lang].copied}
+              onSide={onSide}
+            />
           ))}
         </ol>
+        <Pager count={cards.length} at={cardAt} go={(i) => centre(track.current, i)} prev={t.cards.prev} next={t.cards.next} label={t.nav.cards} />
         <p className="mp-demos__more">
           <Link to={PATHS.examples[t.lang]} className="mp-xbtn mp-xbtn--solid">
             {d.allCards} <FiArrowRight aria-hidden="true" />
@@ -246,6 +327,9 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
                   <span className="mp-demos__view">
                     <img src={media(`scroll-${t.lang}-${id}-desktop`, 640)} alt={c.alt} width={640} height={400} loading="lazy" decoding="async" draggable={false} />
                   </span>
+                  <span className="mp-demos__open" aria-hidden="true">
+                    {t.websites.open} <FiArrowRight />
+                  </span>
                 </Link>
                 <p className="mp-demos__label">
                   <strong>{c.label}</strong> <span>{c.caption}</span>
@@ -254,6 +338,9 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
             );
           })}
         </ul>
+        <div className="mp-demos__pager-sites">
+          <Pager count={CONCEPT_ORDER.length} at={siteAt} go={(i) => centre(sites.current, i)} prev={t.websites.prev} next={t.websites.next} label={t.nav.websites} />
+        </div>
         <p className="mp-demos__more">
           <Link to={PATHS.websites[t.lang]} className="mp-xbtn mp-xbtn--solid">
             {d.allSites} <FiArrowRight aria-hidden="true" />

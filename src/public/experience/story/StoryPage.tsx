@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiChevronDown } from "react-icons/fi";
 import { publicContact } from "../../contact";
 import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
@@ -31,6 +31,17 @@ import { cardStrings } from "../../digital-card/strings";
 
 // The 3D scene is a separate bundle, loaded once the page is on screen.
 const StoryCanvas = lazy(() => import("./StoryCanvas"));
+
+/** If the scene cannot load (network, a blocked file, WebGL lost), the page stays, without it. */
+class SceneGuard extends React.Component<{ children: React.ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 const MOBILE_QUERY = "(max-width: 759px)";
 
@@ -127,6 +138,8 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     const arch = el.querySelector<HTMLElement>("[data-arch]");
     const dots = [...el.querySelectorAll<HTMLElement>("[data-dot]")];
     const dotsNav = el.querySelector<HTMLElement>(".mp-tale__dots");
+    const nudge = el.querySelector<HTMLElement>(".mp-tale__nudge");
+    let nudging = false;
     let current = "";
     const screen = el.closest<HTMLElement>(".mp-screen");
     let dark = false;
@@ -170,6 +183,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         node.style.transform = `translate3d(0, ${(c.from > 0 ? rise : Math.min(0, rise)).toFixed(1)}px, 0)`;
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
+      // phones: the arrow that says there is more, after the hero's own hint and until the end
+      const wantNudge = !reduce && p > 0.06 && el.getBoundingClientRect().bottom > window.innerHeight * 1.2;
+      if (nudge && wantNudge !== nudging) {
+        nudging = wantNudge;
+        nudge.classList.toggle("is-on", nudging);
+      }
       // the chapter dots belong to the 3D part: they leave with it
       if (dotsNav) {
         const gone = el.getBoundingClientRect().bottom < window.innerHeight * 0.6;
@@ -403,9 +422,11 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         {/* hero: a soft cream light in the green, behind the objects */}
         {!still && <div className="mp-tale__arch" data-arch="" aria-hidden="true" />}
         {gl && (
-          <Suspense fallback={null}>
-            <StoryCanvas lang={t.lang} />
-          </Suspense>
+          <SceneGuard>
+            <Suspense fallback={null}>
+              <StoryCanvas lang={t.lang} />
+            </Suspense>
+          </SceneGuard>
         )}
 
         {/* chapter 2: the lines that join card, phone and website (ends projected by the scene) */}
@@ -509,6 +530,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
               ))}
             </ol>
           </nav>
+        )}
+
+        {!reduce && (
+          <span className="mp-tale__nudge" aria-hidden="true">
+            <FiChevronDown />
+          </span>
         )}
 
         {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
