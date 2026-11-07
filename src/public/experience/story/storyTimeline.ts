@@ -76,8 +76,8 @@ export const CARD_FRAMES: Frame[] = [
   // 4 cards: comes to the front and opens in layers, then turns to show its QR code
   [0.62, pose(1.0, 0.15, 0, 0.38, -1.1, -0.04, 1)],
   [0.7, pose(1.0, 0.15, 0, 0.38, -1.25, -0.04, 1)],
-  [0.76, pose(0.9, 0.05, 0, 0.08, -Math.PI - 0.3, 0.02, 0.8)],
-  [0.84, pose(0.9, 0.05, 0, 0.08, -Math.PI - 0.24, 0.02, 0.8)],
+  [0.76, pose(0.55, 0.05, 0, 0.08, -Math.PI - 0.3, 0.02, 0.8)],
+  [0.84, pose(0.55, 0.05, 0, 0.08, -Math.PI - 0.24, 0.02, 0.8)],
   [0.9, pose(-2.6, -2.2, -3.5, 0.4, -Math.PI + 0.6, 0.15, 0.6)],
 ];
 /** After this the card is out of the picture and is no longer drawn. */
@@ -96,8 +96,8 @@ export const PHONE_FRAMES: Frame[] = [
   // 4 cards: waits aside, then comes up beside the card and reads its QR code
   [0.66, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
   [0.72, pose(6.5, 0.2, 0.6, 0.02, -0.5, 0.1)],
-  [0.76, pose(3.05, 0.1, 0.9, 0.02, -0.42, 0.05)],
-  [0.84, pose(2.95, 0.1, 0.9, 0.02, -0.3, 0.03)],
+  [0.76, pose(2.6, 0.1, 0.9, 0.02, -0.42, 0.05)],
+  [0.84, pose(2.55, 0.1, 0.9, 0.02, -0.3, 0.03)],
   // the phone comes to the centre; its screen becomes the website window (HTML)
   [0.88, pose(0, 0, 1.2, 0, 0, 0)],
   [0.92, pose(0, 0, 3.4, 0, 0, 0)],
