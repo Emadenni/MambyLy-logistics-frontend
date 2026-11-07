@@ -708,33 +708,406 @@ $cover-background:
     }
   }
 
-  // The contact after the 3D part: an ordinary section over the fixed backdrop.
-  .mp-tale-contact {
+  // ---------------------------------------------------------------------------------------------
+  // The end of Utforska (Closing.tsx): three steps, then the contact
+  // ---------------------------------------------------------------------------------------------
+
+  .mp-howto {
     position: relative;
     z-index: 1;
     display: grid;
-    place-items: center;
-    min-height: 80vh;
-    min-height: 80svh;
-    padding: 64px var(--x-gutter) 80px;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
 
-    &__panel {
-      width: min(100%, 40rem);
-      padding: 30px 26px 26px;
-      border: 1px solid rgba(16, 59, 53, 0.08);
-      border-radius: 26px;
-      background: color-mix(in srgb, #fbfaf6 74%, transparent);
-      -webkit-backdrop-filter: blur(16px);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 24px 60px rgba(16, 59, 53, 0.14);
-      text-align: center;
+    > * {
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+    padding: clamp(80px, 12svh, 140px) var(--x-gutter) 20px;
 
-      @include desk {
-        padding: 40px 40px 32px;
+    &__list {
+      position: relative;
+      display: grid;
+      gap: 34px;
+      width: min(100%, 1080px);
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+
+      // the line that joins the three steps, drawn when they come into view
+      &::before {
+        content: "";
+        position: absolute;
+        left: 27px;
+        top: 28px;
+        bottom: 28px;
+        width: 2px;
+        background: linear-gradient(#247b67, #103b35);
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 1.4s var(--x-ease) 0.2s;
       }
 
-      .mp-tale__actions {
-        justify-content: center;
+      @media (min-width: 860px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 40px;
+
+        &::before {
+          left: calc(100% / 6);
+          right: calc(100% / 6);
+          top: 27px;
+          bottom: auto;
+          width: auto;
+          height: 2px;
+          background: linear-gradient(90deg, #247b67, #103b35);
+          transform: scaleX(0);
+          transform-origin: left;
+        }
+      }
+
+      &.is-in::before {
+        transform: none;
+      }
+    }
+
+    &__item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      column-gap: 18px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.8s var(--x-ease);
+      transition-delay: calc(0.25s + var(--i) * 0.35s);
+
+      @media (min-width: 860px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+    }
+
+    @media (min-width: 860px) {
+      .mp-howto__item {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        text-align: center;
+      }
+
+      .mp-howto__num {
+        grid-row: auto;
+        margin-bottom: 18px;
+      }
+    }
+
+    .mp-howto__list.is-in .mp-howto__item {
+      opacity: 1;
+      transform: none;
+    }
+
+    &__num {
+      grid-row: span 2;
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--x-ink);
+      color: #fff;
+      font: 400 26px / 1 var(--x-serif);
+      box-shadow:
+        0 0 0 6px rgba(246, 244, 238, 0.9),
+        0 12px 28px rgba(16, 59, 53, 0.25);
+      transform: scale(0.6);
+      transition: transform 0.6s cubic-bezier(0.2, 1.4, 0.4, 1);
+      transition-delay: calc(0.35s + var(--i) * 0.35s);
+
+      @media (min-width: 860px) {
+        grid-row: auto;
+        margin-bottom: 18px;
+      }
+    }
+
+    .mp-howto__list.is-in .mp-howto__num {
+      transform: none;
+    }
+
+    &__title {
+      margin: 6px 0 6px;
+      color: var(--x-ink);
+      font: 400 clamp(24px, 5vw, 32px) / 1.15 var(--x-serif);
+    }
+
+    &__text {
+      margin: 0;
+      color: #5d6b66;
+      font: 400 16px / 1.5 var(--mp-font);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &__list::before,
+      &__item,
+      &__num {
+        transition: none;
+      }
+    }
+  }
+
+  .mp-close {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 40px;
+    justify-items: center;
+    padding: clamp(60px, 10svh, 120px) var(--x-gutter) 80px;
+
+    // the contact on deep green: the strongest moment of the page
+    &__panel {
+      position: relative;
+      overflow: hidden;
+      width: min(100%, 980px);
+      padding: 44px 24px 34px;
+      border-radius: 32px;
+      background:
+        radial-gradient(70% 60% at 85% 0%, rgba(127, 156, 144, 0.35), transparent 70%),
+        radial-gradient(60% 50% at 0% 100%, rgba(36, 123, 103, 0.35), transparent 70%),
+        linear-gradient(160deg, #1d5047, #103b35 55%, #0a2723);
+      color: #f6f4ee;
+      text-align: center;
+      box-shadow: 0 40px 90px rgba(16, 59, 53, 0.35);
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+      transition:
+        opacity 0.8s ease,
+        transform 0.9s var(--x-ease);
+
+      &.is-in {
+        opacity: 1;
+        transform: none;
+      }
+
+      @include desk {
+        padding: 64px 56px 44px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    &__kicker {
+      margin: 0 0 12px;
+      color: #cfdcd4;
+      font: 600 13px / 1 var(--mp-font);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    &__title {
+      margin: 0;
+      color: #f6f4ee;
+      font: 400 clamp(36px, 8vw, 68px) / 1.02 var(--x-serif);
+    }
+
+    &__lead {
+      margin: 14px auto 0;
+      max-width: 32rem;
+      color: rgba(246, 244, 238, 0.82);
+      font: 400 17px / 1.5 var(--mp-font);
+    }
+
+    // the two services, same weight, white
+    &__choices {
+      display: grid;
+      gap: 12px;
+      max-width: 720px;
+      margin: 30px auto 0;
+
+      @media (min-width: 680px) {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    &__choice {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      min-height: 64px;
+      padding: 0 24px;
+      border-radius: 18px;
+      background: #fff;
+      color: #103b35;
+      font: 600 16px / 1.25 var(--mp-font);
+      text-align: left;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      transition:
+        transform 0.3s var(--x-ease),
+        box-shadow 0.3s ease;
+
+      svg {
+        flex: none;
+        font-size: 20px;
+        transition: transform 0.3s var(--x-ease);
+      }
+
+      &:hover,
+      &:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+
+        svg {
+          transform: translateX(4px);
+        }
+      }
+
+      &:focus-visible {
+        outline: 3px solid #cfdcd4;
+        outline-offset: 3px;
+      }
+    }
+
+    &__write {
+      margin: 36px 0 12px;
+      color: #cfdcd4;
+      font: 600 13px / 1 var(--mp-font);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    // the written ways in: three quiet tiles
+    &__ways {
+      display: grid;
+      gap: 10px;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+
+      @media (min-width: 680px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    &__way {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 12px;
+      align-items: center;
+      height: 100%;
+      padding: 16px 18px;
+      border: 1px solid rgba(246, 244, 238, 0.2);
+      border-radius: 16px;
+      background: rgba(246, 244, 238, 0.06);
+      color: #f6f4ee;
+      text-align: left;
+      text-decoration: none;
+      transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease;
+
+      svg {
+        grid-row: span 2;
+        font-size: 22px;
+        color: #cfdcd4;
+      }
+
+      strong {
+        color: #f6f4ee;
+        font: 600 15px / 1.3 var(--mp-font);
+      }
+
+      span {
+        color: rgba(246, 244, 238, 0.72);
+        font: 400 14px / 1.35 var(--mp-font);
+        overflow-wrap: anywhere;
+      }
+
+      &:hover,
+      &:focus-visible {
+        border-color: rgba(246, 244, 238, 0.5);
+        background: rgba(246, 244, 238, 0.12);
+      }
+
+      &:focus-visible {
+        outline: 3px solid #cfdcd4;
+        outline-offset: 2px;
+      }
+    }
+
+    // for those who want to see more first: the demos
+    &__demos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 10px 14px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(246, 244, 238, 0.15);
+
+      p {
+        width: 100%;
+        margin: 0 0 4px;
+        color: rgba(246, 244, 238, 0.78);
+        font: 400 15px / 1.4 var(--mp-font);
+      }
+    }
+
+    &__demo {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 20px;
+      border: 1px solid rgba(246, 244, 238, 0.45);
+      border-radius: 999px;
+      color: #f6f4ee;
+      font: 600 15px / 1 var(--mp-font);
+      text-decoration: none;
+      transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+
+      &:hover,
+      &:focus-visible {
+        background: #f6f4ee;
+        color: #103b35;
+      }
+    }
+
+    // the old explore page's foot: the people and the way to About
+    &__about {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+
+      img {
+        width: min(70vw, 300px);
+        height: auto;
+        border-radius: 20px;
+        opacity: 0.95;
+      }
+    }
+
+    &__aboutlink {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      color: var(--x-ink);
+      font: 400 clamp(24px, 5vw, 32px) / 1 var(--x-serif);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 6px;
       }
     }
   }

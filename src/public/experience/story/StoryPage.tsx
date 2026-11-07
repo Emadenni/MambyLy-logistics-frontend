@@ -25,6 +25,7 @@ import {
 import { story } from "./progress";
 import { hasWebGL } from "./webgl";
 import Demos from "./Demos";
+import Closing from "./Closing";
 import { CardPreview } from "../../digital-card/DigitalCard";
 import { COMPANY_CARD_SLUG, getCard } from "../../digital-card/registry";
 import { cardStrings } from "../../digital-card/strings";
@@ -543,29 +544,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
       <Demos still={still} />
 
-      {/* After the demos: the contact, only in writing (form, e-mail, WhatsApp) */}
-      <section className="mp-tale-contact" aria-labelledby="tale-contact">
-        <div className="mp-tale-contact__panel">
-          <h2 id="tale-contact" className="mp-tale__title">
-            {s.contact.title}
-          </h2>
-          <div className="mp-tale__actions">
-            <Link to={contactPath} state={{ service: "site" }} className="mp-xbtn mp-xbtn--solid">
-              {s.contact.website} <FiArrowRight aria-hidden="true" />
-            </Link>
-            <Link to={contactPath} state={{ service: "card" }} className="mp-xbtn mp-xbtn--solid">
-              {s.contact.card} <FiArrowRight aria-hidden="true" />
-            </Link>
-          </div>
-          <p className="mp-tale__write">
-            {s.contact.write} <Link to={contactPath}>{s.contact.form}</Link>, <a href={`mailto:${publicContact.email}`}>{s.contact.email}</a> {s.contact.or}{" "}
-            <a href={whatsapp} target="_blank" rel="noopener noreferrer">
-              {s.contact.whatsapp}
-            </a>
-            .
-          </p>
-        </div>
-      </section>
+      <Closing />
     </>
   );
 };
