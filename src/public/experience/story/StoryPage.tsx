@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import React, { Suspense, lazy, startTransition, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useReducedMotion } from "framer-motion";
 import { FiArrowRight, FiChevronDown } from "react-icons/fi";
@@ -6,6 +6,7 @@ import { publicContact } from "../../contact";
 import { PATHS, pathFor } from "../routes";
 import { useCopy } from "../i18n";
 import { media } from "../media";
+import logoLight from "../../assets/logo-light.svg";
 import {
   CAPTION_EDGE,
   CHAPTERS,
@@ -95,6 +96,36 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const phone = useRef<HTMLDivElement>(null);
   const links = useRef<SVGSVGElement>(null);
   const [gl, setGl] = useState(false);
+  // Demos, steps and contact are drawn right after the first paint, in an interruptible render, so
+  // they never hold up the page's start (they are still in the page for everyone, search included).
+  const [rest, setRest] = useState(false);
+  useEffect(() => startTransition(() => setRest(true)), []);
+  const [near, setNear] = useState(false);
+  const nearMark = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = nearMark.current;
+    // not under the home veil: there the page is hidden and would count as near
+    if (!el || near || !active) return;
+    const seen = new IntersectionObserver(([e]) => e.isIntersecting && startTransition(() => setNear(true)), { rootMargin: "150% 0px" });
+    seen.observe(el);
+    return () => seen.disconnect();
+  }, [rest, near, active]);
+  // The 3D scene and the smooth scroll start with the visitor's first gesture: a page that is only
+  // looked at (or measured) carries no 3D engine. Until the scene draws, a poster stands in.
+  const [moved, setMoved] = useState(false);
+  const poster = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (still || moved) return;
+    const go = () => setMoved(true);
+    const events = ["pointerdown", "touchstart", "wheel", "keydown", "scroll"] as const;
+    const mouse = (e: PointerEvent) => e.pointerType === "mouse" && go();
+    events.forEach((e) => window.addEventListener(e, go, { once: true, passive: true }));
+    window.addEventListener("pointermove", mouse, { passive: true });
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, go));
+      window.removeEventListener("pointermove", mouse);
+    };
+  }, [still, moved]);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
   useEffect(() => {
@@ -109,6 +140,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     };
     native();
     window.addEventListener("scroll", native, { passive: true });
+    if (!moved && !reduce)
+      return () => {
+        window.removeEventListener("scroll", native);
+      };
     import("./scroll").then(({ startScroll }) => {
       if (cancelled) return;
       window.removeEventListener("scroll", native);
@@ -119,7 +154,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       window.removeEventListener("scroll", native);
       stop?.();
     };
-  }, [active, reduce]);
+  }, [active, reduce, moved]);
 
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_QUERY);
@@ -195,6 +230,13 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         const gone = el.getBoundingClientRect().bottom < window.innerHeight * 0.6;
         dotsNav.style.opacity = gone ? "0" : "";
         dotsNav.style.visibility = gone ? "hidden" : "";
+      }
+      // the poster gives way once the scene is drawing (and with the hero, whatever happens)
+      const pst = poster.current;
+      if (pst) {
+        const out = story.scene ? 1 : seg(p, 0.04, 0.1);
+        pst.style.opacity = (1 - out).toFixed(3);
+        pst.style.visibility = out > 0.99 ? "hidden" : "";
       }
       const here = CHAPTERS.find((c) => p >= c.from && p < c.to)?.id ?? "cards";
       if (here !== current) {
@@ -353,12 +395,12 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   // The scene loads after the first paint, when the browser is idle, and only once the story is on
   // screen: under the home veil it waits until the veil starts to open.
   useEffect(() => {
-    if (reduce || !active || gl) return;
+    if (reduce || !active || gl || !moved) return;
     const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
     const cancel = window.cancelIdleCallback ?? window.clearTimeout;
     const id = idle(() => setGl(true), { timeout: 1500 });
     return () => cancel(id);
-  }, [reduce, active, gl]);
+  }, [reduce, active, gl, moved]);
 
   useEffect(() => {
     const move = (e: PointerEvent) => {
@@ -420,6 +462,29 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       <div ref={root} className={`mp-tale${reduce ? " is-static" : ""}`} style={{ "--story-screens": STORY_SCREENS } as React.CSSProperties}>
         <div className="mp-tale__backdrop" aria-hidden="true" />
         {!still && <div ref={green} className="mp-tale__green" aria-hidden="true" />}
+        {/* hero: until the 3D scene draws, the same three objects as a light HTML picture */}
+        {!still && (
+          <div ref={poster} className="mp-tale__poster" aria-hidden="true">
+            <div className="mp-tale__poster-site">
+              <span className="mp-tale__poster-bar">
+                <i />
+                <i />
+                <i />
+              </span>
+              <img src={media(`preview-${t.lang}-architecture-desktop`, 640)} alt="" width={640} height={400} decoding="async" />
+            </div>
+            <div className="mp-tale__poster-phone">
+              <img src={media(`preview-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={844} decoding="async" />
+            </div>
+            {card && (
+              // a light picture of the card (the full card component is too heavy for a stand-in)
+              <div className="mp-tale__poster-card">
+                <img src={logoLight} alt="" width={440} height={125} />
+                <span>{card.role}</span>
+              </div>
+            )}
+          </div>
+        )}
         {/* hero: a soft cream light in the green, behind the objects */}
         {!still && <div className="mp-tale__arch" data-arch="" aria-hidden="true" />}
         {gl && (
@@ -457,8 +522,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
               </div>
               <div className="mp-tale__site-layer mp-tale__site-web" data-layer="web">
                 <img
-                  src={media(`scroll-${t.lang}-architecture-desktop`, 1280)}
-                  srcSet={`${media(`scroll-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`scroll-${t.lang}-architecture-desktop`, 1280)} 1280w`}
+                  // only once the scene runs: this window belongs to it
+                  src={gl ? media(`scroll-${t.lang}-architecture-desktop`, 1280) : undefined}
+                  srcSet={gl ? `${media(`scroll-${t.lang}-architecture-desktop`, 640)} 640w, ${media(`scroll-${t.lang}-architecture-desktop`, 1280)} 1280w` : undefined}
                   sizes="(min-width: 760px) 50vw, 100vw"
                   alt=""
                   width={1280}
@@ -470,7 +536,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
               <canvas ref={profile} className="mp-tale__site-layer mp-tale__site-profile" data-layer="profile" />
             </div>
             <div ref={phone} className="mp-tale__site-phone" aria-hidden="true">
-              <img src={media(`scroll-${t.lang}-architecture-mobile`, 390)} alt="" width={390} height={2889} loading="lazy" decoding="async" />
+              <img src={gl ? media(`scroll-${t.lang}-architecture-mobile`, 390) : undefined} alt="" width={390} height={2889} loading="lazy" decoding="async" />
             </div>
           </>
         )}
@@ -542,9 +608,10 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
       </div>
 
-      <Demos still={still} />
+      {/* the demos are drawn as they come near (a tall stand-in keeps the page's length) */}
+      {rest && (near ? <Demos still={still} /> : <div ref={nearMark} className="mp-demos-wait" aria-hidden="true" />)}
 
-      <Closing />
+      {rest && <Closing />}
     </>
   );
 };

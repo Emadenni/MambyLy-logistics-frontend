@@ -147,6 +147,17 @@ $cover-background:
   // Demos after the 3D part (Demos.tsx): example cards in a 3D carousel, website demos in frames
   // ---------------------------------------------------------------------------------------------
 
+  // stand-in for the demos until they come near: about their height, so the page keeps its length
+  .mp-demos-wait {
+    height: 2600px;
+  }
+
+  .mp-demos,
+  .mp-close {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 1400px;
+  }
+
   .mp-demos {
     position: relative;
     z-index: 1;
@@ -1460,6 +1471,111 @@ $cover-background:
         }
       }
 
+    }
+
+    // Hero poster (until the 3D scene draws): website, phone and card composed like the scene.
+    // Fixed like the scene, under it; phones: between title and text, larger screens: the right.
+    &__poster {
+      position: fixed;
+      left: 50%;
+      top: calc(96px + 28svh);
+      // over the soft light of the hero, under the text
+      z-index: 1;
+      width: min(92vw, 420px);
+      aspect-ratio: 1.45;
+      translate: -50% -50%;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+
+      @include desk {
+        left: auto;
+        right: max(var(--x-gutter), calc((100vw - 1180px) / 2));
+        top: 52%;
+        width: min(48vw, 640px);
+        translate: 0 -50%;
+      }
+    }
+
+    &__poster-site {
+      position: absolute;
+      left: 0;
+      top: 8%;
+      width: 78%;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fbfaf6;
+      box-shadow: 0 24px 50px rgba(5, 25, 22, 0.35);
+      transform: perspective(1200px) rotateY(-14deg) rotateX(4deg);
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    &__poster-bar {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 14px;
+      padding: 0 7px;
+      background: #f3f2ee;
+
+      i {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #c9c8c1;
+      }
+    }
+
+    &__poster-phone {
+      position: absolute;
+      right: 2%;
+      top: 0;
+      width: 25%;
+      aspect-ratio: 390 / 800;
+      overflow: hidden;
+      border: 4px solid #1d2321;
+      border-radius: 14px;
+      background: #fbfaf6;
+      box-shadow: 0 24px 50px rgba(5, 25, 22, 0.4);
+      transform: perspective(1200px) rotateY(-14deg) rotateZ(3deg);
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    // the card, drawn light: green, the logo, the role
+    &__poster-card {
+      position: absolute;
+      left: 26%;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 54%;
+      aspect-ratio: 85 / 55;
+      padding: 7% 8%;
+      border-radius: 6%/9%;
+      background: linear-gradient(135deg, #1d5047, #103b35 55%, #0c312c);
+      box-shadow: 0 22px 40px rgba(5, 25, 22, 0.45);
+      transform: perspective(1200px) rotateY(-12deg) rotateX(8deg) rotateZ(2deg);
+
+      img {
+        width: 52%;
+        height: auto;
+        filter: sepia(1) saturate(0.6) brightness(1.02);
+      }
+
+      span {
+        color: #f6f4ee;
+        font: 600 clamp(8px, 1.9vw, 13px) / 1.2 var(--mp-font);
+      }
     }
 
     // Hero: a soft cream light in the green, behind the objects, like a studio lamp (no edge).

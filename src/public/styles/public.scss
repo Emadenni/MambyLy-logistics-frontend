@@ -30,13 +30,32 @@ $bp-hero: 980px;
 }
 
 // Brand font: Poppins is already part of the project (OFL, src/assets/Poppins). It is declared
-// under its own family name so the existing global "Poppins" face stays untouched.
+// under its own family name so the existing global "Poppins" face stays untouched. Each weight is a
+// small Latin WOFF2 (Swedish, English, punctuation); the full TTF is only fetched if a page shows a
+// character outside that range.
+@font-face {
+  font-family: "MP Poppins";
+  src: url("../../assets/Poppins/Poppins-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-017F, U+2010-2027, U+2030-203A, U+20AC, U+2122, U+2190-2193, U+2212;
+}
 @font-face {
   font-family: "MP Poppins";
   src: url("../../assets/Poppins/Poppins-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-001F, U+0180-200F, U+2028-202F, U+203B-20AB, U+20AD-2121, U+2123-218F, U+2194-2211, U+2213-FFFF;
+}
+@font-face {
+  font-family: "MP Poppins";
+  src: url("../../assets/Poppins/Poppins-Medium-latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-017F, U+2010-2027, U+2030-203A, U+20AC, U+2122, U+2190-2193, U+2212;
 }
 @font-face {
   font-family: "MP Poppins";
@@ -44,6 +63,15 @@ $bp-hero: 980px;
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-001F, U+0180-200F, U+2028-202F, U+203B-20AB, U+20AD-2121, U+2123-218F, U+2194-2211, U+2213-FFFF;
+}
+@font-face {
+  font-family: "MP Poppins";
+  src: url("../../assets/Poppins/Poppins-SemiBold-latin.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-017F, U+2010-2027, U+2030-203A, U+20AC, U+2122, U+2190-2193, U+2212;
 }
 @font-face {
   font-family: "MP Poppins";
@@ -51,6 +79,15 @@ $bp-hero: 980px;
   font-weight: 600;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-001F, U+0180-200F, U+2028-202F, U+203B-20AB, U+20AD-2121, U+2123-218F, U+2194-2211, U+2213-FFFF;
+}
+@font-face {
+  font-family: "MP Poppins";
+  src: url("../../assets/Poppins/Poppins-Bold-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-017F, U+2010-2027, U+2030-203A, U+20AC, U+2122, U+2190-2193, U+2212;
 }
 @font-face {
   font-family: "MP Poppins";
@@ -58,6 +95,7 @@ $bp-hero: 980px;
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-001F, U+0180-200F, U+2028-202F, U+203B-20AB, U+20AD-2121, U+2123-218F, U+2194-2211, U+2213-FFFF;
 }
 
 @mixin tokens {

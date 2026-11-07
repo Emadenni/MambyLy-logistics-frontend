@@ -45,17 +45,13 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   const useGl = !!webgl.current && !reduce && !gone && wanted;
 
   // Until then the HTML veil (the same picture) is on screen: the first paint and the page's own
-  // start are not shared with a 3D engine. A pointer, a touch, a key or 2.5 s bring the silk.
+  // start are not shared with a 3D engine. A pointer, a touch or a key brings the silk.
   useEffect(() => {
     if (wanted || !webgl.current || reduce) return;
     const want = () => setWanted(true);
     const events = ["pointermove", "pointerdown", "touchstart", "wheel", "keydown", "focusin"] as const;
     events.forEach((e) => window.addEventListener(e, want, { once: true, passive: true }));
-    const timer = window.setTimeout(want, 2500);
-    return () => {
-      events.forEach((e) => window.removeEventListener(e, want));
-      window.clearTimeout(timer);
-    };
+    return () => events.forEach((e) => window.removeEventListener(e, want));
   }, [wanted, reduce]);
 
   // The URL decides where the veil goes; a gesture only moves it there first.
@@ -88,7 +84,9 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
     if (gone) return;
     const scope = root.current?.parentElement;
     const parts = () => scope?.querySelectorAll<HTMLElement>(UNDER) ?? [];
+    const under = scope?.querySelector<HTMLElement>(".mp-under");
     let frame = 0;
+    let rest: boolean | null = null;
     const tick = () => {
       frame = requestAnimationFrame(tick);
       const p = veil.p;
@@ -101,15 +99,24 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
         el.style.transform = reduce ? "" : `translate3d(0, ${(-p * 100).toFixed(2)}%, 0)`;
         el.style.opacity = reduce ? (1 - p).toFixed(3) : "";
       }
-      if (!reduce) parts().forEach((node) => {
-        node.style.transformOrigin = "50% 50vh";
-        node.style.transform = `scale(${(0.93 + 0.07 * p).toFixed(4)})`;
-        node.style.filter = p < 0.995 ? `blur(${(8 * (1 - p)).toFixed(2)}px)` : "";
-      });
+      // While the veil rests, the page under it is not seen: the browser skips laying it out and
+      // painting it (and its blur); it comes forward as soon as the veil moves.
+      const resting = home && p === 0;
+      if (resting !== rest) {
+        rest = resting;
+        if (under) under.style.contentVisibility = resting ? "hidden" : "";
+      }
+      if (!reduce && !resting)
+        parts().forEach((node) => {
+          node.style.transformOrigin = "50% 50vh";
+          node.style.transform = `scale(${(0.93 + 0.07 * p).toFixed(4)})`;
+          node.style.filter = p < 0.995 ? `blur(${(8 * (1 - p)).toFixed(2)}px)` : "";
+        });
     };
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
+      if (under) under.style.contentVisibility = "";
       parts().forEach((node) => {
         node.style.transform = "";
         node.style.filter = "";
