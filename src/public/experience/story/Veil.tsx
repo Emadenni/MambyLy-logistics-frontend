@@ -40,6 +40,22 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   const [glReady, setGlReady] = useState(false);
   const [wanted, setWanted] = useState(false);
   const [glShown, setGlShown] = useState(false);
+  // The page is getting ready: a loading ring where the swipe control will be, and no opening yet.
+  const [loaded, setLoaded] = useState(() => typeof document === "undefined" || document.documentElement.dataset.ready === "1");
+  const loadedRef = useRef(loaded);
+  loadedRef.current = loaded;
+  useEffect(() => {
+    if (loaded) return;
+    const ready = () => setLoaded(true);
+    if (document.documentElement.dataset.ready === "1") ready();
+    window.addEventListener("mp:ready", ready);
+    // never wait for ever (a page without the boot screen)
+    const safety = window.setTimeout(ready, 4000);
+    return () => {
+      window.removeEventListener("mp:ready", ready);
+      window.clearTimeout(safety);
+    };
+  }, [loaded]);
   const webgl = useRef<boolean | null>(null);
   if (webgl.current === null && typeof window !== "undefined") webgl.current = !reduce && hasWebGL();
   const useGl = !!webgl.current && !reduce && !gone && wanted;
@@ -73,7 +89,7 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   }, [home, reduce]);
 
   const open = () => {
-    if (!home) return;
+    if (!home || !loadedRef.current) return;
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
     onOpen();
   };
@@ -175,7 +191,7 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   }, [home]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!home || (e.pointerType === "mouse" && e.button !== 0)) return;
+    if (!home || !loadedRef.current || (e.pointerType === "mouse" && e.button !== 0)) return;
     if ((e.target as HTMLElement).closest(".mp-lang")) return;
     stopVeil();
     drag.current = { id: e.pointerId, y0: e.clientY, t0: e.timeStamp, p0: veil.p, active: false };
@@ -237,7 +253,16 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
       <div ref={lang} className="mp-veil__lang">
         <LangSwitch />
       </div>
-      <div ref={action} className="mp-veil__action">
+      <div ref={action} className={`mp-veil__action${loaded ? " is-ready" : ""}`}>
+        {!loaded && (
+          <span className="mp-veil__loading" role="status" aria-label={t.cover.loading}>
+            <svg className="mp-load" viewBox="0 0 116 116" aria-hidden="true" focusable="false">
+              <circle cx="58" cy="58" r="54" fill="none" stroke="rgba(16,59,53,0.16)" strokeWidth="1.5" />
+              <circle className="mp-load__arc" cx="58" cy="58" r="54" fill="none" stroke="#c9a64d" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="70 270" />
+              <circle className="mp-load__dot" cx="58" cy="58" r="5" fill="#103b35" />
+            </svg>
+          </span>
+        )}
         <button
           type="button"
           className="mp-cover__handle mp-veil__handle"

@@ -595,7 +595,6 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
         {!reduce && (
           <span className="mp-tale__nudge" aria-hidden="true">
-            <span>{s.hero.scrollShort}</span>
             <FiChevronDown />
           </span>
         )}

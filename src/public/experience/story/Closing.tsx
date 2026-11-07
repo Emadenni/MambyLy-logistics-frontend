@@ -84,8 +84,8 @@ const Closing: React.FC = () => {
   const [boom, setBoom] = useState<{ x: number; y: number } | null>(null);
   const boomed = useRef(false);
 
-  // The burst goes off once, when the contact's title comes up into the upper two thirds of the
-  // screen (read from the scroll position: robust whatever clips or contains the section).
+  // The burst goes off once, when the contact's title reaches the middle of the screen, and the
+  // panel comes in with it (read from the scroll position: robust whatever contains the section).
   useEffect(() => {
     const el = title.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -94,8 +94,9 @@ const Closing: React.FC = () => {
       frame = 0;
       if (boomed.current) return;
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.7 && r.bottom > 0) {
+      if (r.top + r.height / 2 < window.innerHeight * 0.55 && r.bottom > 0) {
         boomed.current = true;
+        panel.current?.classList.add("is-in");
         setBoom({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
       }
     };
