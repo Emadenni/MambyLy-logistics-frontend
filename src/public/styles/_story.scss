@@ -299,6 +299,56 @@ $cover-background:
       animation-delay: -4.1s;
     }
 
+    // the card that arrives in the centre: lifts with half a turn in 3D, a gold light crosses it
+    .mp-demos__card.is-arrived .mp-demos__stage {
+      animation:
+        mp-demos-arrive 1.1s cubic-bezier(0.2, 1.2, 0.3, 1),
+        mp-demos-float 6s ease-in-out 1.1s infinite;
+    }
+
+    .mp-demos__card.is-arrived .mp-demos__sheen {
+      animation:
+        mp-demos-gold 1.2s ease-in-out 0.25s,
+        mp-demos-silk 7s ease-in-out 1.5s infinite;
+    }
+
+    @keyframes mp-demos-arrive {
+      0% {
+        transform: perspective(1000px) rotateY(-28deg) translateZ(-60px);
+      }
+      55% {
+        transform: perspective(1000px) rotateY(6deg) translateZ(30px) translateY(-8px);
+      }
+      100% {
+        transform: none;
+      }
+    }
+
+    @keyframes mp-demos-gold {
+      0% {
+        background-position:
+          0 0,
+          110% 0;
+        filter: brightness(1);
+      }
+      50% {
+        filter: brightness(1.6) sepia(0.5);
+      }
+      100% {
+        background-position:
+          0 0,
+          -10% 0;
+        filter: brightness(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mp-demos__card.is-arrived .mp-demos__stage,
+      .mp-demos__card.is-arrived .mp-demos__sheen {
+        animation: none;
+      }
+    }
+
     // light on the card: a soft spot that follows the pointer, and a slow silk shimmer across
     &__sheen {
       position: absolute;
@@ -879,12 +929,18 @@ $cover-background:
     &__panel {
       position: relative;
       overflow: hidden;
+      isolation: isolate;
       width: min(100%, 980px);
       padding: 44px 24px 34px;
       border-radius: 32px;
+      // less one green: a cream light from the top, a warm gold one low at the right, the card's
+      // fine diagonal lines and a gold hairline along the top edge
       background:
-        radial-gradient(70% 60% at 85% 0%, rgba(127, 156, 144, 0.35), transparent 70%),
-        radial-gradient(60% 50% at 0% 100%, rgba(36, 123, 103, 0.35), transparent 70%),
+        linear-gradient(90deg, transparent 8%, rgba(228, 201, 138, 0.9) 50%, transparent 92%) top / 100% 2px no-repeat,
+        radial-gradient(70% 45% at 50% -8%, rgba(246, 244, 238, 0.28), transparent 70%),
+        radial-gradient(45% 40% at 100% 100%, rgba(228, 201, 138, 0.2), transparent 70%),
+        radial-gradient(50% 45% at 0% 100%, rgba(127, 156, 144, 0.32), transparent 70%),
+        repeating-linear-gradient(135deg, rgba(246, 244, 238, 0.035) 0 1px, transparent 1px 22px),
         linear-gradient(160deg, #1d5047, #103b35 55%, #0a2723);
       color: #f6f4ee;
       text-align: center;
@@ -911,9 +967,73 @@ $cover-background:
       }
     }
 
+    // the burst: waves and sparks from the centre of the panel, once, when it arrives
+    &__burst {
+      position: absolute;
+      left: 50%;
+      top: 170px;
+      // over the content, lightening it (screen): a moment of light, never in the way of a click
+      z-index: 3;
+      mix-blend-mode: screen;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    &__wave {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      border: 3px solid rgba(242, 204, 88, 0.95);
+      border-radius: 50%;
+      box-shadow:
+        0 0 18px rgba(242, 204, 88, 0.6),
+        inset 0 0 12px rgba(242, 204, 88, 0.4);
+      opacity: 0;
+
+      &--2 {
+        border-color: rgba(246, 244, 238, 0.7);
+      }
+    }
+
+    &__spark {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--s);
+      height: var(--s);
+      margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+      border-radius: 50%;
+      background: var(--c);
+      box-shadow:
+        0 0 12px var(--c),
+        0 0 24px var(--c);
+      opacity: 0;
+    }
+
+    // a bright flash at the centre of the burst
+    &__flash {
+      position: absolute;
+      left: -300px;
+      top: -300px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 246, 214, 0.9) 0, rgba(242, 204, 88, 0.45) 22%, rgba(242, 204, 88, 0) 60%);
+      opacity: 0;
+    }
+
+    &__panel.is-in &__wave,
+    &__panel.is-in &__spark {
+      animation-fill-mode: both;
+    }
+
     &__kicker {
       margin: 0 0 12px;
-      color: #cfdcd4;
+      color: #e4c98a;
       font: 600 13px / 1 var(--mp-font);
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -930,6 +1050,93 @@ $cover-background:
       max-width: 32rem;
       color: rgba(246, 244, 238, 0.82);
       font: 400 17px / 1.5 var(--mp-font);
+    }
+
+    .mp-close__panel.is-in .mp-close__wave {
+      animation: mp-close-wave 1.5s cubic-bezier(0.15, 0.8, 0.3, 1) 0.35s both;
+    }
+
+    .mp-close__panel.is-in .mp-close__flash {
+      animation: mp-close-flash 1.1s ease-out 0.3s both;
+    }
+
+    @keyframes mp-close-flash {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
+      }
+      18% {
+        transform: scale(0.7);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    .mp-close__panel.is-in .mp-close__wave--2 {
+      animation-delay: 0.5s;
+    }
+
+    .mp-close__panel.is-in .mp-close__spark {
+      animation: mp-close-spark 1.8s cubic-bezier(0.12, 0.85, 0.3, 1) calc(0.35s + var(--d)) both;
+    }
+
+    // the title lands with the burst
+    .mp-close__panel.is-in .mp-close__title {
+      animation: mp-close-title 0.9s cubic-bezier(0.2, 1.3, 0.35, 1) 0.3s both;
+    }
+
+    @keyframes mp-close-wave {
+      0% {
+        transform: scale(0.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(30);
+        opacity: 0;
+      }
+    }
+
+    @keyframes mp-close-spark {
+      0% {
+        transform: rotate(var(--a)) translateX(0) scale(0.4);
+        opacity: 0;
+      }
+      12% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(var(--a)) translateX(calc(var(--far) * min(110vw, 980px))) scale(0.6);
+        opacity: 0;
+      }
+    }
+
+    @keyframes mp-close-title {
+      0% {
+        transform: scale(0.82);
+        opacity: 0;
+        letter-spacing: 0.04em;
+      }
+      100% {
+        transform: none;
+        opacity: 1;
+        letter-spacing: normal;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mp-close__burst {
+        display: none;
+      }
+
+      .mp-close__panel.is-in .mp-close__title {
+        animation: none;
+      }
     }
 
     // the two services, same weight, white
@@ -1013,9 +1220,9 @@ $cover-background:
       align-items: center;
       height: 100%;
       padding: 16px 18px;
-      border: 1px solid rgba(246, 244, 238, 0.2);
+      border: 1px solid rgba(246, 244, 238, 0.22);
       border-radius: 16px;
-      background: rgba(246, 244, 238, 0.06);
+      background: linear-gradient(160deg, rgba(246, 244, 238, 0.14), rgba(246, 244, 238, 0.04));
       color: #f6f4ee;
       text-align: left;
       text-decoration: none;
@@ -1026,7 +1233,7 @@ $cover-background:
       svg {
         grid-row: span 2;
         font-size: 22px;
-        color: #cfdcd4;
+        color: #e4c98a;
       }
 
       strong {

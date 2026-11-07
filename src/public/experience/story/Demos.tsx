@@ -11,6 +11,10 @@ import { media } from "../media";
 import { CARD_PATH, PATHS, conceptPath } from "../routes";
 import { SITE } from "../Screen";
 
+/** The carousel moves on by itself every STEP ms while it is on screen and nobody touches it. */
+const STEP = 3400;
+const RESUME = 7000;
+
 /** A swipe up of at least this many px shares the card; a press that moves less than TAP flips it. */
 const SWIPE = 50;
 const TAP = 8;
@@ -176,10 +180,17 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
     if (!el) return;
     // start on the card in the middle, so there are cards on both sides
     centre(el, Math.floor(el.children.length / 2), false);
+    let arrived = -1;
     let frame = 0;
     const update = () => {
       frame = 0;
-      setCardAt(nearest(el));
+      const at = nearest(el);
+      setCardAt(at);
+      // the card that has just arrived in the centre gets its moment (see .is-arrived)
+      if (at !== arrived) {
+        arrived = at;
+        [...el.children].forEach((c, i) => c.classList.toggle("is-arrived", i === at));
+      }
       if (still) return;
       const box = el.getBoundingClientRect();
       const centre = box.left + box.width / 2;
@@ -198,6 +209,45 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
       cancelAnimationFrame(frame);
       el.removeEventListener("scroll", ask);
       window.removeEventListener("resize", ask);
+    };
+  }, [still]);
+
+  // Cards: a slow, steady walk through the carousel while it is on screen; a touch, the pointer or
+  // keyboard focus pauses it, and it goes on a while after. Never with reduced motion.
+  useEffect(() => {
+    const el = track.current;
+    if (!el || still) return;
+    let visible = false;
+    let pausedUntil = 0;
+    let hover = false;
+    const seen = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.4 });
+    seen.observe(el);
+    const pause = () => (pausedUntil = Date.now() + RESUME);
+    const enter = () => (hover = true);
+    const leave = () => {
+      hover = false;
+      pause();
+    };
+    el.addEventListener("pointerdown", pause, { passive: true });
+    el.addEventListener("touchstart", pause, { passive: true });
+    el.addEventListener("wheel", pause, { passive: true });
+    el.addEventListener("focusin", pause);
+    el.addEventListener("pointerenter", enter);
+    el.addEventListener("pointerleave", leave);
+    const id = window.setInterval(() => {
+      if (!visible || hover || Date.now() < pausedUntil || document.hidden) return;
+      const at = nearest(el);
+      centre(el, at + 1 < el.children.length ? at + 1 : 0);
+    }, STEP);
+    return () => {
+      window.clearInterval(id);
+      seen.disconnect();
+      el.removeEventListener("pointerdown", pause);
+      el.removeEventListener("touchstart", pause);
+      el.removeEventListener("wheel", pause);
+      el.removeEventListener("focusin", pause);
+      el.removeEventListener("pointerenter", enter);
+      el.removeEventListener("pointerleave", leave);
     };
   }, [still]);
 

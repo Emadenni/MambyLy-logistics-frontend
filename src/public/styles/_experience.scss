@@ -1066,6 +1066,47 @@ $x-wide: 1180px;
     }
   }
 
+  // MambyLy's own card: the opening (see .mp-cardpage--own .dc__stage)
+  @keyframes own-open {
+    0% {
+      transform: perspective(1400px) translate3d(0, 18%, -700px) rotateX(28deg) rotateY(-68deg) rotateZ(-6deg);
+      opacity: 0;
+      filter: blur(6px);
+    }
+    35% {
+      opacity: 1;
+      filter: blur(0);
+    }
+    72% {
+      transform: perspective(1400px) translate3d(0, -2%, 40px) rotateX(-4deg) rotateY(9deg) rotateZ(0.5deg);
+    }
+    100% {
+      transform: perspective(1400px) translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0);
+      opacity: 1;
+      filter: none;
+    }
+  }
+
+  @keyframes own-ring {
+    0% {
+      opacity: 1;
+      transform: scale(0.6);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+
+  @keyframes own-sweep {
+    0% {
+      background-position: 120% 0;
+    }
+    100% {
+      background-position: -20% 0;
+    }
+  }
+
   @keyframes mp-halo {
     0% {
       transform: scale(0.7);
@@ -2749,6 +2790,50 @@ $x-wide: 1180px;
   // 270px, plus the safe areas) is kept; under 240px wide the page may scroll instead of cutting.
   .mp-cardpage--own {
     --own-rest: 306px;
+
+    // Opening: the card comes from the depth turning towards you, settles with a small spring, a
+    // ring of gold light leaves it and a light sweeps its face. Once per page view; none with
+    // reduced motion. On the stage (its children keep their own 3D for drag and flip).
+    .dc__stage {
+      transform-origin: 50% 55%;
+      animation: own-open 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 6%;
+        z-index: -1;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba(242, 204, 88, 0.7);
+        opacity: 0;
+        pointer-events: none;
+        animation: own-ring 1.4s cubic-bezier(0.15, 0.8, 0.3, 1) 1.35s both;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        border-radius: 4.5cqi;
+        background: linear-gradient(110deg, transparent 30%, rgba(255, 246, 220, 0.55) 47%, rgba(255, 255, 255, 0.15) 53%, transparent 68%);
+        background-size: 260% 100%;
+        background-position: 120% 0;
+        mix-blend-mode: soft-light;
+        pointer-events: none;
+        animation: own-sweep 1.2s ease-in-out 1.45s both;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+
+        &::before,
+        &::after {
+          animation: none;
+          opacity: 0;
+        }
+      }
+    }
 
     .mp-cardpage__top {
       justify-content: space-between;
