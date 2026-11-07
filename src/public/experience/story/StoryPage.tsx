@@ -220,7 +220,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
         node.style.visibility = o < 0.01 ? "hidden" : "";
       });
       // phones: the arrow that says there is more, after the hero's own hint and until the end
-      const wantNudge = !reduce && p > 0.06 && el.getBoundingClientRect().bottom > window.innerHeight * 1.2;
+      const wantNudge = !reduce && el.getBoundingClientRect().bottom > window.innerHeight * 1.2;
       if (nudge && wantNudge !== nudging) {
         nudging = wantNudge;
         nudge.classList.toggle("is-on", nudging);
@@ -569,12 +569,6 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
                       <span>{s.hero.cards}</span> <FiArrowRight aria-hidden="true" />
                     </Link>
                   </div>
-                  {!reduce && (
-                    <span className="mp-tale__scroll" aria-hidden="true">
-                      {s.hero.scroll}
-                      <i />
-                    </span>
-                  )}
                 </div>
               )}
               {c.id === "identity" && caption("identity", s.identity.title, s.identity.text)}
@@ -601,6 +595,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
         {!reduce && (
           <span className="mp-tale__nudge" aria-hidden="true">
+            <span>{s.hero.scrollShort}</span>
             <FiChevronDown />
           </span>
         )}

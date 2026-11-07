@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiArrowUpRight, FiEdit3, FiMail, FiMessageCircle } from "react-icons/fi";
 import { publicContact } from "../../contact";
@@ -6,18 +6,46 @@ import { useCopy } from "../i18n";
 import { media } from "../media";
 import { PATHS, pathFor } from "../routes";
 
-/** Sparks of the burst: angle, distance (share of the panel), size, delay and colour, fixed. */
-const SPARKS = Array.from({ length: 48 }, (_, i) => {
-  const a = (i / 48) * 360 + ((i * 47) % 11) - 5;
-  const far = 0.32 + ((i * 37) % 23) / 40;
+/** Sparks of the burst: angle, distance (share of the screen's larger side), size, delay, colour. */
+const SPARKS = Array.from({ length: 90 }, (_, i) => {
+  const a = (i / 90) * 360 + ((i * 47) % 13) - 6;
+  const far = 0.25 + ((i * 37) % 31) / 40;
   return {
     a,
     far,
-    size: 6 + ((i * 13) % 11),
-    delay: ((i * 29) % 12) * 0.018,
-    tone: ["#f2cc58", "#f6f4ee", "#cfdcd4", "#e4c98a"][i % 4],
+    size: 5 + ((i * 13) % 14),
+    delay: ((i * 29) % 14) * 0.02,
+    tone: ["#f2cc58", "#f6f4ee", "#cfdcd4", "#e4c98a", "#ffffff"][i % 5],
   };
 });
+const BOOM_MS = 2200;
+
+/**
+ * The moment the contact arrives: over the whole screen, a flash that fills it, waves that leave
+ * its edges and sparks everywhere, from the contact's title; then it clears and the contact stays.
+ */
+const Boom: React.FC<{ at: { x: number; y: number }; onEnd: () => void }> = ({ at, onEnd }) => {
+  useEffect(() => {
+    const id = window.setTimeout(onEnd, BOOM_MS);
+    return () => window.clearTimeout(id);
+  }, [onEnd]);
+  // inside the site (its styles live under .mambyly-public); fixed, so it covers the screen
+  return (
+    <div className="mp-boom" aria-hidden="true" style={{ "--x": `${at.x}px`, "--y": `${at.y}px` } as React.CSSProperties}>
+      <i className="mp-boom__flash" />
+      <i className="mp-boom__wave" />
+      <i className="mp-boom__wave mp-boom__wave--2" />
+      <i className="mp-boom__wave mp-boom__wave--3" />
+      {SPARKS.map((p, i) => (
+        <i
+          key={i}
+          className="mp-boom__spark"
+          style={{ "--a": `${p.a}deg`, "--far": p.far, "--s": `${p.size}px`, "--d": `${p.delay}s`, "--c": p.tone } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  );
+};
 
 /** Adds "is-in" to an element the first time it comes into view (CSS does the rest). */
 const useReveal = <T extends HTMLElement>() => {
@@ -52,6 +80,33 @@ const Closing: React.FC = () => {
   const whatsapp = t.lang === "sv" ? publicContact.whatsappGreetingUrl : publicContact.whatsappUrl;
   const steps = useReveal<HTMLOListElement>();
   const panel = useReveal<HTMLDivElement>();
+  const title = useRef<HTMLHeadingElement>(null);
+  const [boom, setBoom] = useState<{ x: number; y: number } | null>(null);
+  const boomed = useRef(false);
+
+  // The burst goes off once, when the contact's title comes up into the upper two thirds of the
+  // screen (read from the scroll position: robust whatever clips or contains the section).
+  useEffect(() => {
+    const el = title.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    const check = () => {
+      frame = 0;
+      if (boomed.current) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.7 && r.bottom > 0) {
+        boomed.current = true;
+        setBoom({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      }
+    };
+    const ask = () => (frame ||= requestAnimationFrame(check));
+    window.addEventListener("scroll", ask, { passive: true });
+    check();
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", ask);
+    };
+  }, []);
 
   return (
     <>
@@ -75,23 +130,11 @@ const Closing: React.FC = () => {
         </ol>
       </section>
 
+      {boom && <Boom at={boom} onEnd={() => setBoom(null)} />}
       <section className="mp-close" aria-labelledby="tale-contact">
         <div ref={panel} className="mp-close__panel">
-          {/* the moment the contact arrives: a ring of light and sparks from the centre */}
-          <div className="mp-close__burst" aria-hidden="true">
-            <i className="mp-close__flash" />
-            <i className="mp-close__wave" />
-            <i className="mp-close__wave mp-close__wave--2" />
-            {SPARKS.map((p, i) => (
-              <i
-                key={i}
-                className="mp-close__spark"
-                style={{ "--a": `${p.a}deg`, "--far": p.far, "--s": `${p.size}px`, "--d": `${p.delay}s`, "--c": p.tone } as React.CSSProperties}
-              />
-            ))}
-          </div>
           <p className="mp-close__kicker">{c.kicker}</p>
-          <h2 id="tale-contact" className="mp-close__title">
+          <h2 id="tale-contact" ref={title} className="mp-close__title">
             {c.title}
           </h2>
           <p className="mp-close__lead">{c.lead}</p>

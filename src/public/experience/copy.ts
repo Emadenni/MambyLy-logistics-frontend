@@ -73,6 +73,7 @@ const sv = {
       websites: "Webbplatser",
       cards: "Digitala visitkort",
       scroll: "Scrolla för att utforska",
+      scrollShort: "Scrolla",
     },
     identity: {
       title: "Allt ditt företag behöver online. Ett ställe, en stil.",
@@ -554,6 +555,7 @@ const en: Copy = {
       websites: "Websites",
       cards: "Digital cards",
       scroll: "Scroll to explore",
+      scrollShort: "Scroll",
     },
     identity: {
       title: "Everything your business needs online. One place, one style.",

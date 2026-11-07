@@ -11,9 +11,9 @@ import { media } from "../media";
 import { CARD_PATH, PATHS, conceptPath } from "../routes";
 import { SITE } from "../Screen";
 
-/** The carousel moves on by itself every STEP ms while it is on screen and nobody touches it. */
-const STEP = 3400;
-const RESUME = 7000;
+/** The carousel drifts by itself (px per second) while it is on screen and nobody touches it. */
+const DRIFT = 34;
+const RESUME = 5000;
 
 /** A swipe up of at least this many px shares the card; a press that moves less than TAP flips it. */
 const SWIPE = 50;
@@ -212,42 +212,73 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
     };
   }, [still]);
 
-  // Cards: a slow, steady walk through the carousel while it is on screen; a touch, the pointer or
-  // keyboard focus pauses it, and it goes on a while after. Never with reduced motion.
+  // Cards: a slow, continuous drift back and forth while the carousel is on screen. A touch, a
+  // wheel, a mouse over it or keyboard focus pauses it; it goes on a while after. While it drifts
+  // the snapping is off (it would pull the cards back), and comes back as soon as someone takes over.
   useEffect(() => {
     const el = track.current;
     if (!el || still) return;
     let visible = false;
     let pausedUntil = 0;
-    let hover = false;
-    const seen = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.4 });
+    let mouseOver = false;
+    let dir = 1;
+    let pos = el.scrollLeft;
+    let last = 0;
+    let frame = 0;
+    const seen = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.3 });
     seen.observe(el);
-    const pause = () => (pausedUntil = Date.now() + RESUME);
-    const enter = () => (hover = true);
-    const leave = () => {
-      hover = false;
-      pause();
+    const take = () => {
+      pausedUntil = Date.now() + RESUME;
+      el.classList.remove("is-drifting");
     };
-    el.addEventListener("pointerdown", pause, { passive: true });
-    el.addEventListener("touchstart", pause, { passive: true });
-    el.addEventListener("wheel", pause, { passive: true });
-    el.addEventListener("focusin", pause);
-    el.addEventListener("pointerenter", enter);
-    el.addEventListener("pointerleave", leave);
-    const id = window.setInterval(() => {
-      if (!visible || hover || Date.now() < pausedUntil || document.hidden) return;
-      const at = nearest(el);
-      centre(el, at + 1 < el.children.length ? at + 1 : 0);
-    }, STEP);
+    const over = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") mouseOver = true;
+    };
+    const out = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      mouseOver = false;
+      take();
+    };
+    const tick = (now: number) => {
+      frame = requestAnimationFrame(tick);
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      const free = visible && !mouseOver && Date.now() > pausedUntil && !document.hidden;
+      if (!free) {
+        pos = el.scrollLeft;
+        return;
+      }
+      if (!el.classList.contains("is-drifting")) {
+        el.classList.add("is-drifting");
+        pos = el.scrollLeft;
+      }
+      const max = el.scrollWidth - el.clientWidth;
+      pos += dir * DRIFT * dt;
+      if (pos >= max) {
+        pos = max;
+        dir = -1;
+      } else if (pos <= 0) {
+        pos = 0;
+        dir = 1;
+      }
+      el.scrollLeft = pos;
+    };
+    frame = requestAnimationFrame(tick);
+    el.addEventListener("pointerdown", take, { passive: true });
+    el.addEventListener("touchstart", take, { passive: true });
+    el.addEventListener("wheel", take, { passive: true });
+    el.addEventListener("focusin", take);
+    el.addEventListener("pointerover", over);
+    el.addEventListener("pointerleave", out);
     return () => {
-      window.clearInterval(id);
+      cancelAnimationFrame(frame);
       seen.disconnect();
-      el.removeEventListener("pointerdown", pause);
-      el.removeEventListener("touchstart", pause);
-      el.removeEventListener("wheel", pause);
-      el.removeEventListener("focusin", pause);
-      el.removeEventListener("pointerenter", enter);
-      el.removeEventListener("pointerleave", leave);
+      el.removeEventListener("pointerdown", take);
+      el.removeEventListener("touchstart", take);
+      el.removeEventListener("wheel", take);
+      el.removeEventListener("focusin", take);
+      el.removeEventListener("pointerover", over);
+      el.removeEventListener("pointerleave", out);
     };
   }, [still]);
 
@@ -346,7 +377,17 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
             />
           ))}
         </ol>
-        <Pager count={cards.length} at={cardAt} go={(i) => centre(track.current, i)} prev={t.cards.prev} next={t.cards.next} label={t.nav.cards} />
+        <Pager
+          count={cards.length}
+          at={cardAt}
+          go={(i) => {
+            track.current?.dispatchEvent(new Event("wheel"));
+            centre(track.current, i);
+          }}
+          prev={t.cards.prev}
+          next={t.cards.next}
+          label={t.nav.cards}
+        />
         <p className="mp-demos__more">
           <Link to={PATHS.examples[t.lang]} className="mp-xbtn mp-xbtn--solid">
             {d.allCards} <FiArrowRight aria-hidden="true" />
