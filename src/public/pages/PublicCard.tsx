@@ -10,6 +10,7 @@ import { savedLang } from "../experience/i18n";
 import { destinations } from "../experience/nav";
 import { CARD_PATH, PATHS, langOfPath, type Lang, type StaticScreen } from "../experience/routes";
 import LangSwitch from "../experience/LangSwitch";
+import { previousIs } from "../experience/visits";
 import logoDark from "../assets/logo-dark.svg";
 import { LinkMark } from "../experience/icons";
 
@@ -88,7 +89,18 @@ const PublicCard: React.FC = () => {
 
       {isCompany && (
         <div className="mp-cardpage__top">
-          <Link to={PATHS.explore[lang]} className="mp-cardpage__logo" aria-label={t.common.logoLabel}>
+          <Link
+            to={PATHS.explore[lang]}
+            className="mp-cardpage__logo"
+            aria-label={t.common.logoLabel}
+            onClick={(e) => {
+              // came from Utforska (its carousel): back to it, where it was left
+              if (previousIs("explore") && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                e.preventDefault();
+                navigate(-1);
+              }
+            }}
+          >
             <img src={logoDark} alt="" width={132} height={38} />
           </Link>
           <LangSwitch

@@ -18,7 +18,7 @@ const layerKey = (r: Resolved) => {
   return r.screen;
 };
 
-type Move = { enter: Enter; reduce: boolean; fix: number; vw: number; vh: number };
+type Move = { enter: Enter; reduce: boolean; fix: number; vw: number; vh: number; back?: boolean };
 
 const EASE = [0.22, 0.75, 0.18, 1] as const;
 const DURATION = 0.46;
@@ -44,7 +44,7 @@ const variants: Variants = {
     x: 0,
     y: 0,
     opacity: 1,
-    transition: m.reduce ? { duration: 0 } : { duration: DURATION, ease: EASE },
+    transition: m.reduce ? { duration: 0 } : { duration: m.back ? 0.22 : DURATION, ease: EASE },
   }),
   // The leaving screen is pinned where the visitor was looking (`fix` compensates the scroll reset
   // of the new screen), then steps back slightly in the direction of travel.
@@ -119,6 +119,8 @@ const Stage: React.FC = () => {
     const from = window.scrollY;
     leftAt.current = from;
     const to = navType === "POP" ? scrolls.get(location.key) ?? 0 : 0;
+    // Back / Forward: the screen is simply there again, where it was left (a short fade, no travel)
+    if (navType === "POP") return { enter: "fade", back: true, reduce, fix: to - from, vw, vh };
     return { enter: enterFrom(prev.screen, resolved.screen), reduce, fix: to - from, vw, vh };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.key]);
@@ -139,6 +141,26 @@ const Stage: React.FC = () => {
     scrolls.set(prev.locKey, leftAt.current);
     const to = navType === "POP" ? scrolls.get(location.key) ?? 0 : 0;
     window.scrollTo({ top: to, left: 0, behavior: "instant" as ScrollBehavior });
+    if (!to) return;
+    // A screen that builds itself after mounting (Utforska's pinned story, its demos drawn as they
+    // come near) is shorter at first and the browser clamps the scroll: hold the position until it
+    // stays, for a moment, unless the visitor scrolls first.
+    let frame = 0;
+    let n = 0;
+    const stop = () => cancelAnimationFrame(frame);
+    const hold = () => {
+      if (currentKey.current !== location.key) return;
+      if (Math.abs(window.scrollY - to) > 2) window.scrollTo({ top: to, left: 0, behavior: "instant" as ScrollBehavior });
+      if (++n < 90) frame = requestAnimationFrame(hold);
+      else off();
+    };
+    const off = () => {
+      stop();
+      ["wheel", "touchstart", "keydown", "pointerdown"].forEach((e) => window.removeEventListener(e, off));
+    };
+    ["wheel", "touchstart", "keydown", "pointerdown"].forEach((e) => window.addEventListener(e, off, { passive: true, once: true }));
+    frame = requestAnimationFrame(hold);
+    return off;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.key]);
 

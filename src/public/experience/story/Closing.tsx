@@ -42,22 +42,35 @@ const PIECES = Array.from({ length: COLS * ROWS * 2 }, (_, n) => {
   };
 });
 
+/**
+ * What has already made its entrance in this tab: coming back to Utforska (from a demo, with Back)
+ * shows it as it was left, without playing it again ("is-done" turns its motion off).
+ */
+const shown = new Set<string>();
+const showDone = (el: HTMLElement, name: string) => {
+  if (!shown.has(name)) return false;
+  el.classList.add("is-in", "is-done");
+  return true;
+};
+
 /** Adds "is-in" to an element the first time it comes into view (CSS does the rest). */
-const useReveal = <T extends HTMLElement>() => {
+const useReveal = <T extends HTMLElement>(name: string) => {
   const ref = useRef<T>(null);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || showDone(el, name)) return;
     const seen = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         el.classList.add("is-in");
+        shown.add(name);
         seen.disconnect();
       },
       { threshold: 0.35 },
     );
     seen.observe(el);
     return () => seen.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return ref;
 };
@@ -73,15 +86,15 @@ const Closing: React.FC = () => {
   const c = t.story.contact;
   const contactPath = pathFor("contact", t.lang);
   const whatsapp = t.lang === "sv" ? publicContact.whatsappGreetingUrl : publicContact.whatsappUrl;
-  const steps = useReveal<HTMLOListElement>();
-  const panel = useReveal<HTMLDivElement>();
+  const steps = useReveal<HTMLOListElement>("steps");
+  const panel = useReveal<HTMLDivElement>("contact");
   const built = useRef(false);
 
   // The card puts itself together once, when it is well into the screen (read from the scroll
   // position: robust whatever contains the section).
   useEffect(() => {
     const el = panel.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!el || showDone(el, "contact") || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let frame = 0;
     const check = () => {
       frame = 0;
@@ -89,6 +102,7 @@ const Closing: React.FC = () => {
       const r = el.getBoundingClientRect();
       if (r.top < window.innerHeight * 0.62 && r.bottom > 0) {
         built.current = true;
+        shown.add("contact");
         el.classList.add("is-in");
       }
     };

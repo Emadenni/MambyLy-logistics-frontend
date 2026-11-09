@@ -3,15 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiInfo, FiX } from "react-icons/fi";
 import { useCopy } from "../i18n";
 import { PATHS, type StaticScreen } from "../routes";
-import { previousIs } from "../visits";
+import { hasPrevious } from "../visits";
 import { conceptCopy } from "./content";
 import { useConceptFx } from "./fx";
 
 /**
  * The only element from outside inside a fullscreen demo (websites and cards): a small close button
- * in the top corner that leads back to the gallery in the same language. It goes back in history
- * when the gallery is the previous entry (so the gallery keeps its position), otherwise it links
- * to the gallery, so direct links and refreshes always have a way out.
+ * in the top corner that leads back to where the visitor came from: back in history whenever there
+ * is an earlier entry of the site in this tab (Utforska, the gallery…, which then keep their
+ * position), otherwise a link to the gallery, so direct links and refreshes always have a way out.
  */
 export const ExitButton: React.FC<{ to?: StaticScreen; tone?: "light" | "dark" }> = ({ to = "websites", tone = "light" }) => {
   const t = useCopy();
@@ -24,7 +24,7 @@ export const ExitButton: React.FC<{ to?: StaticScreen; tone?: "light" | "dark" }
         className="mp-exit__btn"
         aria-label={c.exitLabel}
         onClick={(e) => {
-          if (previousIs(to) && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
+          if (hasPrevious() && !e.metaKey && !e.ctrlKey && !e.shiftKey) {
             e.preventDefault();
             navigate(-1);
           }

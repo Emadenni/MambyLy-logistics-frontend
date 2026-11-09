@@ -1131,6 +1131,20 @@ $cover-background:
   }
 
 
+  // Back on Utforska after a demo: what already made its entrance is simply there (Closing.tsx)
+  .mp-howto__list.is-done,
+  .mp-close__panel.is-done {
+    &,
+    &::before,
+    &::after,
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+
   // ---------------------------------------------------------------------------------------------
   // The contact at the end of Utforska (Closing.tsx)
   // ---------------------------------------------------------------------------------------------
