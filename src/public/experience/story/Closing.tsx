@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight, FiArrowUpRight, FiEdit3, FiMail, FiMessageCircle } from "react-icons/fi";
 import { publicContact } from "../../contact";
@@ -6,46 +6,41 @@ import { useCopy } from "../i18n";
 import { media } from "../media";
 import { PATHS, pathFor } from "../routes";
 
-/** Sparks of the burst: angle, distance (share of the screen's larger side), size, delay, colour. */
-const SPARKS = Array.from({ length: 90 }, (_, i) => {
-  const a = (i / 90) * 360 + ((i * 47) % 13) - 6;
-  const far = 0.25 + ((i * 37) % 31) / 40;
+/**
+ * The pieces the contact card is put together from: a grid of cells, each cut along its diagonal
+ * into two triangles; every piece comes from its own direction, turning in 3D, and lands in place.
+ * Each shows its own part of the card's surface (background size and position from its cell).
+ */
+const COLS = 6;
+const ROWS = 5;
+const PIECES = Array.from({ length: COLS * ROWS * 2 }, (_, n) => {
+  const cell = n >> 1;
+  const half = n & 1;
+  const col = cell % COLS;
+  const row = Math.floor(cell / COLS);
+  const seed = (n * 97 + 31) % 101;
+  const side = col < COLS / 2 ? -1 : 1;
+  // the round corners of the card: on the piece that holds each corner
+  const top = row === 0;
+  const bottom = row === ROWS - 1;
+  const left = col === 0;
+  const right = col === COLS - 1;
+  const radius = [top && left && !half, top && right, bottom && right && half, bottom && left && !half]
+    .map((on) => (on ? "32px" : "0"))
+    .join(" ");
   return {
-    a,
-    far,
-    size: 5 + ((i * 13) % 14),
-    delay: ((i * 29) % 14) * 0.02,
-    tone: ["#f2cc58", "#f6f4ee", "#cfdcd4", "#e4c98a", "#ffffff"][i % 5],
+    col,
+    row,
+    half,
+    radius,
+    dx: side * (30 + (seed % 50)) + (col - COLS / 2) * 8,
+    dy: (row - ROWS / 2) * 18 + ((seed * 7) % 60) - 30,
+    rz: ((seed * 13) % 360) - 180,
+    rx: ((seed * 5) % 140) - 70,
+    ry: ((seed * 11) % 160) - 80,
+    delay: ((Math.abs(col - (COLS - 1) / 2) + Math.abs(row - (ROWS - 1) / 2)) * 0.07 + (seed % 7) * 0.025).toFixed(3),
   };
 });
-const BOOM_MS = 2200;
-
-/**
- * The moment the contact arrives: over the whole screen, a flash that fills it, waves that leave
- * its edges and sparks everywhere, from the contact's title; then it clears and the contact stays.
- */
-const Boom: React.FC<{ at: { x: number; y: number }; onEnd: () => void }> = ({ at, onEnd }) => {
-  useEffect(() => {
-    const id = window.setTimeout(onEnd, BOOM_MS);
-    return () => window.clearTimeout(id);
-  }, [onEnd]);
-  // inside the site (its styles live under .mambyly-public); fixed, so it covers the screen
-  return (
-    <div className="mp-boom" aria-hidden="true" style={{ "--x": `${at.x}px`, "--y": `${at.y}px` } as React.CSSProperties}>
-      <i className="mp-boom__flash" />
-      <i className="mp-boom__wave" />
-      <i className="mp-boom__wave mp-boom__wave--2" />
-      <i className="mp-boom__wave mp-boom__wave--3" />
-      {SPARKS.map((p, i) => (
-        <i
-          key={i}
-          className="mp-boom__spark"
-          style={{ "--a": `${p.a}deg`, "--far": p.far, "--s": `${p.size}px`, "--d": `${p.delay}s`, "--c": p.tone } as React.CSSProperties}
-        />
-      ))}
-    </div>
-  );
-};
 
 /** Adds "is-in" to an element the first time it comes into view (CSS does the rest). */
 const useReveal = <T extends HTMLElement>() => {
@@ -80,24 +75,21 @@ const Closing: React.FC = () => {
   const whatsapp = t.lang === "sv" ? publicContact.whatsappGreetingUrl : publicContact.whatsappUrl;
   const steps = useReveal<HTMLOListElement>();
   const panel = useReveal<HTMLDivElement>();
-  const title = useRef<HTMLHeadingElement>(null);
-  const [boom, setBoom] = useState<{ x: number; y: number } | null>(null);
-  const boomed = useRef(false);
+  const built = useRef(false);
 
-  // The burst goes off once, when the contact's title reaches the middle of the screen, and the
-  // panel comes in with it (read from the scroll position: robust whatever contains the section).
+  // The card puts itself together once, when it is well into the screen (read from the scroll
+  // position: robust whatever contains the section).
   useEffect(() => {
-    const el = title.current;
+    const el = panel.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let frame = 0;
     const check = () => {
       frame = 0;
-      if (boomed.current) return;
+      if (built.current) return;
       const r = el.getBoundingClientRect();
-      if (r.top + r.height / 2 < window.innerHeight * 0.55 && r.bottom > 0) {
-        boomed.current = true;
-        panel.current?.classList.add("is-in");
-        setBoom({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      if (r.top < window.innerHeight * 0.62 && r.bottom > 0) {
+        built.current = true;
+        el.classList.add("is-in");
       }
     };
     const ask = () => (frame ||= requestAnimationFrame(check));
@@ -131,11 +123,31 @@ const Closing: React.FC = () => {
         </ol>
       </section>
 
-      {boom && <Boom at={boom} onEnd={() => setBoom(null)} />}
       <section className="mp-close" aria-labelledby="tale-contact">
         <div ref={panel} className="mp-close__panel">
+          <div className="mp-close__pieces" aria-hidden="true" style={{ "--cols": COLS, "--rows": ROWS } as React.CSSProperties}>
+            {PIECES.map((p, i) => (
+              <i
+                key={i}
+                className={`mp-close__piece mp-close__piece--${p.half ? "b" : "a"}`}
+                style={
+                  {
+                    "--c": p.col,
+                    "--r": p.row,
+                    "--dx": `${p.dx}vw`,
+                    "--dy": `${p.dy}vh`,
+                    "--rz": `${p.rz}deg`,
+                    "--rx": `${p.rx}deg`,
+                    "--ry": `${p.ry}deg`,
+                    "--d": `${p.delay}s`,
+                    borderRadius: p.radius,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+          </div>
           <p className="mp-close__kicker">{c.kicker}</p>
-          <h2 id="tale-contact" ref={title} className="mp-close__title">
+          <h2 id="tale-contact" className="mp-close__title">
             {c.title}
           </h2>
           <p className="mp-close__lead">{c.lead}</p>

@@ -33,6 +33,7 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   const brand = useRef<HTMLDivElement>(null);
   const action = useRef<HTMLDivElement>(null);
   const lang = useRef<HTMLDivElement>(null);
+  const ring = useRef<HTMLSpanElement>(null);
   const drag = useRef<{ id: number; y0: number; t0: number; p0: number; active: boolean } | null>(null);
   const shownHome = useRef<boolean | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -97,9 +98,11 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
     onOpen();
   };
 
-  // Every frame while the veil is up: the controls fade with the opening, the page underneath comes
-  // forward (a little zoom, no blur: a blur over the whole page made the opening stutter on
-  // phones). Without WebGL the HTML veil itself moves.
+  // Every frame while the veil is up: the controls fade with the opening; without WebGL the HTML
+  // veil lifts with its curved hem while the logo rises slower and fades into the light; a gold
+  // ring goes out from the swipe control; the page underneath rises from a tilted plane and its
+  // title and links arrive one after the other (--vp). Only transforms and opacity: a blur over
+  // the whole page made the opening stutter on phones.
   useEffect(() => {
     if (gone) return;
     const scope = root.current?.parentElement;
@@ -115,9 +118,21 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
       if (action.current) action.current.style.opacity = controls;
       if (lang.current) lang.current.style.opacity = controls;
       const el = root.current;
+      const h = window.innerHeight;
       if (el && !glShown) {
-        el.style.transform = reduce ? "" : `translate3d(0, ${(-p * 100).toFixed(2)}%, 0)`;
+        // the hem hangs below the veil: it lifts that much further to leave the screen
+        const k = p;
+        el.style.transform = reduce ? "" : `translate3d(0, ${(-k * h * 1.16).toFixed(1)}px, 0)`;
         el.style.opacity = reduce ? (1 - p).toFixed(3) : "";
+        if (brand.current && !reduce) {
+          brand.current.style.transform = `translate3d(-50%, ${(k * h * 0.55).toFixed(1)}px, 0) scale(${(1 + p * 0.25).toFixed(3)})`;
+          brand.current.style.opacity = Math.max(0, 1 - p * 1.8).toFixed(3);
+        }
+      }
+      if (ring.current) {
+        const on = !reduce && p > 0.02 && p < 0.98;
+        ring.current.style.opacity = on ? (Math.sin(Math.min(1, p * 1.4) * Math.PI) * 0.9).toFixed(3) : "0";
+        if (on) ring.current.style.transform = `translate(-50%, -50%) scale(${(0.15 + p * 3.2).toFixed(3)})`;
       }
       // While the veil rests, the page under it is not seen: the browser skips laying it out and
       // painting it (and its blur); it comes forward as soon as the veil moves.
@@ -126,16 +141,27 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
         rest = resting;
         if (under) under.style.contentVisibility = resting ? "hidden" : "";
       }
-      if (!reduce && !resting)
+      if (!reduce && !resting) {
+        const q = 1 - ease.out3(p);
+        under?.style.setProperty("--vp", p.toFixed(3));
         parts().forEach((node) => {
-          node.style.transformOrigin = "50% 50vh";
-          node.style.transform = `scale(${(0.93 + 0.07 * p).toFixed(4)})`;
+          node.style.transformOrigin = "50% 60vh";
+          node.style.transform = `perspective(1400px) translate3d(0, ${(q * 9).toFixed(2)}vh, 0) rotateX(${(q * 16).toFixed(2)}deg) scale(${(1 - q * 0.12).toFixed(4)})`;
         });
+      }
     };
     frame = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(frame);
-      if (under) under.style.contentVisibility = "";
+      if (under) {
+        under.style.contentVisibility = "";
+        under.style.removeProperty("--vp");
+      }
+      if (brand.current) {
+        brand.current.style.transform = "";
+        brand.current.style.opacity = "";
+      }
+      if (ring.current) ring.current.style.opacity = "0";
       parts().forEach((node) => {
         node.style.transform = "";
         node.style.filter = "";
@@ -229,6 +255,7 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   };
 
   return (
+    <>
     <div
       ref={root}
       className={`mp-veil${dragging ? " is-dragging" : ""}${glShown ? " is-gl" : ""}`}
@@ -242,6 +269,8 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
     >
       {home && head}
       <div className="mp-veil__silk" aria-hidden="true" />
+      {/* the hem of the silk: a curved green edge with a gold line, seen while it lifts */}
+      <div className="mp-veil__hem" aria-hidden="true" />
       <div ref={brand} className="mp-veil__brand">
         <h1 className="mp-veil__logo">
           <img src={logoDark} alt="MambyLy Solutions" width={300} height={85} draggable={false} />
@@ -286,6 +315,8 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
         </p>
       </div>
     </div>
+    <span ref={ring} className="mp-veil-ring" aria-hidden="true" style={{ visibility: gone ? "hidden" : "visible" }} />
+    </>
   );
 };
 

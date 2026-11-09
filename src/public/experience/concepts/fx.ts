@@ -17,6 +17,7 @@ type FxConfig = { reveal: string; parallax?: string; magnetic?: string };
 // the sections of sites.ts reveal item by item (their inner wrapper itself does not)
 const SITE_REVEAL =
   ".cx-sx__head, .cx-sx__text > div > :not(.cx-sx__head), .cx-sx__pic, .cx-sx__stats > div, .cx-sx__cards > li, .cx-sx__groups > div, .cx-sx__gallery > li, .cx-sx__quotes > li, .cx-sx__faq > details, .cx-sx__info > div";
+const LISTS = ".cx-sx__cards, .cx-sx__gallery, .cx-sx__quotes, .cx-sx__groups, .cx-sx__faq, .cx-sx__info, .cx-sx__stats";
 const BASE_REVEAL = "main section > :is(h2, h3, p, ul, ol, figure, form, div, dl, blockquote):not(.cx-sx__in), main section :is(h2, h3), " + SITE_REVEAL;
 
 export const FX: Record<string, FxConfig> = {
@@ -36,16 +37,19 @@ export const useConceptFx = (root: React.RefObject<HTMLElement>, id: string) => 
     if (!el || !cfg || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     el.classList.add("fx-on");
 
-    // reveal: only what starts below the first screen (nothing already seen is hidden)
+    // reveal: only what starts below the first screen (nothing already seen is hidden). Items of
+    // the sites' lists are watched through their list, which does not move: some items start far
+    // to the side (rolling plates, vans driving in) where they would never be seen themselves.
+    const byList = new Map<Element, HTMLElement[]>();
     const seen = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
           const t = e.target as HTMLElement;
-          t.classList.add("fx-in");
+          (byList.get(t) ?? [t]).forEach((n) => n.classList.add("fx-in"));
           seen.unobserve(t);
         }),
-      { rootMargin: "0px 0px -8% 0px" },
+      { rootMargin: "0px 0px -12% 0px" },
     );
     const marked = new Set<HTMLElement>();
     const mark = () => {
@@ -57,7 +61,13 @@ export const useConceptFx = (root: React.RefObject<HTMLElement>, id: string) => 
         const sibs = n.parentElement ? [...n.parentElement.children].filter((c) => marked.has(c as HTMLElement)) : [];
         n.style.setProperty("--fx-delay", `${Math.min(sibs.indexOf(n), 6) * 70}ms`);
         n.classList.add("fx", /^H[1-3]$/.test(n.tagName) ? "fx--wipe" : "fx--rise");
-        seen.observe(n);
+        const list = n.parentElement?.matches(LISTS) ? n.parentElement : null;
+        if (!list) return seen.observe(n);
+        if (!byList.has(list)) {
+          byList.set(list, []);
+          seen.observe(list);
+        }
+        byList.get(list)!.push(n);
       });
     };
     mark();

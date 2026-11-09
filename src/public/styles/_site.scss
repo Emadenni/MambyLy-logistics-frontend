@@ -511,6 +511,7 @@
     img {
       display: block;
       width: 100%;
+      height: auto;
       aspect-ratio: 4 / 5;
       object-fit: cover;
       transform: scale(1.04);
@@ -694,6 +695,7 @@
     img {
       display: block;
       width: 100%;
+      height: auto;
       aspect-ratio: 1;
       object-fit: cover;
       transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -949,6 +951,853 @@
     margin-block: clamp(56px, 8vw, 96px);
   }
 
+  // ---------------------------------------------------------------------------------------------
+  // Shared tools of the signatures: cards that turn over, titles letter by letter, a running band
+  // ---------------------------------------------------------------------------------------------
+
+  .cx-sx__cards li.is-flip {
+    padding: 0;
+    border: 0;
+    background: none;
+    perspective: 1100px;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  .cx-sx__flip {
+    position: relative;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    min-height: 230px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.85s cubic-bezier(0.2, 0.85, 0.25, 1.05);
+
+    &:focus-visible {
+      outline: 3px solid var(--sx-accent);
+      outline-offset: 4px;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cx-sx__cards li.is-flip:hover .cx-sx__flip {
+      transform: rotateY(180deg);
+    }
+  }
+
+  .cx-sx__cards li.is-flipped .cx-sx__flip {
+    transform: rotateY(180deg);
+  }
+
+  .cx-sx__face {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px 26px;
+    border: 1px solid var(--sx-line);
+    border-radius: var(--sx-radius);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    &--front {
+      background: var(--sx-card);
+    }
+
+    &--back {
+      justify-content: center;
+      background: var(--sx-accent);
+      color: var(--sx-on-accent);
+      transform: rotateY(180deg);
+    }
+  }
+
+  .cx-sx__h3 {
+    font-family: var(--sx-display);
+    font-weight: var(--sx-display-w);
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .cx-sx__p {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .cx-sx__turn {
+    margin-top: auto;
+    align-self: flex-end;
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  .cx-sx__word {
+    display: inline-block;
+    margin-right: 0.24em;
+    white-space: nowrap;
+  }
+
+  .cx-sx__ch {
+    display: inline-block;
+    transform-origin: 50% 100%;
+  }
+
+  .cx-sx-marquee {
+    grid-column: 1 / -1;
+    margin-inline: calc(50% - 50vw);
+    overflow: hidden;
+    padding: 22px 0;
+    background: var(--sx-accent);
+    color: var(--sx-on-accent);
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding-right: 32px;
+    }
+
+    b {
+      font-family: var(--sx-display);
+      font-weight: var(--sx-display-w);
+      font-size: clamp(28px, 5vw, 56px);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    i {
+      flex: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.5;
+    }
+  }
+
+  .cx-sx-marquee__run {
+    display: flex;
+    width: max-content;
+    animation: cx-marquee 30s linear infinite;
+  }
+
+  @keyframes cx-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Restaurant: plates that roll in and turn, menu cards that turn over, notes pinned askew
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--restaurant {
+    .cx-sx__gallery figure {
+      overflow: visible;
+      border-radius: 0;
+    }
+
+    .cx-sx__gallery img {
+      border-radius: 50%;
+      box-shadow: 0 22px 34px -20px rgba(36, 26, 20, 0.65);
+      transition: transform 1s cubic-bezier(0.2, 0.9, 0.25, 1);
+    }
+
+    .cx-sx__gallery figure:hover img {
+      transform: rotate(28deg) scale(1.04);
+    }
+
+    .cx-sx__gallery figcaption {
+      position: static;
+      padding: 14px 0 0;
+      background: none;
+      color: var(--sx-ink);
+      font-family: var(--x-serif);
+      font-style: italic;
+      font-size: 19px;
+      text-align: center;
+    }
+
+    .cx-sx-marquee {
+      rotate: -2deg;
+      scale: 1.04;
+      margin-block: 20px;
+
+      b {
+        font-style: italic;
+      }
+    }
+
+    // the menu cards of the evenings: a double red frame in front, red on the back
+    .cx-sx__face--front {
+      border: 0;
+      box-shadow:
+        inset 0 0 0 6px var(--sx-card),
+        inset 0 0 0 7px var(--sx-accent),
+        0 18px 30px -24px rgba(36, 26, 20, 0.6);
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+
+      .cx-sx__h3 {
+        font-size: 30px;
+        font-style: italic;
+      }
+    }
+
+    .cx-sx__quotes blockquote {
+      background: #fffdf7;
+      border-top: 2px dashed rgba(36, 26, 20, 0.2);
+      box-shadow: 0 18px 30px -22px rgba(36, 26, 20, 0.55);
+    }
+
+    .cx-sx__quotes li:nth-child(odd) blockquote {
+      rotate: -2.2deg;
+    }
+
+    .cx-sx__quotes li:nth-child(even) blockquote {
+      rotate: 1.6deg;
+    }
+
+    .cx-sx__row i {
+      transform-origin: left;
+      transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s;
+    }
+  }
+
+  .fx-on.cx--restaurant {
+    .cx-sx__gallery > li.fx {
+      transition:
+        opacity 0.5s ease var(--fx-delay, 0ms),
+        transform 1.5s cubic-bezier(0.2, 0.9, 0.25, 1) var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__gallery > li.fx--rise:not(.fx-in) {
+      opacity: 0;
+      transform: translateX(-70vw) rotate(-600deg);
+      filter: none;
+    }
+
+    .cx-sx__quotes > li.fx--rise:not(.fx-in) {
+      transform: translateY(-90px) rotate(-14deg);
+      filter: none;
+    }
+
+    .cx-sx__groups > div.fx--rise:not(.fx-in) {
+      transform: translateX(-40px);
+      filter: none;
+
+      .cx-sx__row i {
+        transform: scaleX(0);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Photographer: cards develop out of a flash, the picture opens like an aperture, a film strip
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--photographer {
+    .cx-sx__cards li,
+    .cx-sx__face--front {
+      background:
+        radial-gradient(260px circle at var(--px, 50%) var(--py, 0%), rgba(227, 226, 122, 0.14), transparent 62%),
+        var(--sx-card);
+    }
+
+    // viewfinder corners on the cards that turn over
+    .cx-sx__face--front {
+      background:
+        linear-gradient(var(--sx-accent), var(--sx-accent)) 14px 14px / 18px 2px no-repeat,
+        linear-gradient(var(--sx-accent), var(--sx-accent)) 14px 14px / 2px 18px no-repeat,
+        linear-gradient(var(--sx-accent), var(--sx-accent)) calc(100% - 14px) calc(100% - 14px) / 18px 2px no-repeat,
+        linear-gradient(var(--sx-accent), var(--sx-accent)) calc(100% - 14px) calc(100% - 14px) / 2px 18px no-repeat,
+        var(--sx-card);
+      justify-content: flex-end;
+    }
+
+    // the steps on a strip of film
+    .cx-sx--process .cx-sx__cards {
+      position: relative;
+      gap: 8px;
+      padding: 30px 8px;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(241, 238, 230, 0.75) 10px 20px, transparent 20px 30px) 0 9px / 100% 10px no-repeat,
+        repeating-linear-gradient(90deg, transparent 0 10px, rgba(241, 238, 230, 0.75) 10px 20px, transparent 20px 30px) 0 calc(100% - 9px) / 100% 10px no-repeat,
+        #050505;
+
+      li {
+        border: 0;
+        border-radius: 0;
+      }
+    }
+  }
+
+  .fx-on.cx--photographer {
+    .cx-sx__cards > li.fx {
+      transition:
+        opacity 0.4s ease var(--fx-delay, 0ms),
+        transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) var(--fx-delay, 0ms),
+        filter 1.6s ease var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: scale(1.05);
+      filter: brightness(3.2) grayscale(1) contrast(0.6);
+    }
+
+    .cx-sx--process .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      transform: translateX(120px);
+    }
+
+    .cx-sx__pic.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      clip-path: circle(0% at 50% 50%);
+    }
+
+    .cx-sx__pic.fx-in {
+      clip-path: circle(80% at 50% 50%);
+      transition: clip-path 1.4s cubic-bezier(0.7, 0, 0.2, 1);
+    }
+
+    .cx-sx__quotes > li.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      clip-path: inset(50% 0 50% 0);
+    }
+
+    .cx-sx__quotes > li.fx-in {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Logistics: cards drive in, a road with a van along the steps, a departure board, a ticker
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--logistics {
+    .cx-sx-marquee {
+      background: var(--sx-ink);
+      color: #fff;
+
+      b {
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
+
+      i {
+        width: 42px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--sx-accent);
+        opacity: 1;
+      }
+    }
+
+    .cx-sx--process .cx-sx__cards {
+      position: relative;
+      padding-top: 56px;
+
+      // the road
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 16px;
+        height: 14px;
+        border-radius: 7px;
+        background:
+          repeating-linear-gradient(90deg, #fff 0 18px, transparent 18px 34px) 0 50% / 100% 2px no-repeat,
+          var(--sx-ink);
+        transform-origin: left;
+        transition: transform 1.6s cubic-bezier(0.6, 0, 0.2, 1);
+      }
+
+      // the van
+      &::after {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 46px;
+        height: 24px;
+        border-radius: 6px 12px 4px 4px;
+        background:
+          linear-gradient(90deg, transparent 62%, rgba(255, 255, 255, 0.75) 62% 84%, transparent 84%) 0 4px / 100% 9px no-repeat,
+          var(--sx-accent);
+        box-shadow: 0 6px 12px -4px rgba(194, 65, 12, 0.6);
+        transition: left 2.6s cubic-bezier(0.5, 0, 0.2, 1) 0.4s;
+      }
+    }
+
+    .cx-sx__groups {
+      > div {
+        perspective: 700px;
+      }
+
+      h3 {
+        border-bottom-color: var(--sx-accent);
+      }
+
+      li {
+        margin-bottom: 6px;
+        padding: 12px 14px;
+        border: 0;
+        border-radius: 6px;
+        background: var(--sx-ink);
+        color: #fff;
+        transform-origin: 50% 0;
+        transition:
+          transform 0.7s cubic-bezier(0.2, 1.2, 0.3, 1),
+          opacity 0.3s ease;
+
+        &:nth-child(2) {
+          transition-delay: 0.12s;
+        }
+
+        &:nth-child(3) {
+          transition-delay: 0.24s;
+        }
+      }
+
+      .cx-sx__row i {
+        border-bottom-color: rgba(255, 255, 255, 0.35);
+      }
+
+      .cx-sx__row span {
+        color: #ffb37a;
+        font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+
+      .cx-sx__sub {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+
+  .fx-on.cx--logistics {
+    .cx-sx__cards > li.fx {
+      transition:
+        opacity 0.4s ease var(--fx-delay, 0ms),
+        transform 1.1s cubic-bezier(0.2, 1.25, 0.3, 1) var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      opacity: 0;
+      transform: translateX(-70vw) skewX(20deg);
+      filter: none;
+    }
+
+    .cx-sx--process .cx-sx__cards {
+      &::before {
+        transform: scaleX(0);
+      }
+
+      &::after {
+        left: 0;
+      }
+
+      &:has(> li.fx-in)::before {
+        transform: scaleX(1);
+      }
+
+      &:has(> li.fx-in:last-child)::after {
+        left: calc(100% - 46px);
+      }
+    }
+
+    .cx-sx__groups > div.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+
+      li {
+        opacity: 0;
+        transform: rotateX(-95deg);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Painter: colour swatches that turn over, work painted on with a brush, a roller over the picture
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--painter {
+    $swatches: (#a5452f #fff, #5d6b4f #fff, #d8b98f #2d0f26, #3d1530 #fff, #7f9c90 #fff, #efe0c8 #2d0f26);
+
+    @for $i from 1 through 6 {
+      .cx-sx__cards li.is-flip:nth-child(#{$i}) .cx-sx__face--front {
+        background: nth(nth($swatches, $i), 1);
+        color: nth(nth($swatches, $i), 2);
+        border: 0;
+      }
+    }
+
+    .cx-sx__face--front {
+      justify-content: flex-end;
+      box-shadow: 0 22px 34px -26px rgba(45, 15, 38, 0.7);
+
+      .cx-sx__meta {
+        color: inherit;
+        border-color: currentColor;
+        opacity: 0.8;
+      }
+    }
+
+    .cx-sx__face--back {
+      background: var(--sx-card);
+      color: var(--sx-ink);
+      border: 1px solid var(--sx-line);
+    }
+
+    .cx-sx__head::after {
+      content: "";
+      display: block;
+      width: 140px;
+      height: 12px;
+      margin-top: 18px;
+      border-radius: 10px 4px 12px 3px;
+      background: var(--sx-accent);
+      rotate: -2deg;
+      transform-origin: left;
+      transition: transform 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.4s;
+    }
+  }
+
+  .fx-on.cx--painter {
+    .cx-sx__head.fx--rise:not(.fx-in)::after {
+      transform: scaleX(0);
+    }
+
+    .cx-sx--work .cx-sx__cards > li.fx--rise:not(.fx-in),
+    .cx-sx__quotes > li.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      clip-path: inset(0 100% 0 0 round var(--sx-radius));
+    }
+
+    .cx-sx--work .cx-sx__cards > li.fx-in,
+    .cx-sx__quotes > li.fx-in {
+      clip-path: inset(0 0 0 0 round var(--sx-radius));
+    }
+
+    .cx-sx__cards > li.is-flip.fx {
+      transition:
+        opacity 0.4s ease var(--fx-delay, 0ms),
+        transform 1s cubic-bezier(0.2, 1.3, 0.3, 1) var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__cards > li.is-flip.fx--rise:not(.fx-in) {
+      opacity: 0;
+      transform: translateY(-120px) rotate(-10deg);
+      filter: none;
+    }
+
+    .cx-sx__pic.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      clip-path: inset(0 0 100% 0 round var(--sx-radius));
+    }
+
+    .cx-sx__pic.fx-in {
+      clip-path: inset(0 0 0 0 round var(--sx-radius));
+      transition: clip-path 1.5s cubic-bezier(0.6, 0, 0.2, 1);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Architecture: titles set letter by letter, plans that unfold, lines drawn on drafting paper
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--architecture {
+    .cx-sx--process {
+      background:
+        linear-gradient(var(--sx-line) 1px, transparent 1px) 0 0 / 32px 32px,
+        linear-gradient(90deg, var(--sx-line) 1px, transparent 1px) 0 0 / 32px 32px,
+        var(--sx-bg);
+    }
+
+    .cx-sx h2 {
+      perspective: 800px;
+    }
+
+    .cx-sx__cards {
+      perspective: 1200px;
+    }
+
+    .cx-sx__cards li {
+      transform-origin: 50% 0;
+    }
+
+    .cx-sx__groups li {
+      position: relative;
+      border-bottom: 0;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 1px;
+        background: var(--sx-ink);
+        opacity: 0.35;
+        transform-origin: left;
+        transition: transform 1.1s cubic-bezier(0.6, 0, 0.2, 1);
+      }
+
+      @for $i from 2 through 4 {
+        &:nth-child(#{$i})::after {
+          transition-delay: #{($i - 1) * 0.15}s;
+        }
+      }
+    }
+  }
+
+  .fx-on.cx--architecture {
+    .cx-sx__head.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    .cx-sx__head.fx .cx-sx__ch {
+      transition:
+        opacity 0.6s ease calc(var(--ci) * 24ms + 100ms),
+        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--ci) * 24ms + 100ms);
+    }
+
+    .cx-sx__head.fx:not(.fx-in) .cx-sx__ch {
+      opacity: 0;
+      transform: translateY(0.4em) rotateX(-70deg);
+    }
+
+    .cx-sx__cards > li.fx {
+      transition:
+        opacity 0.5s ease var(--fx-delay, 0ms),
+        transform 1.2s cubic-bezier(0.2, 0.9, 0.25, 1) var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      opacity: 0;
+      transform: rotateX(-100deg);
+      filter: none;
+    }
+
+    .cx-sx__groups > div.fx--rise:not(.fx-in) {
+      filter: none;
+
+      li::after {
+        transform: scaleX(0);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Lighting: cards that switch on with a flicker and turn like a shade, a warm light under the pointer
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--lighting {
+    // above the lamp of the product view, which stays put while the page scrolls past it
+    .cx-sx,
+    .cx-sx-marquee,
+    .cx-foot {
+      position: relative;
+      z-index: 3;
+    }
+
+    .cx-sx:not(.cx-sx--quotes, .cx-sx--info, .cx-sx--gallery) {
+      background: var(--sx-bg);
+    }
+
+    .cx-sx__cards {
+      perspective: 1200px;
+    }
+
+    .cx-sx__cards li,
+    .cx-sx__face--front {
+      background:
+        radial-gradient(280px circle at var(--px, 50%) var(--py, 0%), rgba(255, 210, 140, 0.5), transparent 62%),
+        var(--sx-card);
+    }
+
+    .cx-sx__face--back {
+      background: var(--sx-ink);
+      color: #f7f1e6;
+      box-shadow: inset 0 -60px 80px -40px rgba(255, 200, 120, 0.35);
+    }
+
+    .cx-sx__pic img {
+      transition:
+        transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 1.8s ease;
+    }
+  }
+
+  @keyframes cx-flicker {
+    0% {
+      filter: brightness(0.35) saturate(0.4);
+    }
+    8% {
+      filter: brightness(1.25);
+    }
+    14% {
+      filter: brightness(0.45);
+    }
+    24% {
+      filter: brightness(1.15);
+    }
+    30% {
+      filter: brightness(0.6);
+    }
+    46% {
+      filter: brightness(1.05);
+    }
+    100% {
+      filter: none;
+    }
+  }
+
+  .fx-on.cx--lighting {
+    .cx-sx__cards > li.fx {
+      transform-origin: 50% 50%;
+      transition:
+        opacity 0.4s ease var(--fx-delay, 0ms),
+        transform 1.3s cubic-bezier(0.2, 0.9, 0.25, 1) var(--fx-delay, 0ms);
+    }
+
+    .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      opacity: 0.4;
+      transform: rotateY(-80deg);
+      filter: brightness(0.35) saturate(0.4);
+    }
+
+    .cx-sx__cards > li.fx-in {
+      animation: cx-flicker 1.1s steps(1) calc(var(--fx-delay, 0ms) + 0.5s) both;
+    }
+
+    .cx-sx__pic.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+
+      img {
+        filter: brightness(0.2) sepia(0.4);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Typographic: letters that tumble into place, venues that turn red, rows thrown in from the sides
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--typographic {
+    .cx-sx h2 {
+      text-transform: uppercase;
+      perspective: 700px;
+    }
+
+    .cx-sx-marquee {
+      padding: 10px 0;
+      background: none;
+      border-block: 1px solid var(--sx-line);
+
+      b {
+        color: transparent;
+        -webkit-text-stroke: 1.5px var(--sx-ink);
+        font-size: clamp(56px, 11vw, 140px);
+        text-transform: uppercase;
+      }
+
+      i {
+        width: 28px;
+        height: 28px;
+        background: var(--sx-accent);
+        opacity: 1;
+      }
+    }
+
+    .cx-sx-marquee__run {
+      animation-direction: reverse;
+      animation-duration: 24s;
+    }
+
+    .cx-sx__face--front {
+      justify-content: flex-end;
+      border-color: var(--sx-accent);
+
+      .cx-sx__h3 {
+        font-size: 34px;
+        text-transform: uppercase;
+      }
+    }
+
+    .cx-sx__stats dt {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--sx-accent);
+      font-size: clamp(54px, 8vw, 96px);
+    }
+  }
+
+  .fx-on.cx--typographic {
+    .cx-sx__head.fx--rise:not(.fx-in) {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    .cx-sx__head.fx .cx-sx__ch {
+      transition:
+        opacity 0.3s ease calc(var(--ci) * 30ms + 120ms),
+        transform 0.9s cubic-bezier(0.2, 1.4, 0.3, 1) calc(var(--ci) * 30ms + 120ms);
+    }
+
+    .cx-sx__head.fx:not(.fx-in) .cx-sx__ch {
+      opacity: 0;
+      transform: translateY(1.2em) rotate(-35deg) scale(1.4);
+    }
+
+    .cx-sx__head.fx:not(.fx-in) .cx-sx__ch:nth-child(even) {
+      transform: translateY(-1.2em) rotate(35deg) scale(1.4);
+    }
+
+    .cx-sx__info > div.fx--rise:not(.fx-in),
+    .cx-sx__faq > details.fx--rise:nth-child(odd):not(.fx-in) {
+      transform: translateX(-40vw) rotate(-5deg);
+      filter: none;
+    }
+
+    .cx-sx__info > div.fx--rise:nth-child(even):not(.fx-in),
+    .cx-sx__faq > details.fx--rise:nth-child(even):not(.fx-in) {
+      transform: translateX(40vw) rotate(5deg);
+    }
+
+    .cx-sx__cards > li.fx--rise:not(.fx-in) {
+      transform: translateY(80px) rotate(8deg);
+      filter: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cx-nav__sheet,
     .cx-nav__sheet li,
@@ -962,6 +1811,14 @@
     .cx-sx__gallery img {
       transition: none;
       transform: none !important;
+    }
+
+    .cx-sx-marquee__run {
+      animation: none;
+    }
+
+    .cx-sx__flip {
+      transition: none;
     }
   }
 }
