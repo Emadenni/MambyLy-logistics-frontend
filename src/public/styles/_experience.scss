@@ -2795,6 +2795,12 @@ $x-wide: 1180px;
     // ring of gold light leaves it and a light sweeps its face. Once per page view; none with
     // reduced motion. On the stage (its children keep their own 3D for drag and flip).
     .dc__stage {
+      opacity: 0;
+    }
+
+    // starts once the page is ready (the loading screen has lifted)
+    html[data-ready] & .dc__stage {
+      opacity: 1;
       transform-origin: 50% 55%;
       animation: own-open 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
 
