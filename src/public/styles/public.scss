@@ -12,6 +12,7 @@
 @use "./story" as story;
 @use "./concepts" as cx;
 @use "./demos" as demos;
+@use "./fx" as fx;
 @use "./card-designs" as cd;
 
 $bp-mobile: 720px;
@@ -2145,6 +2146,7 @@ body:has(.mambyly-public) {
   @include story.styles;
   @include cx.styles;
   @include demos.styles;
+  @include fx.styles;
   @include cd.styles;
 }
 

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiInfo, FiX } from "react-icons/fi";
 import { useCopy } from "../i18n";
 import { PATHS, type StaticScreen } from "../routes";
 import { previousIs } from "../visits";
 import { conceptCopy } from "./content";
+import { useConceptFx } from "./fx";
 
 /**
  * The only element from outside inside a fullscreen demo (websites and cards): a small close button
@@ -59,7 +60,8 @@ export const DemoNote: React.FC<{ onAgain?: () => void; text?: string }> = ({ on
   );
 };
 
-/** Fullscreen wrapper of one demo: its own look, a skip link and the small exit button. */
+/** Fullscreen wrapper of one demo: its own look, a skip link, the small exit button and the
+ * demos' special effects (fx.ts). */
 export const ConceptFrame: React.FC<{ id: string; className?: string; children: React.ReactNode; tone?: "light" | "dark" }> = ({
   id,
   className = "",
@@ -67,8 +69,12 @@ export const ConceptFrame: React.FC<{ id: string; className?: string; children: 
   tone = "light",
 }) => {
   const t = useCopy();
+  const root = useRef<HTMLDivElement>(null);
+  useConceptFx(root, id);
   return (
-    <div className={`mp-concept cx cx--${id} ${className}`}>
+    <div ref={root} className={`mp-concept cx cx--${id} ${className}`}>
+      {/* reading progress of the demo, a thin line at the top (fx.ts) */}
+      <span className="cx-fx-read" aria-hidden="true" />
       <a
         className="mp-skip"
         href={`#cx-main-${id}`}

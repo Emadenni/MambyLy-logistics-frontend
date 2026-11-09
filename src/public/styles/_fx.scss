@@ -1,0 +1,664 @@
+// Special effects of the website demos (src/public/experience/concepts/fx.ts). The demos' own
+// styles are in _concepts.scss and _demos.scss; this only adds motion and light on top, driven by
+// the classes and variables fx.ts sets (.fx-on on the demo, .fx/.fx-in on blocks, --fx-*).
+// Everything here is off with reduced motion (fx.ts sets nothing then).
+
+@mixin desk {
+  @media (min-width: 960px) {
+    @content;
+  }
+}
+
+@mixin styles {
+  // ---------------------------------------------------------------------------------------------
+  // Shared
+  // ---------------------------------------------------------------------------------------------
+
+  .mp-concept {
+    --fx-accent: #103b35;
+  }
+
+  // reading progress: a thin line along the top, in the demo's accent
+  .cx-fx-read {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    width: 100%;
+    height: 3px;
+    background: var(--fx-accent);
+    transform: scaleX(var(--fx-read, 0));
+    transform-origin: left;
+    pointer-events: none;
+  }
+
+  .mp-concept:not(.fx-on) .cx-fx-read {
+    display: none;
+  }
+
+  // blocks that rise and clear in
+  .fx-on .fx {
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--fx-delay, 0ms),
+      transform 1s cubic-bezier(0.2, 0.7, 0.2, 1) var(--fx-delay, 0ms),
+      clip-path 1.1s cubic-bezier(0.7, 0, 0.2, 1) var(--fx-delay, 0ms),
+      filter 0.9s ease var(--fx-delay, 0ms);
+  }
+
+  .fx-on .fx--rise:not(.fx-in) {
+    opacity: 0;
+    transform: translateY(46px) scale(0.98);
+    filter: blur(6px);
+  }
+
+  // headings open like a curtain from the bottom, with a small rise
+  .fx-on .fx--wipe:not(.fx-in) {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(24px);
+  }
+
+  .fx-on .fx--wipe.fx-in {
+    clip-path: inset(-10% -5% -20% -5%);
+  }
+
+  // parallax pictures
+  .fx-on :is(.cx-ed__hero img, .cx-lo__route img, .cx-re__catword) {
+    translate: 0 var(--fx-y, 0px);
+    will-change: translate;
+  }
+
+  // buttons that lean towards the pointer
+  .fx-on :is(.cx-ed__read, .cx-ed__visit button, .cx-re__book, .cx-ph__send, .cx-ph__open, .cx-lo__cta, .cx-pa__cta, .cx-mi__cta, .cx-mi__send, .cx-ty__more) {
+    translate: var(--fx-mag-x, 0px) var(--fx-mag-y, 0px);
+    transition: translate 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Restaurant: the plate leans to the pointer and steams; the category word fills with colour
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--restaurant {
+    --fx-accent: #a8191f;
+  }
+
+  .fx-on.cx--restaurant {
+    .cx-re__stage {
+      perspective: 1200px;
+    }
+
+    .cx-re__plate {
+      position: relative;
+      transform: rotateX(calc((var(--fx-my, 0.5) - 0.5) * -10deg)) rotateY(calc((var(--fx-mx, 0.5) - 0.5) * 14deg));
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      animation: fx-plate-in 1.4s cubic-bezier(0.2, 1.1, 0.3, 1) both;
+
+      // steam: soft white wisps rising from the dish
+      &::before,
+      &::after {
+        content: "";
+        position: absolute;
+        left: 38%;
+        top: 18%;
+        z-index: 2;
+        width: 22%;
+        height: 40%;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), transparent);
+        filter: blur(14px);
+        opacity: 0;
+        animation: fx-steam 4.2s ease-in 0.8s infinite;
+        pointer-events: none;
+      }
+
+      &::after {
+        left: 52%;
+        animation-delay: 2.6s;
+      }
+    }
+
+    // the big category word: a darker red sweeps through its letters
+    .cx-re__catword {
+      background: linear-gradient(100deg, currentColor 40%, #e8484d 50%, currentColor 60%) 0 0 / 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation:
+        fx-word-in 1s cubic-bezier(0.2, 0.9, 0.3, 1) both,
+        fx-word-sweep 5s ease-in-out 1.2s infinite;
+    }
+
+    .cx-re__book {
+      animation: fx-pop 0.8s cubic-bezier(0.2, 1.4, 0.4, 1) 0.7s both;
+    }
+  }
+
+  @keyframes fx-plate-in {
+    from {
+      opacity: 0;
+      transform: rotateX(30deg) rotateZ(-14deg) scale(0.85);
+    }
+  }
+
+  @keyframes fx-steam {
+    0% {
+      opacity: 0;
+      transform: translateY(20%) scaleX(0.7);
+    }
+    30% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-90%) scaleX(1.3) rotate(8deg);
+    }
+  }
+
+  @keyframes fx-word-in {
+    from {
+      opacity: 0;
+      letter-spacing: 0.3em;
+      filter: blur(8px);
+    }
+  }
+
+  @keyframes fx-word-sweep {
+    0%,
+    30% {
+      background-position: 100% 0;
+    }
+    70%,
+    100% {
+      background-position: 0 0;
+    }
+  }
+
+  @keyframes fx-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6) translateY(20px);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Photographer: the darkroom – a light follows the pointer, pictures develop as they load, grain,
+  // viewfinder corners on the picture under the pointer
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--photographer {
+    --fx-accent: #e6e86c;
+  }
+
+  .fx-on.cx--photographer {
+    // the light of a torch in a dark room, following the pointer
+    &::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(circle 360px at calc(var(--fx-mx, 0.5) * 100%) calc(var(--fx-my, 0.3) * 100%), rgba(255, 255, 230, 0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    // film grain over everything
+    &::after {
+      content: "";
+      position: fixed;
+      inset: -50%;
+      z-index: 50;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 3px 3px;
+      opacity: 0.35;
+      animation: fx-grain 0.9s steps(4) infinite;
+      pointer-events: none;
+    }
+
+    // pictures develop: from white and soft to the print
+    .cx-ph__tile img {
+      animation: fx-develop 1.8s ease-out both;
+    }
+
+    .cx-ph__tile:nth-child(2) img {
+      animation-delay: 0.25s;
+    }
+
+    .cx-ph__tile:nth-child(3) img {
+      animation-delay: 0.45s;
+    }
+
+    .cx-ph__tile:nth-child(4) img {
+      animation-delay: 0.65s;
+    }
+
+    .cx-ph__tile {
+      position: relative;
+      overflow: hidden;
+
+      img {
+        transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      // viewfinder corners
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        z-index: 2;
+        background:
+          linear-gradient(var(--fx-accent), var(--fx-accent)) left top / 22px 2px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) left top / 2px 22px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) right top / 22px 2px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) right top / 2px 22px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) left bottom / 22px 2px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) left bottom / 2px 22px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) right bottom / 22px 2px,
+          linear-gradient(var(--fx-accent), var(--fx-accent)) right bottom / 2px 22px;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transform: scale(1.08);
+        transition:
+          opacity 0.3s ease,
+          transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        pointer-events: none;
+      }
+
+      &:hover,
+      &:focus-visible {
+        img {
+          transform: scale(1.06);
+        }
+
+        &::after {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
+  }
+
+  @keyframes fx-develop {
+    0% {
+      filter: brightness(2.4) contrast(0.4) blur(6px);
+      opacity: 0.4;
+    }
+    100% {
+      filter: none;
+      opacity: 1;
+    }
+  }
+
+  @keyframes fx-grain {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-1%, 1%);
+    }
+    50% {
+      transform: translate(1%, -1%);
+    }
+    75% {
+      transform: translate(-1%, -1%);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Logistics: the route is alive – the dotted road flows from pickup to delivery, the pins ping,
+  // the photo drives slowly
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--logistics {
+    --fx-accent: #c4410c;
+  }
+
+  .fx-on.cx--logistics {
+    .cx-lo__path {
+      animation: fx-road 1.6s linear infinite;
+    }
+
+    .cx-lo__route img {
+      animation: fx-drive 16s ease-in-out infinite alternate;
+    }
+
+    .cx-lo__pin i {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid currentColor;
+        opacity: 0;
+        animation: fx-ping 2s ease-out infinite;
+      }
+    }
+
+    .cx-lo__pin--to i::after {
+      animation-delay: 1s;
+    }
+
+    .cx-lo__pin {
+      animation: fx-drop 0.8s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+    }
+
+    .cx-lo__pin--to {
+      animation-delay: 0.35s;
+    }
+
+    .cx-lo__card {
+      animation: fx-up 0.9s cubic-bezier(0.2, 0.9, 0.3, 1) 0.2s both;
+    }
+  }
+
+  @keyframes fx-road {
+    to {
+      stroke-dashoffset: -24;
+    }
+  }
+
+  @keyframes fx-drive {
+    from {
+      transform: scale(1.04) translateX(-1.5%);
+    }
+    to {
+      transform: scale(1.1) translateX(1.5%);
+    }
+  }
+
+  @keyframes fx-ping {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fx-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-30px) scale(0.8);
+    }
+  }
+
+  @keyframes fx-up {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Painter: the room repaints itself (the slider sweeps once, fx.ts); a brush stroke under the new
+  // feeling; the swatch turns slowly
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--painter {
+    --fx-accent: #a8432a;
+  }
+
+  .fx-on.cx--painter {
+    // the title arrives; its brush stroke (the swatch, _demos.scss) paints itself in and sways
+    .cx-pa__head h1,
+    main h1 {
+      animation: fx-up 1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+
+      em {
+        display: inline-block;
+        background: linear-gradient(90deg, currentColor 50%, transparent 50%) 100% 0 / 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: fx-paint 1.4s cubic-bezier(0.6, 0, 0.2, 1) 0.5s forwards;
+      }
+
+      &::after {
+        transform-origin: 50% 90%;
+        animation:
+          fx-swatch-in 1s cubic-bezier(0.2, 1.3, 0.4, 1) 1s both,
+          fx-sway 6s ease-in-out 2s infinite;
+      }
+    }
+
+    .cx-pa__cmp {
+      box-shadow: 0 30px 70px rgba(60, 30, 20, 0.25);
+    }
+
+    .cx-pa__knob {
+      animation: fx-knob 2.2s ease-in-out 3.8s 3;
+    }
+  }
+
+  // the new colour rolls over the word, like paint
+  @keyframes fx-paint {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  @keyframes fx-swatch-in {
+    from {
+      opacity: 0;
+      transform: rotate(-40deg) scale(0.3);
+    }
+  }
+
+  @keyframes fx-sway {
+    0%,
+    100% {
+      transform: rotate(18deg);
+    }
+    50% {
+      transform: rotate(10deg) scale(1.05);
+    }
+  }
+
+  @keyframes fx-knob {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 0 14px rgba(255, 255, 255, 0);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Architecture: the house drifts slowly, the plan draws itself line by line, the rooms glow
+  // ---------------------------------------------------------------------------------------------
+
+  .fx-on.cx--architecture {
+    .cx-ed__hero img {
+      animation: fx-kenburns 22s ease-in-out infinite alternate;
+    }
+
+    .cx-ed__herotext > * {
+      animation: fx-up 1.1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+    }
+
+    .cx-ed__herotext > :nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .cx-ed__herotext > :nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .cx-ed__herotext > :nth-child(4) {
+      animation-delay: 0.45s;
+    }
+
+    // the plan draws itself when it comes into view
+    .cx-ed__plan path {
+      stroke-dasharray: 1400;
+      stroke-dashoffset: 1400;
+    }
+
+    .fx-in .cx-ed__plan path,
+    .cx-ed__plan.fx-in path {
+      animation: fx-draw 2.4s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+    }
+
+    .fx-in .cx-ed__plan path:nth-of-type(n + 2),
+    .cx-ed__plan.fx-in path:nth-of-type(n + 2) {
+      animation-delay: 0.6s;
+    }
+
+    // a plan that was already on screen at the start draws too
+    .cx-ed__plan:not(.fx) path {
+      animation: fx-draw 2.4s cubic-bezier(0.5, 0, 0.2, 1) 0.4s forwards;
+    }
+  }
+
+  @keyframes fx-kenburns {
+    from {
+      transform: scale(1.02);
+    }
+    to {
+      transform: scale(1.12) translate(-1.5%, -1%);
+    }
+  }
+
+  @keyframes fx-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Lighting: a warm light follows the pointer over the lamp's picture; the lamp breathes
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--lighting {
+    --fx-accent: #2a2723;
+  }
+
+  .fx-on.cx--lighting {
+    .cx-mi__lamp {
+      position: relative;
+      animation: fx-up 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(circle 260px at calc(var(--fx-mx, 0.3) * 200% - 10%) calc(var(--fx-my, 0.4) * 140% - 10%), rgba(255, 214, 150, 0.32), transparent 70%);
+        mix-blend-mode: soft-light;
+        pointer-events: none;
+      }
+    }
+
+    .cx-mi__glow {
+      animation: fx-breathe 4s ease-in-out infinite;
+    }
+
+    // the collection and the question slide up over the lamp like a sheet (the lamp stays put)
+    .cx-mi__collection,
+    .cx-mi__ask {
+      position: relative;
+      z-index: 2;
+      background: var(--mi-bg);
+      box-shadow: 0 -30px 60px -30px rgba(42, 41, 37, 0.25);
+
+      @include desk {
+        margin: 40px 24px 0;
+        padding: 56px 40px 48px;
+        border-radius: 28px;
+      }
+    }
+
+    .cx-mi__info > * {
+      animation: fx-up 1s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+    }
+
+    .cx-mi__info > :nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .cx-mi__info > :nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .cx-mi__info > :nth-child(n + 4) {
+      animation-delay: 0.3s;
+    }
+  }
+
+  @keyframes fx-breathe {
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Typographic: kinetic type – the words arrive one by one and float in depth with the pointer,
+  // the silk behind drifts
+  // ---------------------------------------------------------------------------------------------
+
+  .cx--typographic {
+    --fx-accent: #ff6a4a;
+  }
+
+  .fx-on.cx--typographic {
+    .cx-ty__hero > img {
+      animation: fx-kenburns 18s ease-in-out infinite alternate;
+    }
+
+    .cx-ty__word {
+      display: inline-block;
+      animation: fx-word 1.1s cubic-bezier(0.2, 1, 0.3, 1) both;
+      translate: calc((var(--fx-mx, 0.5) - 0.5) * var(--depth) * 1px) calc((var(--fx-my, 0.5) - 0.5) * var(--depth) * 0.6px);
+      transition: translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .cx-ty__word--0 {
+      --depth: -30;
+    }
+
+    .cx-ty__word--1 {
+      --depth: 50;
+      animation-delay: 0.18s;
+    }
+
+    .cx-ty__word--2 {
+      --depth: 26;
+      animation-delay: 0.36s;
+    }
+
+    .cx-ty__list > * {
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+      &:hover {
+        transform: translateX(10px) skewX(-3deg);
+      }
+    }
+  }
+
+  @keyframes fx-word {
+    from {
+      opacity: 0;
+      transform: translateY(60%) rotateX(-70deg) scale(0.9);
+      filter: blur(10px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mp-concept *,
+    .mp-concept *::before,
+    .mp-concept *::after {
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

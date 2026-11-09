@@ -57,7 +57,10 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
     };
   }, [loaded]);
   const webgl = useRef<boolean | null>(null);
-  if (webgl.current === null && typeof window !== "undefined") webgl.current = !reduce && hasWebGL();
+  // The WebGL silk only where a mouse drives it: on touch screens the HTML veil (the same picture)
+  // follows the finger, which keeps the opening light on phones.
+  if (webgl.current === null && typeof window !== "undefined")
+    webgl.current = !reduce && window.matchMedia("(hover: hover) and (pointer: fine)").matches && hasWebGL();
   const useGl = !!webgl.current && !reduce && !gone && wanted;
 
   // Until then the HTML veil (the same picture) is on screen: the first paint and the page's own
@@ -95,7 +98,8 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
   };
 
   // Every frame while the veil is up: the controls fade with the opening, the page underneath comes
-  // forward (a little zoom and a blur that clears). Without WebGL the HTML veil itself moves.
+  // forward (a little zoom, no blur: a blur over the whole page made the opening stutter on
+  // phones). Without WebGL the HTML veil itself moves.
   useEffect(() => {
     if (gone) return;
     const scope = root.current?.parentElement;
@@ -126,7 +130,6 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
         parts().forEach((node) => {
           node.style.transformOrigin = "50% 50vh";
           node.style.transform = `scale(${(0.93 + 0.07 * p).toFixed(4)})`;
-          node.style.filter = p < 0.995 ? `blur(${(8 * (1 - p)).toFixed(2)}px)` : "";
         });
     };
     frame = requestAnimationFrame(tick);

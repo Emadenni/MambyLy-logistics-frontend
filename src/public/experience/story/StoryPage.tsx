@@ -115,7 +115,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const [moved, setMoved] = useState(false);
   const poster = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (still || moved) return;
+    // only gestures on the story itself: the touch that opens the home veil must not start the 3D
+    // engine in the middle of the veil's own motion
+    if (still || moved || !active) return;
     const go = () => setMoved(true);
     const events = ["pointerdown", "touchstart", "wheel", "keydown", "scroll"] as const;
     const mouse = (e: PointerEvent) => e.pointerType === "mouse" && go();
@@ -125,7 +127,7 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
       events.forEach((e) => window.removeEventListener(e, go));
       window.removeEventListener("pointermove", mouse);
     };
-  }, [still, moved]);
+  }, [still, moved, active]);
 
   // Until the scroll driver (scroll.ts, its own bundle) has loaded, the native scroll sets the progress.
   useEffect(() => {
