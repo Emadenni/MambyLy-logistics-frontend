@@ -983,6 +983,155 @@ $cover-background:
   }
 
   // ---------------------------------------------------------------------------------------------
+  // The end of Utforska (Closing.tsx): three steps, then the contact
+  // ---------------------------------------------------------------------------------------------
+
+  .mp-howto {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
+
+    > * {
+      grid-column: 1 / -1;
+      min-width: 0;
+    }
+    padding: clamp(80px, 12svh, 140px) var(--x-gutter) 20px;
+
+    &__list {
+      position: relative;
+      display: grid;
+      gap: 34px;
+      width: min(100%, 1080px);
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+
+      // the line that joins the three steps, drawn when they come into view
+      &::before {
+        content: "";
+        position: absolute;
+        left: 27px;
+        top: 28px;
+        bottom: 28px;
+        width: 2px;
+        background: linear-gradient(#247b67, #103b35);
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 1.4s var(--x-ease) 0.2s;
+      }
+
+      @media (min-width: 860px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 40px;
+
+        &::before {
+          left: calc(100% / 6);
+          right: calc(100% / 6);
+          top: 27px;
+          bottom: auto;
+          width: auto;
+          height: 2px;
+          background: linear-gradient(90deg, #247b67, #103b35);
+          transform: scaleX(0);
+          transform-origin: left;
+        }
+      }
+
+      &.is-in::before {
+        transform: none;
+      }
+    }
+
+    &__item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      column-gap: 18px;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.8s var(--x-ease);
+      transition-delay: calc(0.25s + var(--i) * 0.35s);
+
+      @media (min-width: 860px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+    }
+
+    @media (min-width: 860px) {
+      .mp-howto__item {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        text-align: center;
+      }
+
+      .mp-howto__num {
+        grid-row: auto;
+        margin-bottom: 18px;
+      }
+    }
+
+    .mp-howto__list.is-in .mp-howto__item {
+      opacity: 1;
+      transform: none;
+    }
+
+    &__num {
+      grid-row: span 2;
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--x-ink);
+      color: #fff;
+      font: 400 26px / 1 var(--x-serif);
+      box-shadow:
+        0 0 0 6px rgba(246, 244, 238, 0.9),
+        0 12px 28px rgba(16, 59, 53, 0.25);
+      transform: scale(0.6);
+      transition: transform 0.6s cubic-bezier(0.2, 1.4, 0.4, 1);
+      transition-delay: calc(0.35s + var(--i) * 0.35s);
+
+      @media (min-width: 860px) {
+        grid-row: auto;
+        margin-bottom: 18px;
+      }
+    }
+
+    .mp-howto__list.is-in .mp-howto__num {
+      transform: none;
+    }
+
+    &__title {
+      margin: 6px 0 6px;
+      color: var(--x-ink);
+      font: 400 clamp(24px, 5vw, 32px) / 1.15 var(--x-serif);
+    }
+
+    &__text {
+      margin: 0;
+      color: #5d6b66;
+      font: 400 16px / 1.5 var(--mp-font);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &__list::before,
+      &__item,
+      &__num {
+        transition: none;
+      }
+    }
+  }
+
+
+  // ---------------------------------------------------------------------------------------------
   // The contact at the end of Utforska (Closing.tsx)
   // ---------------------------------------------------------------------------------------------
 

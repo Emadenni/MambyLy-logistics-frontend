@@ -112,7 +112,7 @@ const sv = {
     siteDemos: "Se våra webbplatsdemos",
     demos: {
       title: "Exempel och demos",
-      cardHint: "Tryck för att vända kortet, svep uppåt för att dela.",
+      cardHint: "Tryck för att vända kortet.",
       share: "Dela",
       ourCard: "Vårt eget kort",
       allCards: "Alla visitkort",
@@ -594,7 +594,7 @@ const en: Copy = {
     siteDemos: "See our website demos",
     demos: {
       title: "Examples and demos",
-      cardHint: "Tap to turn the card, swipe up to share.",
+      cardHint: "Tap to turn the card.",
       share: "Share",
       ourCard: "Our own card",
       allCards: "All business cards",

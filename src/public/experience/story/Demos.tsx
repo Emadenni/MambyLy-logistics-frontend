@@ -15,8 +15,7 @@ import { SITE } from "../Screen";
 const DRIFT = 34;
 const RESUME = 5000;
 
-/** A swipe up of at least this many px shares the card; a press that moves less than TAP flips it. */
-const SWIPE = 50;
+/** A press that moves less than this many px turns the card over. */
 const TAP = 8;
 
 const absolute = (path: string) => `${SITE}${encodeURI(path)}`;
@@ -26,8 +25,8 @@ const EDGE = [1, 2, 3, 4, 5];
 
 /**
  * One card of the carousel: the real card design as a thin slab in 3D – front, back and an edge of
- * the card's own colour, a shadow on the floor. A tap turns it over, a swipe up shares it (as on
- * the real card); the card leans towards the pointer and the light follows it. The name opens it.
+ * the card's own colour, a shadow on the floor. A tap turns it over (no swipe to share here:
+ * scrolling past the carousel must never share by mistake; the share button does it); the card leans towards the pointer and the light follows it. The name opens it.
  */
 const DemoCard: React.FC<{
   card: CardConfig;
@@ -68,8 +67,7 @@ const DemoCard: React.FC<{
     if (!p || p.id !== e.pointerId) return;
     const dx = e.clientX - p.x;
     const dy = e.clientY - p.y;
-    if (dy < -SWIPE && Math.abs(dx) < SWIPE) void share();
-    else if (Math.abs(dx) < TAP && Math.abs(dy) < TAP) {
+    if (Math.abs(dx) < TAP && Math.abs(dy) < TAP) {
       if (stage.current && onSide(stage.current)) return;
       setFlipped((f) => !f);
     }
