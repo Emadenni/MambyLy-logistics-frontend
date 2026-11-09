@@ -40,24 +40,9 @@ $cover-background:
     will-change: transform, opacity;
   }
 
-  // while the veil opens, the hero of the page underneath arrives in steps (--vp, 0..1, Veil.tsx);
-  // the individual translate and rotate properties leave the story's own transforms alone
-  .mp-under .mp-tale__hero {
-    translate: 0 calc((1 - var(--vp, 1)) * 16vh);
-  }
-
-  .mp-under .mp-tale__hero-sub {
-    translate: 0 calc((1 - var(--vp, 1)) * 26vh);
-  }
-
-  .mp-under .mp-tale__chip {
-    translate: 0 calc((1 - var(--vp, 1)) * 36vh);
-    rotate: calc((1 - var(--vp, 1)) * -8deg);
-  }
-
-  .mp-under .mp-tale__chip + .mp-tale__chip {
-    translate: 0 calc((1 - var(--vp, 1)) * 44vh);
-    rotate: calc((1 - var(--vp, 1)) * 8deg);
+  // below the story its fixed layers are off (StoryPage.tsx sets is-past), whatever they were told
+  .mp-tale.is-past :is(.mp-tale__green, .mp-tale__poster, .mp-tale__arch, .mp-tale__gl, .mp-tale__links, .mp-tale__site, .mp-tale__site-phone) {
+    visibility: hidden !important;
   }
 
   .mp-veil {

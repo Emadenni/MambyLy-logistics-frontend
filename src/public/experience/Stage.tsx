@@ -142,12 +142,13 @@ const Stage: React.FC = () => {
     const to = navType === "POP" ? scrolls.get(location.key) ?? 0 : 0;
     window.scrollTo({ top: to, left: 0, behavior: "instant" as ScrollBehavior });
     if (!to) return;
-    // ...and until it holds, the arriving screen stays hidden: otherwise its top (Utforska's green
-    // opening) flashes for a moment before the position comes back.
+    // ...and until it holds, the arriving screen stays invisible (opacity on the layer: nothing
+    // inside can show through it): otherwise Utforska's opening, still drawn for its first frames,
+    // flashes for a moment before the position comes back.
     const arriving = document.querySelector<HTMLElement>(`[data-layer="${CSS.escape(key)}"]:not(.is-leaving)`);
-    const show = () => arriving && (arriving.style.visibility = "");
+    const show = () => arriving?.classList.remove("is-restoring");
     let steady = 0;
-    if (arriving && Math.abs(window.scrollY - to) > 2) arriving.style.visibility = "hidden";
+    arriving?.classList.add("is-restoring");
     // A screen that builds itself after mounting (Utforska's pinned story, its demos drawn as they
     // come near) is shorter at first and the browser clamps the scroll: hold the position until it
     // stays, for a moment, unless the visitor scrolls first.
@@ -159,7 +160,7 @@ const Stage: React.FC = () => {
       if (Math.abs(window.scrollY - to) > 2) {
         steady = 0;
         window.scrollTo({ top: to, left: 0, behavior: "instant" as ScrollBehavior });
-      } else if (++steady >= 3) show();
+      } else if (++steady >= 5) show();
       if (++n < 90) frame = requestAnimationFrame(hold);
       else off();
     };

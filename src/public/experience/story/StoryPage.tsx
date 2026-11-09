@@ -75,6 +75,9 @@ const PULSE = 0.08; // length of the light that runs along a line, as a share of
 
 const showDebug = () => import.meta.env.DEV || new URLSearchParams(window.location.search).has("debug");
 
+/** What of Utforska has been drawn in this tab (see rest / near below). */
+const drawn = { rest: false, near: false };
+
 /**
  * Utforska: MambyLy's digital world told while scrolling – website, digital business card and
  * profile as one. The 3D part is ordinary HTML text in the page flow (one section per chapter, as
@@ -98,15 +101,27 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
   const [gl, setGl] = useState(false);
   // Demos, steps and contact are drawn right after the first paint, in an interruptible render, so
   // they never hold up the page's start (they are still in the page for everyone, search included).
-  const [rest, setRest] = useState(false);
-  useEffect(() => startTransition(() => setRest(true)), []);
-  const [near, setNear] = useState(false);
+  // Once drawn in this tab they are drawn at once on a return (from a demo, with Back), so the
+  // page has its full length and content in its first frame.
+  const [rest, setRest] = useState(drawn.rest);
+  useEffect(() => {
+    drawn.rest = true;
+    startTransition(() => setRest(true));
+  }, []);
+  const [near, setNear] = useState(drawn.near);
   const nearMark = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = nearMark.current;
     // not under the home veil: there the page is hidden and would count as near
     if (!el || near || !active) return;
-    const seen = new IntersectionObserver(([e]) => e.isIntersecting && startTransition(() => setNear(true)), { rootMargin: "150% 0px" });
+    const seen = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        drawn.near = true;
+        startTransition(() => setNear(true));
+      },
+      { rootMargin: "150% 0px" },
+    );
     seen.observe(el);
     return () => seen.disconnect();
   }, [rest, near, active]);
@@ -204,8 +219,17 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
     let since = performance.now();
     let fps = 0;
     let frame = 0;
+    let past: boolean | null = null;
     const tick = () => {
       frame = requestAnimationFrame(tick);
+      // Below the story (the demos, the contact): its fixed layers (the green, the poster, the
+      // scene) are off whatever the progress says; on a return to the page the progress is not
+      // known yet for a frame and would draw the opening for a moment.
+      const isPast = el.getBoundingClientRect().bottom <= 0;
+      if (isPast !== past) {
+        past = isPast;
+        el.classList.toggle("is-past", isPast);
+      }
       const p = story.p;
       CHAPTERS.forEach((c, i) => {
         const node = captions[i];

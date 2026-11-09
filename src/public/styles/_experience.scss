@@ -86,6 +86,11 @@ $x-wide: 1180px;
     overflow: clip;
   }
 
+  // back on a screen, until its scroll position is restored (Stage.tsx)
+  .mp-layer.is-restoring {
+    opacity: 0 !important;
+  }
+
   .mp-layer {
     grid-area: 1 / 1;
     min-width: 0;

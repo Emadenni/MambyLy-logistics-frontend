@@ -100,9 +100,8 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
 
   // Every frame while the veil is up: the controls fade with the opening; without WebGL the HTML
   // veil lifts with its curved hem while the logo rises slower and fades into the light; a gold
-  // ring goes out from the swipe control; the page underneath rises from a tilted plane and its
-  // title and links arrive one after the other (--vp). Only transforms and opacity: a blur over
-  // the whole page made the opening stutter on phones.
+  // ring goes out from the swipe control. The page underneath stays still (moving it made the
+  // opening stutter on phones).
   useEffect(() => {
     if (gone) return;
     const scope = root.current?.parentElement;
@@ -141,14 +140,7 @@ const Veil: React.FC<{ home: boolean; onOpen: () => void; head: React.ReactNode 
         rest = resting;
         if (under) under.style.contentVisibility = resting ? "hidden" : "";
       }
-      if (!reduce && !resting) {
-        const q = 1 - ease.out3(p);
-        under?.style.setProperty("--vp", p.toFixed(3));
-        parts().forEach((node) => {
-          node.style.transformOrigin = "50% 60vh";
-          node.style.transform = `perspective(1400px) translate3d(0, ${(q * 9).toFixed(2)}vh, 0) rotateX(${(q * 16).toFixed(2)}deg) scale(${(1 - q * 0.12).toFixed(4)})`;
-        });
-      }
+
     };
     frame = requestAnimationFrame(tick);
     return () => {
