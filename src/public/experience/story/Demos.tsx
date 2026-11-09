@@ -318,14 +318,11 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
     const onScroll = () => setSiteAt(nearest(el));
     el.addEventListener("scroll", onScroll, { passive: true });
     const frames = [...el.querySelectorAll<HTMLElement>(".mp-demos__site")];
-    // is-on while visible (the page scrolls inside), is-open from the first time (the laptop opens)
+    // is-on while visible (the page scrolls inside)
     const seen = new IntersectionObserver(
       (entries) =>
-        entries.forEach((e) => {
-          e.target.classList.toggle("is-on", e.isIntersecting);
-          if (e.isIntersecting && e.intersectionRatio > 0.25) e.target.classList.add("is-open");
-        }),
-      { rootMargin: "10% 0px", threshold: [0, 0.25, 0.5] },
+        entries.forEach((e) => e.target.classList.toggle("is-on", e.isIntersecting)),
+      { rootMargin: "10% 0px" },
     );
     frames.forEach((f) => seen.observe(f));
     if (still)
@@ -445,9 +442,6 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
             const c = t.websites.concepts[id];
             return (
               <li key={id} className="mp-demos__site" style={{ "--i": i } as React.CSSProperties}>
-                {/* a laptop in 3D: the lid (the link, the website on it), its aluminium back, the deck */}
-                <div className="mp-demos__device">
-                <span className="mp-demos__shell" aria-hidden="true" />
                 <Link to={conceptPath(id, t.lang)} className="mp-demos__frame" aria-label={`${c.label} – ${t.websites.open}`}>
                   <span className="mp-demos__bar" aria-hidden="true">
                     <i />
@@ -461,11 +455,6 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
                     {t.websites.open} <FiArrowRight />
                   </span>
                 </Link>
-                <span className="mp-demos__deck" aria-hidden="true">
-                  <i className="mp-demos__keys" />
-                  <i className="mp-demos__pad" />
-                </span>
-                </div>
                 <p className="mp-demos__label">
                   <strong>{c.label}</strong> <span>{c.caption}</span>
                 </p>
