@@ -120,6 +120,9 @@ export const ScreenFooter: React.FC<{ withAdmin?: boolean }> = ({ withAdmin = fa
         <li>
           <Link to={t.lang === "en" ? "/en/card" : "/card"}>{t.common.ourCard}</Link>
         </li>
+        <li>
+          <Link to={pathFor("tools", t.lang)}>MambyLy Tools</Link>
+        </li>
         {publicSiteConfig.showSidoButik && (
           <li>
             <Link to="/sidoButik">Sido Butik</Link>

@@ -1,0 +1,265 @@
+{
+  "slug": "sjostugan-vid-roxen",
+  "template": "stuga",
+  "demo": true,
+  "name": "Sjöstugan vid Roxen",
+  "place": {
+    "sv": "Vid sjön Roxen, Linköping",
+    "en": "On Lake Roxen, Linköping",
+    "de": "Am See Roxen, Linköping"
+  },
+  "languages": ["sv", "en", "de"],
+  "host": {
+    "name": "Karin",
+    "phone": "+46 70 174 06 05",
+    "welcome": {
+      "sv": "Välkommen till stugan! Bastun är vedeldad och sjön ligger tjugo steg från trappan. Hör av dig om något saknas.",
+      "en": "Welcome to the cottage! The sauna is wood-fired and the lake is twenty steps from the porch. Let me know if anything is missing.",
+      "de": "Willkommen im Häuschen! Die Sauna wird mit Holz geheizt und der See liegt zwanzig Schritte von der Treppe. Melden Sie sich, wenn etwas fehlt."
+    }
+  },
+  "arrival": {
+    "keyLabel": { "sv": "Nyckelboxen", "en": "Key box", "de": "Schlüsselbox" },
+    "keyCode": "4812",
+    "keyWhere": {
+      "sv": "Grå box till vänster om ytterdörren. Lägg tillbaka nyckeln när du åker.",
+      "en": "Grey box to the left of the front door. Put the key back when you leave.",
+      "de": "Graue Box links neben der Haustür. Legen Sie den Schlüssel bei der Abreise zurück."
+    },
+    "wifi": { "name": "Sjostugan", "password": "roxen-ljus-26" },
+    "checkIn": "15:00",
+    "checkOut": "11:00"
+  },
+  "sections": [
+    {
+      "id": "sauna",
+      "icon": "sauna",
+      "title": { "sv": "Bastun", "en": "The sauna", "de": "Die Sauna" },
+      "body": {
+        "sv": "Vedeldad bastu i bodan vid bryggan. Elda i ungefär 45 minuter innan den är varm. Tändved och tidningar ligger i lådan bredvid kaminen. Häll inte vatten på stenarna förrän termometern visar minst 60 grader. Stäng spjället först när glöden har slocknat.",
+        "en": "Wood-fired sauna in the shed by the jetty. Light it about 45 minutes before you want it warm. Kindling and newspaper are in the box next to the stove. Don't pour water on the stones until the thermometer shows at least 60 degrees. Close the damper only once the embers are out.",
+        "de": "Holzbeheizte Sauna im Häuschen am Steg. Etwa 45 Minuten vorher anheizen. Anzündholz und Zeitungen liegen in der Kiste neben dem Ofen. Erst Wasser auf die Steine gießen, wenn das Thermometer mindestens 60 Grad zeigt. Die Klappe erst schließen, wenn die Glut erloschen ist."
+      }
+    },
+    {
+      "id": "fireplace",
+      "icon": "fire",
+      "title": { "sv": "Kaminen och veden", "en": "Fireplace and firewood", "de": "Kamin und Brennholz" },
+      "body": {
+        "sv": "Veden finns i vedboden bakom stugan, ta gärna från den vänstra högen (torrast). Öppna spjället helt innan du tänder. Lämna aldrig elden utan tillsyn, och lägg askan i den gröna metallhinken på trappan – aldrig i soporna.",
+        "en": "Firewood is in the woodshed behind the cottage; take from the left-hand pile (the driest). Open the damper fully before lighting. Never leave the fire unattended, and put the ash in the green metal bucket on the steps – never in the bin.",
+        "de": "Brennholz liegt im Holzschuppen hinter dem Haus, bitte vom linken Stapel nehmen (am trockensten). Vor dem Anzünden die Klappe ganz öffnen. Das Feuer nie unbeaufsichtigt lassen und die Asche in den grünen Metalleimer auf der Treppe geben – nie in den Müll."
+      }
+    },
+    {
+      "id": "swim",
+      "icon": "swim",
+      "title": { "sv": "Bad och kanot", "en": "Swimming and canoe", "de": "Baden und Kanu" },
+      "body": {
+        "sv": "Badstegen sitter i slutet av bryggan; vattnet är grunt de första fem metrarna. Kanoten ligger upp och ner bredvid bryggan, paddlar och flytvästar hänger i bodan. Använd alltid flytväst och paddla inte ut när det blåser hårt.",
+        "en": "The swimming ladder is at the end of the jetty; the water is shallow for the first five metres. The canoe lies upside down next to the jetty; paddles and life jackets hang in the shed. Always wear a life jacket and don't paddle out in strong wind.",
+        "de": "Die Badeleiter ist am Ende des Stegs; die ersten fünf Meter ist das Wasser flach. Das Kanu liegt kopfüber neben dem Steg, Paddel und Schwimmwesten hängen im Schuppen. Immer eine Schwimmweste tragen und bei starkem Wind nicht hinauspaddeln."
+      }
+    },
+    {
+      "id": "recycling",
+      "icon": "recycle",
+      "title": { "sv": "Sopor och källsortering", "en": "Rubbish and recycling", "de": "Müll und Mülltrennung" },
+      "body": {
+        "sv": "Under diskbänken finns tre kärl: matavfall (brun påse), förpackningar och restavfall. Glas, papper och metall lämnar du på återvinningsstationen vid infarten till byn, 800 meter bort. Pantburkar får du gärna lämna i den blå kassen i hallen.",
+        "en": "Under the sink there are three bins: food waste (brown bag), packaging and general waste. Glass, paper and metal go to the recycling station at the entrance to the village, 800 metres away. Deposit cans can go in the blue bag in the hall.",
+        "de": "Unter der Spüle stehen drei Behälter: Bioabfall (brauner Beutel), Verpackungen und Restmüll. Glas, Papier und Metall bringen Sie zur Recyclingstation an der Dorfeinfahrt, 800 Meter entfernt. Pfanddosen gern in die blaue Tasche im Flur."
+      }
+    },
+    {
+      "id": "parking",
+      "icon": "parking",
+      "title": { "sv": "Parkering", "en": "Parking", "de": "Parken" },
+      "body": {
+        "sv": "Parkera på grusplanen vid grinden, plats för två bilar. Kör inte ner på gräset mot sjön, det är mjukt. Ingen laddbox finns vid stugan; närmaste laddstation är vid mataffären i byn.",
+        "en": "Park on the gravel area by the gate, room for two cars. Please don't drive down on the grass towards the lake, it is soft. There is no EV charger at the cottage; the nearest one is at the grocery store in the village.",
+        "de": "Parken auf dem Kiesplatz am Tor, Platz für zwei Autos. Bitte nicht auf die Wiese zum See fahren, sie ist weich. Am Haus gibt es keine Ladestation; die nächste ist am Supermarkt im Dorf."
+      }
+    },
+    {
+      "id": "kitchen",
+      "icon": "kitchen",
+      "title": { "sv": "Kök och sängar", "en": "Kitchen and beds", "de": "Küche und Betten" },
+      "body": {
+        "sv": "Köket har spis, ugn, kylskåp och kaffebryggare; kaffe och te finns i skafferiet. Sängarna är bäddade när du kommer, handdukar ligger på sängarna. Diskmaskin finns inte – diskmedel och borste står vid diskbänken.",
+        "en": "The kitchen has a stove, oven, fridge and coffee maker; coffee and tea are in the pantry. Beds are made when you arrive, towels are on the beds. There is no dishwasher – washing-up liquid and brush are by the sink.",
+        "de": "Die Küche hat Herd, Backofen, Kühlschrank und Kaffeemaschine; Kaffee und Tee sind in der Speisekammer. Die Betten sind bei Ankunft bezogen, Handtücher liegen auf den Betten. Es gibt keine Spülmaschine – Spülmittel und Bürste stehen an der Spüle."
+      }
+    },
+    {
+      "id": "shop",
+      "icon": "shop",
+      "title": { "sv": "Handla i närheten", "en": "Shops nearby", "de": "Einkaufen in der Nähe" },
+      "body": {
+        "sv": "Byns mataffär ligger 3 km bort och har öppet 8–21 alla dagar. Större butiker och apotek finns i Linköping, 15 minuter med bil.",
+        "en": "The village grocery store is 3 km away and open 8 am–9 pm every day. Larger shops and a pharmacy are in Linköping, 15 minutes by car.",
+        "de": "Der Dorfladen ist 3 km entfernt und täglich 8–21 Uhr geöffnet. Größere Geschäfte und eine Apotheke gibt es in Linköping, 15 Minuten mit dem Auto."
+      }
+    },
+    {
+      "id": "checkout",
+      "icon": "checkout",
+      "title": { "sv": "Utcheckning", "en": "Check-out", "de": "Abreise" },
+      "body": {
+        "sv": "Utcheckning senast {checkOut}. Diska och ställ in i skåpen, töm soporna i kärlen vid vägen, släck i kaminen och bastun, stäng fönstren och lägg nyckeln i nyckelboxen. Lakan och handdukar kan ligga kvar i sängarna.",
+        "en": "Check-out by {checkOut}. Wash up and put things away, empty the bins into the containers by the road, put out the fireplace and sauna, close the windows and put the key in the key box. Sheets and towels can stay on the beds.",
+        "de": "Abreise bis {checkOut} Uhr. Abwaschen und einräumen, den Müll in die Tonnen an der Straße leeren, Kamin und Sauna löschen, Fenster schließen und den Schlüssel in die Schlüsselbox legen. Bettwäsche und Handtücher können auf den Betten bleiben."
+      }
+    },
+    {
+      "id": "emergency",
+      "icon": "alert",
+      "title": { "sv": "Om något händer", "en": "In an emergency", "de": "Im Notfall" },
+      "body": {
+        "sv": "Ring 112 vid nödfall. Sjukvårdsrådgivning: 1177. Brandsläckare och brandfilt sitter i hallen, första hjälpen-lådan i badrummet. Stugans adress står på lappen innanför ytterdörren.",
+        "en": "Call 112 in an emergency. Medical advice: 1177. A fire extinguisher and fire blanket are in the hall, the first-aid kit in the bathroom. The cottage's address is on the note inside the front door.",
+        "de": "Im Notfall 112 anrufen. Medizinische Beratung: 1177. Feuerlöscher und Löschdecke sind im Flur, der Erste-Hilfe-Kasten im Bad. Die Adresse des Hauses steht auf dem Zettel innen an der Haustür."
+      }
+    }
+  ],
+  "answers": [
+    {
+      "id": "wifi",
+      "suggest": true,
+      "keywords": ["wifi", "losenord", "internet"],
+      "question": { "sv": "Vad är lösenordet till Wi-Fi?", "en": "What's the Wi-Fi password?", "de": "Wie lautet das WLAN-Passwort?" },
+      "answer": {
+        "sv": "Nätverket heter {wifiName} och lösenordet är {wifiPassword}. Routern sitter på hyllan i vardagsrummet om du behöver starta om den.",
+        "en": "The network is {wifiName} and the password is {wifiPassword}. The router is on the shelf in the living room if you need to restart it.",
+        "de": "Das Netzwerk heißt {wifiName}, das Passwort ist {wifiPassword}. Der Router steht im Regal im Wohnzimmer, falls Sie ihn neu starten müssen."
+      }
+    },
+    {
+      "id": "key",
+      "keywords": ["nyckel", "kod", "dorr", "komma in"],
+      "question": { "sv": "Hur kommer jag in?", "en": "How do I get in?", "de": "Wie komme ich hinein?" },
+      "answer": {
+        "sv": "Nyckeln ligger i den grå nyckelboxen till vänster om ytterdörren. Koden är {keyCode}. Lägg tillbaka nyckeln när du åker.",
+        "en": "The key is in the grey key box to the left of the front door. The code is {keyCode}. Put the key back when you leave.",
+        "de": "Der Schlüssel liegt in der grauen Schlüsselbox links neben der Haustür. Der Code ist {keyCode}. Legen Sie ihn bei der Abreise zurück."
+      }
+    },
+    {
+      "id": "checkin",
+      "keywords": ["incheckning", "tidig", "early", "fruh", "nar kan"],
+      "answer": {
+        "sv": "Incheckning från {checkIn}. Vill du komma tidigare? Skriv till {hostName}, ofta går det att ordna.",
+        "en": "Check-in is from {checkIn}. Want to arrive earlier? Write to {hostName} – it can often be arranged.",
+        "de": "Anreise ab {checkIn} Uhr. Früher ankommen? Schreiben Sie {hostName}, oft lässt sich das einrichten."
+      }
+    },
+    {
+      "id": "checkout",
+      "suggest": true,
+      "keywords": ["utcheckning", "sen", "late", "spat"],
+      "question": { "sv": "Vad ska jag göra vid utcheckning?", "en": "What do I do at check-out?", "de": "Was muss ich bei der Abreise tun?" },
+      "answer": {
+        "sv": "Utcheckning senast {checkOut}. Diska, töm soporna i kärlen vid vägen, släck i kaminen och bastun, stäng fönstren och lägg nyckeln i nyckelboxen. Lakan och handdukar kan ligga kvar.",
+        "en": "Check-out by {checkOut}. Wash up, empty the bins into the containers by the road, put out the fireplace and sauna, close the windows and put the key in the key box. Sheets and towels can stay.",
+        "de": "Abreise bis {checkOut} Uhr. Abwaschen, Müll in die Tonnen an der Straße, Kamin und Sauna löschen, Fenster schließen, Schlüssel in die Schlüsselbox. Bettwäsche und Handtücher können bleiben."
+      }
+    },
+    {
+      "id": "sauna",
+      "suggest": true,
+      "keywords": ["bastu"],
+      "question": { "sv": "Hur eldar jag bastun?", "en": "How do I heat the sauna?", "de": "Wie heize ich die Sauna?" },
+      "answer": {
+        "sv": "Bastun är vedeldad, i bodan vid bryggan. Tänd ungefär 45 minuter innan; tändved ligger i lådan bredvid kaminen. Häll vatten på stenarna först vid minst 60 grader, och stäng spjället först när glöden slocknat.",
+        "en": "The sauna is wood-fired, in the shed by the jetty. Light it about 45 minutes ahead; kindling is in the box next to the stove. Pour water on the stones only from 60 degrees, and close the damper only once the embers are out.",
+        "de": "Die Sauna wird mit Holz geheizt, im Häuschen am Steg. Etwa 45 Minuten vorher anheizen; Anzündholz liegt in der Kiste neben dem Ofen. Wasser erst ab 60 Grad auf die Steine, die Klappe erst schließen, wenn die Glut aus ist."
+      }
+    },
+    {
+      "id": "fireplace",
+      "keywords": ["kamin", "ved", "aska"],
+      "question": { "sv": "Var finns veden?", "en": "Where is the firewood?", "de": "Wo ist das Brennholz?" },
+      "answer": {
+        "sv": "Veden finns i vedboden bakom stugan – ta från den vänstra högen, den är torrast. Öppna spjället helt innan du tänder, och lägg askan i den gröna metallhinken på trappan.",
+        "en": "Firewood is in the woodshed behind the cottage – take from the left-hand pile, it's the driest. Open the damper fully before lighting, and put the ash in the green metal bucket on the steps.",
+        "de": "Das Brennholz ist im Holzschuppen hinter dem Haus – vom linken Stapel nehmen, der ist am trockensten. Vor dem Anzünden die Klappe ganz öffnen, die Asche in den grünen Metalleimer auf der Treppe."
+      }
+    },
+    {
+      "id": "swim",
+      "keywords": ["bada", "vatten", "water", "wasser"],
+      "answer": {
+        "sv": "Badstegen sitter i slutet av bryggan. Vattnet är grunt de första fem metrarna, sedan blir det djupt.",
+        "en": "The swimming ladder is at the end of the jetty. The water is shallow for the first five metres, then it gets deep.",
+        "de": "Die Badeleiter ist am Ende des Stegs. Die ersten fünf Meter ist es flach, danach wird es tief."
+      }
+    },
+    {
+      "id": "canoe",
+      "suggest": true,
+      "keywords": ["kanot"],
+      "question": { "sv": "Får vi låna kanoten?", "en": "Can we use the canoe?", "de": "Dürfen wir das Kanu benutzen?" },
+      "answer": {
+        "sv": "Ja! Kanoten ligger bredvid bryggan, paddlar och flytvästar hänger i bodan. Använd alltid flytväst och paddla inte ut när det blåser hårt.",
+        "en": "Yes! The canoe is next to the jetty; paddles and life jackets hang in the shed. Always wear a life jacket and don't paddle out in strong wind.",
+        "de": "Ja! Das Kanu liegt neben dem Steg, Paddel und Schwimmwesten hängen im Schuppen. Immer eine Schwimmweste tragen und bei starkem Wind nicht hinauspaddeln."
+      }
+    },
+    {
+      "id": "recycling",
+      "suggest": true,
+      "keywords": ["sopor", "glas", "papper"],
+      "question": { "sv": "Hur sorterar jag soporna?", "en": "How do I sort the rubbish?", "de": "Wie trenne ich den Müll?" },
+      "answer": {
+        "sv": "Under diskbänken: matavfall (brun påse), förpackningar och restavfall. Glas, papper och metall lämnar du på återvinningsstationen vid infarten till byn, 800 meter bort.",
+        "en": "Under the sink: food waste (brown bag), packaging and general waste. Glass, paper and metal go to the recycling station at the entrance to the village, 800 metres away.",
+        "de": "Unter der Spüle: Bioabfall (brauner Beutel), Verpackungen und Restmüll. Glas, Papier und Metall zur Recyclingstation an der Dorfeinfahrt, 800 Meter entfernt."
+      }
+    },
+    {
+      "id": "parking",
+      "keywords": ["parkering"],
+      "answer": {
+        "sv": "Parkera på grusplanen vid grinden – plats för två bilar. Närmaste laddstation är vid mataffären i byn.",
+        "en": "Park on the gravel area by the gate – room for two cars. The nearest EV charger is at the grocery store in the village.",
+        "de": "Parken auf dem Kiesplatz am Tor – Platz für zwei Autos. Die nächste Ladestation ist am Supermarkt im Dorf."
+      }
+    },
+    {
+      "id": "kitchen",
+      "keywords": ["kok", "kaffe", "sang"],
+      "answer": {
+        "sv": "Köket har spis, ugn, kylskåp och kaffebryggare; kaffe och te finns i skafferiet. Sängarna är bäddade och handdukar ligger på sängarna.",
+        "en": "The kitchen has a stove, oven, fridge and coffee maker; coffee and tea are in the pantry. The beds are made and towels are on the beds.",
+        "de": "Die Küche hat Herd, Backofen, Kühlschrank und Kaffeemaschine; Kaffee und Tee in der Speisekammer. Die Betten sind bezogen, Handtücher liegen bereit."
+      }
+    },
+    {
+      "id": "shop",
+      "keywords": ["affar"],
+      "answer": {
+        "sv": "Byns mataffär ligger 3 km bort, öppet 8–21 alla dagar. Större butiker och apotek finns i Linköping, 15 minuter med bil.",
+        "en": "The village grocery store is 3 km away, open 8 am–9 pm every day. Larger shops and a pharmacy are in Linköping, 15 minutes by car.",
+        "de": "Der Dorfladen ist 3 km entfernt, täglich 8–21 Uhr geöffnet. Größere Geschäfte und eine Apotheke in Linköping, 15 Minuten mit dem Auto."
+      }
+    },
+    {
+      "id": "emergency",
+      "keywords": ["nodfall"],
+      "answer": {
+        "sv": "Ring 112 vid nödfall, 1177 för sjukvårdsråd. Brandsläckare och brandfilt sitter i hallen, första hjälpen-lådan i badrummet.",
+        "en": "Call 112 in an emergency, 1177 for medical advice. A fire extinguisher and fire blanket are in the hall, the first-aid kit in the bathroom.",
+        "de": "Im Notfall 112, medizinische Beratung 1177. Feuerlöscher und Löschdecke im Flur, Erste-Hilfe-Kasten im Bad."
+      }
+    },
+    {
+      "id": "host",
+      "keywords": ["vard"],
+      "answer": {
+        "sv": "Du når {hostName} på {hostPhone} – helst via sms.",
+        "en": "You can reach {hostName} on {hostPhone} – a text message is best.",
+        "de": "Sie erreichen {hostName} unter {hostPhone} – am besten per SMS."
+      }
+    }
+  ]
+}

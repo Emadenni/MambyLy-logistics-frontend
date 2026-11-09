@@ -23,10 +23,14 @@ export type ScreenId =
   | "jobs"
   | "privacy"
   | "card"
+  | "tools"
+  | "toolsStay"
+  | "stayDemo"
+  | "stay"
   | "notFound";
 
 /** Screens with a fixed path (no parameters). */
-export type StaticScreen = Exclude<ScreenId, "example" | "concept" | "card" | "notFound">;
+export type StaticScreen = Exclude<ScreenId, "example" | "concept" | "card" | "stayDemo" | "stay" | "notFound">;
 
 export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   home: { sv: "/", en: "/en" },
@@ -40,7 +44,16 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   contact: { sv: "/kontaktaOss", en: "/en/contact" },
   jobs: { sv: "/jobbaMedOss", en: "/en/careers" },
   privacy: { sv: "/integritet", en: "/en/privacy" },
+  tools: { sv: "/tools", en: "/en/tools" },
+  toolsStay: { sv: "/tools/stay", en: "/en/tools/stay" },
 };
+
+/**
+ * MambyLy Stay: the public demos (one address each, the guest page picks its language from the
+ * phone) and the guest page of a real house, /stay/<house>?k=<key> (see tools/stay/data.ts).
+ */
+export const STAY_DEMO_BASE = "/tools/stay/demo";
+export const STAY_BASE = "/stay";
 
 export const EXAMPLE_BASE: Record<Lang, string> = { sv: "/exempel", en: "/en/examples" };
 export const CARD_PATH: Record<Lang, string> = { sv: "/card", en: "/en/card" };
@@ -101,6 +114,10 @@ export function resolvePath(pathname: string): Resolved {
   const concept = p.match(lang === "en" ? /^\/en\/websites\/concepts\/([^/]+)$/i : /^\/webbplatser\/koncept\/([^/]+)$/i);
   if (concept && conceptOfSlug(concept[1], lang)) return { screen: "concept", lang, slug: concept[1].toLowerCase() };
   if (p === CARD_PATH[lang]) return { screen: "card", lang };
+  const demo = p.match(/^\/tools\/stay\/demo\/([^/]+)$/i);
+  if (demo) return { screen: "stayDemo", lang: "sv", slug: demo[1].toLowerCase() };
+  const stay = p.match(/^\/stay\/([^/]+)$/i);
+  if (stay) return { screen: "stay", lang: "sv", slug: stay[1].toLowerCase() };
   const card = lang === "sv" ? p.match(/^\/card\/([^/]+)$/) : null;
   if (card) return { screen: "card", lang, slug: card[1] };
   return { screen: "notFound", lang };
@@ -112,6 +129,7 @@ export function translatePath(pathname: string, to: Lang): string {
   if (r.screen === "example" && r.slug) return `${EXAMPLE_BASE[to]}/${r.slug}`;
   if (r.screen === "concept" && r.slug) return conceptPath(conceptOfSlug(r.slug, r.lang)!, to);
   if (r.screen === "card") return r.slug ? pathname : CARD_PATH[to];
+  if (r.screen === "stayDemo" || r.screen === "stay") return pathname;
   if (r.screen === "notFound") return PATHS.explore[to];
   return PATHS[r.screen as StaticScreen][to];
 }

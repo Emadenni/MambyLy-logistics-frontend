@@ -2,6 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import React from 'react'
+import { openStayDomain } from './public/tools/stay/domains'
+
+// a MambyLy Stay house on its own domain opens its guest page (none configured yet)
+openStayDomain();
 
 const root = createRoot(document.getElementById('root')!);
 

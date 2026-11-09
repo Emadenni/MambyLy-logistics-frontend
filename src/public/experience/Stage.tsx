@@ -12,7 +12,7 @@ import "../styles/public.scss";
 /** Screens that share one mounted component (the home cover lies on top of Utforska). */
 const layerKey = (r: Resolved) => {
   if (r.screen === "home" || r.screen === "explore") return "hub";
-  if (r.screen === "example" || r.screen === "card") return `${r.screen}:${r.slug ?? ""}`;
+  if (r.screen === "example" || r.screen === "card" || r.screen === "stay" || r.screen === "stayDemo") return `${r.screen}:${r.slug ?? ""}`;
   // Same concept in both languages: switching language is not a move to another place.
   if (r.screen === "concept") return `concept:${conceptOfSlug(r.slug, r.lang)}`;
   return r.screen;
@@ -202,7 +202,7 @@ const Stage: React.FC = () => {
   const pref = savedLang();
   // A demo or example link is explicit about its language (its address is the language): it is
   // never switched by a preference saved earlier.
-  const explicit = ["card", "concept", "example"].includes(resolved.screen);
+  const explicit = ["card", "concept", "example", "stay", "stayDemo"].includes(resolved.screen);
   const langRedirect =
     pref && pref !== resolved.lang && !explicit && (first ? resolved.lang === "sv" : navType === "POP")
       ? translatePath(location.pathname, pref) + location.search + location.hash

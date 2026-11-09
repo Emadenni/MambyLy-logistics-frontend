@@ -65,7 +65,7 @@ const TemplateDetails = lazy(() => import("./components/TemplateDetails/Template
 // Public site: one screen at a time, Swedish and English (see src/public/experience and
 // docs/RESTYLE-PUBLIC.md). Swedish keeps the existing URLs; English lives under /en.
 import Stage from "./public/experience/Stage";
-import { CONCEPT_BASE, LANGS, PATHS, isLegacyPath } from "./public/experience/routes";
+import { CONCEPT_BASE, LANGS, PATHS, STAY_BASE, STAY_DEMO_BASE, isLegacyPath } from "./public/experience/routes";
 import Hub from "./public/experience/screens/Hub";
 import LegacyConsent from "./public/experience/LegacyConsent";
 
@@ -83,6 +83,9 @@ const screens = {
   privacy: () => import("./public/experience/screens/Privacy"),
   card: () => import("./public/pages/PublicCard"),
   concept: () => import("./public/experience/concepts/Concept"),
+  tools: () => import("./public/tools/ToolsHome"),
+  toolsStay: () => import("./public/tools/stay/StayLanding"),
+  stay: () => import("./public/tools/stay/StayPages"),
 };
 const Websites = lazy(screens.websites);
 const Method = lazy(screens.method);
@@ -97,6 +100,10 @@ const Privacy = lazy(() => screens.privacy().then((m) => ({ default: m.Privacy }
 const NotFound = lazy(() => screens.privacy().then((m) => ({ default: m.NotFound })));
 const PublicCard = lazy(screens.card);
 const Concept = lazy(screens.concept);
+const ToolsHome = lazy(screens.tools);
+const StayLanding = lazy(screens.toolsStay);
+const StayHousePage = lazy(() => screens.stay().then((m) => ({ default: m.StayHousePage })));
+const StayDemoPage = lazy(() => screens.stay().then((m) => ({ default: m.StayDemoPage })));
 
 /** A screen that may still be loading: nothing until it is there (a moment, usually preloaded). */
 const page = (el: React.ReactNode) => <Suspense fallback={null}>{el}</Suspense>;
@@ -182,11 +189,16 @@ const App = () => {
                   <Route path={PATHS.contact[lang]} element={page(<Contact />)} />
                   <Route path={PATHS.jobs[lang]} element={page(<Jobs />)} />
                   <Route path={PATHS.privacy[lang]} element={page(<Privacy />)} />
+                  <Route path={PATHS.tools[lang]} element={page(<ToolsHome />)} />
+                  <Route path={PATHS.toolsStay[lang]} element={page(<StayLanding />)} />
                 </React.Fragment>
               ))}
               <Route path="/card" element={page(<PublicCard />)} />
               <Route path="/en/card" element={page(<PublicCard />)} />
               <Route path="/card/:slug" element={page(<PublicCard />)} />
+              {/* MambyLy Stay: the demos and the guest page of a real house (NFC tag / QR code) */}
+              <Route path={`${STAY_DEMO_BASE}/:demo`} element={page(<StayDemoPage />)} />
+              <Route path={`${STAY_BASE}/:slug`} element={page(<StayHousePage />)} />
               <Route path="*" element={page(<NotFound />)} />
             </Route>
             <Route element={<PublicLayout />}>

@@ -1,13 +1,13 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiCompass, FiMail, FiUsers } from "react-icons/fi";
+import { FiCompass, FiMail, FiTool, FiUsers } from "react-icons/fi";
 import { LuIdCard } from "react-icons/lu";
 import { TbBrowser } from "react-icons/tb";
 import { useCopy } from "./i18n";
 import { PATHS, resolvePath, type ScreenId, type StaticScreen } from "./routes";
 
-/** The five places of the menu and the screens that belong to each of them. */
-type Section = "explore" | "websites" | "cards" | "about" | "contact";
+/** The places of the menu and the screens that belong to each of them. */
+type Section = "explore" | "websites" | "cards" | "tools" | "about" | "contact";
 
 const SECTION_OF: Partial<Record<ScreenId, Section>> = {
   explore: "explore",
@@ -19,12 +19,15 @@ const SECTION_OF: Partial<Record<ScreenId, Section>> = {
   about: "about",
   jobs: "about",
   contact: "contact",
+  tools: "tools",
+  toolsStay: "tools",
 };
 
 const ITEMS: { section: Section; screen: StaticScreen; icon: React.ReactNode }[] = [
   { section: "explore", screen: "explore", icon: <FiCompass /> },
   { section: "websites", screen: "websites", icon: <TbBrowser /> },
   { section: "cards", screen: "cards", icon: <LuIdCard /> },
+  { section: "tools", screen: "tools", icon: <FiTool /> },
   { section: "about", screen: "about", icon: <FiUsers /> },
   { section: "contact", screen: "contact", icon: <FiMail /> },
 ];

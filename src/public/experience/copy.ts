@@ -44,6 +44,7 @@ const sv = {
     open: "Öppna navigering",
     close: "Stäng navigering",
     explore: "Utforska",
+    tools: "MambyLy Tools",
     websites: "Webbplatser",
     cards: "Digitala visitkort",
     about: "Om oss",
@@ -480,6 +481,14 @@ const sv = {
       title: "Integritet & cookies | MambyLy Solutions",
       description: "Hur MambyLy Solutions behandlar personuppgifter och vilka cookies webbplatsen använder.",
     },
+    tools: {
+      title: "MambyLy Tools – smarta sidor bakom en NFC-tagg",
+      description: "Små digitala verktyg för företag, öppnade med en NFC-tagg eller QR-kod. Först ut: MambyLy Stay för uthyrare.",
+    },
+    toolsStay: {
+      title: "MambyLy Stay – digital concierge för uthyrare | MambyLy Tools",
+      description: "En skylt med NFC och QR i boendet: gästen får husets information och svar på sina frågor på sitt eget språk, dygnet runt.",
+    },
     notFound: { title: "Sidan finns inte | MambyLy Solutions", description: "Sidan finns inte." },
   },
 };
@@ -526,6 +535,7 @@ const en: Copy = {
     open: "Open navigation",
     close: "Close navigation",
     explore: "Explore",
+    tools: "MambyLy Tools",
     websites: "Websites",
     cards: "Digital cards",
     about: "About",
@@ -961,6 +971,14 @@ const en: Copy = {
     privacy: {
       title: "Privacy & cookies | MambyLy Solutions",
       description: "How MambyLy Solutions processes personal data and which cookies the website uses.",
+    },
+    tools: {
+      title: "MambyLy Tools – smart pages behind an NFC tag",
+      description: "Small digital tools for businesses, opened with an NFC tag or QR code. First out: MambyLy Stay for hosts.",
+    },
+    toolsStay: {
+      title: "MambyLy Stay – a digital concierge for hosts | MambyLy Tools",
+      description: "A sign with NFC and QR in your rental: guests get the house information and answers to their questions in their own language, around the clock.",
     },
     notFound: { title: "Page not found | MambyLy Solutions", description: "The page does not exist." },
   },

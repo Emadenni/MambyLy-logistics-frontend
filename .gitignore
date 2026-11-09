@@ -35,3 +35,9 @@ MambyLy_Corrections_Menu/
 # Video studio output (frames, videos); local only
 studio/out/
 studio/reel/public/
+
+# MambyLy Stay: real houses hold key codes and Wi-Fi passwords. Never commit them while the
+# repository is public (see docs/MAMBYLY-TOOLS.md); only the two demos are tracked.
+/public/stay-data/*
+!/public/stay-data/sjostugan-vid-roxen/
+!/public/stay-data/stadsvaningen-linkoping/

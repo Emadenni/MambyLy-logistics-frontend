@@ -1,0 +1,256 @@
+{
+  "slug": "stadsvaningen-linkoping",
+  "template": "city",
+  "demo": true,
+  "name": "Stadsvåningen",
+  "place": {
+    "sv": "Centrala Linköping",
+    "en": "Central Linköping",
+    "de": "Zentrum von Linköping"
+  },
+  "languages": ["sv", "en", "de"],
+  "host": {
+    "name": "Jonas",
+    "phone": "+46 70 174 06 42",
+    "welcome": {
+      "sv": "Välkommen! Lägenheten ligger mitt i stan, med bussen och de bästa kaféerna runt hörnet. Allt du behöver står här nedan.",
+      "en": "Welcome! The flat is right in town, with the bus and the best cafés round the corner. Everything you need is below.",
+      "de": "Willkommen! Die Wohnung liegt mitten in der Stadt, Bus und die besten Cafés um die Ecke. Alles Nötige steht unten."
+    }
+  },
+  "arrival": {
+    "keyLabel": { "sv": "Portkod", "en": "Door code", "de": "Türcode" },
+    "keyCode": "2580",
+    "keyWhere": {
+      "sv": "Koden till porten. Nyckeln till lägenheten ligger i nyckelboxen vid dörren på 3:e våningen, samma kod.",
+      "en": "The code for the street door. The flat key is in the key box by the door on the 3rd floor – same code.",
+      "de": "Der Code für die Haustür. Der Wohnungsschlüssel liegt in der Schlüsselbox an der Tür im 3. Stock – gleicher Code."
+    },
+    "wifi": { "name": "Stadsvaningen-5G", "password": "kaffe-och-buss" },
+    "checkIn": "15:00",
+    "checkOut": "11:00"
+  },
+  "sections": [
+    {
+      "id": "entrance",
+      "icon": "door",
+      "title": { "sv": "Porten och lägenheten", "en": "Street door and flat", "de": "Haustür und Wohnung" },
+      "body": {
+        "sv": "Portkoden är {keyCode}. Ta hissen eller trappan till 3:e våningen, dörren till höger med namnet ”Stay 3B”. Nyckeln ligger i nyckelboxen bredvid dörren, samma kod.",
+        "en": "The street door code is {keyCode}. Take the lift or the stairs to the 3rd floor, door on the right marked “Stay 3B”. The key is in the key box next to the door, same code.",
+        "de": "Der Code der Haustür ist {keyCode}. Mit dem Aufzug oder der Treppe in den 3. Stock, Tür rechts mit „Stay 3B“. Der Schlüssel liegt in der Schlüsselbox neben der Tür, gleicher Code."
+      }
+    },
+    {
+      "id": "laundry",
+      "icon": "laundry",
+      "title": { "sv": "Tvättstugan", "en": "The laundry room", "de": "Die Waschküche" },
+      "body": {
+        "sv": "Tvättstugan ligger i källaren. Boka ett pass på bokningstavlan vid dörren med den blå låscylindern som hänger på nyckelknippan. Pass: 07–11, 11–15, 15–19. Tvätta bara på ditt eget pass, rensa luddfiltret i torktumlaren och torka av maskinerna efter dig. Ingen tvätt efter kl 21.",
+        "en": "The laundry room is in the basement. Book a slot on the board by the door with the blue lock cylinder on the key ring. Slots: 7–11, 11–15, 15–19. Only wash during your own slot, clean the dryer's lint filter and wipe the machines after you. No washing after 9 pm.",
+        "de": "Die Waschküche ist im Keller. Buchen Sie eine Zeit an der Tafel neben der Tür mit dem blauen Schließzylinder am Schlüsselbund. Zeiten: 7–11, 11–15, 15–19 Uhr. Nur in der eigenen Zeit waschen, das Flusensieb des Trockners reinigen und die Maschinen abwischen. Nach 21 Uhr nicht waschen."
+      }
+    },
+    {
+      "id": "transport",
+      "icon": "bus",
+      "title": { "sv": "Buss och tåg", "en": "Bus and train", "de": "Bus und Zug" },
+      "body": {
+        "sv": "Busshållplatsen ligger 100 meter bort, på andra sidan torget. Resecentrum med tåg och flygbuss nås på 8 minuter till fots. Biljett köper du i appen eller med kort direkt vid påstigning.",
+        "en": "The bus stop is 100 metres away, across the square. The travel centre with trains and the airport bus is an 8-minute walk. Buy tickets in the app or with a card when you board.",
+        "de": "Die Bushaltestelle ist 100 Meter entfernt, auf der anderen Seite des Platzes. Zum Reisezentrum mit Zügen und Flughafenbus sind es 8 Minuten zu Fuß. Tickets in der App oder mit Karte beim Einsteigen."
+      }
+    },
+    {
+      "id": "breakfast",
+      "icon": "coffee",
+      "title": { "sv": "Frukost i närheten", "en": "Breakfast nearby", "de": "Frühstück in der Nähe" },
+      "body": {
+        "sv": "Bageriet på hörnet öppnar 7 och har de bästa kardemummabullarna. Kaféet vid torget serverar frukost 8–11 på helgen. Mataffären mittemot har öppet 7–22.",
+        "en": "The bakery on the corner opens at 7 and has the best cardamom buns. The café on the square serves breakfast 8–11 at weekends. The grocery store opposite is open 7 am–10 pm.",
+        "de": "Die Bäckerei an der Ecke öffnet um 7 und hat die besten Kardamomschnecken. Das Café am Platz serviert am Wochenende 8–11 Uhr Frühstück. Der Supermarkt gegenüber hat 7–22 Uhr geöffnet."
+      }
+    },
+    {
+      "id": "rules",
+      "icon": "quiet",
+      "title": { "sv": "Husets regler", "en": "House rules", "de": "Hausordnung" },
+      "body": {
+        "sv": "Det är ett bostadshus med fasta grannar: tyst mellan 22 och 07, inga fester. Rökning är inte tillåten i lägenheten, på balkongen eller i trapphuset. Barnvagnar och cyklar ställs i cykelrummet, inte i trapphuset.",
+        "en": "This is a residential building with permanent neighbours: quiet between 10 pm and 7 am, no parties. No smoking in the flat, on the balcony or in the stairwell. Prams and bikes go in the bike room, not in the stairwell.",
+        "de": "Ein Wohnhaus mit festen Nachbarn: Ruhe zwischen 22 und 7 Uhr, keine Partys. Rauchen ist in der Wohnung, auf dem Balkon und im Treppenhaus nicht erlaubt. Kinderwagen und Fahrräder in den Fahrradraum, nicht ins Treppenhaus."
+      }
+    },
+    {
+      "id": "recycling",
+      "icon": "recycle",
+      "title": { "sv": "Sopor", "en": "Rubbish", "de": "Müll" },
+      "body": {
+        "sv": "Soprummet ligger på gården, genom dörren bredvid cykelrummet (samma kod som porten). Sortera i matavfall, förpackningar och restavfall; glas och metall har egna kärl längst in.",
+        "en": "The bin room is in the courtyard, through the door next to the bike room (same code as the street door). Sort into food waste, packaging and general waste; glass and metal have their own bins at the back.",
+        "de": "Der Müllraum ist im Hof, durch die Tür neben dem Fahrradraum (gleicher Code wie die Haustür). Trennen in Bioabfall, Verpackungen und Restmüll; Glas und Metall haben eigene Tonnen hinten."
+      }
+    },
+    {
+      "id": "parking",
+      "icon": "parking",
+      "title": { "sv": "Parkering", "en": "Parking", "de": "Parken" },
+      "body": {
+        "sv": "Lägenheten har ingen egen parkering. Närmaste parkeringshus ligger 300 meter bort, öppet dygnet runt. Gatuparkering betalas i appen.",
+        "en": "The flat has no parking of its own. The nearest car park is 300 metres away, open 24 hours. Street parking is paid in the app.",
+        "de": "Die Wohnung hat keinen eigenen Parkplatz. Das nächste Parkhaus ist 300 Meter entfernt, rund um die Uhr geöffnet. Straßenparken wird per App bezahlt."
+      }
+    },
+    {
+      "id": "checkout",
+      "icon": "checkout",
+      "title": { "sv": "Utcheckning", "en": "Check-out", "de": "Abreise" },
+      "body": {
+        "sv": "Utcheckning senast {checkOut}. Diska, ta ut soporna till soprummet, stäng fönstren och lägg nyckeln i nyckelboxen vid dörren.",
+        "en": "Check-out by {checkOut}. Wash up, take the rubbish to the bin room, close the windows and put the key in the key box by the door.",
+        "de": "Abreise bis {checkOut} Uhr. Abwaschen, Müll in den Müllraum bringen, Fenster schließen und den Schlüssel in die Schlüsselbox an der Tür legen."
+      }
+    },
+    {
+      "id": "emergency",
+      "icon": "alert",
+      "title": { "sv": "Om något händer", "en": "In an emergency", "de": "Im Notfall" },
+      "body": {
+        "sv": "Ring 112 vid nödfall, 1177 för sjukvårdsråd. Brandsläckare sitter i hallen. Vid vattenläcka: stäng huvudkranen under diskbänken och skriv till värden.",
+        "en": "Call 112 in an emergency, 1177 for medical advice. A fire extinguisher is in the hall. If there's a water leak: close the main valve under the sink and write to the host.",
+        "de": "Im Notfall 112, medizinische Beratung 1177. Ein Feuerlöscher ist im Flur. Bei einem Wasserschaden: Hauptventil unter der Spüle schließen und dem Gastgeber schreiben."
+      }
+    }
+  ],
+  "answers": [
+    {
+      "id": "door",
+      "suggest": true,
+      "keywords": ["port", "kod", "nyckel", "komma in"],
+      "question": { "sv": "Vad är portkoden?", "en": "What's the door code?", "de": "Wie lautet der Türcode?" },
+      "answer": {
+        "sv": "Portkoden är {keyCode}. Ta dig till 3:e våningen, dörren till höger (”Stay 3B”). Nyckeln ligger i nyckelboxen bredvid dörren, samma kod.",
+        "en": "The door code is {keyCode}. Go up to the 3rd floor, door on the right (“Stay 3B”). The key is in the key box next to the door, same code.",
+        "de": "Der Türcode ist {keyCode}. In den 3. Stock, Tür rechts („Stay 3B“). Der Schlüssel liegt in der Schlüsselbox neben der Tür, gleicher Code."
+      }
+    },
+    {
+      "id": "floor",
+      "keywords": ["vaning"],
+      "question": { "sv": "Vilken våning?", "en": "Which floor?", "de": "Welcher Stock?" },
+      "answer": {
+        "sv": "3:e våningen, dörren till höger när du kommer ur hissen. Det står ”Stay 3B” på dörren.",
+        "en": "3rd floor, the door on the right as you leave the lift. It says “Stay 3B” on the door.",
+        "de": "3. Stock, die Tür rechts, wenn Sie aus dem Aufzug kommen. An der Tür steht „Stay 3B“."
+      }
+    },
+    {
+      "id": "wifi",
+      "suggest": true,
+      "keywords": ["wifi", "losenord", "internet"],
+      "question": { "sv": "Vad är lösenordet till Wi-Fi?", "en": "What's the Wi-Fi password?", "de": "Wie lautet das WLAN-Passwort?" },
+      "answer": {
+        "sv": "Nätverket heter {wifiName} och lösenordet är {wifiPassword}.",
+        "en": "The network is {wifiName} and the password is {wifiPassword}.",
+        "de": "Das Netzwerk heißt {wifiName}, das Passwort ist {wifiPassword}."
+      }
+    },
+    {
+      "id": "laundry",
+      "suggest": true,
+      "keywords": ["tvattstuga"],
+      "question": { "sv": "Hur funkar tvättstugan?", "en": "How does the laundry room work?", "de": "Wie funktioniert die Waschküche?" },
+      "answer": {
+        "sv": "Tvättstugan ligger i källaren. Boka ett pass på tavlan vid dörren med den blå låscylindern på nyckelknippan (07–11, 11–15, 15–19). Tvätta bara på ditt pass, rensa luddfiltret och torka av maskinerna. Ingen tvätt efter kl 21.",
+        "en": "The laundry room is in the basement. Book a slot on the board by the door with the blue lock cylinder on the key ring (7–11, 11–15, 15–19). Only wash during your slot, clean the lint filter and wipe the machines. No washing after 9 pm.",
+        "de": "Die Waschküche ist im Keller. Buchen Sie eine Zeit an der Tafel neben der Tür mit dem blauen Schließzylinder am Schlüsselbund (7–11, 11–15, 15–19 Uhr). Nur in Ihrer Zeit waschen, Flusensieb reinigen, Maschinen abwischen. Nach 21 Uhr nicht waschen."
+      }
+    },
+    {
+      "id": "transport",
+      "suggest": true,
+      "keywords": ["buss", "flygplats", "airport", "flughafen"],
+      "question": { "sv": "Hur tar jag mig till tåget?", "en": "How do I get to the train?", "de": "Wie komme ich zum Zug?" },
+      "answer": {
+        "sv": "Resecentrum med tåg och flygbuss ligger 8 minuter bort till fots. Busshållplatsen är 100 meter bort, på andra sidan torget. Biljett köper du i appen eller med kort vid påstigning.",
+        "en": "The travel centre with trains and the airport bus is an 8-minute walk. The bus stop is 100 metres away, across the square. Buy tickets in the app or with a card when you board.",
+        "de": "Das Reisezentrum mit Zügen und Flughafenbus ist 8 Minuten zu Fuß entfernt. Die Bushaltestelle liegt 100 Meter entfernt, gegenüber am Platz. Tickets in der App oder mit Karte beim Einsteigen."
+      }
+    },
+    {
+      "id": "breakfast",
+      "suggest": true,
+      "keywords": ["frukost", "affar"],
+      "question": { "sv": "Var kan vi äta frukost?", "en": "Where can we have breakfast?", "de": "Wo können wir frühstücken?" },
+      "answer": {
+        "sv": "Bageriet på hörnet öppnar 7 – prova kardemummabullarna. Kaféet vid torget serverar frukost 8–11 på helgen, och mataffären mittemot har öppet 7–22.",
+        "en": "The bakery on the corner opens at 7 – try the cardamom buns. The café on the square serves breakfast 8–11 at weekends, and the grocery store opposite is open 7 am–10 pm.",
+        "de": "Die Bäckerei an der Ecke öffnet um 7 – probieren Sie die Kardamomschnecken. Das Café am Platz serviert am Wochenende 8–11 Uhr Frühstück, der Supermarkt gegenüber hat 7–22 Uhr geöffnet."
+      }
+    },
+    {
+      "id": "rules",
+      "keywords": ["tyst", "roka", "smoke", "rauchen", "smoking"],
+      "question": { "sv": "Vilka regler gäller i huset?", "en": "What are the house rules?", "de": "Welche Hausregeln gelten?" },
+      "answer": {
+        "sv": "Tyst mellan 22 och 07, inga fester – det bor grannar runt omkring. Rökning är inte tillåten i lägenheten, på balkongen eller i trapphuset.",
+        "en": "Quiet between 10 pm and 7 am, no parties – there are neighbours all around. No smoking in the flat, on the balcony or in the stairwell.",
+        "de": "Ruhe zwischen 22 und 7 Uhr, keine Partys – rundherum wohnen Nachbarn. Rauchen ist in der Wohnung, auf dem Balkon und im Treppenhaus nicht erlaubt."
+      }
+    },
+    {
+      "id": "recycling",
+      "keywords": ["sopor"],
+      "answer": {
+        "sv": "Soprummet ligger på gården, dörren bredvid cykelrummet (samma kod som porten). Sortera i matavfall, förpackningar och restavfall.",
+        "en": "The bin room is in the courtyard, the door next to the bike room (same code as the street door). Sort into food waste, packaging and general waste.",
+        "de": "Der Müllraum ist im Hof, die Tür neben dem Fahrradraum (gleicher Code wie die Haustür). Trennen in Bioabfall, Verpackungen und Restmüll."
+      }
+    },
+    {
+      "id": "parking",
+      "keywords": ["parkering"],
+      "answer": {
+        "sv": "Ingen egen parkering. Närmaste parkeringshus ligger 300 meter bort och har öppet dygnet runt; gatuparkering betalas i appen.",
+        "en": "No parking of its own. The nearest car park is 300 metres away, open 24 hours; street parking is paid in the app.",
+        "de": "Kein eigener Parkplatz. Das nächste Parkhaus ist 300 Meter entfernt, rund um die Uhr geöffnet; Straßenparken per App."
+      }
+    },
+    {
+      "id": "checkout",
+      "keywords": ["utcheckning"],
+      "answer": {
+        "sv": "Utcheckning senast {checkOut}. Diska, ta ut soporna, stäng fönstren och lägg nyckeln i nyckelboxen vid dörren.",
+        "en": "Check-out by {checkOut}. Wash up, take out the rubbish, close the windows and put the key in the key box by the door.",
+        "de": "Abreise bis {checkOut} Uhr. Abwaschen, Müll hinausbringen, Fenster schließen, Schlüssel in die Schlüsselbox an der Tür."
+      }
+    },
+    {
+      "id": "checkin",
+      "keywords": ["incheckning", "tidig", "early", "fruh"],
+      "answer": {
+        "sv": "Incheckning från {checkIn}. Vill du komma tidigare? Skriv till {hostName}.",
+        "en": "Check-in is from {checkIn}. Want to arrive earlier? Write to {hostName}.",
+        "de": "Anreise ab {checkIn} Uhr. Früher ankommen? Schreiben Sie {hostName}."
+      }
+    },
+    {
+      "id": "emergency",
+      "keywords": ["nodfall", "lacka", "leak", "wasserschaden"],
+      "answer": {
+        "sv": "Ring 112 vid nödfall, 1177 för sjukvårdsråd. Vid vattenläcka: stäng huvudkranen under diskbänken och skriv till värden.",
+        "en": "Call 112 in an emergency, 1177 for medical advice. If there's a water leak: close the main valve under the sink and write to the host.",
+        "de": "Im Notfall 112, medizinische Beratung 1177. Bei Wasserschaden: Hauptventil unter der Spüle schließen und dem Gastgeber schreiben."
+      }
+    },
+    {
+      "id": "host",
+      "keywords": ["vard"],
+      "answer": {
+        "sv": "Du når {hostName} på {hostPhone} – helst via sms.",
+        "en": "You can reach {hostName} on {hostPhone} – a text message is best.",
+        "de": "Sie erreichen {hostName} unter {hostPhone} – am besten per SMS."
+      }
+    }
+  ]
+}
