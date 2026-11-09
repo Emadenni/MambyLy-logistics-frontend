@@ -21,9 +21,13 @@ const TAP = 8;
 
 const absolute = (path: string) => `${SITE}${encodeURI(path)}`;
 
+/** Layers of a card's edge: the card is a thin slab, not a picture (px apart). */
+const EDGE = [1, 2, 3, 4, 5];
+
 /**
- * One card of the carousel: the real card design, front and back. A tap turns it, a swipe up
- * shares it (as on the real card), the light follows the pointer. The name below opens the page.
+ * One card of the carousel: the real card design as a thin slab in 3D – front, back and an edge of
+ * the card's own colour, a shadow on the floor. A tap turns it over, a swipe up shares it (as on
+ * the real card); the card leans towards the pointer and the light follows it. The name opens it.
  */
 const DemoCard: React.FC<{
   card: CardConfig;
@@ -74,8 +78,18 @@ const DemoCard: React.FC<{
     const el = stage.current;
     if (!el || e.pointerType !== "mouse") return;
     const r = el.getBoundingClientRect();
-    el.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 100).toFixed(1) + "%");
-    el.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 100).toFixed(1) + "%");
+    const x = (e.clientX - r.left) / r.width;
+    const y = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+    el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+    el.style.setProperty("--rx", ((0.5 - y) * 16).toFixed(2) + "deg");
+    el.style.setProperty("--ry", ((x - 0.5) * 22).toFixed(2) + "deg");
+  };
+  const onPointerLeave = () => {
+    const el = stage.current;
+    if (!el) return;
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
   };
 
   return (
@@ -91,6 +105,7 @@ const DemoCard: React.FC<{
         onPointerUp={onPointerUp}
         onPointerCancel={() => (press.current = null)}
         onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
@@ -98,8 +113,19 @@ const DemoCard: React.FC<{
           }
         }}
       >
-        <CardPreview card={card} t={t} withBack />
-        <span className="mp-demos__sheen" aria-hidden="true" />
+        <span className="mp-demos__floor" aria-hidden="true" />
+        <div className="mp-demos__slab" style={{ "--edge": card.theme.front, "--edge-back": card.theme.back } as React.CSSProperties}>
+          {EDGE.map((z) => (
+            <span key={z} className="mp-demos__layer" style={{ "--z": z } as React.CSSProperties} aria-hidden="true" />
+          ))}
+          <div className="mp-demos__face mp-demos__face--back" aria-hidden="true">
+            <CardPreview card={card} t={t} withBack />
+          </div>
+          <div className="mp-demos__face mp-demos__face--front">
+            <CardPreview card={card} t={t} />
+            <span className="mp-demos__sheen" aria-hidden="true" />
+          </div>
+        </div>
       </div>
       <div className="mp-demos__meta">
         <Link to={href} className="mp-demos__name">
@@ -199,6 +225,8 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
         const dist = (r.left + r.width / 2 - centre) / r.width;
         item.style.setProperty("--d", Math.max(-2, Math.min(2, dist)).toFixed(3));
         item.style.setProperty("--meta-v", Math.abs(dist) > 0.4 ? "hidden" : "visible");
+        // the nearer the centre, the more in front
+        item.style.zIndex = String(100 - Math.round(Math.abs(dist) * 10));
       });
     };
     const ask = () => (frame ||= requestAnimationFrame(update));
@@ -290,7 +318,15 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
     const onScroll = () => setSiteAt(nearest(el));
     el.addEventListener("scroll", onScroll, { passive: true });
     const frames = [...el.querySelectorAll<HTMLElement>(".mp-demos__site")];
-    const seen = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle("is-on", e.isIntersecting)), { rootMargin: "10% 0px" });
+    // is-on while visible (the page scrolls inside), is-open from the first time (the laptop opens)
+    const seen = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          e.target.classList.toggle("is-on", e.isIntersecting);
+          if (e.isIntersecting && e.intersectionRatio > 0.25) e.target.classList.add("is-open");
+        }),
+      { rootMargin: "10% 0px", threshold: [0, 0.25, 0.5] },
+    );
     frames.forEach((f) => seen.observe(f));
     if (still)
       return () => {
@@ -409,6 +445,9 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
             const c = t.websites.concepts[id];
             return (
               <li key={id} className="mp-demos__site" style={{ "--i": i } as React.CSSProperties}>
+                {/* a laptop in 3D: the lid (the link, the website on it), its aluminium back, the deck */}
+                <div className="mp-demos__device">
+                <span className="mp-demos__shell" aria-hidden="true" />
                 <Link to={conceptPath(id, t.lang)} className="mp-demos__frame" aria-label={`${c.label} – ${t.websites.open}`}>
                   <span className="mp-demos__bar" aria-hidden="true">
                     <i />
@@ -422,6 +461,11 @@ const Demos: React.FC<{ still: boolean }> = ({ still }) => {
                     {t.websites.open} <FiArrowRight />
                   </span>
                 </Link>
+                <span className="mp-demos__deck" aria-hidden="true">
+                  <i className="mp-demos__keys" />
+                  <i className="mp-demos__pad" />
+                </span>
+                </div>
                 <p className="mp-demos__label">
                   <strong>{c.label}</strong> <span>{c.caption}</span>
                 </p>
