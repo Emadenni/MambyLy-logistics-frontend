@@ -1,10 +1,14 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { FiArrowRight, FiChevronLeft, FiChevronRight, FiMinus, FiPlus, FiX } from "react-icons/fi";
+import { FiArrowRight, FiChevronLeft, FiChevronRight, FiMinus, FiPlus } from "react-icons/fi";
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
 import MENU from "./restaurant-menu.json";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
+import { sectionId } from "./sites";
+
+const BOOK = sectionId("restaurant", "book");
 
 type Lang = "sv" | "en";
 type Dish = (typeof MENU.dishes)[number];
@@ -30,10 +34,6 @@ const copy = {
     send: "Skicka förfrågan",
     needName: "Fyll i datum och namn.",
     booked: "Det här är en demo – ingen bokning har gjorts och inget skickades.",
-    close: "Stäng",
-    findLines: ["Adressen är påhittad – restaurangen finns inte.", "På en riktig sajt står adress, karta och vägbeskrivning här."],
-    hoursTitle: "Öppettider (exempel)",
-    hours: ["Tis–tors 17–22", "Fre–lör 17–23", "Sön–mån stängt"],
   },
   en: {
     kind: "Restaurant",
@@ -53,10 +53,6 @@ const copy = {
     send: "Send request",
     needName: "Fill in the date and your name.",
     booked: "This is a demo – no booking was made and nothing was sent.",
-    close: "Close",
-    findLines: ["The address is made up – the restaurant does not exist.", "A real site shows the address, a map and directions here."],
-    hoursTitle: "Opening hours (example)",
-    hours: ["Tue–Thu 5–10 pm", "Fri–Sat 5–11 pm", "Sun–Mon closed"],
   },
 };
 
@@ -81,7 +77,6 @@ const Restaurant: React.FC = () => {
   const [index, setIndex] = useState(START);
   const [dir, setDir] = useState(1);
   const [info, setInfo] = useState(false);
-  const [panel, setPanel] = useState<"book" | "find" | null>(null);
   const [booking, setBooking] = useState({ date: "", time: "19:00", guests: 2, name: "" });
   const [tried, setTried] = useState(false);
   const [booked, setBooked] = useState(false);
@@ -92,11 +87,6 @@ const Restaurant: React.FC = () => {
   const inCat = DISHES.filter((d) => d.category === cat);
   const posInCat = inCat.findIndex((d) => d.id === dish.id) + 1;
   const catLabel = (id: CatId) => MENU.categories.find((x) => x.id === id)!.label[lang];
-
-  // An opened panel comes into view and takes the focus.
-  useEffect(() => {
-    if (panel) goTo(`${ids}-${panel}`);
-  }, [panel, ids]);
 
   // The next dish is fetched ahead; the others only when they are shown.
   useEffect(() => {
@@ -137,16 +127,21 @@ const Restaurant: React.FC = () => {
 
   return (
     <ConceptFrame id="restaurant">
-      <header className="cx-re__head">
-        <span className="cx-re__kind">{c.kind}</span>
-        <span className="cx-re__name">{c.name}</span>
-      </header>
+      <SiteNav
+        id="restaurant"
+        wordmark={
+          <>
+            <span className="cx-re__name">{c.name}</span>
+            <span className="cx-re__kind">{c.kind}</span>
+          </>
+        }
+      />
 
       <main id="cx-main-restaurant" className="cx-re__main">
         <h1 className="mp-sr" data-focus>
           {c.name} – {label("menu", lang)}
         </h1>
-        <div className="cx-re__stage" onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={() => (swipe.current = null)}>
+        <div id={sectionId("restaurant", "dish")} className="cx-re__stage" onPointerDown={onDown} onPointerUp={onUp} onPointerCancel={() => (swipe.current = null)}>
           <p className="cx-re__catword" aria-hidden="true" style={{ "--len": catLabel(cat).length } as React.CSSProperties}>
             {catLabel(cat)}
           </p>
@@ -167,7 +162,7 @@ const Restaurant: React.FC = () => {
               />
             </AnimatePresence>
           </div>
-          <button type="button" className="cx-re__book" onClick={() => setPanel(panel === "book" ? null : "book")} aria-expanded={panel === "book"} aria-controls={`${ids}-book`}>
+          <button type="button" className="cx-re__book" onClick={() => goTo(BOOK)}>
             {label("book", lang)} <FiArrowRight aria-hidden="true" />
           </button>
         </div>
@@ -219,12 +214,11 @@ const Restaurant: React.FC = () => {
           </nav>
         </section>
 
-        <section id={`${ids}-book`} className="cx-re__panel" hidden={panel !== "book"} aria-labelledby={`${ids}-bt`}>
+        <SiteSections id="restaurant" keys={["about", "menu", "gallery", "events", "quotes"]} />
+
+        <section id={BOOK} className="cx-re__panel cx-re__panel--book" aria-labelledby={`${ids}-bt`}>
           <div className="cx-re__panelhead">
             <h2 id={`${ids}-bt`}>{label("book", lang)}</h2>
-            <button type="button" onClick={() => setPanel(null)} aria-label={c.close}>
-              <FiX aria-hidden="true" />
-            </button>
           </div>
           <p className="cx-re__small">{c.bookLead}</p>
           {booked ? (
@@ -271,28 +265,10 @@ const Restaurant: React.FC = () => {
           )}
         </section>
 
-        <section id={`${ids}-find`} className="cx-re__panel" hidden={panel !== "find"} aria-labelledby={`${ids}-ft`}>
-          <div className="cx-re__panelhead">
-            <h2 id={`${ids}-ft`}>{label("findUs", lang)}</h2>
-            <button type="button" onClick={() => setPanel(null)} aria-label={c.close}>
-              <FiX aria-hidden="true" />
-            </button>
-          </div>
-          {c.findLines.map((l) => (
-            <p key={l}>{l}</p>
-          ))}
-          <h3>{c.hoursTitle}</h3>
-          <ul>
-            {c.hours.map((h) => (
-              <li key={h}>{h}</li>
-            ))}
-          </ul>
-        </section>
+        <SiteSections id="restaurant" keys={["faq", "visit"]} />
       </main>
 
-      <button type="button" className="cx-re__find" onClick={() => setPanel(panel === "find" ? null : "find")} aria-expanded={panel === "find"} aria-controls={`${ids}-find`}>
-        {label("findUs", lang)} <FiArrowRight aria-hidden="true" />
-      </button>
+      <SiteFooter id="restaurant" wordmark={c.name} />
     </ConceptFrame>
   );
 };

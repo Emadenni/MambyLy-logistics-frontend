@@ -14,7 +14,10 @@ import { useEffect } from "react";
  */
 type FxConfig = { reveal: string; parallax?: string; magnetic?: string };
 
-const BASE_REVEAL = "main section > :is(h2, h3, p, ul, ol, figure, form, div, dl, blockquote), main section :is(h2, h3)";
+// the sections of sites.ts reveal item by item (their inner wrapper itself does not)
+const SITE_REVEAL =
+  ".cx-sx__head, .cx-sx__text > div > :not(.cx-sx__head), .cx-sx__pic, .cx-sx__stats > div, .cx-sx__cards > li, .cx-sx__groups > div, .cx-sx__gallery > li, .cx-sx__quotes > li, .cx-sx__faq > details, .cx-sx__info > div";
+const BASE_REVEAL = "main section > :is(h2, h3, p, ul, ol, figure, form, div, dl, blockquote):not(.cx-sx__in), main section :is(h2, h3), " + SITE_REVEAL;
 
 export const FX: Record<string, FxConfig> = {
   architecture: { reveal: BASE_REVEAL + ", .cx-ed__materials li, .cx-ed__roomlist li", parallax: ".cx-ed__hero img", magnetic: ".cx-ed__read, .cx-ed__visit button" },

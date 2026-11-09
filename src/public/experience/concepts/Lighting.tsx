@@ -5,6 +5,7 @@ import { fill } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
 import type { ConceptCopy } from "./content";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
 
 // Bigger size = the camera comes closer to the lamp on its plinth (the picture never shrinks).
 const SCALE: Record<string, number> = { s: 1, m: 1.1, l: 1.22 };
@@ -31,17 +32,7 @@ const Lighting: React.FC<{ c: ConceptCopy["lighting"] }> = ({ c }) => {
 
   return (
     <ConceptFrame id="lighting">
-      <header className="cx-mi__head">
-        <span className="cx-mi__mark">{c.wordmark}</span>
-        <nav aria-label={c.wordmark} className="cx-mi__nav">
-          <a href="#cx-mi-collection" onClick={(e) => (e.preventDefault(), goTo("cx-mi-collection"))}>
-            {c.collectionNav}
-          </a>
-          <a href="#cx-mi-ask" onClick={(e) => (e.preventDefault(), goTo("cx-mi-ask"))}>
-            {c.askNav}
-          </a>
-        </nav>
-      </header>
+      <SiteNav id="lighting" wordmark={<span className="cx-mi__mark">{c.wordmark}</span>} />
 
       <main id="cx-main-lighting" className="cx-mi__main">
         <div className={`cx-mi__stage cx-mi__stage--${light}${on ? " is-on" : ""}`}>
@@ -126,6 +117,8 @@ const Lighting: React.FC<{ c: ConceptCopy["lighting"] }> = ({ c }) => {
           </div>
         </section>
 
+        <SiteSections id="lighting" keys={["craft", "materials"]} />
+
         <section id="cx-mi-collection" className="cx-mi__collection" aria-labelledby={`${ids}-col`}>
           <h2 id={`${ids}-col`}>{c.collectionTitle}</h2>
           <p className="cx-mi__intro">{c.collectionLead}</p>
@@ -142,6 +135,8 @@ const Lighting: React.FC<{ c: ConceptCopy["lighting"] }> = ({ c }) => {
             ))}
           </ul>
         </section>
+
+        <SiteSections id="lighting" keys={["stores", "faq"]} />
 
         <section id="cx-mi-ask" className="cx-mi__ask" aria-labelledby={`${ids}-ask`}>
           <h2 id={`${ids}-ask`}>{c.askTitle}</h2>
@@ -173,6 +168,8 @@ const Lighting: React.FC<{ c: ConceptCopy["lighting"] }> = ({ c }) => {
           <p className="cx-mi__note">{c.note}</p>
         </section>
       </main>
+
+      <SiteFooter id="lighting" wordmark={c.wordmark} />
     </ConceptFrame>
   );
 };

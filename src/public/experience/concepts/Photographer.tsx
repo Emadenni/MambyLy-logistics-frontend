@@ -3,7 +3,9 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiArrowUpRight, FiChevronLeft, FiChevronRight, FiX } from "react-icons/fi";
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
-import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
+import { ConceptFrame, DemoNote } from "./ConceptChrome";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
+import { sectionId } from "./sites";
 
 type Cat = "portraits" | "spaces" | "brands";
 type Photo = { id: string; img: string; cat: Cat; title: string; alt: string };
@@ -19,18 +21,11 @@ const copy = {
     open: "Öppna serien",
     count: "{n} bilder",
     one: "1 bild",
-    about: "Om mig",
-    book: "Boka fotografering",
     series: "Serie: {cat}",
     of: "{i} av {n}",
     prev: "Föregående bild",
     next: "Nästa bild",
     close: "Stäng serien",
-    aboutTitle: "Om mig",
-    aboutText: [
-      "Påhittad fotograf för den här demon – personen finns inte.",
-      "Jag fotograferar människor, rum och hantverk i naturligt ljus, helst tidigt eller sent på dagen.",
-    ],
     bookTitle: "Boka fotografering",
     bookLead: "En demo: ingen fotograf kontaktas och ingenting bokas.",
     kind: "Vad gäller det?",
@@ -56,18 +51,11 @@ const copy = {
     open: "View the series",
     count: "{n} photos",
     one: "1 photo",
-    about: "About me",
-    book: "Book a shoot",
     series: "Series: {cat}",
     of: "{i} of {n}",
     prev: "Previous photo",
     next: "Next photo",
     close: "Close the series",
-    aboutTitle: "About me",
-    aboutText: [
-      "A made-up photographer for this demo – the person does not exist.",
-      "I photograph people, rooms and craft in natural light, preferably early or late in the day.",
-    ],
     bookTitle: "Book a shoot",
     bookLead: "A demo: no photographer is contacted and nothing is booked.",
     kind: "What is it about?",
@@ -91,7 +79,8 @@ const MONTHS = { sv: ["Januari", "Februari", "Mars", "April", "Maj", "Juni"], en
 /**
  * Photographer: the contact sheet is the navigation. Every picture opens its series fullscreen
  * (arrows, keyboard, Escape); the category row filters the sheet and the counts are the real number
- * of pictures in the demo. "About me" and the booking request are short local panels.
+ * of pictures in the demo. The site around it (about, work, process, questions,
+ * booking) comes from sites.ts with its navigation.
  */
 const Photographer: React.FC = () => {
   const { lang } = useCopy();
@@ -100,7 +89,6 @@ const Photographer: React.FC = () => {
   const ids = useId();
   const [cat, setCat] = useState<Cat | "all">("all");
   const [viewer, setViewer] = useState<{ cat: Cat; i: number } | null>(null);
-  const [panel, setPanel] = useState<"about" | "book" | null>(null);
   const [req, setReq] = useState({ kind: "portraits" as Cat, month: 0, name: "" });
   const [tried, setTried] = useState(false);
   const [sent, setSent] = useState(false);
@@ -151,18 +139,14 @@ const Photographer: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewer]);
 
-  useEffect(() => {
-    if (panel) goTo(`${ids}-${panel}`);
-  }, [panel, ids]);
-
   return (
     <ConceptFrame id="photographer" tone="dark">
-      <header className="cx-ph__head">
-        <span className="cx-ph__kind">{c.wordmark}</span>
-      </header>
+      <SiteNav id="photographer" wordmark={<span className="cx-ph__kind">{c.wordmark}</span>} />
 
       <main id="cx-main-photographer" className="cx-ph__main">
-        <h1 data-focus>{c.title}</h1>
+        <h1 id={sectionId("photographer", "work")} data-focus>
+          {c.title}
+        </h1>
         <p className="cx-ph__lead">{c.lead}</p>
 
         <div className="cx-ph__filters" role="group" aria-label={c.filter}>
@@ -194,14 +178,9 @@ const Photographer: React.FC = () => {
           ))}
         </ul>
 
-        <section id={`${ids}-about`} className="cx-ph__panel" hidden={panel !== "about"} aria-labelledby={`${ids}-at`}>
-          <h2 id={`${ids}-at`}>{c.aboutTitle}</h2>
-          {c.aboutText.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
-        </section>
+        <SiteSections id="photographer" />
 
-        <section id={`${ids}-book`} className="cx-ph__panel" hidden={panel !== "book"} aria-labelledby={`${ids}-bt`}>
+        <section id={sectionId("photographer", "book")} className="cx-ph__panel cx-ph__panel--book" aria-labelledby={`${ids}-bt`}>
           <h2 id={`${ids}-bt`}>{c.bookTitle}</h2>
           <p className="cx-ph__small">{c.bookLead}</p>
           {sent ? (
@@ -246,17 +225,7 @@ const Photographer: React.FC = () => {
         </section>
       </main>
 
-      <nav className="cx-ph__bar" aria-label={c.wordmark}>
-        <button type="button" aria-pressed={panel === null && cat === "all"} onClick={() => (setPanel(null), setCat("all"), window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }))}>
-          {c.all}
-        </button>
-        <button type="button" aria-expanded={panel === "about"} aria-controls={`${ids}-about`} onClick={() => setPanel(panel === "about" ? null : "about")}>
-          {c.about}
-        </button>
-        <button type="button" className="cx-ph__booknav" aria-expanded={panel === "book"} aria-controls={`${ids}-book`} onClick={() => setPanel(panel === "book" ? null : "book")}>
-          {c.book} <FiArrowUpRight aria-hidden="true" />
-        </button>
-      </nav>
+      <SiteFooter id="photographer" wordmark={c.wordmark} />
 
       <AnimatePresence>
         {viewer && current && (

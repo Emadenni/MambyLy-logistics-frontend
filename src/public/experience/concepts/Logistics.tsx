@@ -1,13 +1,14 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useId, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { FiArrowUpRight, FiEdit2, FiMail, FiMapPin, FiMoreHorizontal, FiPackage, FiTruck, FiUsers } from "react-icons/fi";
+import { FiArrowUpRight, FiEdit2, FiMapPin, FiMoreHorizontal, FiPackage, FiTruck } from "react-icons/fi";
 import { LuLayers } from "react-icons/lu";
 import { fill, useCopy } from "../i18n";
 import { media } from "../media";
-import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
+import { ConceptFrame, DemoNote } from "./ConceptChrome";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
+import { sectionId } from "./sites";
 
 type Load = "parcel" | "pallet" | "other";
-type Panel = "services" | "about" | "contact";
 
 const copy = {
   sv: {
@@ -28,14 +29,6 @@ const copy = {
     edit: "Ändra",
     send: "Skicka förfrågan",
     sent: "Det här är en demo – ingen förfrågan skickades och ingen transport är bokad.",
-    nav: { services: "Våra transporter", about: "Om oss", contact: "Kontakt" } as Record<Panel, string>,
-    services: [
-      { title: "Lokala leveranser", text: "Paket och mindre gods inom samma region, samma dag eller nästa – exempeltext." },
-      { title: "Företagstransporter", text: "Fasta körningar mellan lager, butik och kund efter överenskommelse." },
-      { title: "Pallgods", text: "Hel- och halvpall med bakgavellyft. Mått och vikt anges i förfrågan." },
-    ],
-    about: "Ett påhittat åkeri för den här demon. Uppgifter om fordon, område och tider skulle stå här på en riktig sajt.",
-    contact: "På en riktig sajt står telefon, e-post och adress här. Demon har inga riktiga kontaktuppgifter.",
   },
   en: {
     wordmark: "Transport & logistics",
@@ -55,19 +48,10 @@ const copy = {
     edit: "Edit",
     send: "Send request",
     sent: "This is a demo – no request was sent and no transport is booked.",
-    nav: { services: "Our services", about: "About us", contact: "Contact" } as Record<Panel, string>,
-    services: [
-      { title: "Local deliveries", text: "Parcels and smaller goods within the same region, same or next day – sample text." },
-      { title: "Business transport", text: "Regular runs between warehouse, shop and customer, as agreed." },
-      { title: "Pallet freight", text: "Full and half pallets with a tail lift. Size and weight go in the request." },
-    ],
-    about: "A made-up haulier for this demo. Vehicles, area and times would be described here on a real site.",
-    contact: "A real site lists phone, email and address here. The demo has no real contact details.",
   },
 };
 
 const LOAD_ICONS: Record<Load, React.ReactNode> = { parcel: <FiPackage />, pallet: <LuLayers />, other: <FiMoreHorizontal /> };
-const PANEL_ICONS: Record<Panel, React.ReactNode> = { services: <FiTruck />, about: <FiUsers />, contact: <FiMail /> };
 
 /**
  * Transport & logistics: the journey of the shipment leads the page. The visitor fills in
@@ -84,19 +68,12 @@ const Logistics: React.FC = () => {
   const [load, setLoad] = useState<Load>("parcel");
   const [tried, setTried] = useState(false);
   const [stage, setStage] = useState<"form" | "summary" | "sent">("form");
-  const [panel, setPanel] = useState<Panel | null>(null);
 
   const ok = from.trim().length > 1 && to.trim().length > 1;
 
-  useEffect(() => {
-    if (panel) goTo(`${ids}-panel`);
-  }, [panel, ids]);
-
   return (
     <ConceptFrame id="logistics">
-      <header className="cx-lo__head">
-        <span className="cx-lo__kind">{c.wordmark}</span>
-      </header>
+      <SiteNav id="logistics" wordmark={<span className="cx-lo__kind">{c.wordmark}</span>} />
 
       <main id="cx-main-logistics" className="cx-lo__main">
         <h1 data-focus>
@@ -125,7 +102,7 @@ const Logistics: React.FC = () => {
           </span>
         </figure>
 
-        <section className="cx-lo__card" aria-label={c.cta}>
+        <section id={sectionId("logistics", "quote")} className="cx-lo__card" aria-label={c.cta}>
           <AnimatePresence mode="wait" initial={false}>
             {stage === "form" ? (
               <motion.form
@@ -194,30 +171,10 @@ const Logistics: React.FC = () => {
           <FiTruck aria-hidden="true" /> {c.tagline}
         </p>
 
-        <section id={`${ids}-panel`} className="cx-lo__panel" hidden={!panel} aria-label={panel ? c.nav[panel] : undefined}>
-          {panel === "services" && (
-            <ul>
-              {c.services.map((sv) => (
-                <li key={sv.title}>
-                  <strong>{sv.title}</strong>
-                  <span>{sv.text}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {panel === "about" && <p>{c.about}</p>}
-          {panel === "contact" && <p>{c.contact}</p>}
-        </section>
+        <SiteSections id="logistics" />
       </main>
 
-      <nav className="cx-lo__bar" aria-label={c.wordmark}>
-        {(Object.keys(c.nav) as Panel[]).map((k) => (
-          <button key={k} type="button" aria-expanded={panel === k} aria-controls={`${ids}-panel`} onClick={() => setPanel(panel === k ? null : k)}>
-            <span aria-hidden="true">{PANEL_ICONS[k]}</span>
-            {c.nav[k]}
-          </button>
-        ))}
-      </nav>
+      <SiteFooter id="logistics" wordmark={c.wordmark} />
     </ConceptFrame>
   );
 };

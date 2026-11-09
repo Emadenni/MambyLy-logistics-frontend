@@ -4,6 +4,7 @@ import { FiArrowDown, FiX } from "react-icons/fi";
 import { media } from "../media";
 import { ConceptFrame, goTo } from "./ConceptChrome";
 import type { ConceptCopy } from "./content";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
 
 const IMG = media("site-architecture", 1536);
 const IMG_SMALL = media("site-architecture", 900);
@@ -19,7 +20,8 @@ const ROOMS: Record<string, { pos: string; plan: string }> = {
 /**
  * Architecture (kept from the earlier gallery): one project told as a feature story. Serif type,
  * generous columns, a plan whose rooms open a detail panel, materials and a viewing request that
- * stays in the browser. The section links are always visible (no hamburger).
+ * stays in the browser. The studio, its way of working and more projects come from sites.ts, with the
+ * navigation.
  */
 const Architecture: React.FC<{ c: ConceptCopy["architecture"]; s: ConceptCopy["shared"] }> = ({ c, s }) => {
   const reduce = useReducedMotion() ?? false;
@@ -32,22 +34,7 @@ const Architecture: React.FC<{ c: ConceptCopy["architecture"]; s: ConceptCopy["s
 
   return (
     <ConceptFrame id="architecture">
-      <header className="cx-ed__head">
-        <button type="button" className="cx-ed__mark" onClick={() => window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" })}>
-          {c.wordmark}
-        </button>
-        <nav className="cx-ed__nav" aria-label={c.wordmark}>
-          <ul>
-            {c.nav.map((n) => (
-              <li key={n.id}>
-                <a href={`#cx-ed-${n.id}`} onClick={(e) => (e.preventDefault(), nav(n.id))}>
-                  {n.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
+      <SiteNav id="architecture" wordmark={<span className="cx-ed__mark">{c.wordmark}</span>} />
 
       <main id="cx-main-architecture">
         <section className="cx-ed__hero">
@@ -164,6 +151,8 @@ const Architecture: React.FC<{ c: ConceptCopy["architecture"]; s: ConceptCopy["s
           </ul>
         </section>
 
+        <SiteSections id="architecture" />
+
         <section id="cx-ed-visning" className="cx-ed__visit" aria-labelledby={`${ids}-visit`}>
           <h2 id={`${ids}-visit`}>{c.visitTitle}</h2>
           <p>{c.visitLead}</p>
@@ -188,6 +177,8 @@ const Architecture: React.FC<{ c: ConceptCopy["architecture"]; s: ConceptCopy["s
           </form>
         </section>
       </main>
+
+      <SiteFooter id="architecture" wordmark={c.wordmark} />
     </ConceptFrame>
   );
 };

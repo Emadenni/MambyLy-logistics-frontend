@@ -5,6 +5,7 @@ import { fill } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, goTo } from "./ConceptChrome";
 import type { ConceptCopy } from "./content";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
 
 type Cat = "all" | "exhibition" | "talk" | "stage";
 type Day = "fri" | "sat" | "sun";
@@ -29,17 +30,7 @@ const Typographic: React.FC<{ c: ConceptCopy["typographic"] }> = ({ c }) => {
 
   return (
     <ConceptFrame id="typographic" tone="dark">
-      <header className="cx-ty__head">
-        <span className="cx-ty__mark">{c.wordmark}</span>
-        <nav aria-label={c.wordmark}>
-          <a href="#cx-ty-program" onClick={(e) => (e.preventDefault(), goTo("cx-ty-program"))}>
-            {c.navProgram}
-          </a>
-          <a href="#cx-ty-plan" onClick={(e) => (e.preventDefault(), goTo("cx-ty-plan"))}>
-            {c.navPlan} <span className="cx-ty__badge">{plan.length}</span>
-          </a>
-        </nav>
-      </header>
+      <SiteNav id="typographic" wordmark={<span className="cx-ty__mark">{c.wordmark}</span>} badge={plan.length} />
 
       <main id="cx-main-typographic">
         <section className="cx-ty__hero">
@@ -153,7 +144,10 @@ const Typographic: React.FC<{ c: ConceptCopy["typographic"] }> = ({ c }) => {
             </>
           )}
         </section>
+        <SiteSections id="typographic" />
       </main>
+
+      <SiteFooter id="typographic" wordmark={c.wordmark} />
     </ConceptFrame>
   );
 };

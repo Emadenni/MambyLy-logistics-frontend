@@ -1,17 +1,19 @@
-import React, { useEffect, useId, useState } from "react";
+import React, { useId, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FiArrowRight, FiArrowUpRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useCopy } from "../i18n";
 import { media } from "../media";
 import { ConceptFrame, DemoNote, goTo } from "./ConceptChrome";
+import { SiteFooter, SiteNav, SiteSections } from "./Site";
+import { sectionId } from "./sites";
+
+const at = (key: string) => sectionId("painter", key);
 
 type Service = "interior" | "exterior" | "wallpaper";
-type Panel = "work" | "how" | "about" | "quote";
 
 const copy = {
   sv: {
     wordmark: "Måleri",
-    contact: "Kontakt",
     title: ["Samma rum.", "Ny känsla."],
     before: "Före",
     after: "Efter",
@@ -33,18 +35,6 @@ const copy = {
     noPhoto: "Inga bilder i demon för den här tjänsten – på en riktig sajt visas riktiga jobb här.",
     cta: "Berätta vad du vill måla",
     more: "Se fler arbeten",
-    how: "Så arbetar vi",
-    about: "Om oss",
-    workTitle: "Fler arbeten",
-    work: [
-      { title: "Kök, ljusgrå snickerier", text: "Exempeltext – påhittat uppdrag." },
-      { title: "Trapphus, två kulörer", text: "Exempeltext – påhittat uppdrag." },
-      { title: "Sommarhus, panel och knutar", text: "Exempeltext – påhittat uppdrag." },
-    ],
-    howTitle: "Så arbetar vi",
-    howSteps: ["Vi tittar på rummet och pratar kulör.", "Du får en skriftlig offert.", "Vi skyddar, förbereder och målar.", "Slutbesiktning tillsammans."],
-    aboutTitle: "Om oss",
-    aboutText: "Ett påhittat måleri för den här demon. Erfarenhet, certifieringar och område skulle stå här på en riktig sajt.",
     quoteTitle: "Berätta vad du vill måla",
     quoteLead: "En demo: ingen offert skapas och ingenting skickas.",
     room: "Vad gäller det?",
@@ -57,7 +47,6 @@ const copy = {
   },
   en: {
     wordmark: "Painting & decorating",
-    contact: "Contact",
     title: ["Same room.", "A fresh feeling."],
     before: "Before",
     after: "After",
@@ -79,18 +68,6 @@ const copy = {
     noPhoto: "No pictures in the demo for this service – a real site shows real jobs here.",
     cta: "Tell us what needs painting",
     more: "View more work",
-    how: "How we work",
-    about: "About us",
-    workTitle: "More work",
-    work: [
-      { title: "Kitchen, pale grey woodwork", text: "Sample text – made-up job." },
-      { title: "Stairwell, two colours", text: "Sample text – made-up job." },
-      { title: "Summer house, panels and corners", text: "Sample text – made-up job." },
-    ],
-    howTitle: "How we work",
-    howSteps: ["We look at the room and talk colours.", "You get a written quote.", "We protect, prepare and paint.", "A final walk-through together."],
-    aboutTitle: "About us",
-    aboutText: "A made-up painting firm for this demo. Experience, certifications and area would be described here on a real site.",
     quoteTitle: "Tell us what needs painting",
     quoteLead: "A demo: no quote is created and nothing is sent.",
     room: "What is it?",
@@ -119,29 +96,18 @@ const Painter: React.FC = () => {
   const ids = useId();
   const [pos, setPos] = useState(50);
   const [service, setService] = useState<Service>("interior");
-  const [panel, setPanel] = useState<Panel | null>(null);
   const [quote, setQuote] = useState({ room: 0, size: "", text: "" });
   const [tried, setTried] = useState(false);
   const [sent, setSent] = useState(false);
 
-  useEffect(() => {
-    if (panel) goTo(`${ids}-${panel}`);
-  }, [panel, ids]);
-
-  const toggle = (p: Panel) => setPanel(panel === p ? null : p);
   const nudge = (d: number) => setPos((v) => Math.min(100, Math.max(0, v + d)));
 
   return (
     <ConceptFrame id="painter">
-      <header className="cx-pa__head">
-        <span className="cx-pa__kind">{c.wordmark}</span>
-        <button type="button" className="cx-pa__contact" onClick={() => toggle("quote")} aria-expanded={panel === "quote"} aria-controls={`${ids}-quote`}>
-          {c.contact}
-        </button>
-      </header>
+      <SiteNav id="painter" wordmark={<span className="cx-pa__kind">{c.wordmark}</span>} />
 
       <main id="cx-main-painter" className="cx-pa__main">
-        <h1 data-focus>
+        <h1 id={at("compare")} data-focus>
           {c.title[0]} <em>{c.title[1]}</em>
         </h1>
 
@@ -217,14 +183,18 @@ const Painter: React.FC = () => {
           {c.serviceText[service]}
         </p>
 
-        <button type="button" className="cx-pa__cta" onClick={() => toggle("quote")} aria-expanded={panel === "quote"} aria-controls={`${ids}-quote`}>
+        <button type="button" className="cx-pa__cta" onClick={() => goTo(at("quote"))}>
           {c.cta} <FiArrowUpRight aria-hidden="true" />
         </button>
-        <button type="button" className="cx-pa__more" onClick={() => toggle("work")} aria-expanded={panel === "work"} aria-controls={`${ids}-work`}>
+        <button type="button" className="cx-pa__more" onClick={() => goTo(at("work"))}>
           {c.more} <FiArrowRight aria-hidden="true" />
         </button>
 
-        <section id={`${ids}-quote`} className="cx-pa__panel" hidden={panel !== "quote"} aria-labelledby={`${ids}-qt`}>
+        <SiteSections id="painter" keys={["services", "work", "how", "about"]} />
+
+        <SiteSections id="painter" keys={["quotes"]} />
+
+        <section id={at("quote")} className="cx-pa__panel cx-pa__panel--open cx-pa__panel--quote" aria-labelledby={`${ids}-qt`}>
           <h2 id={`${ids}-qt`}>{c.quoteTitle}</h2>
           <p className="cx-pa__small">{c.quoteLead}</p>
           {sent ? (
@@ -261,42 +231,10 @@ const Painter: React.FC = () => {
           )}
         </section>
 
-        <section id={`${ids}-work`} className="cx-pa__panel" hidden={panel !== "work"} aria-labelledby={`${ids}-wt`}>
-          <h2 id={`${ids}-wt`}>{c.workTitle}</h2>
-          <ul className="cx-pa__work">
-            {c.work.map((w) => (
-              <li key={w.title}>
-                <strong>{w.title}</strong>
-                <span>{w.text}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section id={`${ids}-how`} className="cx-pa__panel" hidden={panel !== "how"} aria-labelledby={`${ids}-ht`}>
-          <h2 id={`${ids}-ht`}>{c.howTitle}</h2>
-          <ol className="cx-pa__steps">
-            {c.howSteps.map((st) => (
-              <li key={st}>{st}</li>
-            ))}
-          </ol>
-        </section>
-
-        <section id={`${ids}-about`} className="cx-pa__panel" hidden={panel !== "about"} aria-labelledby={`${ids}-abt`}>
-          <h2 id={`${ids}-abt`}>{c.aboutTitle}</h2>
-          <p>{c.aboutText}</p>
-        </section>
-
-        <nav className="cx-pa__links" aria-label={c.wordmark}>
-          <button type="button" onClick={() => toggle("how")} aria-expanded={panel === "how"} aria-controls={`${ids}-how`}>
-            {c.how}
-          </button>
-          <span aria-hidden="true">·</span>
-          <button type="button" onClick={() => toggle("about")} aria-expanded={panel === "about"} aria-controls={`${ids}-about`}>
-            {c.about}
-          </button>
-        </nav>
+        <SiteSections id="painter" keys={["faq", "contact"]} />
       </main>
+
+      <SiteFooter id="painter" wordmark={c.wordmark} />
     </ConceptFrame>
   );
 };
