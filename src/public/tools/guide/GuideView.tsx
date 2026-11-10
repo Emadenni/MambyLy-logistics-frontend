@@ -189,7 +189,7 @@ const GuideView: React.FC<{ place: Place; pointId?: string; base: string }> = ({
       {place.demo && <p className="gd-demo-note">{u.demoNote}</p>}
 
       <footer className="gd-foot">
-        <Link to={PATHS.toolsGuide[lang === "de" ? "en" : lang]} aria-label={u.poweredBy}>
+        <Link to={PATHS.home[lang === "de" ? "en" : lang]} aria-label={u.poweredBy}>
           <img src={TOOLS_LOGO.green} alt="MambyLy Tools" width={584} height={199} loading="lazy" />
           <span>{u.poweredBy}</span>
         </Link>

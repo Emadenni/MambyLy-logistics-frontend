@@ -200,7 +200,7 @@ const GuideLanding: React.FC = () => {
             <Link to={demo} className="tl-btn tl-btn--solid">
               {c.demo} <LuArrowRight aria-hidden />
             </Link>
-            <Link to={PATHS.contact[t.lang]} className="tl-btn">
+            <Link to={PATHS.contact[t.lang]} state={{ service: "tools", tool: "guide" }} className="tl-btn">
               {c.talk} <LuArrowRight aria-hidden />
             </Link>
           </div>
@@ -323,7 +323,7 @@ const GuideLanding: React.FC = () => {
         <h2>{c.contactTitle}</h2>
         <p>{c.contactText}</p>
         <div className="tl-actions">
-          <Link to={PATHS.contact[t.lang]} className="tl-btn tl-btn--solid">
+          <Link to={PATHS.contact[t.lang]} state={{ service: "tools", tool: "guide" }} className="tl-btn tl-btn--solid">
             {c.contactCta} <LuArrowRight aria-hidden />
           </Link>
           <a href={`mailto:${publicContact.email}?subject=MambyLy%20Guide`} className="tl-btn">

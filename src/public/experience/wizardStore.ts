@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { ServiceKey } from "../digital-card/service";
+import type { ToolId } from "../tools/catalogue";
 
 /**
  * Answers of the contact wizard. In memory only (never localStorage, URL or analytics): they
@@ -10,6 +11,8 @@ export type WizardAnswers = {
   step: 0 | 1 | 2;
   name: string;
   service?: ServiceKey;
+  /** when the request is about MambyLy Tools: which tool (none = not decided yet) */
+  tool?: ToolId;
   existing?: "yes" | "no";
   example?: string;
   message: string;

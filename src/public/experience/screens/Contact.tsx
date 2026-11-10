@@ -2,22 +2,26 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { FiArrowRight, FiEdit2, FiMonitor, FiMail, FiUser, FiX } from "react-icons/fi";
-import { LuIdCard, LuLayers, LuSparkles } from "react-icons/lu";
+import { LuIdCard, LuLayers, LuNfc, LuSparkles } from "react-icons/lu";
 import { submitContact, type DeliveryOutcome, type SubmitFailure } from "../../contactSubmit";
 import { getCard } from "../../digital-card/registry";
 import { SERVICE_SUBJECTS, subjectFor, type ContactState, type ServiceKey } from "../../digital-card/service";
 import { publicContact } from "../../contact";
+import { TOOLS } from "../../tools/catalogue";
 import { fill, useCopy } from "../i18n";
 import Screen, { ScreenHead, TopBar } from "../Screen";
 import { PATHS } from "../routes";
 import { MESSAGE_MAX, NAME_MAX, stepValid, useWizard, validEmail, validMessage, validName, type WizardAnswers } from "../wizardStore";
 
 const EASE = [0.22, 0.75, 0.18, 1] as const;
-const SERVICES: ServiceKey[] = ["site", "card", "both", "other"];
+const SERVICES: ServiceKey[] = ["site", "card", "both", "tools", "other"];
+/** The tools a visitor can ask about: the ones that are available now. */
+const ACTIVE_TOOLS = TOOLS.filter((tool) => tool.status === "active");
 const SERVICE_ICONS: Record<ServiceKey, React.ReactNode> = {
   site: <FiMonitor />,
   card: <LuIdCard />,
   both: <LuLayers />,
+  tools: <LuNfc />,
   other: <LuSparkles />,
 };
 
@@ -25,6 +29,7 @@ const SERVICE_ICONS: Record<ServiceKey, React.ReactNode> = {
 function composeMessage(a: WizardAnswers, lang: "sv" | "en") {
   const context = [
     a.existing && (a.service === "site" || a.service === "both") ? `Har webbplats i dag: ${a.existing === "yes" ? "ja, ska förnyas" : "nej"}` : "",
+    a.service === "tools" ? `Verktyg: ${ACTIVE_TOOLS.find((tool) => tool.id === a.tool)?.name ?? "inte bestämt än"}` : "",
     lang === "en" ? "Språk: engelska (skickat från den engelska sidan)" : "",
   ].filter(Boolean);
   return context.length ? `${a.message.trim()}\n\n—\n${context.join("\n")}` : a.message.trim();
@@ -57,7 +62,8 @@ const Contact: React.FC = () => {
     const state = (location.state ?? {}) as ContactState;
     if (state.service && state.service in SERVICE_SUBJECTS) {
       const model = state.example ? getCard(state.example) : undefined;
-      w.set({ service: state.service, example: model?.demo ? model.slug : w.example });
+      const tool = state.service === "tools" ? ACTIVE_TOOLS.find((x) => x.id === state.tool)?.id : undefined;
+      w.set({ service: state.service, example: model?.demo ? model.slug : w.example, ...(tool ? { tool } : {}) });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.key]);
@@ -106,7 +112,7 @@ const Contact: React.FC = () => {
     const result = await submitContact({
       name: w.name.trim(),
       email: w.email.trim(),
-      subject: subjectFor(w.service!, example?.demo ? example : undefined),
+      subject: subjectFor(w.service!, example?.demo ? example : undefined, ACTIVE_TOOLS.find((tool) => tool.id === w.tool)?.name),
       message: composeMessage(w, t.lang),
     });
     sending.current = false;
@@ -138,7 +144,12 @@ const Contact: React.FC = () => {
   const summaries: { step: 0 | 1; icon: React.ReactNode; label: string; value: string }[] = [];
   if (w.step > 0) summaries.push({ step: 0, icon: <FiUser />, label: c.summaryName, value: w.name.trim() });
   if (w.step > 1 && w.service)
-    summaries.push({ step: 1, icon: SERVICE_ICONS[w.service], label: c.summaryService, value: c.services[w.service].label });
+    summaries.push({
+      step: 1,
+      icon: SERVICE_ICONS[w.service],
+      label: c.summaryService,
+      value: w.service === "tools" && w.tool ? `${c.services.tools.label} – ${ACTIVE_TOOLS.find((tool) => tool.id === w.tool)?.name ?? ""}` : c.services[w.service].label,
+    });
 
   return (
     <Screen
@@ -252,6 +263,24 @@ const Contact: React.FC = () => {
                     <p id={`${ids}-service-err`} className="mp-error">
                       {c.errors.service}
                     </p>
+                  )}
+
+                  {w.service === "tools" && (
+                    <div className="mp-toolpick">
+                      <label className="mp-label" htmlFor={`${ids}-tool`}>
+                        {c.toolLabel} <span className="mp-muted">({c.optional})</span>
+                      </label>
+                      <div className="mp-field">
+                        <select id={`${ids}-tool`} name="tool" value={w.tool ?? ""} onChange={(e) => w.set({ tool: ACTIVE_TOOLS.find((tool) => tool.id === e.target.value)?.id })}>
+                          <option value="">{c.toolAny}</option>
+                          {ACTIVE_TOOLS.map((tool) => (
+                            <option key={tool.id} value={tool.id}>
+                              {tool.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
                   )}
 
                   {showModel && model && (

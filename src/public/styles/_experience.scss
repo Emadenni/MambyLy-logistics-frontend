@@ -2164,9 +2164,14 @@ $x-wide: 1180px;
   .mp-field {
     margin-top: 8px;
 
-    input {
+    input,
+    select {
       @include field;
     }
+  }
+
+  .mp-toolpick {
+    margin-top: 18px;
   }
 
   .mp-textarea {

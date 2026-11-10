@@ -330,7 +330,7 @@ const StayLanding: React.FC = () => {
         <h2>{c.contactTitle}</h2>
         <p>{c.contactText}</p>
         <div className="tl-actions">
-          <Link to={PATHS.contact[t.lang]} className="tl-btn tl-btn--solid">
+          <Link to={PATHS.contact[t.lang]} state={{ service: "tools", tool: "stay" }} className="tl-btn tl-btn--solid">
             {c.contactCta} <LuArrowRight aria-hidden />
           </Link>
           <a href={`mailto:${publicContact.email}?subject=MambyLy%20Stay`} className="tl-btn">

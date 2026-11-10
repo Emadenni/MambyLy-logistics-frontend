@@ -29,6 +29,7 @@ const ToolsChrome: React.FC<{
       bar={
         <TopBar
           crumbs={crumbs}
+          service="tools"
           logo={{ src: TOOLS_LOGO.green, label: c.homeLabel }}
           logoTo={PATHS.tools[t.lang]}
           back={here ? { screen: "tools", label: "MambyLy Tools" } : { screen: "explore", label: t.common.back, anyPrevious: true }}
