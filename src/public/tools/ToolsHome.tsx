@@ -24,9 +24,8 @@ const ToolsHome: React.FC = () => {
   const t = useCopy();
   const c = TOOLS_COPY[t.lang];
   return (
-    <ToolsChrome>
-      <ScreenHead lang={t.lang} title={c.meta} description={c.metaDesc} screen="tools" />
-      <section className="tl-hero">
+    <ToolsChrome id="tools" head={<ScreenHead lang={t.lang} title={c.meta} description={c.metaDesc} screen="tools" />}>
+      <section className="tl-hero tl-dark">
         <p className="tl-kicker">{c.kicker}</p>
         <h1 data-focus>{c.title}</h1>
         <p className="tl-lead">{c.lead}</p>

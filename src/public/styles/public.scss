@@ -13,6 +13,7 @@
 @use "./concepts" as cx;
 @use "./demos" as demos;
 @use "./fx" as fx;
+@use "./tools-banner" as toolsBanner;
 @use "./site" as site;
 @use "./card-designs" as cd;
 
@@ -2145,6 +2146,7 @@ body:has(.mambyly-public) {
   @include dc.styles;
   @include x.styles;
   @include story.styles;
+  @include toolsBanner.styles;
   @include cx.styles;
   @include demos.styles;
   @include site.styles;

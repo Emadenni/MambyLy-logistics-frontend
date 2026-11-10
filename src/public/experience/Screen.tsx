@@ -59,15 +59,21 @@ export const TopBar: React.FC<{
   back?: { screen: StaticScreen; label: string; anyPrevious?: boolean };
   service?: ServiceKey;
   logoTo?: string;
+  /** another logo of the family (MambyLy Tools), with its own accessible name */
+  logo?: { src: string; label: string };
   showContact?: boolean;
-}> = ({ crumbs, back, service, logoTo, showContact = true }) => {
+}> = ({ crumbs, back, service, logoTo, logo, showContact = true }) => {
   const t = useCopy();
   const here = crumbs[crumbs.length - 1]?.label;
   return (
     <header className="mp-bar">
       <div className="mp-bar__row">
-        <Link to={logoTo ?? pathFor("explore", t.lang)} className="mp-bar__logo" aria-label={logoTo === "/" || logoTo === "/en" ? t.common.logoHomeLabel : t.common.logoLabel}>
-          <img src={logoDark} alt="" width={132} height={38} />
+        <Link
+          to={logoTo ?? pathFor("explore", t.lang)}
+          className="mp-bar__logo"
+          aria-label={logo?.label ?? (logoTo === "/" || logoTo === "/en" ? t.common.logoHomeLabel : t.common.logoLabel)}
+        >
+          <img src={logo?.src ?? logoDark} alt="" width={132} height={38} />
         </Link>
         <nav className="mp-bar__crumbs" aria-label={t.common.breadcrumb}>
           <ol>

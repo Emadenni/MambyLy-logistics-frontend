@@ -27,6 +27,7 @@ import { story } from "./progress";
 import { hasWebGL } from "./webgl";
 import Demos from "./Demos";
 import Closing from "./Closing";
+import ToolsBanner from "./ToolsBanner";
 import { CardPreview } from "../../digital-card/DigitalCard";
 import { COMPANY_CARD_SLUG, getCard } from "../../digital-card/registry";
 import { cardStrings } from "../../digital-card/strings";
@@ -627,6 +628,9 @@ const StoryPage: React.FC<{ active: boolean }> = ({ active }) => {
 
         {showDebug() && <div ref={debug} className="mp-tale__debug" aria-hidden="true" />}
       </div>
+
+      {/* MambyLy Tools: the new line, one band right after the story */}
+      {rest && <ToolsBanner />}
 
       {/* the demos are drawn as they come near (a tall stand-in keeps the page's length) */}
       {rest && (near ? <Demos still={still} /> : <div ref={nearMark} className="mp-demos-wait" aria-hidden="true" />)}

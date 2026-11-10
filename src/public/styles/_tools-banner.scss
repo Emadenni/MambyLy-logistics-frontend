@@ -1,0 +1,217 @@
+// Utforska's banner for MambyLy Tools (story/ToolsBanner.tsx): a deep green band across the page,
+// gold for the line, the tag pulsing. Transforms and opacity only (light on phones).
+
+@mixin styles {
+  .mp-toolsband {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin: clamp(48px, 8vw, 96px) 0;
+    padding: clamp(48px, 9vw, 104px) var(--x-gutter, 20px);
+    background:
+      radial-gradient(50% 70% at 85% 50%, rgba(228, 201, 138, 0.18), transparent 70%),
+      radial-gradient(60% 60% at 0% 100%, rgba(127, 156, 144, 0.25), transparent 70%),
+      linear-gradient(160deg, #1d5047, #103b35 55%, #0a2622);
+    color: #f6f4ee;
+
+    // a thin gold line along the top and the bottom
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #e4c98a 30%, #e4c98a 70%, transparent);
+      transform: scaleX(0);
+      transition: transform 1.2s cubic-bezier(0.6, 0, 0.2, 1) 0.1s;
+    }
+
+    &::before {
+      top: 0;
+    }
+
+    &::after {
+      bottom: 0;
+    }
+
+    &.is-in::before,
+    &.is-in::after {
+      transform: scaleX(1);
+    }
+  }
+
+  .mp-toolsband__in {
+    position: relative;
+    display: grid;
+    gap: 40px;
+    align-items: center;
+    max-width: 1120px;
+    margin: 0 auto;
+
+    @media (min-width: 860px) {
+      grid-template-columns: 1.3fr 0.7fr;
+    }
+  }
+
+  .mp-toolsband__text > * {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @for $i from 1 through 5 {
+    .mp-toolsband.is-in .mp-toolsband__text > :nth-child(#{$i}) {
+      opacity: 1;
+      transform: none;
+      transition-delay: #{0.1 + ($i - 1) * 0.1}s;
+    }
+  }
+
+  .mp-toolsband__news {
+    display: inline-block;
+    margin: 0 0 22px !important;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #e4c98a;
+    color: #103b35 !important;
+    font: 700 12px/1.2 var(--mp-font);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .mp-toolsband__logo {
+    display: block;
+    width: clamp(220px, 46vw, 420px);
+    height: auto;
+  }
+
+  .mp-toolsband__title {
+    margin: clamp(22px, 4vw, 34px) 0 0 !important;
+    color: #f6f4ee !important;
+    font: 400 clamp(34px, 6.4vw, 66px) / 1.02 var(--x-serif) !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  .mp-toolsband__lead {
+    max-width: 52ch;
+    margin-top: 16px !important;
+    color: rgba(246, 244, 238, 0.82) !important;
+    font-size: clamp(16px, 2vw, 18.5px);
+    line-height: 1.6;
+  }
+
+  .mp-toolsband__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .mp-toolsband__btn {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    min-height: 50px;
+    padding: 0 22px;
+    border: 1.5px solid rgba(246, 244, 238, 0.45);
+    border-radius: 999px;
+    color: #f6f4ee !important;
+    font: 600 15px/1.2 var(--mp-font);
+    text-decoration: none;
+    transition: transform 0.25s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    &--solid {
+      border-color: transparent;
+      background: #e4c98a;
+      color: #103b35 !important;
+    }
+  }
+
+  // the tag: a gold chip, rings going out from it
+  .mp-toolsband__tag {
+    position: relative;
+    justify-self: center;
+    width: min(260px, 48vw);
+    aspect-ratio: 1;
+    opacity: 0;
+    transform: scale(0.85);
+    transition:
+      opacity 0.8s ease 0.3s,
+      transform 1s cubic-bezier(0.2, 0.9, 0.2, 1.05) 0.3s;
+
+    i {
+      position: absolute;
+      inset: 0;
+      border: 1.5px solid #e4c98a;
+      border-radius: 50%;
+      opacity: 0;
+      animation: mp-toolsband-ring 3.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+
+      &:nth-of-type(2) {
+        animation-delay: 1.2s;
+      }
+
+      &:nth-of-type(3) {
+        animation-delay: 2.4s;
+      }
+    }
+  }
+
+  .mp-toolsband.is-in .mp-toolsband__tag {
+    opacity: 1;
+    transform: none;
+  }
+
+  .mp-toolsband__chip {
+    position: absolute;
+    inset: 30%;
+    display: grid;
+    place-items: center;
+    border-radius: 26%;
+    background: linear-gradient(145deg, #f0dcaa, #b0812c);
+    box-shadow:
+      0 0 60px rgba(228, 201, 138, 0.45),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+
+    b {
+      color: #103b35;
+      font: 700 clamp(16px, 3.4vw, 22px) / 1 var(--mp-font);
+      letter-spacing: 0.12em;
+    }
+  }
+
+  @keyframes mp-toolsband-ring {
+    0% {
+      transform: scale(0.4);
+      opacity: 0.9;
+    }
+
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mp-toolsband::before,
+    .mp-toolsband::after,
+    .mp-toolsband__text > *,
+    .mp-toolsband__tag {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .mp-toolsband__tag i {
+      animation: none;
+      opacity: 0.3;
+    }
+  }
+}

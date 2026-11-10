@@ -195,10 +195,9 @@ const StayLanding: React.FC = () => {
   const c = COPY[t.lang];
   const demo = (id: "stuga" | "lagenhet") => `${STAY_DEMO_BASE}/${id}`;
   return (
-    <ToolsChrome product="Stay" home={PATHS.toolsStay[t.lang]}>
-      <ScreenHead lang={t.lang} title={c.meta} description={c.metaDesc} screen="toolsStay" />
+    <ToolsChrome id="toolsStay" here="Stay" head={<ScreenHead lang={t.lang} title={c.meta} description={c.metaDesc} screen="toolsStay" />}>
 
-      <section className="tl-stay-hero">
+      <section className="tl-stay-hero tl-dark">
         <div className="tl-stay-hero__text">
           <p className="tl-kicker">{c.kicker}</p>
           <h1 data-focus>{c.title}</h1>
@@ -325,7 +324,7 @@ const StayLanding: React.FC = () => {
         </ul>
       </section>
 
-      <section className="tl-cta">
+      <section className="tl-cta tl-dark">
         <h2>{c.contactTitle}</h2>
         <p>{c.contactText}</p>
         <div className="tl-actions">
