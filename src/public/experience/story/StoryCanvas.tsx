@@ -30,26 +30,17 @@ import { ContextGuard } from "./glGuard";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
 const LAG = { card: 0.16, phone: 0.13, browser: 0.16 };
-/** The objects float up from below when the story first shows (after the veil, or on arrival). */
-const INTRO = { s: 1.6, drop: 2.8 };
-
 /**
  * What every object does on top of its keyframes: the phone layout, a slow float of its own, a
- * small tilt towards the pointer, and the rise from below when the story first shows.
+ * small tilt towards the pointer. They are simply there when the story shows (no rise from below).
  */
 const live = (phase: number, phone: PhonePose[]) => {
-  let since: number | null = null;
   return (pose: Pose, time: number) => {
     if (story.mobile) toPhone(pose, phone, story.p);
     pose.rx += story.pointer.y * 0.06;
     pose.ry += story.pointer.x * 0.1;
     pose.y += Math.sin(time * 0.8 + phase) * 0.035;
     pose.rz += Math.sin(time * 0.55 + 1 + phase) * 0.012;
-    if (since === null && story.active) since = time + phase * 0.12;
-    const rise = since === null ? 0 : Math.min(1, Math.max(0, (time - since) / INTRO.s));
-    const left = Math.pow(1 - rise, 3);
-    pose.y -= left * INTRO.drop;
-    pose.rx += left * 0.5;
   };
 };
 
