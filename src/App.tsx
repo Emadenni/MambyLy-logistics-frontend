@@ -85,6 +85,7 @@ const screens = {
   concept: () => import("./public/experience/concepts/Concept"),
   tools: () => import("./public/tools/ToolsHome"),
   toolsStay: () => import("./public/tools/stay/StayLanding"),
+  toolsReviews: () => import("./public/tools/reviews/ReviewsLanding"),
   stay: () => import("./public/tools/stay/StayPages"),
 };
 const Websites = lazy(screens.websites);
@@ -102,6 +103,7 @@ const PublicCard = lazy(screens.card);
 const Concept = lazy(screens.concept);
 const ToolsHome = lazy(screens.tools);
 const StayLanding = lazy(screens.toolsStay);
+const ReviewsLanding = lazy(screens.toolsReviews);
 const StayHousePage = lazy(() => screens.stay().then((m) => ({ default: m.StayHousePage })));
 const StayDemoPage = lazy(() => screens.stay().then((m) => ({ default: m.StayDemoPage })));
 
@@ -191,6 +193,7 @@ const App = () => {
                   <Route path={PATHS.privacy[lang]} element={page(<Privacy />)} />
                   <Route path={PATHS.tools[lang]} element={page(<ToolsHome />)} />
                   <Route path={PATHS.toolsStay[lang]} element={page(<StayLanding />)} />
+                  <Route path={PATHS.toolsReviews[lang]} element={page(<ReviewsLanding />)} />
                 </React.Fragment>
               ))}
               <Route path="/card" element={page(<PublicCard />)} />

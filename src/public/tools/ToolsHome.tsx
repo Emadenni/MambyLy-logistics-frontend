@@ -9,7 +9,10 @@ import ToolMark from "./ToolMark";
 import ToolsChrome from "./ToolsChrome";
 
 /** Where an active tool lives. */
-const PAGE: Partial<Record<ToolId, (lang: "sv" | "en") => string>> = { stay: (lang) => PATHS.toolsStay[lang] };
+const PAGE: Partial<Record<ToolId, (lang: "sv" | "en") => string>> = {
+  stay: (lang) => PATHS.toolsStay[lang],
+  reviews: (lang) => PATHS.toolsReviews[lang],
+};
 
 /**
  * /tools: the shop window of the line, as modules – one tile per tool, its logo on a plate and a
@@ -19,6 +22,7 @@ const ToolsHome: React.FC = () => {
   const t = useCopy();
   const c = TOOLS_COPY[t.lang];
   const ready = TOOLS.filter((tool) => tool.status === "active").length;
+  const readyLabel = ready === 1 ? c.countActive : c.countActivePl;
   return (
     <ToolsChrome id="tools" head={<ScreenHead lang={t.lang} title={c.meta} description={c.metaDesc} screen="tools" />}>
       <section className="tl-top">
@@ -31,7 +35,7 @@ const ToolsHome: React.FC = () => {
         <p className="tl-modules__head" aria-hidden="true">
           <span>{c.toolsLabel}</span>
           <span>
-            {ready} {c.countActive} · {TOOLS.length - ready} {c.countSoon}
+            {ready} {readyLabel} · {TOOLS.length - ready} {c.countSoon}
           </span>
         </p>
         <ul className="tl-tiles">
@@ -44,7 +48,11 @@ const ToolsHome: React.FC = () => {
                     <img src={tool.logo.src} alt={tool.name} width={tool.logo.width} height={tool.logo.height} decoding="async" />
                   ) : (
                     <>
-                      <ToolMark name={tool.name.replace("MambyLy ", "")} />
+                      <ToolMark
+                        name={tool.name.replace("MambyLy ", "")}
+                        light={tool.status === "active"}
+                        accent={tool.status === "active" ? tool.accent?.dark : tool.accent?.pale}
+                      />
                       <span className="tl-vh">{tool.name}</span>
                     </>
                   )}

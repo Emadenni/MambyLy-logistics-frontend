@@ -10,8 +10,19 @@ const WORD =
  * "mambyLy", and the tool's name in script across its foot. A tool with a logo of its own
  * (catalogue: logo) shows that instead.
  */
-const ToolMark: React.FC<{ name: string }> = ({ name }) => (
-  <svg className="tl-mark" viewBox="-50 12 622 206" aria-hidden="true">
+const ToolMark: React.FC<{
+  name: string;
+  /** on a dark plate: a light "mambyLy" */
+  light?: boolean;
+  /** the colour of the script name */
+  accent?: string;
+}> = ({ name, light, accent }) => (
+  <svg
+    className={light ? "tl-mark tl-mark--light" : "tl-mark"}
+    style={accent ? ({ "--mark-accent": accent } as React.CSSProperties) : undefined}
+    viewBox="-50 12 622 206"
+    aria-hidden="true"
+  >
     <g className="tl-mark__signal">
       <circle cx="-34" cy="72" r="8.5" />
       <path d="M-17.7 55.7A23 23 0 0 1 -17.7 88.3" />

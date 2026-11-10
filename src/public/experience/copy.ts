@@ -489,6 +489,10 @@ const sv = {
       title: "MambyLy Stay – digital concierge för uthyrare | MambyLy Tools",
       description: "En skylt med NFC och QR i boendet: gästen får husets information och svar på sina frågor på sitt eget språk, dygnet runt.",
     },
+    toolsReviews: {
+      title: "MambyLy Reviews – fler recensioner på Google | MambyLy Tools",
+      description: "En skylt med NFC och QR vid kassan: kunden blippar och landar direkt i ditt recensionsformulär på Google.",
+    },
     notFound: { title: "Sidan finns inte | MambyLy Solutions", description: "Sidan finns inte." },
   },
 };
@@ -979,6 +983,10 @@ const en: Copy = {
     toolsStay: {
       title: "MambyLy Stay – a digital concierge for hosts | MambyLy Tools",
       description: "A sign with NFC and QR in your rental: guests get the house information and answers to their questions in their own language, around the clock.",
+    },
+    toolsReviews: {
+      title: "MambyLy Reviews – more Google reviews | MambyLy Tools",
+      description: "A sign with NFC and QR at the counter: the customer taps and lands straight in your Google review form.",
     },
     notFound: { title: "Page not found | MambyLy Solutions", description: "The page does not exist." },
   },

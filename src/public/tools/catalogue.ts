@@ -16,6 +16,8 @@ export type Tool = {
   status: "active" | "soon";
   /** the tool's drawn logo (light, for a dark plate), in /public/brand; none yet = its wordmark is composed (ToolMark) */
   logo?: { src: string; width: number; height: number };
+  /** the colour of the script name in a composed wordmark: on a pale plate, on a dark one (none = the line's gold) */
+  accent?: { pale: string; dark: string };
   /** what it does, in a few words */
   line: Record<Lang, string>;
   /** who it is for */
@@ -40,7 +42,8 @@ export const TOOLS: Tool[] = [
   {
     id: "reviews",
     name: "MambyLy Reviews",
-    status: "soon",
+    status: "active",
+    accent: { pale: "#c4553a", dark: "#f2906e" },
     line: {
       sv: "Från disken direkt till dina recensioner på Google.",
       en: "From the counter straight to your Google reviews.",
@@ -109,6 +112,7 @@ export const TOOLS_COPY = {
     madeBy: "En produktlinje från MambyLy Solutions.",
     toolsLabel: "Verktygen",
     countActive: "tillgängligt",
+    countActivePl: "tillgängliga",
     countSoon: "på väg",
   },
   en: {
@@ -126,6 +130,7 @@ export const TOOLS_COPY = {
     madeBy: "A product line by MambyLy Solutions.",
     toolsLabel: "The tools",
     countActive: "available",
+    countActivePl: "available",
     countSoon: "on the way",
   },
 } satisfies Record<Lang, Record<string, string>>;

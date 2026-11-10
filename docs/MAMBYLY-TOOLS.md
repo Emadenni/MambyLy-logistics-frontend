@@ -7,6 +7,7 @@ Shared engine "tag → smart page"; every tool is a page template. First tool: *
 |---|---|
 | `/tools`, `/en/tools` | The shop window: one tile per tool (logo, one line); coming tools are shown switched off |
 | `/tools/stay`, `/en/tools/stay` | MambyLy Stay landing page |
+| `/tools/reviews`, `/en/tools/reviews` | MambyLy Reviews landing page, with a phone to tap (demo of the customer page) |
 | `/tools/stay/demo/stuga` | Demo: "Sjöstugan vid Roxen" (cottage by the lake) |
 | `/tools/stay/demo/lagenhet` | Demo: "Stadsvåningen" (city flat) |
 | `/stay/<house>?k=<key>` | Guest page of a real house (the NFC tag / QR code link) |
@@ -32,6 +33,12 @@ Entry points from the main site: the compass menu (MambyLy Tools) and the footer
 - Tests: `src/__tests__/stayAnswer.test.ts`.
 
 No backend and no AI: the chat only uses the house's prepared answers.
+
+**MambyLy Reviews** (`src/public/tools/reviews/ReviewsLanding.tsx`): a sign at the counter whose tag opens a
+short thank-you and a button into the business's own Google review form. Today it is the landing page
+only: no prices yet, no customer page of its own (the phone on the page is a demo with a made-up café).
+Every customer is sent to the same form – never filter who is asked (against Google's rules). Its
+wordmark is composed (`ToolMark`), with the script name in the tool's `accent` colour from the catalogue.
 
 ## Adding a real house
 
