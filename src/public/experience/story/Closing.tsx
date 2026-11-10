@@ -11,8 +11,9 @@ import { PATHS, pathFor } from "../routes";
  * into two triangles; every piece comes from its own direction, turning in 3D, and lands in place.
  * Each shows its own part of the card's surface (background size and position from its cell).
  */
-const COLS = 6;
-const ROWS = 5;
+// fewer, larger pieces: the same assembling, a fraction of the 3D layers to move
+const COLS = 4;
+const ROWS = 3;
 const PIECES = Array.from({ length: COLS * ROWS * 2 }, (_, n) => {
   const cell = n >> 1;
   const half = n & 1;

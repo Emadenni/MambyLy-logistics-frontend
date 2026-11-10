@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { easing } from "maath";
 import { veil } from "./veilState";
+import { ContextGuard } from "./glGuard";
 
 const OVERSIZE = 1.05;
 const MAX_TEXTURE = 2048;
@@ -221,17 +222,24 @@ const Silk: React.FC<{ brand: React.RefObject<HTMLElement>; onReady: () => void 
 };
 
 /** The WebGL silk of the home veil (see Veil). Unmounted once the veil is up. */
-const VeilCanvas: React.FC<{ brand: React.RefObject<HTMLElement>; onReady: () => void }> = ({ brand, onReady }) => (
-  <div className="mp-veil__gl" aria-hidden="true">
-    <Canvas
-      flat
-      dpr={[1, window.innerWidth < 760 ? 1.5 : 2]}
-      camera={{ fov: 30, position: [0, 0, 10], near: 0.1, far: 40 }}
-      gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-    >
-      <Silk brand={brand} onReady={onReady} />
-    </Canvas>
-  </div>
-);
+const VeilCanvas: React.FC<{ brand: React.RefObject<HTMLElement>; onReady: () => void }> = ({ brand, onReady }) => {
+  const [epoch, setEpoch] = useState(0);
+  const rebuild = useCallback(() => setEpoch((n) => n + 1), []);
+  const phone = window.innerWidth < 760;
+  return (
+    <div className="mp-veil__gl" aria-hidden="true">
+      <Canvas
+        key={epoch}
+        flat
+        dpr={[1, phone ? 1.25 : 1.75]}
+        camera={{ fov: 30, position: [0, 0, 10], near: 0.1, far: 40 }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+      >
+        <ContextGuard onRestore={rebuild} />
+        <Silk brand={brand} onReady={onReady} />
+      </Canvas>
+    </div>
+  );
+};
 
 export default VeilCanvas;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
@@ -26,6 +26,7 @@ import PhoneModel from "./PhoneModel";
 import BrowserModel from "./BrowserModel";
 import CardCore from "./CardCore";
 import Floaters from "./Floaters";
+import { ContextGuard } from "./glGuard";
 
 /** How quickly objects catch up with the scroll (seconds to cover most of the way). */
 const LAG = { card: 0.16, phone: 0.13, browser: 0.16 };
@@ -248,7 +249,7 @@ const Studio: React.FC = () => (
     <ambientLight intensity={0.6} />
     <directionalLight position={[3, 5, 6]} intensity={2.3} />
     <directionalLight position={[-5, 1.5, 4]} intensity={0.7} color="#eef3ef" />
-    <Environment resolution={256} frames={1}>
+    <Environment resolution={128} frames={1}>
       {/* a warm room tone, so metals (the gold foil) never mirror black */}
       <color attach="background" args={["#cfc8b8"]} />
       <Lightformer form="rect" intensity={1.6} color="#fff6e6" position={[0, 1.5, 9]} scale={[10, 4, 1]} />
@@ -261,16 +262,24 @@ const Studio: React.FC = () => (
 );
 
 /** The fixed scene behind the story (see StoryPage). */
-const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
+const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => {
+  // a new count builds the whole scene again: after the GPU context was lost and given back its
+  // pictures (cards, screens) would otherwise stay blank
+  const [epoch, setEpoch] = useState(0);
+  const rebuild = useCallback(() => setEpoch((n) => n + 1), []);
+  const phone = typeof window !== "undefined" && window.innerWidth < 760;
+  return (
   <div className="mp-tale__gl" aria-hidden="true">
     <Canvas
-      dpr={[1, story.mobile ? 1.5 : 2]}
+      key={epoch}
+      dpr={[1, phone ? 1.25 : 1.75]}
       camera={{ fov: 30, position: [0, 0, 10], near: 0.1, far: 60 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.NeutralToneMapping;
       }}
     >
+      <ContextGuard onRestore={rebuild} />
       <Clock />
       <Links />
       <Warmup />
@@ -284,6 +293,7 @@ const StoryCanvas: React.FC<{ lang: Lang }> = ({ lang }) => (
       </Fit>
     </Canvas>
   </div>
-);
+  );
+};
 
 export default StoryCanvas;

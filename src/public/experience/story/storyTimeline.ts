@@ -261,8 +261,4 @@ export const TOKENS: { icon: "phone" | "mail" | "pin" | "web" | "link"; at: [num
   { icon: "web", at: [-2.2, -1.4, 0.8] },
   { icon: "link", at: [0.35, -1.85, -1.8] },
 ];
-export const GLASS: [number, number, number][] = [
-  [-1.35, 1.85, -1.6],
-  [1.55, -1.75, 0.9],
-  [3.0, 0.55, -0.4],
-];
+export const GLASS: [number, number, number][] = [[1.55, -1.75, 0.9]];

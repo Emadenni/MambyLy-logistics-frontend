@@ -12,7 +12,8 @@ import { CARD } from "./storyTimeline";
  * The front logo is not printed: it is a mask for the gold foil layer. Max 2048 px per side.
  */
 
-const W = 2048;
+// phones draw the cards smaller: a smaller picture means far less GPU memory (and fewer lost contexts)
+const W = typeof window !== "undefined" && window.innerWidth < 760 ? 1280 : 2048;
 const H = Math.round((W * CARD.h) / CARD.w);
 const PX = W / 440; // the real card is drawn 440 px wide
 const SANS = '"MP Poppins", Poppins, system-ui, sans-serif';
