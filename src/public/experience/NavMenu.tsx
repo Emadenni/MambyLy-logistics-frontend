@@ -21,7 +21,6 @@ const SECTION_OF: Partial<Record<ScreenId, Section>> = {
   contact: "contact",
   tools: "tools",
   toolsStay: "tools",
-  toolsReviews: "tools",
   toolsGuide: "tools",
 };
 

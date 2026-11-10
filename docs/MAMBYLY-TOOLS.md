@@ -7,7 +7,6 @@ Shared engine "tag → smart page"; every tool is a page template. First tool: *
 |---|---|
 | `/tools`, `/en/tools` | The shop window: one tile per tool (logo, one line); coming tools are shown switched off |
 | `/tools/stay`, `/en/tools/stay` | MambyLy Stay landing page |
-| `/tools/reviews`, `/en/tools/reviews` | MambyLy Reviews landing page, with a phone to tap (demo of the customer page) |
 | `/tools/guide`, `/en/tools/guide` | MambyLy Guide landing page (what, 3 steps, who, indicative prices, demo, contact) |
 | `/tools/guide/demo/hembygdsgard` (+ `/<point>`) | Demo: "Exempelby hembygdsgård", a made-up heritage farm with 7 points |
 | `/guide/<place>` (+ `/<point>`) | Visitor page of a real place: the address on the sign at each point |
@@ -37,11 +36,11 @@ Entry points from the main site: the compass menu (MambyLy Tools) and the footer
 
 No backend and no AI: the chat only uses the house's prepared answers.
 
-**MambyLy Reviews** (`src/public/tools/reviews/ReviewsLanding.tsx`): a sign at the counter whose tag opens a
-short thank-you and a button into the business's own Google review form. Today it is the landing page
-only: no prices yet, no customer page of its own (the phone on the page is a demo with a made-up café).
-Every customer is sent to the same form – never filter who is asked (against Google's rules). Its
-wordmark is composed (`ToolMark`), with the script name in the tool's `accent` colour from the catalogue.
+**Reviews are part of Stay**, not a tool of their own: a house file can have `review: { url }` (the page
+where the host wants reviews: Google or another, https only) and the guest page then shows a "Did you
+enjoy your stay?" card with a button to it. Every guest gets the same invitation – never filter who is
+asked (against Google's rules). On the demo houses (`url: "demo"`) the button only says where it would
+open. Without `review` the card is not shown.
 
 ## What the tools share
 
@@ -97,7 +96,7 @@ that `.gitignore` rule), or keep the house files in separate storage (for exampl
 served under `/stay-data/`).
 
 House file fields: `name`, `place`, `languages` (`sv`/`en`/`de`), `template` (`stuga`/`city`), `host`
-(name, phone for the SMS button, welcome text), `arrival` (key code and where, Wi-Fi, times),
+(name, phone for the SMS button, welcome text), `review` (optional: `{ url }`, see above), `arrival` (key code and where, Wi-Fi, times),
 `sections` (the accordion: icon, title, text), `answers` (chat: keywords in any language, the reply,
 `suggest` + `question` to show it as a suggested question). Texts can use `{keyCode}`, `{wifiName}`,
 `{wifiPassword}`, `{checkIn}`, `{checkOut}`, `{hostName}`, `{hostPhone}`.

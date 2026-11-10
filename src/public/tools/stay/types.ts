@@ -62,6 +62,8 @@ export type House = {
     checkIn: string;
     checkOut: string;
   };
+  /** the page where the host wants reviews (Google or another): the guest page invites every guest to write one */
+  review?: { url: string };
   sections: Section[];
   answers: Answer[];
 };

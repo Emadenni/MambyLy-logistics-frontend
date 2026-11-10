@@ -8,7 +8,7 @@ import type { Lang } from "../experience/routes";
 /** The line's logo (public/brand): green for the cream pages, white for the green panels. */
 export const TOOLS_LOGO = { green: "/brand/mambyly-tools-verde.svg", white: "/brand/mambyly-tools-bianco.svg" };
 
-export type ToolId = "stay" | "reviews" | "menu" | "booking" | "guide" | "origin";
+export type ToolId = "stay" | "menu" | "booking" | "guide" | "origin";
 
 export type Tool = {
   id: ToolId;
@@ -40,15 +40,15 @@ export const TOOLS: Tool[] = [
     },
   },
   {
-    id: "reviews",
-    name: "MambyLy Reviews",
+    id: "guide",
+    name: "MambyLy Guide",
     status: "active",
-    accent: { pale: "#c4553a", dark: "#f2906e" },
+    accent: { pale: "#3f7f95", dark: "#8fbfd0" },
     line: {
-      sv: "Från disken direkt till dina recensioner på Google.",
-      en: "From the counter straight to your Google reviews.",
+      sv: "Ljudguide på flera språk, tagg för tagg.",
+      en: "An audio guide in several languages, tag by tag.",
     },
-    who: { sv: "För butiker, kaféer, salonger och verkstäder.", en: "For shops, cafés, salons and workshops." },
+    who: { sv: "För museer, kyrkor och hembygdsföreningar.", en: "For museums, churches and local heritage societies." },
   },
   {
     id: "menu",
@@ -72,17 +72,6 @@ export const TOOLS: Tool[] = [
       sv: "För frisörer, hudterapeuter, konsulter och andra yrkesverksamma.",
       en: "For hairdressers, beauty therapists, consultants and other professionals.",
     },
-  },
-  {
-    id: "guide",
-    name: "MambyLy Guide",
-    status: "active",
-    accent: { pale: "#3f7f95", dark: "#8fbfd0" },
-    line: {
-      sv: "Ljudguide på flera språk, tagg för tagg.",
-      en: "An audio guide in several languages, tag by tag.",
-    },
-    who: { sv: "För museer, kyrkor och hembygdsföreningar.", en: "For museums, churches and local heritage societies." },
   },
   {
     id: "origin",

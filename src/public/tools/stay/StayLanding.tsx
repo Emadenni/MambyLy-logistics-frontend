@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { LuArrowRight, LuCopy, LuKey, LuMessageCircle, LuNfc, LuQrCode, LuSmartphone, LuWifi } from "react-icons/lu";
+import { LuArrowRight, LuCopy, LuKey, LuMessageCircle, LuNfc, LuQrCode, LuSmartphone, LuStar, LuWifi } from "react-icons/lu";
 import { useCopy } from "../../experience/i18n";
 import { ScreenHead } from "../../experience/Screen";
 import { PATHS, STAY_DEMO_BASE, type Lang } from "../../experience/routes";
@@ -28,7 +28,7 @@ const COPY: Record<Lang, {
   guestKicker: string;
   guestTitle: string;
   guestText: string;
-  guestList: { icon: "key" | "wifi" | "chat" | "phone"; text: string }[];
+  guestList: { icon: "key" | "wifi" | "chat" | "phone" | "star"; text: string }[];
   signAlt: string;
   signNote: string;
   whoKicker: string;
@@ -74,6 +74,7 @@ const COPY: Record<Lang, {
       { icon: "wifi", text: "Allt om huset: bastu, kamin, sopor, parkering och husets regler – kort och tydligt." },
       { icon: "chat", text: "En chatt som svarar utifrån husets information, på svenska, engelska och tyska." },
       { icon: "phone", text: "Hittar den inte svaret kan gästen skriva direkt till dig." },
+      { icon: "star", text: "Efter vistelsen: en vänlig fråga om en recension, med en knapp rakt till din egen sida – Google eller annan. Samma fråga till alla gäster." },
     ],
     signAlt: "MambyLy Stay-skylten på ett bord i boendet, med NFC-tagg, QR-kod och texten Blippa eller skanna",
     signNote: "Skylten på plats i boendet: blippa eller skanna.",
@@ -127,6 +128,7 @@ const COPY: Record<Lang, {
       { icon: "wifi", text: "All about the house: sauna, fireplace, recycling, parking and house rules – short and clear." },
       { icon: "chat", text: "A chat that answers from the house information, in Swedish, English and German." },
       { icon: "phone", text: "If it can't find the answer, the guest can write to you directly." },
+      { icon: "star", text: "After the stay: a friendly invitation to write a review, with a button straight to your own page – Google or another. The same invitation for every guest." },
     ],
     signAlt: "The MambyLy Stay sign on a table in the rental, with NFC tag, QR code and the words tap or scan",
     signNote: "The sign in place in the rental: tap or scan.",
@@ -155,7 +157,7 @@ const COPY: Record<Lang, {
   },
 };
 
-const GUEST_ICON = { key: <LuKey aria-hidden />, wifi: <LuWifi aria-hidden />, chat: <LuMessageCircle aria-hidden />, phone: <LuSmartphone aria-hidden /> };
+const GUEST_ICON = { key: <LuKey aria-hidden />, wifi: <LuWifi aria-hidden />, chat: <LuMessageCircle aria-hidden />, phone: <LuSmartphone aria-hidden />, star: <LuStar aria-hidden /> };
 
 /** A phone with the guest page on it: the cottage, the arrival card and the question bar. */
 const PhoneMock: React.FC<{ arrival: string; ask: string }> = ({ arrival, ask }) => (

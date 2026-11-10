@@ -85,7 +85,6 @@ const screens = {
   concept: () => import("./public/experience/concepts/Concept"),
   tools: () => import("./public/tools/ToolsHome"),
   toolsStay: () => import("./public/tools/stay/StayLanding"),
-  toolsReviews: () => import("./public/tools/reviews/ReviewsLanding"),
   toolsGuide: () => import("./public/tools/guide/GuideLanding"),
   guide: () => import("./public/tools/guide/GuidePages"),
   stay: () => import("./public/tools/stay/StayPages"),
@@ -105,7 +104,6 @@ const PublicCard = lazy(screens.card);
 const Concept = lazy(screens.concept);
 const ToolsHome = lazy(screens.tools);
 const StayLanding = lazy(screens.toolsStay);
-const ReviewsLanding = lazy(screens.toolsReviews);
 const GuideLanding = lazy(screens.toolsGuide);
 const GuidePlacePage = lazy(() => screens.guide().then((m) => ({ default: m.GuidePlacePage })));
 const GuideDemoPage = lazy(() => screens.guide().then((m) => ({ default: m.GuideDemoPage })));
@@ -198,7 +196,6 @@ const App = () => {
                   <Route path={PATHS.privacy[lang]} element={page(<Privacy />)} />
                   <Route path={PATHS.tools[lang]} element={page(<ToolsHome />)} />
                   <Route path={PATHS.toolsStay[lang]} element={page(<StayLanding />)} />
-                  <Route path={PATHS.toolsReviews[lang]} element={page(<ReviewsLanding />)} />
                   <Route path={PATHS.toolsGuide[lang]} element={page(<GuideLanding />)} />
                 </React.Fragment>
               ))}

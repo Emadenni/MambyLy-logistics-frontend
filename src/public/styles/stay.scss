@@ -535,6 +535,48 @@
   }
 }
 
+.sg-review {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 22px;
+  background: var(--sg-card);
+
+  h2 {
+    margin: 0 0 6px !important;
+    font-size: 19px !important;
+  }
+
+  p {
+    margin: 0 0 14px;
+    color: var(--sg-muted);
+    font-size: 15px;
+  }
+
+  .sg-review__demo {
+    margin: 12px 0 0;
+    font-size: 13.5px;
+  }
+}
+
+.sg-review__btn {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--sg-top);
+  color: #fff !important;
+  font: 600 15px/1 inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  svg {
+    color: var(--sg-light);
+  }
+}
+
 .sg-contact {
   margin-top: 30px;
   padding: 20px;

@@ -2,6 +2,7 @@
   "slug": "stadsvaningen-linkoping",
   "template": "city",
   "demo": true,
+  "review": { "url": "demo" },
   "name": "Stadsvåningen",
   "place": {
     "sv": "Centrala Linköping",

@@ -23,6 +23,10 @@ export const STAY_UI: Record<StayLang, {
   close: string;
   typing: string;
   writeHost: string;
+  reviewTitle: string;
+  reviewText: string;
+  reviewButton: string;
+  reviewDemo: string;
   textHost: string;
   orCall: string;
   smsBody: string;
@@ -55,6 +59,10 @@ export const STAY_UI: Record<StayLang, {
     close: "Stäng",
     typing: "Skriver…",
     writeHost: "Skriv till värden",
+    reviewTitle: "Trivdes du?",
+    reviewText: "Berätta gärna för andra hur du hade det. Det tar en minut och betyder mycket.",
+    reviewButton: "Skriv en recension",
+    reviewDemo: "Demo: här öppnas värdens egen recensionssida.",
     textHost: "Skicka sms till {name}",
     orCall: "eller ring",
     smsBody: "Hej {name}! Jag bor i {house} och har en fråga: ",
@@ -87,6 +95,10 @@ export const STAY_UI: Record<StayLang, {
     close: "Close",
     typing: "Typing…",
     writeHost: "Write to the host",
+    reviewTitle: "Did you enjoy your stay?",
+    reviewText: "Tell others how it was. It takes a minute and means a lot.",
+    reviewButton: "Write a review",
+    reviewDemo: "Demo: this is where the host's own review page opens.",
     textHost: "Text {name}",
     orCall: "or call",
     smsBody: "Hi {name}! I'm staying at {house} and have a question: ",
@@ -119,6 +131,10 @@ export const STAY_UI: Record<StayLang, {
     close: "Schließen",
     typing: "Schreibt…",
     writeHost: "Dem Gastgeber schreiben",
+    reviewTitle: "Hat es Ihnen gefallen?",
+    reviewText: "Erzählen Sie anderen gern, wie es war. Das dauert eine Minute und bedeutet viel.",
+    reviewButton: "Bewertung schreiben",
+    reviewDemo: "Demo: Hier öffnet sich die Bewertungsseite des Gastgebers.",
     textHost: "SMS an {name}",
     orCall: "oder anrufen",
     smsBody: "Hallo {name}! Ich wohne in {house} und habe eine Frage: ",

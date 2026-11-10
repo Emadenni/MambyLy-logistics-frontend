@@ -25,7 +25,6 @@ export type ScreenId =
   | "card"
   | "tools"
   | "toolsStay"
-  | "toolsReviews"
   | "toolsGuide"
   | "stayDemo"
   | "stay"
@@ -50,7 +49,6 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   privacy: { sv: "/integritet", en: "/en/privacy" },
   tools: { sv: "/tools", en: "/en/tools" },
   toolsStay: { sv: "/tools/stay", en: "/en/tools/stay" },
-  toolsReviews: { sv: "/tools/reviews", en: "/en/tools/reviews" },
   toolsGuide: { sv: "/tools/guide", en: "/en/tools/guide" },
 };
 

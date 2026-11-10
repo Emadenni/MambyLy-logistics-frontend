@@ -2,6 +2,7 @@
   "slug": "sjostugan-vid-roxen",
   "template": "stuga",
   "demo": true,
+  "review": { "url": "demo" },
   "name": "Sjöstugan vid Roxen",
   "place": {
     "sv": "Vid sjön Roxen, Linköping",

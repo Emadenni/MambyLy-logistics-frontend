@@ -958,7 +958,7 @@
   }
 }
 
-// /tools/reviews ----------------------------------------------------------------------------------
+// the hero of a tool whose logo is composed (Guide): the logo, and the phone beside it ------------------
 
 .tl-rv-logo {
   width: clamp(190px, 50vw, 290px);
@@ -981,142 +981,6 @@
   margin: 0 !important;
   font-size: 13.5px;
   text-align: center;
-}
-
-// the phone you can tap: still, so the button stays where the finger is
-.tl-rv-phone {
-  animation: none;
-  transform: rotate(-2deg);
-}
-
-.tl-rv-top {
-  padding-bottom: 30px;
-
-  &__star {
-    width: 22px;
-    height: 22px;
-    margin-bottom: 4px;
-    color: #f2906e;
-  }
-}
-
-.tl-rv-card {
-  gap: 8px;
-  padding: 18px 16px;
-  animation: tl-up 0.5s ease both;
-
-  strong {
-    font-size: 19px;
-    letter-spacing: -0.02em;
-  }
-
-  p {
-    margin: 0;
-    color: #56666c !important;
-    font-size: 12px;
-    line-height: 1.5;
-  }
-}
-
-.tl-rv__stars {
-  display: flex;
-  gap: 3px;
-  color: #c9d3cf;
-  font-size: 18px;
-
-  &.is-filled {
-    color: #e8a93a;
-
-    svg {
-      fill: currentcolor;
-    }
-  }
-}
-
-.tl-rv-go {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  margin-top: 6px;
-  border: 0;
-  border-radius: 999px;
-  background: #12303a;
-  color: #f2f5f3;
-  font: 600 13px/1 inherit;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:hover,
-  &:focus-visible {
-    transform: translateY(-2px);
-  }
-}
-
-.tl-rv-form {
-  display: grid;
-  gap: 10px;
-  margin: -14px 12px 0;
-  padding: 16px 14px;
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 12px 24px -16px rgba(18, 48, 58, 0.5);
-  animation: tl-up 0.5s ease both;
-
-  p {
-    margin: 0;
-  }
-}
-
-.tl-dark .tl-rv-form__title {
-  color: #12303a !important;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.tl-dark .tl-rv-form__field {
-  min-height: 74px;
-  padding: 10px 12px;
-  border: 1px solid #dde5e2;
-  border-radius: 10px;
-  color: #8a9894 !important;
-  font-size: 12px;
-}
-
-.tl-dark .tl-rv-form__post {
-  justify-self: end;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: #1d6b57;
-  color: #fff !important;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.tl-dark .tl-rv-form__note {
-  color: #56666c !important;
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.tl-rv-again {
-  display: inline-flex;
-  gap: 6px;
-  align-items: center;
-  justify-self: start;
-  min-height: 36px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: #12303a;
-  font: 600 12px/1 inherit;
-  cursor: pointer;
-}
-
-// what the customer sees: a plain list, the width of a good line of text
-.tl-rv-sees {
-  max-width: 720px;
 }
 
 // /tools/guide ------------------------------------------------------------------------------------
@@ -1208,11 +1072,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tl-rv-card,
-  .tl-rv-form {
-    animation: none;
-  }
-
   .tl-tiles li,
   .tl-bubbles li,
   .tl-phone {
@@ -1220,6 +1079,3 @@
   }
 }
 
-.tl-rv-phone .tl-phone__screen {
-  aspect-ratio: 9 / 14;
-}

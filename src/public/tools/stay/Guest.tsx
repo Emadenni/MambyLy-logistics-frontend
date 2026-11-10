@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { LuArrowUp, LuCheck, LuChevronDown, LuCopy, LuKey, LuMessageCircle, LuPhone, LuWifi, LuX } from "react-icons/lu";
+import { LuArrowUp, LuCheck, LuChevronDown, LuCopy, LuKey, LuMessageCircle, LuPhone, LuStar, LuWifi, LuX } from "react-icons/lu";
 import { answer, fill, pick, recordUnanswered } from "./answer";
 import { phoneLang } from "./data";
 import { Cottage, TownHouse } from "./Drawing";
@@ -12,6 +12,35 @@ import "@fontsource/familjen-grotesk/latin-400.css";
 import "@fontsource/familjen-grotesk/latin-500.css";
 import "@fontsource/familjen-grotesk/latin-600.css";
 import "@fontsource/familjen-grotesk/latin-700.css";
+
+/**
+ * An invitation to write a review, for every guest alike (nobody is picked out by how the stay went).
+ * The button goes to the page the host chose; on a demo house it only says where it would open.
+ */
+const ReviewCard: React.FC<{ house: House; u: (typeof STAY_UI)[StayLang] }> = ({ house, u }) => {
+  const [demoNote, setDemoNote] = useState(false);
+  const url = house.review?.url ?? "";
+  const real = !house.demo && /^https:\/\//.test(url);
+  if (!real && !house.demo) return null;
+  return (
+    <section className="sg-review" aria-labelledby="sg-review-h">
+      <h2 id="sg-review-h">{u.reviewTitle}</h2>
+      <p>{u.reviewText}</p>
+      {real ? (
+        <a className="sg-review__btn" href={url} target="_blank" rel="noopener noreferrer">
+          <LuStar aria-hidden /> {u.reviewButton}
+        </a>
+      ) : (
+        <>
+          <button type="button" className="sg-review__btn" onClick={() => setDemoNote(true)}>
+            <LuStar aria-hidden /> {u.reviewButton}
+          </button>
+          {demoNote && <p className="sg-review__demo">{u.reviewDemo}</p>}
+        </>
+      )}
+    </section>
+  );
+};
 
 type Msg = { id: number; from: "guest" | "bot"; text: string; unknown?: boolean };
 
@@ -295,6 +324,8 @@ const Guest: React.FC<{ house: House }> = ({ house }) => {
             })}
           </ul>
         </section>
+
+        {house.review && <ReviewCard house={house} u={u} />}
 
         <section className="sg-contact">
           <h2>{u.writeHost}</h2>
