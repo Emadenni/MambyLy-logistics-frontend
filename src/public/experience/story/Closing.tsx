@@ -172,6 +172,9 @@ const Closing: React.FC = () => {
             <Link to={contactPath} state={{ service: "card" }} className="mp-close__choice">
               <span>{c.card}</span> <FiArrowRight aria-hidden="true" />
             </Link>
+            <Link to={contactPath} state={{ service: "tools" }} className="mp-close__choice">
+              <span>{c.tools}</span> <FiArrowRight aria-hidden="true" />
+            </Link>
           </div>
 
           <p className="mp-close__write">{c.write}</p>

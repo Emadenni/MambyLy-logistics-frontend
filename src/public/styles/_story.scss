@@ -1339,6 +1339,11 @@ $cover-background:
 
       @media (min-width: 680px) {
         grid-template-columns: 1fr 1fr;
+
+        // the third choice has the whole row
+        .mp-close__choice:nth-child(3) {
+          grid-column: 1 / -1;
+        }
       }
     }
 
