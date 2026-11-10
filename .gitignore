@@ -41,3 +41,8 @@ studio/reel/public/
 /public/stay-data/*
 !/public/stay-data/sjostugan-vid-roxen/
 !/public/stay-data/stadsvaningen-linkoping/
+
+# MambyLy Guide: a real place's texts, photos and recordings are the customer's, not ours to publish
+# while the repository is public (see docs/MAMBYLY-TOOLS.md); only the demo is tracked.
+/public/guide-data/*
+!/public/guide-data/hembygdsgard/

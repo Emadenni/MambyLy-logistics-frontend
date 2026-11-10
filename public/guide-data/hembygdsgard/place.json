@@ -1,0 +1,93 @@
+{
+  "slug": "hembygdsgard",
+  "demo": true,
+  "name": "Exempelby hembygdsgård",
+  "place": {
+    "sv": "Exempelby, Östergötland",
+    "en": "Exempelby, Östergötland",
+    "de": "Exempelby, Östergötland"
+  },
+  "languages": ["sv", "en", "de"],
+  "welcome": {
+    "sv": "Välkommen till Exempelby hembygdsgård! Det här är en påhittad gård som visar hur MambyLy Guide fungerar. Följ rundturen genom sju stopp, eller börja där du står. Tryck på Lyssna så läses texten upp för dig.",
+    "en": "Welcome to Exempelby heritage farm! This is a made-up farm that shows how MambyLy Guide works. Follow the walk through seven stops, or start where you stand. Press Listen and the text is read aloud to you.",
+    "de": "Willkommen auf dem Heimathof Exempelby! Dies ist ein erfundener Hof, der zeigt, wie MambyLy Guide funktioniert. Folgen Sie dem Rundgang durch sieben Stationen oder beginnen Sie dort, wo Sie stehen. Tippen Sie auf Anhören, dann wird Ihnen der Text vorgelesen."
+  },
+  "hours": {
+    "sv": "Exempel: öppet 1 juni–31 augusti, tisdag–söndag 11–16. Området är alltid öppet att gå runt i.",
+    "en": "Example: open 1 June–31 August, Tuesday–Sunday 11–16. The grounds are always open to walk around.",
+    "de": "Beispiel: geöffnet 1. Juni–31. August, Dienstag–Sonntag 11–16 Uhr. Das Gelände ist immer zugänglich."
+  },
+  "points": [
+    {
+      "id": "huvudbyggnaden",
+      "name": { "sv": "Huvudbyggnaden", "en": "The main house", "de": "Das Haupthaus" },
+      "photo": { "art": "house" },
+      "text": {
+        "sv": "Gården byggdes på 1860-talet för en bondfamilj. Spisen i köket var alltid tänd, och här samlades hela hushållet: föräldrar, barn, drängar och pigor. Stanna en stund i förstugan och titta på de handmålade dörrarna.",
+        "en": "The farmhouse was built in the 1860s for a farming family. The kitchen stove was always lit, and the whole household gathered here: parents, children, farmhands and maids. Pause in the porch and look at the hand-painted doors.",
+        "de": "Das Haupthaus wurde in den 1860er Jahren für eine Bauernfamilie gebaut. Der Herd in der Küche brannte immer, und der ganze Haushalt versammelte sich hier: Eltern, Kinder, Knechte und Mägde. Bleiben Sie kurz im Windfang stehen und sehen Sie sich die handbemalten Türen an."
+      }
+    },
+    {
+      "id": "smedjan",
+      "name": { "sv": "Smedjan", "en": "The smithy", "de": "Die Schmiede" },
+      "photo": { "art": "forge" },
+      "text": {
+        "sv": "Byns smed lagade plogar, hästskor och gångjärn. Den öppna härden hölls het med kol och en bälg, och järnet glödde rött innan det formades på städet. Hör du hammarslagen i tankarna? Så lät varje vardag.",
+        "en": "The village blacksmith mended ploughs, horseshoes and hinges. The open hearth was kept hot with charcoal and a bellows, and the iron glowed red before it was shaped on the anvil. Can you hear the hammer in your mind? That was the sound of every working day.",
+        "de": "Der Dorfschmied reparierte Pflüge, Hufeisen und Scharniere. Die offene Esse wurde mit Holzkohle und einem Blasebalg heiß gehalten, und das Eisen glühte rot, bevor es auf dem Amboss geformt wurde. Hören Sie die Hammerschläge im Kopf? So klang jeder Werktag."
+      }
+    },
+    {
+      "id": "ladugarden",
+      "name": { "sv": "Ladugården", "en": "The barn", "de": "Der Stall" },
+      "photo": { "art": "barn" },
+      "text": {
+        "sv": "Här fanns plats för sex kor, två hästar och några grisar. Djuren värmde ladugården på vintern, och höet på loftet räckte från sensommar till vår. Idag visas gamla redskap: lie, hötjuvar och mjölkpallar.",
+        "en": "There was room here for six cows, two horses and a few pigs. The animals kept the barn warm in winter, and the hay in the loft lasted from late summer to spring. Today old tools are on show: scythes, hay forks and milking stools.",
+        "de": "Hier war Platz für sechs Kühe, zwei Pferde und einige Schweine. Die Tiere wärmten den Stall im Winter, und das Heu auf dem Boden reichte vom Spätsommer bis zum Frühjahr. Heute sind alte Geräte zu sehen: Sensen, Heugabeln und Melkschemel."
+      }
+    },
+    {
+      "id": "brunnen",
+      "name": { "sv": "Brunnen", "en": "The well", "de": "Der Brunnen" },
+      "photo": { "art": "well" },
+      "text": {
+        "sv": "Brunnen grävdes för hand och är nästan åtta meter djup. Vattnet vevades upp i en hink och var kallt även en het sommardag. Ett stenlock skyddade det mot smuts och nyfikna barn.",
+        "en": "The well was dug by hand and is almost eight metres deep. The water was cranked up in a bucket and was cold even on a hot summer's day. A stone lid kept it safe from dirt and curious children.",
+        "de": "Der Brunnen wurde von Hand gegraben und ist fast acht Meter tief. Das Wasser wurde im Eimer hochgekurbelt und war selbst an heißen Sommertagen kalt. Ein Steindeckel schützte es vor Schmutz und neugierigen Kindern."
+      }
+    },
+    {
+      "id": "vaderkvarnen",
+      "name": { "sv": "Väderkvarnen", "en": "The windmill", "de": "Die Windmühle" },
+      "photo": { "art": "mill" },
+      "text": {
+        "sv": "Kvarnen byggdes 1893 och malde säd åt hela socknen. Vingarna vreds mot vinden med en lång stång, och en blåsig dag malde kvarnen mer än en man orkade bära. Idag står den kvar som ett landmärke över slätten.",
+        "en": "The mill was built in 1893 and ground grain for the whole parish. The sails were turned into the wind with a long pole, and on a windy day the mill ground more than a man could carry. Today it stands as a landmark over the plain.",
+        "de": "Die Mühle wurde 1893 gebaut und mahlte Getreide für die ganze Gemeinde. Die Flügel wurden mit einer langen Stange in den Wind gedreht, und an einem windigen Tag mahlte die Mühle mehr, als ein Mann tragen konnte. Heute steht sie als Wahrzeichen über der Ebene."
+      }
+    },
+    {
+      "id": "skolsalen",
+      "name": { "sv": "Skolsalen", "en": "The schoolroom", "de": "Das Klassenzimmer" },
+      "photo": { "art": "school" },
+      "text": {
+        "sv": "Från 1880-talet till 1950 gick barnen från byn i skola här. Pulpeterna har hål för bläckhorn, och på väggen hänger en Sverigekarta som ingen vågade peka fel på. Prova att sätta dig i en bänk.",
+        "en": "From the 1880s until 1950 the village children went to school here. The desks have holes for inkwells, and on the wall hangs a map of Sweden that no one dared point wrongly at. Try sitting at a desk.",
+        "de": "Von den 1880er Jahren bis 1950 gingen die Kinder des Dorfes hier zur Schule. In den Pulten sind Löcher für Tintenfässer, und an der Wand hängt eine Schwedenkarte, bei der niemand falsch zu zeigen wagte. Setzen Sie sich ruhig an ein Pult."
+      }
+    },
+    {
+      "id": "kyrkstigen",
+      "name": { "sv": "Kyrkstigen", "en": "The church path", "de": "Der Kirchpfad" },
+      "photo": { "art": "path" },
+      "text": {
+        "sv": "Den här stigen gick byborna varje söndag till kyrkan, nästan två kilometer genom skog och över ängar. Stenarna längs vägen är lagda för hand. Följ stigen så långt du vill, eller vänd här. Tack för besöket!",
+        "en": "The villagers walked this path to church every Sunday, nearly two kilometres through forest and across meadows. The stones along the way were laid by hand. Follow the path as far as you like, or turn back here. Thank you for visiting!",
+        "de": "Auf diesem Pfad gingen die Dorfbewohner jeden Sonntag zur Kirche, fast zwei Kilometer durch Wald und über Wiesen. Die Steine am Weg wurden von Hand gelegt. Folgen Sie dem Pfad, so weit Sie möchten, oder kehren Sie hier um. Danke für Ihren Besuch!"
+      }
+    }
+  ]
+}

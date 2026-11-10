@@ -76,7 +76,8 @@ export const TOOLS: Tool[] = [
   {
     id: "guide",
     name: "MambyLy Guide",
-    status: "soon",
+    status: "active",
+    accent: { pale: "#3f7f95", dark: "#8fbfd0" },
     line: {
       sv: "Ljudguide på flera språk, tagg för tagg.",
       en: "An audio guide in several languages, tag by tag.",

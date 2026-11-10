@@ -26,12 +26,15 @@ export type ScreenId =
   | "tools"
   | "toolsStay"
   | "toolsReviews"
+  | "toolsGuide"
   | "stayDemo"
   | "stay"
+  | "guideDemo"
+  | "guide"
   | "notFound";
 
 /** Screens with a fixed path (no parameters). */
-export type StaticScreen = Exclude<ScreenId, "example" | "concept" | "card" | "stayDemo" | "stay" | "notFound">;
+export type StaticScreen = Exclude<ScreenId, "example" | "concept" | "card" | "stayDemo" | "stay" | "guideDemo" | "guide" | "notFound">;
 
 export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   home: { sv: "/", en: "/en" },
@@ -48,6 +51,7 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
   tools: { sv: "/tools", en: "/en/tools" },
   toolsStay: { sv: "/tools/stay", en: "/en/tools/stay" },
   toolsReviews: { sv: "/tools/reviews", en: "/en/tools/reviews" },
+  toolsGuide: { sv: "/tools/guide", en: "/en/tools/guide" },
 };
 
 /**
@@ -56,6 +60,10 @@ export const PATHS: Record<StaticScreen, Record<Lang, string>> = {
  */
 export const STAY_DEMO_BASE = "/tools/stay/demo";
 export const STAY_BASE = "/stay";
+
+/** MambyLy Guide: the public demo place and the pages of real places (/guide/<place>/<point>). */
+export const GUIDE_DEMO_BASE = "/tools/guide/demo";
+export const GUIDE_BASE = "/guide";
 
 export const EXAMPLE_BASE: Record<Lang, string> = { sv: "/exempel", en: "/en/examples" };
 export const CARD_PATH: Record<Lang, string> = { sv: "/card", en: "/en/card" };
@@ -118,6 +126,10 @@ export function resolvePath(pathname: string): Resolved {
   if (p === CARD_PATH[lang]) return { screen: "card", lang };
   const demo = p.match(/^\/tools\/stay\/demo\/([^/]+)$/i);
   if (demo) return { screen: "stayDemo", lang: "sv", slug: demo[1].toLowerCase() };
+  const guideDemo = p.match(/^\/tools\/guide\/demo\/([^/]+)(?:\/[^/]+)?$/i);
+  if (guideDemo) return { screen: "guideDemo", lang: "sv", slug: guideDemo[1].toLowerCase() };
+  const guide = p.match(/^\/guide\/([^/]+)(?:\/[^/]+)?$/i);
+  if (guide) return { screen: "guide", lang: "sv", slug: guide[1].toLowerCase() };
   const stay = p.match(/^\/stay\/([^/]+)$/i);
   if (stay) return { screen: "stay", lang: "sv", slug: stay[1].toLowerCase() };
   const card = lang === "sv" ? p.match(/^\/card\/([^/]+)$/) : null;
@@ -131,7 +143,7 @@ export function translatePath(pathname: string, to: Lang): string {
   if (r.screen === "example" && r.slug) return `${EXAMPLE_BASE[to]}/${r.slug}`;
   if (r.screen === "concept" && r.slug) return conceptPath(conceptOfSlug(r.slug, r.lang)!, to);
   if (r.screen === "card") return r.slug ? pathname : CARD_PATH[to];
-  if (r.screen === "stayDemo" || r.screen === "stay") return pathname;
+  if (r.screen === "stayDemo" || r.screen === "stay" || r.screen === "guideDemo" || r.screen === "guide") return pathname;
   if (r.screen === "notFound") return PATHS.explore[to];
   return PATHS[r.screen as StaticScreen][to];
 }

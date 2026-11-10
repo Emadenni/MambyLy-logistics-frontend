@@ -1119,6 +1119,94 @@
   max-width: 720px;
 }
 
+// /tools/guide ------------------------------------------------------------------------------------
+
+// the phone with a point on it
+.tl-gd-phone {
+  animation: none;
+  transform: rotate(-2deg);
+
+  .tl-phone__screen {
+    aspect-ratio: 9 / 16;
+    background: #f6f4ee;
+  }
+
+  .gd-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+.tl-gd-phone__bar {
+  padding: 12px 14px;
+  background: #1d3a35;
+  color: #f6f4ee;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.tl-gd-phone__body {
+  display: grid;
+  gap: 8px;
+  padding: 14px 14px 0;
+
+  span {
+    color: #b0812c;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  b {
+    color: #1d3a35;
+    font: 400 28px/1 var(--tl-serif);
+  }
+
+  i {
+    height: 7px;
+    border-radius: 4px;
+    background: #d8ddd6;
+
+    &.is-short {
+      width: 60%;
+    }
+  }
+
+  p {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    margin: 6px 0 0 !important;
+    border-radius: 999px;
+    background: #1d3a35;
+    color: #f6f4ee !important;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}
+
+.tl-demos--one {
+  grid-template-columns: minmax(0, 520px);
+}
+
+.tl-gd-demo {
+  padding: 0;
+  background: none;
+
+  .gd-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tl-rv-card,
   .tl-rv-form {

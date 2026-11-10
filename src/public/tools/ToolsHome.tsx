@@ -12,6 +12,7 @@ import ToolsChrome from "./ToolsChrome";
 const PAGE: Partial<Record<ToolId, (lang: "sv" | "en") => string>> = {
   stay: (lang) => PATHS.toolsStay[lang],
   reviews: (lang) => PATHS.toolsReviews[lang],
+  guide: (lang) => PATHS.toolsGuide[lang],
 };
 
 /**

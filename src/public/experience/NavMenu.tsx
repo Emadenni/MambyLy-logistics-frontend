@@ -22,6 +22,7 @@ const SECTION_OF: Partial<Record<ScreenId, Section>> = {
   tools: "tools",
   toolsStay: "tools",
   toolsReviews: "tools",
+  toolsGuide: "tools",
 };
 
 const ITEMS: { section: Section; screen: StaticScreen; icon: React.ReactNode }[] = [

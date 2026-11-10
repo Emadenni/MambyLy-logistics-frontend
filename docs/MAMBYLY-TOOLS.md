@@ -8,6 +8,9 @@ Shared engine "tag → smart page"; every tool is a page template. First tool: *
 | `/tools`, `/en/tools` | The shop window: one tile per tool (logo, one line); coming tools are shown switched off |
 | `/tools/stay`, `/en/tools/stay` | MambyLy Stay landing page |
 | `/tools/reviews`, `/en/tools/reviews` | MambyLy Reviews landing page, with a phone to tap (demo of the customer page) |
+| `/tools/guide`, `/en/tools/guide` | MambyLy Guide landing page (what, 3 steps, who, indicative prices, demo, contact) |
+| `/tools/guide/demo/hembygdsgard` (+ `/<point>`) | Demo: "Exempelby hembygdsgård", a made-up heritage farm with 7 points |
+| `/guide/<place>` (+ `/<point>`) | Visitor page of a real place: the address on the sign at each point |
 | `/tools/stay/demo/stuga` | Demo: "Sjöstugan vid Roxen" (cottage by the lake) |
 | `/tools/stay/demo/lagenhet` | Demo: "Stadsvåningen" (city flat) |
 | `/stay/<house>?k=<key>` | Guest page of a real house (the NFC tag / QR code link) |
@@ -39,6 +42,40 @@ short thank-you and a button into the business's own Google review form. Today i
 only: no prices yet, no customer page of its own (the phone on the page is a demo with a made-up café).
 Every customer is sent to the same form – never filter who is asked (against Google's rules). Its
 wordmark is composed (`ToolMark`), with the script name in the tool's `accent` colour from the catalogue.
+
+## What the tools share
+
+`src/public/tools/shared/engine.ts` is the one engine under every tag page: the languages (sv/en/de),
+`Texts` and `pick` (a text in a language, with fallback), `phoneLang` (the visitor's language from the
+phone), `fetchJson` (a data file; only a JSON answer counts, since the host answers unknown paths with
+the page itself) and the slug check. Stay and Guide both use it; a new kind of tag page starts there.
+
+## MambyLy Guide
+
+An audio guide for small museums, churches, heritage societies, villages and trails: a sign with an NFC
+tag and a QR code at each point; the visitor taps and gets that point's page with text, picture and
+audio in their language. No app, no audio guide to rent. Annual subscription per place (**placeholder
+prices in `guide/pricing.ts`**), NFC signs included up to a number of points.
+
+- `src/public/tools/guide/` – `types.ts` (the record of a place: **the one shape a future panel edits**),
+  `data.ts` (loading and checking `public/guide-data/<slug>/place.json`), `GuidePages.tsx` (routes),
+  `GuideView.tsx` (the place's start page and a point's page), `Listen.tsx` (the Listen button),
+  `speech.ts`, `visited.ts`, `strings.ts`, `PointArt.tsx` (the demo's drawn scenes), `GuideLanding.tsx`,
+  `pricing.ts`. Styles: `styles/guide.scss` (visitor page, Tools green #1d3a35) and `tools.scss` (landing).
+- A place: name, locality, languages, welcome, hours, and `points` in walking order. A point: `id` (the
+  last part of the address), `name`, `text` (per language), `photo` (`src` = a file/address, or `art` =
+  one of the drawn scenes), `audio` (per language, an mp3).
+- **Listen**: if the point has an `audio` file for the language it plays that; otherwise the phone reads
+  the text with its own voice for the language (Web Speech API, free, in short pieces). With no voice for
+  the language installed the button is switched off and says so. Pause on the phone's voice stops at the
+  current piece and goes on from there.
+- Remembered **only in the visitor's browser** (localStorage, nothing sent): the points seen and the language.
+- No API, no AI, no backend. Real places' files are **not committed** (`.gitignore` keeps everything under
+  `public/guide-data/` out of git except the demo): the customer's texts and photos are theirs. Before the
+  first real place goes live, decide where its files are hosted (like Stay's, see below).
+- New place: `node scripts/guide-new-place.mjs <slug>` copies the demo and prints the address of every
+  point for its NFC tag and QR code. Photos and recordings go in the same folder (`/guide-data/<slug>/…`).
+- The visitor pages are `noindex`. `public/tools/guide-skylt.jpg` on the landing is a **placeholder** (4:3).
 
 ## Adding a real house
 

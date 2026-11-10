@@ -493,6 +493,10 @@ const sv = {
       title: "MambyLy Reviews – fler recensioner på Google | MambyLy Tools",
       description: "En skylt med NFC och QR vid kassan: kunden blippar och landar direkt i ditt recensionsformulär på Google.",
     },
+    toolsGuide: {
+      title: "MambyLy Guide – ljudguide med NFC och QR | MambyLy Tools",
+      description: "En skylt vid varje punkt: besökaren blippar och får text, bild och ljud på sitt eget språk. Ingen app, ingen uthyrd ljudguide.",
+    },
     notFound: { title: "Sidan finns inte | MambyLy Solutions", description: "Sidan finns inte." },
   },
 };
@@ -987,6 +991,10 @@ const en: Copy = {
     toolsReviews: {
       title: "MambyLy Reviews – more Google reviews | MambyLy Tools",
       description: "A sign with NFC and QR at the counter: the customer taps and lands straight in your Google review form.",
+    },
+    toolsGuide: {
+      title: "MambyLy Guide – an audio guide with NFC and QR | MambyLy Tools",
+      description: "A sign at every point: the visitor taps and gets text, pictures and audio in their own language. No app, no audio guide to rent.",
     },
     notFound: { title: "Page not found | MambyLy Solutions", description: "The page does not exist." },
   },

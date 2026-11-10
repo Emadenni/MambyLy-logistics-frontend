@@ -65,7 +65,7 @@ const TemplateDetails = lazy(() => import("./components/TemplateDetails/Template
 // Public site: one screen at a time, Swedish and English (see src/public/experience and
 // docs/RESTYLE-PUBLIC.md). Swedish keeps the existing URLs; English lives under /en.
 import Stage from "./public/experience/Stage";
-import { CONCEPT_BASE, LANGS, PATHS, STAY_BASE, STAY_DEMO_BASE, isLegacyPath } from "./public/experience/routes";
+import { CONCEPT_BASE, GUIDE_BASE, GUIDE_DEMO_BASE, LANGS, PATHS, STAY_BASE, STAY_DEMO_BASE, isLegacyPath } from "./public/experience/routes";
 import Hub from "./public/experience/screens/Hub";
 import LegacyConsent from "./public/experience/LegacyConsent";
 
@@ -86,6 +86,8 @@ const screens = {
   tools: () => import("./public/tools/ToolsHome"),
   toolsStay: () => import("./public/tools/stay/StayLanding"),
   toolsReviews: () => import("./public/tools/reviews/ReviewsLanding"),
+  toolsGuide: () => import("./public/tools/guide/GuideLanding"),
+  guide: () => import("./public/tools/guide/GuidePages"),
   stay: () => import("./public/tools/stay/StayPages"),
 };
 const Websites = lazy(screens.websites);
@@ -104,6 +106,9 @@ const Concept = lazy(screens.concept);
 const ToolsHome = lazy(screens.tools);
 const StayLanding = lazy(screens.toolsStay);
 const ReviewsLanding = lazy(screens.toolsReviews);
+const GuideLanding = lazy(screens.toolsGuide);
+const GuidePlacePage = lazy(() => screens.guide().then((m) => ({ default: m.GuidePlacePage })));
+const GuideDemoPage = lazy(() => screens.guide().then((m) => ({ default: m.GuideDemoPage })));
 const StayHousePage = lazy(() => screens.stay().then((m) => ({ default: m.StayHousePage })));
 const StayDemoPage = lazy(() => screens.stay().then((m) => ({ default: m.StayDemoPage })));
 
@@ -194,6 +199,7 @@ const App = () => {
                   <Route path={PATHS.tools[lang]} element={page(<ToolsHome />)} />
                   <Route path={PATHS.toolsStay[lang]} element={page(<StayLanding />)} />
                   <Route path={PATHS.toolsReviews[lang]} element={page(<ReviewsLanding />)} />
+                  <Route path={PATHS.toolsGuide[lang]} element={page(<GuideLanding />)} />
                 </React.Fragment>
               ))}
               <Route path="/card" element={page(<PublicCard />)} />
@@ -202,6 +208,9 @@ const App = () => {
               {/* MambyLy Stay: the demos and the guest page of a real house (NFC tag / QR code) */}
               <Route path={`${STAY_DEMO_BASE}/:demo`} element={page(<StayDemoPage />)} />
               <Route path={`${STAY_BASE}/:slug`} element={page(<StayHousePage />)} />
+              {/* MambyLy Guide: the demo place and the pages of real places (NFC tag / QR code at a point) */}
+              <Route path={`${GUIDE_DEMO_BASE}/:place/:point?`} element={page(<GuideDemoPage />)} />
+              <Route path={`${GUIDE_BASE}/:place/:point?`} element={page(<GuidePlacePage />)} />
               <Route path="*" element={page(<NotFound />)} />
             </Route>
             <Route element={<PublicLayout />}>

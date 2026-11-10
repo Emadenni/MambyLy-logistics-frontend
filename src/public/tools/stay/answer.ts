@@ -1,3 +1,4 @@
+import { pick } from "../shared/engine";
 import type { Answer, House, StayLang, Texts } from "./types";
 
 /**
@@ -106,8 +107,7 @@ const score = (a: Answer, q: ReturnType<typeof termsOf>) =>
     return sum + ([...q.terms].some((t) => k.length >= 4 && t.length >= 4 && (t.startsWith(k) || k.startsWith(t))) ? 1 : 0);
   }, 0);
 
-/** The text of `t` in `lang`, else Swedish, else English, else any. */
-export const pick = (t: Texts | undefined, lang: StayLang) => (t ? t[lang] ?? t.sv ?? t.en ?? Object.values(t)[0] ?? "" : "");
+export { pick };
 
 /** Fills the house's own details into an answer ({keyCode}, {wifiName}, {hostPhone} …). */
 export const fill = (text: string, house: House) =>

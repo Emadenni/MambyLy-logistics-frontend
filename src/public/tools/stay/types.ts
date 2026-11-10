@@ -3,11 +3,13 @@
  * The file is the whole record of the house – texts, contacts, languages, template, the manual the
  * chat answers from – so a future host panel only has to edit this one shape.
  */
-export type StayLang = "sv" | "en" | "de";
-export const STAY_LANGS: StayLang[] = ["sv", "en", "de"];
+import { TOOL_LANGS, type Texts as SharedTexts, type ToolLang } from "../shared/engine";
+
+export type StayLang = ToolLang;
+export const STAY_LANGS: StayLang[] = TOOL_LANGS;
 
 /** A text in each language of the house (a missing language falls back to Swedish, then English). */
-export type Texts = Partial<Record<StayLang, string>>;
+export type Texts = SharedTexts;
 
 /** Line icons available to sections and answers (mapped to components in icons.tsx). */
 export type IconName =
