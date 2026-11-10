@@ -2,13 +2,12 @@ import React from "react";
 import { useCopy } from "../experience/i18n";
 import Screen, { TopBar } from "../experience/Screen";
 import { PATHS, type ScreenId } from "../experience/routes";
-import logoTools from "../assets/logo-tools-dark.svg";
-import { TOOLS_COPY } from "./catalogue";
+import { TOOLS_COPY, TOOLS_LOGO } from "./catalogue";
 import "../styles/tools.scss";
 
 /**
  * The frame of the MambyLy Tools pages: the site's own screen (bar, menu, language, contact,
- * footer), with the line's logo – the same "mambyLy", "TOOLS" in gold underneath – and its gold
+ * footer), with the line's logo – the same "mambyLy", "TOOLS" spaced out underneath – and its gold
  * accent on the page (styles/tools.scss).
  */
 const ToolsChrome: React.FC<{
@@ -30,7 +29,7 @@ const ToolsChrome: React.FC<{
       bar={
         <TopBar
           crumbs={crumbs}
-          logo={{ src: logoTools, label: c.homeLabel }}
+          logo={{ src: TOOLS_LOGO.green, label: c.homeLabel }}
           logoTo={PATHS.tools[t.lang]}
           back={here ? { screen: "tools", label: "MambyLy Tools" } : { screen: "explore", label: t.common.back, anyPrevious: true }}
         />

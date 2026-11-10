@@ -1,5 +1,5 @@
 // Utforska's banner for MambyLy Tools (story/ToolsBanner.tsx): a deep green band across the page,
-// gold for the line, the tag pulsing. Transforms and opacity only (light on phones).
+// gold for the line, the Stay sign in its house. Transforms and opacity only (light on phones).
 
 @mixin styles {
   .mp-toolsband {
@@ -50,7 +50,7 @@
     margin: 0 auto;
 
     @media (min-width: 860px) {
-      grid-template-columns: 1.3fr 0.7fr;
+      grid-template-columns: 1.15fr 0.85fr;
     }
   }
 
@@ -84,7 +84,8 @@
 
   .mp-toolsband__logo {
     display: block;
-    width: clamp(220px, 46vw, 420px);
+    width: clamp(200px, 42vw, 360px);
+    margin-left: -10px; // the drawing starts a little inside its box
     height: auto;
   }
 
@@ -134,84 +135,43 @@
     }
   }
 
-  // the tag: a gold chip, rings going out from it
-  .mp-toolsband__tag {
+  // the sign in a house: the photo, framed in gold light
+  .mp-toolsband__sign {
     position: relative;
+    width: 100%;
+    max-width: 460px;
+    margin: 0;
     justify-self: center;
-    width: min(260px, 48vw);
-    aspect-ratio: 1;
     opacity: 0;
-    transform: scale(0.85);
+    transform: translateY(24px) rotate(0deg);
     transition:
       opacity 0.8s ease 0.3s,
-      transform 1s cubic-bezier(0.2, 0.9, 0.2, 1.05) 0.3s;
+      transform 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
 
-    i {
-      position: absolute;
-      inset: 0;
-      border: 1.5px solid #e4c98a;
-      border-radius: 50%;
-      opacity: 0;
-      animation: mp-toolsband-ring 3.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
-
-      &:nth-of-type(2) {
-        animation-delay: 1.2s;
-      }
-
-      &:nth-of-type(3) {
-        animation-delay: 2.4s;
-      }
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: clamp(18px, 3vw, 26px);
+      box-shadow:
+        0 0 0 1px rgba(228, 201, 138, 0.35),
+        0 40px 70px -40px rgba(0, 0, 0, 0.8);
     }
   }
 
-  .mp-toolsband.is-in .mp-toolsband__tag {
+  .mp-toolsband.is-in .mp-toolsband__sign {
     opacity: 1;
-    transform: none;
-  }
-
-  .mp-toolsband__chip {
-    position: absolute;
-    inset: 30%;
-    display: grid;
-    place-items: center;
-    border-radius: 26%;
-    background: linear-gradient(145deg, #f0dcaa, #b0812c);
-    box-shadow:
-      0 0 60px rgba(228, 201, 138, 0.45),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-
-    b {
-      color: #103b35;
-      font: 700 clamp(16px, 3.4vw, 22px) / 1 var(--mp-font);
-      letter-spacing: 0.12em;
-    }
-  }
-
-  @keyframes mp-toolsband-ring {
-    0% {
-      transform: scale(0.4);
-      opacity: 0.9;
-    }
-
-    100% {
-      transform: scale(1.3);
-      opacity: 0;
-    }
+    transform: rotate(1.5deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .mp-toolsband::before,
     .mp-toolsband::after,
     .mp-toolsband__text > *,
-    .mp-toolsband__tag {
+    .mp-toolsband__sign {
       opacity: 1;
       transform: none;
       transition: none;
-    }
-
-    .mp-toolsband__tag i {
-      animation: none;
-      opacity: 0.3;
     }
   }
 }

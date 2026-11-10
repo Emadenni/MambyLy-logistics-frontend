@@ -5,13 +5,18 @@ import type { Lang } from "../experience/routes";
  * active tool has its own page, the coming ones are shown switched off. Adding a tool = a line here
  * (and, when it goes live, its template like tools/stay).
  */
+/** The line's logo (public/brand): green for the cream pages, white for the green panels. */
+export const TOOLS_LOGO = { green: "/brand/mambyly-tools-verde.svg", white: "/brand/mambyly-tools-bianco.svg" };
+
 export type ToolId = "stay" | "reviews" | "menu" | "booking" | "guide" | "origin";
 
 export type Tool = {
   id: ToolId;
   name: string;
   status: "active" | "soon";
-  /** what it does, in one sentence */
+  /** the tool's drawn logo (light, for a dark plate), in /public/brand; none yet = its wordmark is composed (ToolMark) */
+  logo?: { src: string; width: number; height: number };
+  /** what it does, in a few words */
   line: Record<Lang, string>;
   /** who it is for */
   who: Record<Lang, string>;
@@ -22,9 +27,10 @@ export const TOOLS: Tool[] = [
     id: "stay",
     name: "MambyLy Stay",
     status: "active",
+    logo: { src: "/brand/mambyly-stay.png", width: 1409, height: 483 },
     line: {
-      sv: "En digital concierge för ditt boende: gästen trycker på skylten och får svar på sitt eget språk, dygnet runt.",
-      en: "A digital concierge for your rental: guests tap the sign and get answers in their own language, around the clock.",
+      sv: "Digital concierge för ditt boende, på gästens språk.",
+      en: "A digital concierge for your rental, in the guest's language.",
     },
     who: {
       sv: "För dig som hyr ut stugor och lägenheter – perfekt om du hyr ut via Airbnb eller Booking.",
@@ -36,8 +42,8 @@ export const TOOLS: Tool[] = [
     name: "MambyLy Reviews",
     status: "soon",
     line: {
-      sv: "Ett NFC-ställ vid disken som tar kunden direkt till företagets recensioner på Google.",
-      en: "An NFC stand at the counter that takes customers straight to your Google reviews.",
+      sv: "Från disken direkt till dina recensioner på Google.",
+      en: "From the counter straight to your Google reviews.",
     },
     who: { sv: "För butiker, kaféer, salonger och verkstäder.", en: "For shops, cafés, salons and workshops." },
   },
@@ -46,8 +52,8 @@ export const TOOLS: Tool[] = [
     name: "MambyLy Menu",
     status: "soon",
     line: {
-      sv: "Digital meny på flera språk, alltid uppdaterad.",
-      en: "A digital menu in several languages, always up to date.",
+      sv: "Digital meny på flera språk, alltid aktuell.",
+      en: "A digital menu in several languages, always current.",
     },
     who: { sv: "För restauranger, kaféer och barer.", en: "For restaurants, cafés and bars." },
   },
@@ -69,8 +75,8 @@ export const TOOLS: Tool[] = [
     name: "MambyLy Guide",
     status: "soon",
     line: {
-      sv: "Ljudguide på flera språk, med NFC-taggar vid sevärdheterna.",
-      en: "A multilingual audio guide, with NFC tags at each point of interest.",
+      sv: "Ljudguide på flera språk, tagg för tagg.",
+      en: "An audio guide in several languages, tag by tag.",
     },
     who: { sv: "För museer, kyrkor och hembygdsföreningar.", en: "For museums, churches and local heritage societies." },
   },
@@ -79,8 +85,8 @@ export const TOOLS: Tool[] = [
     name: "MambyLy Origin",
     status: "soon",
     line: {
-      sv: "Produktens berättelse, med NFC-tagg på varan och äkthetsbevis.",
-      en: "The story of the product, with an NFC tag on the item and a certificate of authenticity.",
+      sv: "Produktens berättelse och äkthetsbevis, på varan.",
+      en: "The product's story and proof of authenticity, on the item.",
     },
     who: { sv: "För hantverkare och små producenter.", en: "For craftspeople and small producers." },
   },
@@ -102,6 +108,8 @@ export const TOOLS_COPY = {
     homeLabel: "MambyLy Tools – start",
     madeBy: "En produktlinje från MambyLy Solutions.",
     toolsLabel: "Verktygen",
+    countActive: "tillgängligt",
+    countSoon: "på väg",
   },
   en: {
     meta: "MambyLy Tools – smart pages behind an NFC tag",
@@ -117,5 +125,7 @@ export const TOOLS_COPY = {
     homeLabel: "MambyLy Tools – home",
     madeBy: "A product line by MambyLy Solutions.",
     toolsLabel: "The tools",
+    countActive: "available",
+    countSoon: "on the way",
   },
 } satisfies Record<Lang, Record<string, string>>;

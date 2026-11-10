@@ -5,7 +5,7 @@ Shared engine "tag → smart page"; every tool is a page template. First tool: *
 
 | Address | What |
 |---|---|
-| `/tools`, `/en/tools` | The shop window: one card per tool; coming tools are shown switched off |
+| `/tools`, `/en/tools` | The shop window: one tile per tool (logo, one line); coming tools are shown switched off |
 | `/tools/stay`, `/en/tools/stay` | MambyLy Stay landing page |
 | `/tools/stay/demo/stuga` | Demo: "Sjöstugan vid Roxen" (cottage by the lake) |
 | `/tools/stay/demo/lagenhet` | Demo: "Stadsvåningen" (city flat) |
@@ -63,7 +63,12 @@ House file fields: `name`, `place`, `languages` (`sv`/`en`/`de`), `template` (`s
 Add `"<domain>": "<slug>"` to `src/public/tools/stay/domains.ts`, point the domain (CNAME) to the
 site and add it in the hosting. The sign's link becomes `https://<domain>/?k=<key>`.
 
-## Kit picture
+## Logos and pictures
 
-`public/tools/stay-packaging.jpg` is a placeholder: replace it with the real photo of the sign in
-its packaging (square, about 1200 × 1200).
+- `public/brand/mambyly-tools-verde.svg` / `mambyly-tools-bianco.svg` – the line's logo, green for
+  light backgrounds and white for dark ones (`TOOLS_LOGO` in the catalogue).
+- `public/brand/mambyly-stay.png` – Stay's logo (light, transparent: for dark backgrounds).
+- A tool's tile on `/tools` shows the `logo` given in the catalogue. A tool without one gets a
+  provisional wordmark composed in the same style (`ToolMark.tsx`); add `logo` when the drawn one exists.
+- `public/tools/stay-stand.jpg` – the sign in a house (4:3, 1200 × 900): on the Stay page and in the
+  Tools banner on Utforska.

@@ -29,8 +29,8 @@ const COPY: Record<Lang, {
   guestTitle: string;
   guestText: string;
   guestList: { icon: "key" | "wifi" | "chat" | "phone"; text: string }[];
-  packagingAlt: string;
-  packagingNote: string;
+  signAlt: string;
+  signNote: string;
   whoKicker: string;
   whoTitle: string;
   who: { title: string; text: string }[];
@@ -75,8 +75,8 @@ const COPY: Record<Lang, {
       { icon: "chat", text: "En chatt som svarar utifrån husets information, på svenska, engelska och tyska." },
       { icon: "phone", text: "Hittar den inte svaret kan gästen skriva direkt till dig." },
     ],
-    packagingAlt: "Stay-skylten med NFC-tagg och QR-kod i sin förpackning",
-    packagingNote: "Skylten med NFC och QR, som den kommer i lådan.",
+    signAlt: "MambyLy Stay-skylten på ett bord i boendet, med NFC-tagg, QR-kod och texten Blippa eller skanna",
+    signNote: "Skylten på plats i boendet: blippa eller skanna.",
     whoKicker: "För vem",
     whoTitle: "För dig som hyr ut",
     who: [
@@ -128,8 +128,8 @@ const COPY: Record<Lang, {
       { icon: "chat", text: "A chat that answers from the house information, in Swedish, English and German." },
       { icon: "phone", text: "If it can't find the answer, the guest can write to you directly." },
     ],
-    packagingAlt: "The Stay sign with NFC tag and QR code in its packaging",
-    packagingNote: "The sign with NFC and QR, as it comes in the box.",
+    signAlt: "The MambyLy Stay sign on a table in the rental, with NFC tag, QR code and the words tap or scan",
+    signNote: "The sign in place in the rental: tap or scan.",
     whoKicker: "Who it's for",
     whoTitle: "For hosts",
     who: [
@@ -199,7 +199,7 @@ const StayLanding: React.FC = () => {
 
       <section className="tl-stay-hero tl-dark">
         <div className="tl-stay-hero__text">
-          <p className="tl-kicker">{c.kicker}</p>
+          <img className="tl-stay-logo" src="/brand/mambyly-stay.png" alt={c.kicker} width={1409} height={483} decoding="async" />
           <h1 data-focus>{c.title}</h1>
           <p className="tl-lead">{c.lead}</p>
           <div className="tl-actions">
@@ -266,9 +266,9 @@ const StayLanding: React.FC = () => {
           </ul>
         </div>
         <figure className="tl-pack">
-          {/* placeholder picture of the physical kit: replace public/tools/stay-packaging.jpg */}
-          <img src="/tools/stay-packaging.jpg" alt={c.packagingAlt} width={1200} height={1200} loading="lazy" decoding="async" />
-          <figcaption>{c.packagingNote}</figcaption>
+          {/* the sign in the house: public/tools/stay-stand.jpg (4:3) */}
+          <img src="/tools/stay-stand.jpg" alt={c.signAlt} width={1200} height={900} loading="lazy" decoding="async" />
+          <figcaption>{c.signNote}</figcaption>
         </figure>
       </section>
 

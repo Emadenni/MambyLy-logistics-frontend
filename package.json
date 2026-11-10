@@ -21,6 +21,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/familjen-grotesk": "^5.3.0",
+    "@fontsource/kaushan-script": "5.3.0",
     "@gsap/react": "^2.1.2",
     "@microsoft/clarity": "^1.0.0",
     "@mui/icons-material": "^6.4.7",
